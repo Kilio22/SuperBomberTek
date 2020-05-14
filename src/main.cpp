@@ -45,8 +45,8 @@ int main(void)
     sydney->setMD2Animation(irr::scene::EMAT_STAND); // On lui dit de se mettre en position STAND
 
     // Creation de la map
-	scene::IMetaTriangleSelector *metaSelector = sceneManager->createMetaTriangleSelector();
-    std::vector<irr::scene::IAnimatedMeshSceneNode *> walls;
+    scene::IMetaTriangleSelector *metaSelector = sceneManager->createMetaTriangleSelector();
+    irr::core::array<irr::scene::IAnimatedMeshSceneNode *> walls;
     irr::scene::ITriangleSelector *selector;
     irr::f32 x = 0;
     irr::f32 y = 0;
@@ -58,7 +58,7 @@ int main(void)
             newWall->setMaterialTexture(0, driver->getTexture("../ressources/wall.png")); // on set la texture du mesh
             selector = sceneManager->createTriangleSelector(newWall); // On créer un selector, c'est ce qui permet de faire des collisions entre cet objet et un autre (à savoir notre perso)
             newWall->setTriangleSelector(selector); // On attribut le selector au mesh parce que c'est pas fait automatiquement c de la merde
-            metaSelector->addTriangleSelector(selector); // On ajoute ce selector dans un meta selector (un vector de selector en gros)
+            // metaSelector->addTriangleSelector(selector); // On ajoute ce selector dans un meta selector (un vector de selector en gros)
             selector->drop();
             walls.push_back(newWall);
             x += 20;
@@ -87,18 +87,18 @@ int main(void)
     walls.push_back(newWall);
 
     // Faire aller d'un point à un autre (pour que ca fonctionne avec la collision faut mettre cette animation avant celle de la collision)
-    const vector3df initPosition = sydney->getAbsolutePosition();
-    const vector3df destPosition(2000, 0, 0);
-    scene::ISceneNodeAnimator *anim = sceneManager->createFlyStraightAnimator(initPosition, destPosition, 50000); // Elle va courir jusqu'en 2000 0 0
-    sydney->addAnimator(anim); // On ajoute l'animation
-    anim->drop();
+    // const vector3df initPosition = sydney->getAbsolutePosition();
+    // const vector3df destPosition(2000, 0, 0);
+    // scene::ISceneNodeAnimator *anim = sceneManager->createFlyStraightAnimator(initPosition, destPosition, 50000); // Elle va courir jusqu'en 2000 0 0
+    // sydney->addAnimator(anim); // On ajoute l'animation
+    // anim->drop();
 
     // on créer le système de collision à partir du metaSelector dans lequel on a mit les selector de tout les cubes
-    const core::aabbox3d<f32> &box = sydney->getBoundingBox();
-    core::vector3df radius = box.MaxEdge - box.getCenter();
-    anim = sceneManager->createCollisionResponseAnimator(metaSelector, sydney, radius, core::vector3df(0, 0, 0), core::vector3df(0, -7, 0), 0);
-    sydney->addAnimator(anim);
-    anim->drop();
+    // const core::aabbox3d<f32> &box = sydney->getBoundingBox();
+    // core::vector3df radius = box.MaxEdge - box.getCenter();
+    // anim = sceneManager->createCollisionResponseAnimator(metaSelector, sydney, radius, core::vector3df(0, 0, 0), core::vector3df(0, -10, 0), 0);
+    // sydney->addAnimator(anim);
+    // anim->drop();
 
     // Controler la camera avec les touches
     irr::SKeyMap keyMap[4];                             // re-assigne les commandes
@@ -118,10 +118,23 @@ int main(void)
     wchar_t text[100] = {'\0'};
     irr::gui::IGUIStaticText *guiText = gui->addStaticText(text, irr::core::rect<irr::s32>(10, 10, 50, 20), true);
     swprintf(text, 100, L"FPS: %d", driver->getFPS());
+    irr::core::vector3df vector(0, 21, 0);
+    bool is_hiting = false;
     while (device->run()) {
         driver->beginScene(true, true, irr::video::SColor(0,255,255,255));
         swprintf(text, 100, L"FPS: %d", driver->getFPS());
         guiText->setText(text);
+        is_hiting = false;
+        for (size_t i = 0; i < walls.size(); i++) {
+            if (walls[i]->getTransformedBoundingBox().intersectsWithBox(sydney->getTransformedBoundingBox()) == true) {
+                is_hiting = true;
+                break;
+            }
+        }
+        if (is_hiting == false) {
+            vector.X++;
+            sydney->setPosition(vector);
+        }
         sceneManager->drawAll();
         gui->drawAll();
         driver->endScene();
