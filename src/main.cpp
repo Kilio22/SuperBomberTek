@@ -39,9 +39,9 @@ int main(void)
     device->getCursorControl()->setVisible(false);
 
     // On créer une mesh (un maillage, ce qui permet de render une forme) animée
-    irr::scene::IAnimatedMeshSceneNode *sydney = sceneManager->addAnimatedMeshSceneNode(sceneManager->getMesh("../ressources/sydney.md2"), 0, -1, irr::core::vector3df(-100, 45, 0));
+    irr::scene::IAnimatedMeshSceneNode *sydney = sceneManager->addAnimatedMeshSceneNode(sceneManager->getMesh("../ressources/untitled_walk.b3d"), 0, -1, irr::core::vector3df(0, 21, 0));
     sydney->setMaterialFlag(irr::video::EMF_LIGHTING, false);
-    sydney->setMaterialTexture(0, driver->getTexture("../ressources/sydney.bmp")); // on set la texture du mesh
+    sydney->setMaterialTexture(0, driver->getTexture("../ressources/red.png")); // on set la texture du mesh
     sydney->setMD2Animation(irr::scene::EMAT_STAND); // On lui dit de se mettre en position STAND
 
     // Creation de la map
@@ -90,12 +90,13 @@ int main(void)
     const vector3df initPosition = sydney->getAbsolutePosition();
     const vector3df destPosition(2000, 0, 0);
     scene::ISceneNodeAnimator *anim = sceneManager->createFlyStraightAnimator(initPosition, destPosition, 50000); // Elle va courir jusqu'en 2000 0 0
+    sydney->addAnimator(anim); // On ajoute l'animation
+    anim->drop();
 
     // on créer le système de collision à partir du metaSelector dans lequel on a mit les selector de tout les cubes
-    sydney->addAnimator(anim); // On ajoute l'animation
     const core::aabbox3d<f32> &box = sydney->getBoundingBox();
     core::vector3df radius = box.MaxEdge - box.getCenter();
-    anim = sceneManager->createCollisionResponseAnimator(metaSelector, sydney, radius, core::vector3df(0, 0,0));
+    anim = sceneManager->createCollisionResponseAnimator(metaSelector, sydney, radius, core::vector3df(0, 0, 0), core::vector3df(0, -7, 0), 0);
     sydney->addAnimator(anim);
     anim->drop();
 
