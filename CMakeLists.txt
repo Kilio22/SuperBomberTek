@@ -9,7 +9,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
-# set lib dirs, find_package will be able to fetch libs
 set(Irrlicht_DIR "${CMAKE_MODULE_PATH}/Irrlicht")
 
 IF(WIN32)

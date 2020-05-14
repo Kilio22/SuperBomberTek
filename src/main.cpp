@@ -5,7 +5,7 @@
 ** main
 */
 
-#include <irrlicht/irrlicht.h>
+#include <irrlicht.h>
 #include <SFML/Audio.hpp>
 #include <iostream>
 
@@ -48,8 +48,8 @@ int main(void)
 	scene::IMetaTriangleSelector *metaSelector = sceneManager->createMetaTriangleSelector();
     std::vector<irr::scene::IAnimatedMeshSceneNode *> walls;
     irr::scene::ITriangleSelector *selector;
-    size_t x = 0;
-    size_t y = 0;
+    irr::f32 x = 0;
+    irr::f32 y = 0;
 
     for (size_t i = 0; i < 10; i++) {
         for (size_t j = 0; j < 10; j++) {
@@ -99,7 +99,6 @@ int main(void)
     sydney->addAnimator(anim);
     anim->drop();
 
-
     // Controler la camera avec les touches
     irr::SKeyMap keyMap[4];                             // re-assigne les commandes
     keyMap[0].Action = irr::EKA_MOVE_FORWARD;           // avancer
@@ -112,7 +111,7 @@ int main(void)
     keyMap[3].KeyCode = irr::KEY_KEY_D;
 
     irr::scene::ICameraSceneNode *camera = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.1f, -1, keyMap, 4);
-    camera->setPosition(irr::core::vector3df(39.5108, 22.277, -10.2412));
+    camera->setPosition(irr::core::vector3df(irr::f32(39.5108), irr::f32(22.277), irr::f32(-10.2412)));
 
     /* RENDU */
     wchar_t text[100] = {'\0'};
