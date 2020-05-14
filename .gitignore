@@ -6,7 +6,6 @@
 *.o
 *.test_o
 *.ko
-*.obj
 *.elf
 
 # Linker output
