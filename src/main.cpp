@@ -79,7 +79,7 @@ int main(void)
 
     newWall = sceneManager->addAnimatedMeshSceneNode(sceneManager->getMesh("../ressources/wall.obj"), 0, -1, irr::core::vector3df(60, 40, 0));
     newWall->setMaterialFlag(irr::video::EMF_LIGHTING, false);
-    newWall->setMaterialTexture(0, driver->getTexture("../ressources/wall.png")); // on set la texture
+    newWall->setVisible(false);
     selector = sceneManager->createTriangleSelector(newWall);
     newWall->setTriangleSelector(selector);
     metaSelector->addTriangleSelector(selector);
