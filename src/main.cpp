@@ -39,15 +39,16 @@ int main(void)
     device->getCursorControl()->setVisible(false);
 
     // On créer une mesh (un maillage, ce qui permet de render une forme) animée
-    irr::scene::IAnimatedMeshSceneNode *sydney = sceneManager->addAnimatedMeshSceneNode(sceneManager->getMesh("../ressources/untitled_walk.b3d"), 0, -1, irr::core::vector3df(0, 21, 0));
+    irr::scene::IAnimatedMeshSceneNode *sydney = sceneManager->addAnimatedMeshSceneNode(sceneManager->getMesh("../ressources/untitled_walk.b3d"), 0, -1, irr::core::vector3df(0, 20, 0));
     sydney->setMaterialFlag(irr::video::EMF_LIGHTING, false);
     sydney->setMaterialTexture(0, driver->getTexture("../ressources/red.png")); // on set la texture du mesh
     sydney->setMD2Animation(irr::scene::EMAT_STAND); // On lui dit de se mettre en position STAND
+    sydney->setRotation(core::vector3df(0, -90, 0));
 
     // Creation de la map
-    scene::IMetaTriangleSelector *metaSelector = sceneManager->createMetaTriangleSelector();
-    irr::core::array<irr::scene::IAnimatedMeshSceneNode *> walls;
-    irr::scene::ITriangleSelector *selector;
+    // scene::IMetaTriangleSelector *metaSelector = sceneManager->createMetaTriangleSelector();
+    // irr::scene::ITriangleSelector *selector;
+    irr::core::array<irr::scene::IAnimatedMeshSceneNode *> ground;
     irr::f32 x = 0;
     irr::f32 y = 0;
 
@@ -56,11 +57,11 @@ int main(void)
             irr::scene::IAnimatedMeshSceneNode *newWall = sceneManager->addAnimatedMeshSceneNode(sceneManager->getMesh("../ressources/wall.obj"), 0, -1, irr::core::vector3df(x, 0, y));
             newWall->setMaterialFlag(irr::video::EMF_LIGHTING, false);
             newWall->setMaterialTexture(0, driver->getTexture("../ressources/wall.png")); // on set la texture du mesh
-            selector = sceneManager->createTriangleSelector(newWall); // On créer un selector, c'est ce qui permet de faire des collisions entre cet objet et un autre (à savoir notre perso)
-            newWall->setTriangleSelector(selector); // On attribut le selector au mesh parce que c'est pas fait automatiquement c de la merde
+            // selector = sceneManager->createTriangleSelector(newWall); // On créer un selector, c'est ce qui permet de faire des collisions entre cet objet et un autre (à savoir notre perso)
+            // newWall->setTriangleSelector(selector); // On attribut le selector au mesh parce que c'est pas fait automatiquement c de la merde
             // metaSelector->addTriangleSelector(selector); // On ajoute ce selector dans un meta selector (un vector de selector en gros)
-            selector->drop();
-            walls.push_back(newWall);
+            // selector->drop();
+            ground.push_back(newWall);
             x += 20;
         }
         x = 0;
@@ -68,22 +69,23 @@ int main(void)
     }
 
     // On ajoute deux murs l'un au dessus de l'autre
+    irr::core::array<irr::scene::IAnimatedMeshSceneNode *> walls;
     irr::scene::IAnimatedMeshSceneNode *newWall = sceneManager->addAnimatedMeshSceneNode(sceneManager->getMesh("../ressources/wall.obj"), 0, -1, irr::core::vector3df(60, 20, 0));
     newWall->setMaterialFlag(irr::video::EMF_LIGHTING, false);
     newWall->setMaterialTexture(0, driver->getTexture("../ressources/wall.png")); // on set la texture
-    selector = sceneManager->createTriangleSelector(newWall);
-    newWall->setTriangleSelector(selector);
-    metaSelector->addTriangleSelector(selector);
-    selector->drop();
+    // selector = sceneManager->createTriangleSelector(newWall);
+    // newWall->setTriangleSelector(selector);
+    // metaSelector->addTriangleSelector(selector);
+    // selector->drop();
     walls.push_back(newWall);
 
     newWall = sceneManager->addAnimatedMeshSceneNode(sceneManager->getMesh("../ressources/wall.obj"), 0, -1, irr::core::vector3df(60, 40, 0));
     newWall->setMaterialFlag(irr::video::EMF_LIGHTING, false);
     newWall->setVisible(false);
-    selector = sceneManager->createTriangleSelector(newWall);
-    newWall->setTriangleSelector(selector);
-    metaSelector->addTriangleSelector(selector);
-    selector->drop();
+    // selector = sceneManager->createTriangleSelector(newWall);
+    // newWall->setTriangleSelector(selector);
+    // metaSelector->addTriangleSelector(selector);
+    // selector->drop();
     walls.push_back(newWall);
 
     // Faire aller d'un point à un autre (pour que ca fonctionne avec la collision faut mettre cette animation avant celle de la collision)
