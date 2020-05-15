@@ -27,6 +27,7 @@ int main(void)
     irr::video::IVideoDriver *driver = device->getVideoDriver(); // On récupère le driver
     irr::scene::ISceneManager *sceneManager = device->getSceneManager(); // On récupère le scène manager
     irr::gui::IGUIEnvironment *gui = device->getGUIEnvironment(); // récupération du gui
+    irr::gui::IGUIFont *font = gui->getFont("../font/myfont.xml");
 
     // Un peu de son
     sf::SoundBuffer buffer;
@@ -36,7 +37,7 @@ int main(void)
     sound.setBuffer(buffer);
     sound.setLoop(true);
     sound.play();
-    device->getCursorControl()->setVisible(false);
+    device->getCursorControl()->setVisible(true);
 
     // On créer une mesh (un maillage, ce qui permet de render une forme) animée
     irr::scene::IAnimatedMeshSceneNode *sydney = sceneManager->addAnimatedMeshSceneNode(sceneManager->getMesh("../ressources/untitled_walk.b3d"), 0, -1, irr::core::vector3df(0, 20, 0));
@@ -111,10 +112,13 @@ int main(void)
     keyMap[2].Action = irr::EKA_STRAFE_LEFT;            // a gauche
     keyMap[2].KeyCode = irr::KEY_KEY_Q;
     keyMap[3].Action = irr::EKA_STRAFE_RIGHT;           // a droite
-    keyMap[3].KeyCode = irr::KEY_KEY_D;
+    keyMap[3].KeyCode = irr::KEY_KEY_D;    
 
     irr::scene::ICameraSceneNode *camera = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.1f, -1, keyMap, 4);
     camera->setPosition(irr::core::vector3df(irr::f32(39.5108), irr::f32(22.277), irr::f32(-10.2412)));
+
+
+
 
     /* RENDU */
     wchar_t text[100] = {'\0'};
@@ -125,6 +129,7 @@ int main(void)
     while (device->run()) {
         driver->beginScene(true, true, irr::video::SColor(0,255,255,255));
         swprintf(text, 100, L"FPS: %d", driver->getFPS());
+        font->draw(text, irr::core::rect<irr::s32>(1, 1, 1, 1), SColor(255, 255, 255, 255));
         guiText->setText(text);
         is_hiting = false;
         for (size_t i = 0; i < walls.size(); i++) {
@@ -137,6 +142,7 @@ int main(void)
             vector.X++;
             sydney->setPosition(vector);
         }
+        
         sceneManager->drawAll();
         gui->drawAll();
         driver->endScene();
