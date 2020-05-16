@@ -130,3 +130,4 @@ flycheck_*.el
 unit_test*
 vgcore*
 results.html
+build/
