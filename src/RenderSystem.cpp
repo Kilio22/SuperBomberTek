@@ -14,11 +14,9 @@ void Indie::System::RenderSystem::onUpdate(int ticks, EntityManager &entityManag
     auto entities = entityManager.getEntitiesByComponents(0);
 
     for (auto &entity : entities) {
-        auto rendComp = entity.getComponent<Indie::Components::RenderComponent>(0);
-        auto posComp = entity.getComponent<Indie::Components::PositionComponent>(1);
+        auto rendComp = entity.getComponent<Indie::Components::RenderComponent>(1);
+        auto posComp = entity.getComponent<Indie::Components::PositionComponent>(0);
 
-        printf("%p\n", *posComp);
-        printf("%f %f %f\n", posComp->getPosition().X, posComp->getPosition().Y, posComp->getPosition().Z);
         rendComp->getMesh()->setPosition(posComp->getPosition());
     }
 }

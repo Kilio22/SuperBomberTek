@@ -41,12 +41,12 @@ int main(void)
         x = 0;
         y += 20;
     }
+    device->getCursorControl()->setVisible(false);
     while (device->run()) {
         driver->beginScene(true, true, irr::video::SColor(0,255,255,255));
         renderSystem.onUpdate(0, entityManager);
         sceneManager->drawAll();
         driver->endScene();
-        std::cout << "Mhh les frites." << std::endl;
     }
     return 0;
 }

@@ -10,6 +10,7 @@
 
 #include <vector>
 #include <memory>
+#include <iostream>
 #include <irrlicht.h>
 #include "Entity.hpp"
 #include "PositionComponent.hpp"
