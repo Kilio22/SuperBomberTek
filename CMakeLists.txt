@@ -24,7 +24,7 @@ include_directories(include)
 include_directories(${Irrlicht_INCLUDE_DIRS})
 
 # add the executable
-add_definitions("-Wall -g")
+#add_definitions("-Wall -g")
 file(GLOB SRCS src/*.cpp)
 add_executable(Bomberman ${SRCS})
 
