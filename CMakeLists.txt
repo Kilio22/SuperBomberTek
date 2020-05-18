@@ -24,7 +24,9 @@ include_directories(include)
 include_directories(${Irrlicht_INCLUDE_DIRS})
 
 # add the executable
-add_executable(Bomberman src/main.cpp)
+add_definitions("-Wall -g")
+file(GLOB SRCS src/*.cpp)
+add_executable(Bomberman ${SRCS})
 
 target_link_libraries(Bomberman ${Irrlicht_LIBRARIES})
 target_link_libraries(Bomberman sfml-graphics sfml-audio)
