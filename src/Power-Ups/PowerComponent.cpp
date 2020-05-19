@@ -8,7 +8,6 @@
 #include "PowerComponent.hpp"
 
 Indie::Components::PowerComponent::PowerComponent()
-    : AComponent(0)
 {
     this->power = 3;
 }

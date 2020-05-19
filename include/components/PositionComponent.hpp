@@ -9,11 +9,11 @@
 #define POSITIONCOMPONENT_HPP_
 
 #include <irrlicht.h>
-#include "AComponent.hpp"
+#include "IComponent.hpp"
 
 namespace Indie::Components
 {
-    class PositionComponent : public AComponent
+    class PositionComponent : public IComponent
     {
         public:
             PositionComponent(float posX, float posY, float posZ);

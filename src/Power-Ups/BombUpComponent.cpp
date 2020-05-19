@@ -8,7 +8,6 @@
 #include "BombUpComponent.hpp"
 
 Indie::Components::BombUpComponent::BombUpComponent()
-    : AComponent(0)
 {
     this->numberBomb = 1;
 }

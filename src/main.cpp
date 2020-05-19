@@ -27,7 +27,7 @@ int main(void)
     irr::scene::ISceneManager *sceneManager = contextManager.getSceneManager();
 
     Indie::EntityManager entityManager;
-    Indie::System::RenderSystem renderSystem;
+    Indie::Systems::RenderSystem renderSystem;
     irr::SKeyMap keyMap[4];                             // re-assigne les commandes
     keyMap[0].Action = irr::EKA_MOVE_FORWARD;           // avancer
     keyMap[0].KeyCode = irr::KEY_KEY_Z;
@@ -52,7 +52,7 @@ int main(void)
 
     for (size_t i = 0; i < 10; i++) {
         for (size_t j = 0; j < 10; j++) {
-            entityManager.createGround(irr::core::vector3df(x, 0, y), "../ressources/static_mesh/map_dirt/ground.obj", "../ressources/static_mesh/map_dirt/ground.png", sceneManager, driver);
+            entityManager.createGround(irr::core::vector3df(x, 0, y), "../ressources/static_mesh/map_dirt/ground.obj", "../ressources/static_mesh/map_dirt/ground.png", contextManager);
             x += 20;
         }
         x = 0;

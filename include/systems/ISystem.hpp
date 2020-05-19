@@ -10,7 +10,7 @@
 
 #include "EntityManager.hpp"
 
-namespace Indie::System
+namespace Indie::Systems
 {
     class ISystem
     {

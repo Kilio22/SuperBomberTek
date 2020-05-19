@@ -8,7 +8,7 @@
 #include "PositionComponent.hpp"
 
 Indie::Components::PositionComponent::PositionComponent(float posX, float posY, float posZ)
-    : AComponent(0), position(posX, posY, posZ)
+    : position(posX, posY, posZ)
 {}
 
 irr::core::vector3df Indie::Components::PositionComponent::getPosition()

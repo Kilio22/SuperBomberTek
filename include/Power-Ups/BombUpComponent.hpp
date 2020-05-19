@@ -8,11 +8,11 @@
 #ifndef BOMBUPCOMPONENT_HPP_
 #define BOMBUPCOMPONENT_HPP_
 
-#include "AComponent.hpp"
+#include "IComponent.hpp"
 
 namespace Indie::Components
 {
-    class BombUpComponent : public AComponent {
+    class BombUpComponent : public IComponent {
         public:
             BombUpComponent();
             ~BombUpComponent() = default;

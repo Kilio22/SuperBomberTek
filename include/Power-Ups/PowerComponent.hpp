@@ -8,11 +8,11 @@
 #ifndef POWERCOMPONENT_HPP_
 #define POWERCOMPONENT_HPP_
 
-#include "AComponent.hpp"
+#include "IComponent.hpp"
 
 namespace Indie::Components
 {
-    class PowerComponent : public AComponent {
+    class PowerComponent : public IComponent {
         public:
             PowerComponent();
             ~PowerComponent() = default;

@@ -8,15 +8,15 @@
 #ifndef KICKBOMBCOMPONENT_HPP_
 #define KICKBOMBCOMPONENT_HPP_
 
-#include "AComponent.hpp"
+#include "IComponent.hpp"
 
 namespace Indie::Components
 {
-    class KickBombComponent : public AComponent {
+    class KickBombComponent : public IComponent {
         public:
             KickBombComponent();
             ~KickBombComponent() = default;
-            
+
             bool getKickStatus() const;
             void setKickStatus(bool status);
         private:

@@ -10,7 +10,7 @@
 
 #include "ISystem.hpp"
 
-namespace Indie::System
+namespace Indie::Systems
 {
     class PositionSystem : public ISystem
     {

@@ -8,11 +8,11 @@
 #ifndef WALLPASSCOMPONENT_HPP_
 #define WALLPASSCOMPONENT_HPP_
 
-#include "AComponent.hpp"
+#include "IComponent.hpp"
 
 namespace Indie::Components
 {
-    class WallPassComponent : public AComponent {
+    class WallPassComponent : public IComponent {
         public:
             WallPassComponent();
             ~WallPassComponent() = default;

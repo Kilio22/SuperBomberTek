@@ -8,16 +8,15 @@
 #include <iostream>
 #include "RenderComponent.hpp"
 
-Indie::Components::RenderComponent::RenderComponent(std::string const &modelPath, std::string const &texturePath, irr::scene::ISceneManager *sceneManager, irr::video::IVideoDriver *driver)
-    : AComponent(0)
+Indie::Components::RenderComponent::RenderComponent(std::string const &modelPath, std::string const &texturePath, ContextManager const &contextManager)
 {
-    irr::scene::IAnimatedMesh *newMesh = sceneManager->getMesh(modelPath.c_str());
-    irr::video::ITexture *newTexture = driver->getTexture(texturePath.c_str());
+    irr::scene::IAnimatedMesh *newMesh = contextManager.getSceneManager()->getMesh(modelPath.c_str());
+    irr::video::ITexture *newTexture = contextManager.getDriver()->getTexture(texturePath.c_str());
 
     if (newMesh == nullptr || newTexture == nullptr) {
         // TODO: throw exception
     }
-    this->mesh = sceneManager->addAnimatedMeshSceneNode(newMesh, 0);
+    this->mesh = contextManager.getSceneManager()->addAnimatedMeshSceneNode(newMesh, 0);
     this->mesh->setMaterialFlag(irr::video::EMF_LIGHTING, true);
     this->mesh->setMaterialFlag(irr::video::EMF_FOG_ENABLE, true);
     this->mesh->setMaterialTexture(0, newTexture);
@@ -26,7 +25,6 @@ Indie::Components::RenderComponent::RenderComponent(std::string const &modelPath
 
 Indie::Components::RenderComponent::~RenderComponent()
 {
-    this->mesh->remove();
 }
 
 irr::scene::IAnimatedMeshSceneNode *Indie::Components::RenderComponent::getMesh()

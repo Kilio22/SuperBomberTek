@@ -8,7 +8,6 @@
 #include "WallPassComponent.hpp"
 
 Indie::Components::WallPassComponent::WallPassComponent()
-    : AComponent(0)
 {
     this->canPass = false;
 }

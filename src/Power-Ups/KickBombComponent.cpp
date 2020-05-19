@@ -8,7 +8,6 @@
 #include "KickBombComponent.hpp"
 
 Indie::Components::KickBombComponent::KickBombComponent()
-    : AComponent(0)
 {
     this->canKick = false;
 }
