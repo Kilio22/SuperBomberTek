@@ -21,12 +21,14 @@ find_package(SFML 2.5 COMPONENTS system audio REQUIRED)
 
 # add include directories
 include_directories(include)
+include_directories(include/Power-Ups)
 include_directories(${Irrlicht_INCLUDE_DIRS})
 
 # add the executable
 #add_definitions("-Wall -g")
 file(GLOB SRCS src/*.cpp)
-add_executable(Bomberman ${SRCS})
+file(GLOB SRCS_POWER src/Power-Ups/*.cpp)
+add_executable(Bomberman ${SRCS} ${SRCS_POWER} )
 
 target_link_libraries(Bomberman ${Irrlicht_LIBRARIES})
 target_link_libraries(Bomberman sfml-graphics sfml-audio)
