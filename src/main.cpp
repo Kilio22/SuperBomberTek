@@ -10,18 +10,22 @@
 #include "EntityManager.hpp"
 #include "RenderSystem.hpp"
 #include "MusicManager.hpp"
+#include "ContextManager.hpp"
 
 int main(void)
 {
     MusicManager::AddMusic("../ressources/musics/main_menu.wav"); // id 0
     MusicManager::AddMusic("../ressources/musics/level_select.wav"); // id 1
-    MusicManager::setVolume(5);
+    MusicManager::setVolume(1);
     MusicManager::setMusic(1);
     MusicManager::playMusic();
 
-    irr::IrrlichtDevice *device = irr::createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(1280, 720), 32); // On créer le device (la fenêtre en gros)
-    irr::video::IVideoDriver *driver = device->getVideoDriver(); // On récupère le driver
-    irr::scene::ISceneManager *sceneManager = device->getSceneManager(); // On récupère le scène manager
+    ContextManager contextManager(irr::core::dimension2d<irr::u32>(1280, 720));
+
+    irr::IrrlichtDevice *device = contextManager.getDevice();
+    irr::video::IVideoDriver *driver = contextManager.getDriver();
+    irr::scene::ISceneManager *sceneManager = contextManager.getSceneManager();
+
     Indie::EntityManager entityManager;
     Indie::System::RenderSystem renderSystem;
     irr::SKeyMap keyMap[4];                             // re-assigne les commandes
