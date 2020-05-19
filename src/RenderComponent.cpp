@@ -18,9 +18,10 @@ Indie::Components::RenderComponent::RenderComponent(std::string const &modelPath
         // TODO: throw exception
     }
     this->mesh = sceneManager->addAnimatedMeshSceneNode(newMesh, 0);
-    this->mesh->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+    this->mesh->setMaterialFlag(irr::video::EMF_LIGHTING, true);
+    this->mesh->setMaterialFlag(irr::video::EMF_FOG_ENABLE, true);
     this->mesh->setMaterialTexture(0, newTexture);
-    this->mesh->setMD2Animation(irr::scene::EMAT_STAND);
+    this->mesh->setVisible(true);
 }
 
 Indie::Components::RenderComponent::~RenderComponent()

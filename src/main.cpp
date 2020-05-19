@@ -9,9 +9,16 @@
 #include <iostream>
 #include "EntityManager.hpp"
 #include "RenderSystem.hpp"
+#include "MusicManager.hpp"
 
 int main(void)
 {
+    MusicManager::AddMusic("../ressources/musics/main_menu.wav"); // id 0
+    MusicManager::AddMusic("../ressources/musics/level_select.wav"); // id 1
+    MusicManager::setVolume(5);
+    MusicManager::setMusic(1);
+    MusicManager::playMusic();
+
     irr::IrrlichtDevice *device = irr::createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(1280, 720), 32); // On créer le device (la fenêtre en gros)
     irr::video::IVideoDriver *driver = device->getVideoDriver(); // On récupère le driver
     irr::scene::ISceneManager *sceneManager = device->getSceneManager(); // On récupère le scène manager
@@ -33,9 +40,15 @@ int main(void)
     irr::f32 x = 0;
     irr::f32 y = 0;
 
+    // Lumière et brouillard quand on s'éloigne
+    driver->setFog(irr::video::SColor(10, 0, 0, 0), irr::video::EFT_FOG_LINEAR, 200.0f, 800.0f, 0.005f, true, true);
+    sceneManager->setAmbientLight (irr::video::SColorf(0.5,0.5,0.5,0.5));
+    //J'ai foutu la camera en parent, du coup ça éclaire autours de la cam.
+    sceneManager->addLightSceneNode (camera, irr::core::vector3df(0, 0, 0), irr::video::SColorf(1.0f, 1.0f, 1.0f, 0.0f), 500.0f);
+
     for (size_t i = 0; i < 10; i++) {
         for (size_t j = 0; j < 10; j++) {
-            entityManager.createGround(irr::core::vector3df(x, 0, y), "../ressources/wall.obj", "../ressources/wall.png", sceneManager, driver);
+            entityManager.createGround(irr::core::vector3df(x, 0, y), "../ressources/static_mesh/map_dirt/ground.obj", "../ressources/static_mesh/map_dirt/ground.png", sceneManager, driver);
             x += 20;
         }
         x = 0;
@@ -43,7 +56,8 @@ int main(void)
     }
     device->getCursorControl()->setVisible(false);
     while (device->run()) {
-        driver->beginScene(true, true, irr::video::SColor(0,255,255,255));
+        MusicManager::update();
+        driver->beginScene(true, true, irr::video::SColor(0,0,0,0));
         renderSystem.onUpdate(0, entityManager);
         sceneManager->drawAll();
         driver->endScene();
