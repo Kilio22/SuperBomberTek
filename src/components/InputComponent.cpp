@@ -13,7 +13,7 @@ Indie::Components::InputComponent::InputComponent(std::map<irr::EKEY_CODE, KEY_T
     : keys(keys)
 {
     for (auto it = keys.begin(); it != keys.end(); ++it) {
-        this->keysState.at(it->first) = false;
+        this->keysState[it->first] = false;
     }
 }
 
@@ -29,7 +29,7 @@ bool Indie::Components::InputComponent::isKeyPressed(KEY_TYPE key) const
     return keyState->second;
 }
 
-const std::map<irr::EKEY_CODE, Indie::Components::InputComponent::KEY_TYPE> &Indie::Components::InputComponent::getKeys() const
+const std::map<irr::EKEY_CODE, Indie::Components::KEY_TYPE> &Indie::Components::InputComponent::getKeys() const
 {
     return this->keys;
 }
@@ -52,7 +52,7 @@ void Indie::Components::InputComponent::setKeysState(std::map<irr::EKEY_CODE, bo
     this->keysState = newKeyStates;
 }
 
-Indie::Components::InputComponent::KEY_TYPE Indie::Components::InputComponent::getKeyType(irr::EKEY_CODE key)
+Indie::Components::KEY_TYPE Indie::Components::InputComponent::getKeyType(irr::EKEY_CODE key)
 {
     auto toFind = std::find_if(this->keys.begin(), this->keys.end(), [key](const std::pair<irr::EKEY_CODE, KEY_TYPE> &value) {return value.first == key;});
 

@@ -8,7 +8,7 @@
 #include "RotationComponent.hpp"
 
 Indie::Components::RotationComponent::RotationComponent()
-    : angle(irr::core::vector3df(0, 0, 0))
+    : angle(irr::core::vector3df(0, 180, 0))
 {}
 
 irr::core::vector3df Indie::Components::RotationComponent::getAngle()

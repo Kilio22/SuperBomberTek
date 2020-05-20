@@ -26,11 +26,13 @@ void Indie::Systems::RenderSystem::onUpdate(int ticks, EntityManager &entityMana
     for (auto entity : entityManager.each<Indie::Components::RenderComponent, Indie::Components::PositionComponent>()) {
         auto renderComponent = entity->getComponent<Indie::Components::RenderComponent>();
         auto positionComponent = entity->getComponent<Indie::Components::PositionComponent>();
+
         renderComponent->getMesh()->setPosition(positionComponent->getPosition());
     }
     for (auto entity : entityManager.each<Indie::Components::RenderComponent, Indie::Components::RotationComponent>()) {
         auto renderComponent = entity->getComponent<Indie::Components::RenderComponent>();
         auto rotationComponent = entity->getComponent<Indie::Components::RotationComponent>();
+
         renderComponent->getMesh()->setRotation(rotationComponent->getAngle());
     }
 }

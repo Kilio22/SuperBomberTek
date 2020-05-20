@@ -13,5 +13,7 @@
 #include "components/PositionComponent.hpp"
 #include "components/RenderComponent.hpp"
 #include "components/VelocityComponent.hpp"
+#include "components/MeshComponent.hpp"
+#include "components/RotationComponent.hpp"
 
 #endif /* !COMPONENTS_H_ */

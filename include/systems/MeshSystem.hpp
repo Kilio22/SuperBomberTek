@@ -16,7 +16,7 @@ namespace Indie::Systems
     class MeshSystem : public ISystem
     {
         public:
-            MeshSystem();
+            MeshSystem() = default;
             ~MeshSystem() = default;
 
             void onUpdate(int ticks, EntityManager &);

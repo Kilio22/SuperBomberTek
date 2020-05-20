@@ -10,16 +10,16 @@
 #include "EventHandler.hpp"
 #include "InputComponent.hpp"
 
-void onUpdate(int ticks, Indie::EntityManager &entityManager)
+void Indie::Systems::MoveSystem::onUpdate(int ticks, Indie::EntityManager &entityManager)
 {
     for (auto entity : entityManager.each<Indie::Components::MoveComponent, Indie::Components::InputComponent>()) {
         auto inputComponent = entity->getComponent<Indie::Components::InputComponent>();
         auto moveComponent = entity->getComponent<Indie::Components::MoveComponent>();
 
-        moveComponent->setUp(inputComponent->isKeyPressed(Indie::Components::InputComponent::UP));
-        moveComponent->setDown(inputComponent->isKeyPressed(Indie::Components::InputComponent::DOWN));
-        moveComponent->setRight(inputComponent->isKeyPressed(Indie::Components::InputComponent::RIGHT));
-        moveComponent->setLeft(inputComponent->isKeyPressed(Indie::Components::InputComponent::LEFT));
-        moveComponent->setDrop(inputComponent->isKeyPressed(Indie::Components::InputComponent::DROP));
+        moveComponent->setUp(inputComponent->isKeyPressed(Indie::Components::UP));
+        moveComponent->setDown(inputComponent->isKeyPressed(Indie::Components::DOWN));
+        moveComponent->setRight(inputComponent->isKeyPressed(Indie::Components::RIGHT));
+        moveComponent->setLeft(inputComponent->isKeyPressed(Indie::Components::LEFT));
+        moveComponent->setDrop(inputComponent->isKeyPressed(Indie::Components::DROP));
     }
 }

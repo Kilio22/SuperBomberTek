@@ -7,12 +7,18 @@
 
 #include <irrlicht.h>
 #include <iostream>
+#include "Components.h"
 #include "EntityBuilder.h"
 #include "EntityManager.hpp"
 #include "RenderSystem.hpp"
 #include "MusicManager.hpp"
 #include "ContextManager.hpp"
+#include "MoveSystem.hpp"
 #include "MapGenerator.hpp"
+#include "VelocitySystem.hpp"
+#include "InputSystem.hpp"
+#include "RotationSystem.hpp"
+#include "MeshSystem.hpp"
 
 int main(void)
 {
@@ -30,6 +36,13 @@ int main(void)
 
     Indie::EntityManager entityManager;
     Indie::Systems::RenderSystem renderSystem;
+    Indie::Systems::InputSystem inputSystem;
+    Indie::Systems::MoveSystem moveSystem;
+    Indie::Systems::RotationSystem rotationSystem;
+    Indie::Systems::VelocitySystem velocitySystem;
+    Indie::Systems::MeshSystem meshSystem;
+
+    device->setEventReceiver(&Indie::EventHandler::getInstance());
     irr::SKeyMap keyMap[4];                             // re-assigne les commandes
     keyMap[0].Action = irr::EKA_MOVE_FORWARD;           // avancer
     keyMap[0].KeyCode = irr::KEY_KEY_Z;
@@ -41,8 +54,8 @@ int main(void)
     keyMap[3].KeyCode = irr::KEY_KEY_D;
 
     irr::scene::ICameraSceneNode *camera = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.1f, -1, keyMap, 4);
-    camera->setPosition(irr::core::vector3df(irr::f32(140), irr::f32(200), irr::f32(-30)));
-    camera->setTarget(irr::core::vector3df(irr::f32(140), irr::f32(0), irr::f32(150)));
+    camera->setPosition(irr::core::vector3df(irr::f32(19), irr::f32(61.8), irr::f32(2.2)));
+    camera->setTarget(irr::core::vector3df(irr::f32(0), irr::f32(0), irr::f32(0)));
 
     irr::f32 x = 0;
     irr::f32 y = 0;
@@ -77,11 +90,16 @@ int main(void)
                 Indie::EntityBuilder::createGround(entityManager, irr::core::vector3df(20 * i, 20, 20 * j), "../ressources/static_mesh/map_stone/ground.obj", "../ressources/static_mesh/map_stone/ground.png", contextManager);
         }
     }
-
+    Indie::EntityBuilder::createPlayer(entityManager, irr::core::vector3df(20, 20, 20), "../ressources/static_mesh/character/red.obj", "../ressources/textures/character/red.png", contextManager, {{irr::KEY_UP, Indie::Components::UP}, {irr::KEY_DOWN, Indie::Components::DOWN}, {irr::KEY_RIGHT, Indie::Components::RIGHT}, {irr::KEY_LEFT, Indie::Components::LEFT}});
     device->getCursorControl()->setVisible(false);
     while (device->run()) {
         MusicManager::update();
         driver->beginScene(true, true, irr::video::SColor(0,0,0,0));
+        inputSystem.onUpdate(0, entityManager);
+        moveSystem.onUpdate(0, entityManager);
+        velocitySystem.onUpdate(0, entityManager);
+        rotationSystem.onUpdate(0, entityManager);
+        meshSystem.onUpdate(0, entityManager);
         renderSystem.onUpdate(0, entityManager);
         sceneManager->drawAll();
         driver->endScene();

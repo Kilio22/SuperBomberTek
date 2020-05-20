@@ -7,7 +7,7 @@
 
 #include "MeshComponent.hpp"
 
-const std::map<Indie::Components::MeshComponent::POSITION, std::string> Indie::Components::MeshComponent::meshPaths = {{STAND, "ressources/static_mesh/character/red.obj"}, {RUN, "ressources/animated_mesh/character/untitled_walk.b3d"}};
+const std::map<Indie::Components::MeshComponent::POSITION, std::string> Indie::Components::MeshComponent::meshPaths = {{STAND, "../ressources/static_mesh/character/red.obj"}, {RUN, "../ressources/animated_mesh/character/untitled_walk.b3d"}};
 
 Indie::Components::MeshComponent::MeshComponent(const std::string &texturePath)
 {

@@ -16,13 +16,13 @@ void Indie::Systems::RotationSystem::onUpdate(int ticks, EntityManager &entityMa
         auto rotationComponent = entity->getComponent<Indie::Components::RotationComponent>();
 
         if (moveComponent->getUp() == true) {
-            rotationComponent->setAngle(0);
+            rotationComponent->setAngle(180);
         } else if (moveComponent->getDown() == true) {
             rotationComponent->setAngle(0);
         } else if (moveComponent->getRight() == true) {
-            rotationComponent->setAngle(0);
+            rotationComponent->setAngle(270);
         } else if (moveComponent->getLeft() == true) {
-            rotationComponent->setAngle(0);
+            rotationComponent->setAngle(90);
         }
     }
 }

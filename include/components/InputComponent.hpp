@@ -12,17 +12,17 @@
 
 namespace Indie::Components
 {
+    enum KEY_TYPE {
+        LEFT,
+        RIGHT,
+        UP,
+        DOWN,
+        DROP,
+        NONE
+    };
     class InputComponent
     {
         public:
-            enum KEY_TYPE {
-                LEFT,
-                RIGHT,
-                UP,
-                DOWN,
-                DROP,
-                NONE
-            };
 
             InputComponent(std::map<irr::EKEY_CODE, KEY_TYPE> keys);
             ~InputComponent() = default;

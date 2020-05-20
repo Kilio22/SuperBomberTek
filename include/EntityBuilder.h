@@ -34,10 +34,20 @@ public:
         return entity;
     }
 
-    static Entity *createPlayer(EntityManager &entityManager)
+    static Entity *createPlayer(EntityManager &entityManager, const irr::core::vector3df &vector, const std::string &modelPath,
+const std::string &texturePath, ContextManager &contextManager, std::map<irr::EKEY_CODE, Components::KEY_TYPE> keys)
     {
         Entity *entity = entityManager.createEntity();
 
+        entity->addComponent<Components::PositionComponent>(
+            vector.X, vector.Y, vector.Z);
+        entity->addComponent<Components::RenderComponent>(
+            modelPath, texturePath, contextManager);
+        entity->addComponent<Components::InputComponent>(keys);
+        entity->addComponent<Components::MoveComponent>();
+        entity->addComponent<Components::VelocityComponent>();
+        entity->addComponent<Components::MeshComponent>(texturePath);
+        entity->addComponent<Components::RotationComponent>();
         return entity;
     }
 };
