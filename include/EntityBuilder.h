@@ -15,8 +15,6 @@
 namespace Indie {
 
 class EntityBuilder {
-private:
-
 public:
     EntityBuilder() = delete;
     EntityBuilder(const EntityBuilder &) = delete;

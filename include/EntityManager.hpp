@@ -21,7 +21,7 @@ namespace Indie
     class EntityIterator
     {
         public:
-            EntityIterator(EntityManager *entityManager, size_t index, bool isEnd)
+            EntityIterator(const EntityManager *entityManager, size_t index, bool isEnd)
                 : entityManager(entityManager), index(index), _isEnd(isEnd) {}
 
             bool isEnd() const;
@@ -54,7 +54,7 @@ namespace Indie
             EntityIterator<Types...> &operator++();
 
         private:
-            EntityManager *entityManager;
+            const EntityManager *entityManager;
             size_t index;
             bool _isEnd;
     };
