@@ -8,46 +8,52 @@
 #ifndef ENTITY_HPP_
 #define ENTITY_HPP_
 
-#include <vector>
+#include <unordered_map>
 #include <memory>
-#include "IComponent.hpp"
-// #include "IEntity.hpp"
+#include "ComponentContainer.hpp"
+#include "TypeIndex.hpp"
 
 namespace Indie
 {
-    class Entity/*  : public IEntity */
+    class Entity
     {
         public:
-            Entity() = default;
+            Entity(int id) : id(id) {}
             ~Entity() = default;
 
             template<class T>
-            std::shared_ptr<T> getComponent(int componentId)
+            bool has()
             {
-                if (this->components[componentId] == nullptr) {
-                    return nullptr;
+                return components.find(getTypeIndex<T>()) != components.end();
+            }
+
+            template <typename T, typename TNext, typename... TList>
+            bool has()
+            {
+                return this->has<T>() && this->has<TNext, TList...>();
+            }
+
+            template <typename T>
+            T *getComponent()
+            {
+                auto container = components.find(getTypeIndex<T>());
+
+                if (container != components.end()) {
+                    return &reinterpret_cast<ComponentContainer<T> *>(container->second)->data;
                 }
-                return std::static_pointer_cast<T>(this->components[componentId]);
+                return nullptr;
             }
 
-            bool hasComponent(int componentId)
+            template <typename T, typename... Args>
+            void addComponent(Args &&... args)
             {
-                if (this->components[componentId] == nullptr)
-                    return false;
-                return true;
-            }
+                ComponentContainer<T> *container = new ComponentContainer<T>(T(args...));
 
-            void addComponent(std::shared_ptr<Components::IComponent> component)
-            {
-                this->components.push_back(component);
-            }
-
-            void removeComponent(std::shared_ptr<Components::IComponent>)
-            {
+                components.insert({ getTypeIndex<T>(), container });
             }
 
         private:
-            std::vector<std::shared_ptr<Components::IComponent>> components;
+            std::unordered_map<TypeIndex, IComponentContainer *> components;
             int id;
     };
 }
