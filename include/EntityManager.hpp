@@ -116,22 +116,22 @@ namespace Indie
                 return this->count;
             }
 
-            // void createGround(irr::core::vector3df const &vector, const std::string &modelPath, const std::string &texturePath, ContextManager &contextManager)
-            // {
-            //     Entity deglingue;
-            //     std::shared_ptr<Components::PositionComponent> xd = std::make_shared<Components::PositionComponent>(vector.X, vector.Y, vector.Z);
-            //     std::shared_ptr<Components::RenderComponent> xd2 = std::make_shared<Components::RenderComponent>(modelPath, texturePath, contextManager);
+            void createGround(irr::core::vector3df const &vector, const std::string &modelPath, const std::string &texturePath, ContextManager &contextManager)
+            {
+                Entity deglingue;
+                std::shared_ptr<Components::PositionComponent> xd = std::make_shared<Components::PositionComponent>(vector.X, vector.Y, vector.Z);
+                std::shared_ptr<Components::RenderComponent> xd2 = std::make_shared<Components::RenderComponent>(modelPath, texturePath, contextManager);
 
-            //     deglingue.addComponent(std::static_pointer_cast<Components::IComponent>(xd));
-            //     deglingue.addComponent(std::static_pointer_cast<Components::IComponent>(xd2));
+                deglingue.addComponent(std::static_pointer_cast<Components::IComponent>(xd));
+                deglingue.addComponent(std::static_pointer_cast<Components::IComponent>(xd2));
 
-            //     this->entities.push_back(deglingue);
-            // }
+                this->entities.push_back(deglingue);
+            }
 
-            // void createWall(irr::core::vector3df &vector);
-            // void createPlayer(irr::core::vector3df &vector);
-            // void createBomb(irr::core::vector3df &vector);
-            // void createIA(irr::core::vector3df &vector);
+            void createWall(irr::core::vector3df &vector);
+            void createPlayer(irr::core::vector3df &vector);
+            void createBomb(irr::core::vector3df &vector);
+            void createIA(irr::core::vector3df &vector);
 
         private:
             std::vector<Entity *> entities;

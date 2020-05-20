@@ -11,6 +11,7 @@
 #include "RenderSystem.hpp"
 #include "MusicManager.hpp"
 #include "ContextManager.hpp"
+#include "MapGenerator.hpp"
 
 int main(void)
 {
@@ -39,7 +40,8 @@ int main(void)
     keyMap[3].KeyCode = irr::KEY_KEY_D;
 
     irr::scene::ICameraSceneNode *camera = sceneManager->addCameraSceneNodeFPS(0, 100.0f, 0.1f, -1, keyMap, 4);
-    camera->setPosition(irr::core::vector3df(irr::f32(39.5108), irr::f32(22.277), irr::f32(-10.2412)));
+    camera->setPosition(irr::core::vector3df(irr::f32(140), irr::f32(200), irr::f32(-30)));
+    camera->setTarget(irr::core::vector3df(irr::f32(140), irr::f32(0), irr::f32(150)));
 
     irr::f32 x = 0;
     irr::f32 y = 0;
@@ -50,14 +52,31 @@ int main(void)
     //J'ai foutu la camera en parent, du coup ça éclaire autours de la cam.
     sceneManager->addLightSceneNode (camera, irr::core::vector3df(0, 0, 0), irr::video::SColorf(1.0f, 1.0f, 1.0f, 0.0f), 500.0f);
 
-    for (size_t i = 0; i < 10; i++) {
-        for (size_t j = 0; j < 10; j++) {
+    for (size_t i = 0; i < 15; i++) {
+        for (size_t j = 0; j < 15; j++) {
             entityManager.createGround(irr::core::vector3df(x, 0, y), "../ressources/static_mesh/map_dirt/ground.obj", "../ressources/static_mesh/map_dirt/ground.png", contextManager);
             x += 20;
         }
         x = 0;
         y += 20;
     }
+    
+    Indie::MapGenerator generator(Indie::MapGenerator::DEFAULT);
+
+    std::vector<std::vector<int>> map = generator.getMap();
+    for (size_t i = 0; i < 15; i++) {
+        for (size_t j = 0; j < 15; j++) {
+            if (map[i][j] == -1)
+                entityManager.createGround(irr::core::vector3df(20 * i, 20, 20 * j), "../ressources/static_mesh/map_dirt/wall_side.obj", "../ressources/static_mesh/map_dirt/wall_side.png", contextManager);
+            else if (map[i][j] == 1)
+                entityManager.createGround(irr::core::vector3df(20 * i, 20, 20 * j), "../ressources/static_mesh/map_dirt/box.obj", "../ressources/static_mesh/map_dirt/box.png", contextManager);
+            else if (map[i][j] == 2)
+                entityManager.createGround(irr::core::vector3df(20 * i, 20, 20 * j), "../ressources/static_mesh/map_dirt/wall_middle.obj", "../ressources/static_mesh/map_dirt/wall_middle.png", contextManager);
+            else if (map[i][j] == 3)
+                entityManager.createGround(irr::core::vector3df(20 * i, 20, 20 * j), "../ressources/static_mesh/map_stone/ground.obj", "../ressources/static_mesh/map_stone/ground.png", contextManager);
+        }
+    }
+
     device->getCursorControl()->setVisible(false);
     while (device->run()) {
         MusicManager::update();
