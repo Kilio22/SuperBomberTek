@@ -35,7 +35,7 @@ void Indie::Components::MeshComponent::setCurrentPosition(POSITION newPostition)
     this->currentPosition = newPostition;
 }
 
-const std::string &Indie::Components::MeshComponent::getMeshPathByPosition(POSITION pos)
+std::string Indie::Components::MeshComponent::getMeshPathByPosition(POSITION pos)
 {
     auto found = this->meshPaths.find(pos);
 

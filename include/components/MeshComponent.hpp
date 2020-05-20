@@ -28,7 +28,7 @@ namespace Indie::Components
             void setTexturePath(const std::string &newPath);
             POSITION getCurrentPosition();
             void setCurrentPosition(POSITION newPostition);
-            const std::string &getMeshPathByPosition(POSITION);
+            std::string getMeshPathByPosition(POSITION);
 
         protected:
         private:

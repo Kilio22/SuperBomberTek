@@ -15,3 +15,8 @@ irr::core::vector3df Indie::Components::PositionComponent::getPosition()
 {
     return this->position;
 }
+
+void Indie::Components::PositionComponent::setPosition(irr::core::vector3df position)
+{
+    this->position = position;
+}
