@@ -27,7 +27,7 @@ namespace Indie::Systems
         private:
             EventHandler &eventHandler;
 
-            std::map<irr::EKEY_CODE, bool> updateKeys(std::map<irr::EKEY_CODE, bool>, std::shared_ptr<Indie::Components::InputComponent> &);
+            std::map<irr::EKEY_CODE, bool> updateKeys(std::map<irr::EKEY_CODE, bool>, Indie::Components::InputComponent *inputComp);
     };
 }
 

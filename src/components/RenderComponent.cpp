@@ -8,7 +8,8 @@
 #include <iostream>
 #include "RenderComponent.hpp"
 
-Indie::Components::RenderComponent::RenderComponent(std::string const &modelPath, std::string const &texturePath, ContextManager const &contextManager)
+Indie::Components::RenderComponent::RenderComponent(std::string const &modelPath, std::string const &texturePath, const ContextManager &contextManager)
+    : contextManager(contextManager)
 {
     irr::scene::IAnimatedMesh *newMesh = contextManager.getSceneManager()->getMesh(modelPath.c_str());
     irr::video::ITexture *newTexture = contextManager.getDriver()->getTexture(texturePath.c_str());
@@ -23,22 +24,21 @@ Indie::Components::RenderComponent::RenderComponent(std::string const &modelPath
     this->mesh->setVisible(true);
 }
 
-Indie::Components::RenderComponent::~RenderComponent()
-{
-}
-
-irr::scene::IAnimatedMeshSceneNode *Indie::Components::RenderComponent::getMesh()
+irr::scene::IAnimatedMeshSceneNode *Indie::Components::RenderComponent::getMesh() const
 {
     return this->mesh;
 }
 
-void Indie::Components::RenderComponent::setMesh(irr::scene::IAnimatedMesh *newMesh, irr::scene::ISceneManager *sceneManager)
+void Indie::Components::RenderComponent::setMesh(irr::scene::IAnimatedMeshSceneNode *newMesh)
 {
-    irr::scene::ISceneNode *parent = this->mesh->getParent();
-
     if (!newMesh) {
         return;
     }
     this->mesh->remove();
-    this->mesh = sceneManager->addAnimatedMeshSceneNode(newMesh, parent);
+    this->mesh = newMesh;
+}
+
+const ContextManager &Indie::Components::RenderComponent::getContextManager() const
+{
+    return this->contextManager;
 }

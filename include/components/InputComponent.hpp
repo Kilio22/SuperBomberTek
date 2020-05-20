@@ -8,13 +8,11 @@
 #ifndef INPUTCOMPONENT_HPP_
 #define INPUTCOMPONENT_HPP_
 
-#include <vector>
 #include <map>
-#include "IComponent.hpp"
 
 namespace Indie::Components
 {
-    class InputComponent : public IComponent
+    class InputComponent
     {
         public:
             enum KEY_TYPE {

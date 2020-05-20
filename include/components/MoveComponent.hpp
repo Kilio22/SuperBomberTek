@@ -8,14 +8,12 @@
 #ifndef MOVECOMPONENT_HPP_
 #define MOVECOMPONENT_HPP_
 
-#include <vector>
 #include <string>
-#include "IComponent.hpp"
 #include "ContextManager.hpp"
 
 namespace Indie::Components
 {
-    class MoveComponent : public IComponent
+    class MoveComponent
     {
         public:
             MoveComponent();

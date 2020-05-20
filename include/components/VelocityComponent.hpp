@@ -8,11 +8,9 @@
 #ifndef VELOCITYCOMPONENT_HPP_
 #define VELOCITYCOMPONENT_HPP_
 
-#include "IComponent.hpp"
-
 namespace Indie::Components
 {
-    class VelocityComponent : public IComponent
+    class VelocityComponent
     {
         public:
             VelocityComponent();

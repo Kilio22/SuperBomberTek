@@ -13,10 +13,10 @@ Indie::Systems::InputSystem::InputSystem()
     : eventHandler(EventHandler::getInstance())
 {}
 
-std::map<irr::EKEY_CODE, bool> Indie::Systems::InputSystem::updateKeys(std::map<irr::EKEY_CODE, bool> keysStates, std::shared_ptr<Indie::Components::InputComponent> &inputComp)
+std::map<irr::EKEY_CODE, bool> Indie::Systems::InputSystem::updateKeys(std::map<irr::EKEY_CODE, bool> keysStates, Indie::Components::InputComponent *inputComponent)
 {
     for (auto &keyState : keysStates) {
-        if (inputComp->getKeyType(keyState.first) == Indie::Components::InputComponent::DROP) {
+        if (inputComponent->getKeyType(keyState.first) == Indie::Components::InputComponent::DROP) {
             keyState.second = this->eventHandler.isKeyReleased(keyState.first);
         } else {
             keyState.second = this->eventHandler.isKeyPressed(keyState.first);
@@ -27,10 +27,8 @@ std::map<irr::EKEY_CODE, bool> Indie::Systems::InputSystem::updateKeys(std::map<
 
 void Indie::Systems::InputSystem::onUpdate(int ticks, EntityManager &entityManager)
 {
-    auto entities = entityManager.getEntitiesByComponents(2); // on get tout ceux qui on un inputComp
-
-    for (auto &entity : entities) {
-        auto inputComp = entity.getComponent<Indie::Components::InputComponent>(2);
-        inputComp->setKeysState(this->updateKeys(inputComp->getKeysState(), inputComp));
+    for (auto entity : entityManager.each<Indie::Components::InputComponent>()) {
+        auto inputComponent = entity->getComponent<Indie::Components::InputComponent>();
+        inputComponent->setKeysState(this->updateKeys(inputComponent->getKeysState(), inputComponent));
     }
 }

@@ -7,6 +7,7 @@
 
 #include <irrlicht.h>
 #include <iostream>
+#include "EntityBuilder.h"
 #include "EntityManager.hpp"
 #include "RenderSystem.hpp"
 #include "MusicManager.hpp"
@@ -54,26 +55,26 @@ int main(void)
 
     for (size_t i = 0; i < 15; i++) {
         for (size_t j = 0; j < 15; j++) {
-            entityManager.createGround(irr::core::vector3df(x, 0, y), "../ressources/static_mesh/map_dirt/ground.obj", "../ressources/static_mesh/map_dirt/ground.png", contextManager);
+            Indie::EntityBuilder::createGround(entityManager, irr::core::vector3df(x, 0, y), "../ressources/static_mesh/map_dirt/ground.obj", "../ressources/static_mesh/map_dirt/ground.png", contextManager);
             x += 20;
         }
         x = 0;
         y += 20;
     }
-    
+
     Indie::MapGenerator generator(Indie::MapGenerator::DEFAULT);
 
     std::vector<std::vector<int>> map = generator.getMap();
     for (size_t i = 0; i < 15; i++) {
         for (size_t j = 0; j < 15; j++) {
             if (map[i][j] == -1)
-                entityManager.createGround(irr::core::vector3df(20 * i, 20, 20 * j), "../ressources/static_mesh/map_dirt/wall_side.obj", "../ressources/static_mesh/map_dirt/wall_side.png", contextManager);
+                Indie::EntityBuilder::createGround(entityManager, irr::core::vector3df(20 * i, 20, 20 * j), "../ressources/static_mesh/map_dirt/wall_side.obj", "../ressources/static_mesh/map_dirt/wall_side.png", contextManager);
             else if (map[i][j] == 1)
-                entityManager.createGround(irr::core::vector3df(20 * i, 20, 20 * j), "../ressources/static_mesh/map_dirt/box.obj", "../ressources/static_mesh/map_dirt/box.png", contextManager);
+                Indie::EntityBuilder::createGround(entityManager, irr::core::vector3df(20 * i, 20, 20 * j), "../ressources/static_mesh/map_dirt/box.obj", "../ressources/static_mesh/map_dirt/box.png", contextManager);
             else if (map[i][j] == 2)
-                entityManager.createGround(irr::core::vector3df(20 * i, 20, 20 * j), "../ressources/static_mesh/map_dirt/wall_middle.obj", "../ressources/static_mesh/map_dirt/wall_middle.png", contextManager);
+                Indie::EntityBuilder::createGround(entityManager, irr::core::vector3df(20 * i, 20, 20 * j), "../ressources/static_mesh/map_dirt/wall_middle.obj", "../ressources/static_mesh/map_dirt/wall_middle.png", contextManager);
             else if (map[i][j] == 3)
-                entityManager.createGround(irr::core::vector3df(20 * i, 20, 20 * j), "../ressources/static_mesh/map_stone/ground.obj", "../ressources/static_mesh/map_stone/ground.png", contextManager);
+                Indie::EntityBuilder::createGround(entityManager, irr::core::vector3df(20 * i, 20, 20 * j), "../ressources/static_mesh/map_stone/ground.obj", "../ressources/static_mesh/map_stone/ground.png", contextManager);
         }
     }
 

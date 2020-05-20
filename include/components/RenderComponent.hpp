@@ -10,21 +10,23 @@
 
 #include <irrlicht.h>
 #include <string>
-#include "IComponent.hpp"
 #include "ContextManager.hpp"
 
 namespace Indie::Components
 {
-    class RenderComponent : public IComponent
+    class RenderComponent
     {
         public:
             RenderComponent(std::string const &, std::string const &, ContextManager const &);
-            ~RenderComponent();
+            ~RenderComponent() = default;
 
-            irr::scene::IAnimatedMeshSceneNode *getMesh();
-            void setMesh(irr::scene::IAnimatedMesh *, irr::scene::ISceneManager *);
+            irr::scene::IAnimatedMeshSceneNode *getMesh() const;
+            void setMesh(irr::scene::IAnimatedMeshSceneNode *);
+            const ContextManager &getContextManager() const;
+
         private:
             irr::scene::IAnimatedMeshSceneNode *mesh;
+            const ContextManager &contextManager;
     };
 }
 

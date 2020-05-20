@@ -13,16 +13,30 @@
 
 void Indie::Systems::VelocitySystem::onUpdate(int ticks, EntityManager &entityManager)
 {
-    auto entities = entityManager.getEntitiesByComponents(2); // Faut get les entity qui bougent (avec input + position + move + velocity bien sur xd)
+    for (auto entity : entityManager.each<Indie::Components::PositionComponent, Indie::Components::MoveComponent, Indie::Components::VelocityComponent>()) {
+        auto moveComponent = entity->getComponent<Indie::Components::MoveComponent>();
+        auto positionComponent = entity->getComponent<Indie::Components::PositionComponent>();
+        auto velocityComponent = entity->getComponent<Indie::Components::VelocityComponent>();
+        irr::core::vector3df posVector = positionComponent->getPosition();
 
-    for (auto &entity : entities) {
-        auto moveComp = entity.getComponent<Indie::Components::MoveComponent>(42);
-        auto posComp = entity.getComponent<Indie::Components::PositionComponent>(42);
-        auto velComp = entity.getComponent<Indie::Components::VelocityComponent>(42);
-        velComp->setVelocity(0);
-        if (moveComp->getUp() == true) {
-            velComp->setVelocity(1);
-
+        velocityComponent->setVelocity(0);
+        if (moveComponent->getUp() == true) {
+            velocityComponent->setVelocity(1);
+            posVector.Z += 1;
         }
+        if (moveComponent->getDown() == true) {
+            velocityComponent->setVelocity(1);
+            posVector.Z -= 1;
+        }
+        if (moveComponent->getRight() == true) {
+            velocityComponent->setVelocity(1);
+            posVector.X += 1;
+        }
+        if (moveComponent->getLeft() == true) {
+            velocityComponent->setVelocity(1);
+            posVector.X -= 1;
+        }
+        positionComponent->setPosition(posVector);
+
     }
 }
