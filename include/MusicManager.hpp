@@ -67,7 +67,9 @@ class InvalidIndex : public MusicManagerException
 class MyMusic {
     public:
         MyMusic(std::string filepath);
-        ~MyMusic() {};
+        ~MyMusic() {}
+
+        void drop();
 
         float getVolume() const {return volume;}
         void setVolume(float volume);
@@ -110,6 +112,8 @@ class MusicManager {
         static void restartMusic();
 
         static void update(); //To be called at every frame : MusicManager::update();
+
+        static void drop();
 
         static std::vector<MyMusic> musics;
         static size_t currentMusic;

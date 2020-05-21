@@ -38,10 +38,19 @@ MyMusic::MyMusic(std::string filepath)
         musics.push_back(std::move(outro));
     }
     catch (const MyMusicException& e) {
-        std::cerr << e.what() << '\n';
+        std::cerr << e.type() << ": " << e.what() << std::endl;
         exit(84);
     }
     
+}
+
+void MyMusic::drop()
+{
+    while (musics.size() > 0) {
+        auto tmp = musics[0];
+        musics.erase(musics.begin());
+        delete tmp;
+    }
 }
 
 void MyMusic::setVolume(float _vol)
@@ -64,7 +73,6 @@ void MyMusic::unMute()
     setVolume(volume);
     isMuted = false;
 }
-
 
 void MyMusic::playMusic()
 {
@@ -156,14 +164,16 @@ void MusicManager::setMusic(size_t id)
             MusicManager::musics[currentMusic].playMusic();
     }    
     catch (const MusicManagerException& e) {
-        std::cerr << e.what() << '\n';
+        std::cerr << e.type() << ": " << e.what() << std::endl;
     }
 }
 
 void MusicManager::setVolume(float _vol)
 {
-    for (size_t i = 0; i < MusicManager::musics.size(); i++)
-        MusicManager::musics[i].setVolume(_vol);
+    for (size_t i = 0; i < MusicManager::musics.size(); i++) {
+        if (!MusicManager::isMuted)
+            MusicManager::musics[i].setVolume(_vol);
+    }
     MusicManager::volume = _vol;
 }
 
@@ -212,4 +222,11 @@ void MusicManager::update()
     for (size_t i = 0; i < MusicManager::musics.size(); i++) {
         MusicManager::musics[i].update();
     }
+}
+
+void MusicManager::drop()
+{
+    MusicManager::musics.clear();
+    for (size_t i = 0; i < MusicManager::musics.size(); i++)
+        MusicManager::musics[i].drop();
 }
