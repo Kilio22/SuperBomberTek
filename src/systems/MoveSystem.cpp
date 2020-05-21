@@ -6,9 +6,7 @@
 */
 
 #include "MoveSystem.hpp"
-#include "MoveComponent.hpp"
-#include "EventHandler.hpp"
-#include "InputComponent.hpp"
+#include "Components.h"
 
 void Indie::Systems::MoveSystem::onUpdate(int ticks, Indie::EntityManager &entityManager) const
 {

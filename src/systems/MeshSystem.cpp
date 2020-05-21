@@ -6,8 +6,7 @@
 */
 
 #include "MeshSystem.hpp"
-#include "MeshComponent.hpp"
-#include "VelocityComponent.hpp"
+#include "Components.h"
 
 void Indie::Systems::MeshSystem::changeMesh(Indie::Components::RenderComponent *renderComp, const std::string &meshPath, const std::string &texturePath) const
 {

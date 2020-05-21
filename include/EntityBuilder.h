@@ -43,6 +43,7 @@ class EntityBuilder {
                 vector.X, vector.Y, vector.Z);
             entity->addComponent<Components::RenderComponent>(
                 modelPath, texturePath, contextManager, vector);
+            entity->addComponent<Components::HitboxComponent>(vector, contextManager);
             entity->addComponent<Components::InputComponent>(keys);
             entity->addComponent<Components::MoveComponent>();
             entity->addComponent<Components::VelocityComponent>();

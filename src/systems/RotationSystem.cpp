@@ -6,8 +6,7 @@
 */
 
 #include "RotationSystem.hpp"
-#include "MoveComponent.hpp"
-#include "RotationComponent.hpp"
+#include "Components.h"
 
 void Indie::Systems::RotationSystem::onUpdate(int ticks, EntityManager &entityManager) const
 {

@@ -6,8 +6,8 @@
 */
 
 #include "InputSystem.hpp"
-#include "InputComponent.hpp"
 #include "EntityManager.hpp"
+#include "Components.h"
 
 Indie::Systems::InputSystem::InputSystem()
     : eventHandler(EventHandler::getInstance())

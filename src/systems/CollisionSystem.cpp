@@ -10,38 +10,36 @@
 
 void Indie::Systems::CollisionSystem::onUpdate(int ticks, EntityManager &entityManager) const
 {
-    for (auto character : entityManager.each<Components::MoveComponent, Components::VelocityComponent, Components::PositionComponent>()) {
-        Components::RenderComponent *characterRenderComponent = character->getComponent<Components::RenderComponent>();
+    for (auto character : entityManager.each<Components::MoveComponent, Components::VelocityComponent, Components::PositionComponent, Components::HitboxComponent>()) {
+        Components::HitboxComponent *characterHitBoxComponent = character->getComponent<Components::HitboxComponent>();
         Components::PositionComponent *characterPositionComponent = character->getComponent<Components::PositionComponent>();
-        irr::core::vector3df currentMeshPosition = characterRenderComponent->getMesh()->getPosition();
-        irr::core::vector3df wantedPosition = characterPositionComponent->getPosition();
-        if (currentMeshPosition != wantedPosition) {
-            irr::core::aabbox3df currentBoundingBox = characterRenderComponent->getMesh()->getTransformedBoundingBox();
+        Components::VelocityComponent *characterVelocityComponent = character->getComponent<Components::VelocityComponent>();
 
-            if (wantedPosition.X < currentMeshPosition.X) {
-                currentBoundingBox.MaxEdge.X -= 2;
-                currentBoundingBox.MinEdge.X -= 2;
+        irr::core::vector3df currentPosition = characterHitBoxComponent->getMesh()->getPosition();
+        irr::core::vector3df wantedPosition = characterPositionComponent->getPosition();
+
+        if (currentPosition != wantedPosition) {
+            irr::core::aabbox3df boundingBox = characterHitBoxComponent->getMesh()->getTransformedBoundingBox();
+
+            if (wantedPosition.X < currentPosition.X) {
+                boundingBox.MaxEdge.X -= currentPosition.X - wantedPosition.X;
+                boundingBox.MinEdge.X -= currentPosition.X - wantedPosition.X;
             } else {
-                currentBoundingBox.MaxEdge.X += 2;
-                currentBoundingBox.MinEdge.X += 2;
+                boundingBox.MaxEdge.X += wantedPosition.X - currentPosition.X;
+                boundingBox.MinEdge.X += wantedPosition.X - currentPosition.X;
             }
-            if (wantedPosition.Z < currentMeshPosition.Z) {
-                currentBoundingBox.MaxEdge.Z -= 2;
-                currentBoundingBox.MinEdge.Z -= 2;
+            if (wantedPosition.Z < currentPosition.Z) {
+                boundingBox.MaxEdge.Z -= currentPosition.Z - wantedPosition.Z;
+                boundingBox.MinEdge.Z -= currentPosition.Z - wantedPosition.Z;
             } else {
-                currentBoundingBox.MaxEdge.Z += 2;
-                currentBoundingBox.MinEdge.Z += 2;
+                boundingBox.MaxEdge.Z += wantedPosition.Z - currentPosition.Z;
+                boundingBox.MinEdge.Z += wantedPosition.Z - currentPosition.Z;
             }
-            std::cout << "before maxEdge x: " << characterRenderComponent->getMesh()->getTransformedBoundingBox().MaxEdge.X << std::endl;
-            std::cout << "before maxEdge y: " << characterRenderComponent->getMesh()->getTransformedBoundingBox().MaxEdge.Y << std::endl;
-            std::cout << "before maxEdge z: " << characterRenderComponent->getMesh()->getTransformedBoundingBox().MaxEdge.Z << std::endl;
-            std::cout << "before MinEdge x: " << characterRenderComponent->getMesh()->getTransformedBoundingBox().MinEdge.X << std::endl;
-            std::cout << "before MinEdge y: " << characterRenderComponent->getMesh()->getTransformedBoundingBox().MinEdge.Y << std::endl;
-            std::cout << "before MinEdge z: " << characterRenderComponent->getMesh()->getTransformedBoundingBox().MinEdge.Z << std::endl;
             for (auto wall : entityManager.each<Components::WallComponent, Components::RenderComponent, Components::PositionComponent>()) {
                 Components::RenderComponent *wallRenderComponent = wall->getComponent<Components::RenderComponent>();
-                if (currentBoundingBox.intersectsWithBox(wallRenderComponent->getMesh()->getTransformedBoundingBox()) == true) {
-                    characterPositionComponent->setPosition(currentMeshPosition);
+                if (boundingBox.intersectsWithBox(wallRenderComponent->getMesh()->getTransformedBoundingBox()) == true) {
+                    characterPositionComponent->setPosition(currentPosition);
+                    characterVelocityComponent->setVelocity(0);
                     break;
                 }
             }

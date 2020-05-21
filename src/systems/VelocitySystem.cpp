@@ -6,10 +6,7 @@
 */
 
 #include "VelocitySystem.hpp"
-#include "PositionComponent.hpp"
-#include "VelocityComponent.hpp"
-#include "InputComponent.hpp"
-#include "MoveComponent.hpp"
+#include "Components.h"
 
 void Indie::Systems::VelocitySystem::onUpdate(int ticks, EntityManager &entityManager) const
 {
