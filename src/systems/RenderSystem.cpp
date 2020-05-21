@@ -21,7 +21,7 @@
  * render -> applique rotation + position
  */
 
-void Indie::Systems::RenderSystem::onUpdate(int ticks, EntityManager &entityManager)
+void Indie::Systems::RenderSystem::onUpdate(int ticks, EntityManager &entityManager) const
 {
     for (auto entity : entityManager.each<Indie::Components::RenderComponent, Indie::Components::PositionComponent>()) {
         auto renderComponent = entity->getComponent<Indie::Components::RenderComponent>();

@@ -138,7 +138,7 @@ void SceneManager::update(ContextManager &contextManager)
                 SceneManager::scenes[SceneManager::currentScene]->renderPost3D();
             if (SceneManager::renderSubScene)
                 SceneManager::scenes[SceneManager::currentSubScene]->renderPost3D();
-            
+
             contextManager.getGuiEnv()->drawAll();
             contextManager.getDriver()->endScene();
         }

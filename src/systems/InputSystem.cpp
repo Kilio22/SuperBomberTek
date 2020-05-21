@@ -13,7 +13,7 @@ Indie::Systems::InputSystem::InputSystem()
     : eventHandler(EventHandler::getInstance())
 {}
 
-std::map<irr::EKEY_CODE, bool> Indie::Systems::InputSystem::updateKeys(std::map<irr::EKEY_CODE, bool> keysStates, Indie::Components::InputComponent *inputComponent)
+std::map<irr::EKEY_CODE, bool> Indie::Systems::InputSystem::updateKeys(std::map<irr::EKEY_CODE, bool> keysStates, Indie::Components::InputComponent *inputComponent) const
 {
     for (auto &keyState : keysStates) {
         if (inputComponent->getKeyType(keyState.first) == Indie::Components::DROP) {
@@ -25,7 +25,7 @@ std::map<irr::EKEY_CODE, bool> Indie::Systems::InputSystem::updateKeys(std::map<
     return keysStates;
 }
 
-void Indie::Systems::InputSystem::onUpdate(int ticks, EntityManager &entityManager)
+void Indie::Systems::InputSystem::onUpdate(int ticks, EntityManager &entityManager) const
 {
     for (auto entity : entityManager.each<Indie::Components::InputComponent>()) {
         auto inputComponent = entity->getComponent<Indie::Components::InputComponent>();

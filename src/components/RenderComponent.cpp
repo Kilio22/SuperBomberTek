@@ -8,7 +8,7 @@
 #include <iostream>
 #include "RenderComponent.hpp"
 
-Indie::Components::RenderComponent::RenderComponent(std::string const &modelPath, std::string const &texturePath, const ContextManager &contextManager)
+Indie::Components::RenderComponent::RenderComponent(std::string const &modelPath, std::string const &texturePath, const ContextManager &contextManager, irr::core::vector3df position)
     : contextManager(contextManager)
 {
     irr::scene::IAnimatedMesh *newMesh = contextManager.getSceneManager()->getMesh(modelPath.c_str());
@@ -22,6 +22,7 @@ Indie::Components::RenderComponent::RenderComponent(std::string const &modelPath
     this->mesh->setMaterialFlag(irr::video::EMF_FOG_ENABLE, true);
     this->mesh->setMaterialTexture(0, newTexture);
     this->mesh->setVisible(true);
+    this->mesh->setPosition(position);
 }
 
 irr::scene::IAnimatedMeshSceneNode *Indie::Components::RenderComponent::getMesh() const

@@ -17,7 +17,7 @@ namespace Indie::Systems
         public:
             virtual ~ISystem() = default;
 
-            virtual void onUpdate(int ticks, EntityManager &) = 0;
+            virtual void onUpdate(int ticks, EntityManager &) const = 0;
 
         protected:
         private:

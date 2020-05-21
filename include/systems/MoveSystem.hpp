@@ -19,7 +19,7 @@ namespace Indie::Systems
             MoveSystem() = default;
             ~MoveSystem() = default;
 
-            void onUpdate(int ticks, EntityManager &);
+            void onUpdate(int ticks, EntityManager &) const final;
 
         protected:
         private:

@@ -19,11 +19,11 @@ namespace Indie::Systems
             MeshSystem() = default;
             ~MeshSystem() = default;
 
-            void onUpdate(int ticks, EntityManager &);
+            void onUpdate(int ticks, EntityManager &) const final;
 
         protected:
         private:
-            void changeMesh(Indie::Components::RenderComponent *, const std::string &, const std::string &);
+            void changeMesh(Indie::Components::RenderComponent *, const std::string &, const std::string &) const;
     };
 }
 

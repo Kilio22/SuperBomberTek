@@ -15,5 +15,6 @@
 #include "components/VelocityComponent.hpp"
 #include "components/MeshComponent.hpp"
 #include "components/RotationComponent.hpp"
+#include "components/WallComponent.hpp"
 
 #endif /* !COMPONENTS_H_ */

@@ -17,13 +17,8 @@
 #include "Components.h"
 #include "EntityBuilder.h"
 #include "EntityManager.hpp"
-#include "RenderSystem.hpp"
-#include "MoveSystem.hpp"
 #include "MapGenerator.hpp"
-#include "VelocitySystem.hpp"
-#include "InputSystem.hpp"
-#include "RotationSystem.hpp"
-#include "MeshSystem.hpp"
+#include "Systems.h"
 
 class GameScene : public IScene {
     public:
@@ -48,6 +43,7 @@ class GameScene : public IScene {
         Indie::Systems::RotationSystem rotationSystem;
         Indie::Systems::VelocitySystem velocitySystem;
         Indie::Systems::MeshSystem meshSystem;
+        Indie::Systems::CollisionSystem collisionSystem;
 };
 
 #endif /* !GAMESCENE_HPP_ */

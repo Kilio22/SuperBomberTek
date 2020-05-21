@@ -11,7 +11,7 @@
 #include "InputComponent.hpp"
 #include "MoveComponent.hpp"
 
-void Indie::Systems::VelocitySystem::onUpdate(int ticks, EntityManager &entityManager)
+void Indie::Systems::VelocitySystem::onUpdate(int ticks, EntityManager &entityManager) const
 {
     for (auto entity : entityManager.each<Indie::Components::PositionComponent, Indie::Components::MoveComponent, Indie::Components::VelocityComponent>()) {
         auto moveComponent = entity->getComponent<Indie::Components::MoveComponent>();
@@ -37,6 +37,5 @@ void Indie::Systems::VelocitySystem::onUpdate(int ticks, EntityManager &entityMa
             posVector.X -= 1;
         }
         positionComponent->setPosition(posVector);
-
     }
 }

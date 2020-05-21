@@ -9,7 +9,7 @@
 #include "MeshComponent.hpp"
 #include "VelocityComponent.hpp"
 
-void Indie::Systems::MeshSystem::changeMesh(Indie::Components::RenderComponent *renderComp, const std::string &meshPath, const std::string &texturePath)
+void Indie::Systems::MeshSystem::changeMesh(Indie::Components::RenderComponent *renderComp, const std::string &meshPath, const std::string &texturePath) const
 {
     const ContextManager &contextManager = renderComp->getContextManager();
     irr::scene::IAnimatedMesh *newMesh = contextManager.getSceneManager()->getMesh(meshPath.c_str());
@@ -23,15 +23,16 @@ void Indie::Systems::MeshSystem::changeMesh(Indie::Components::RenderComponent *
     newMeshNode->setMaterialFlag(irr::video::EMF_FOG_ENABLE, true);
     newMeshNode->setMaterialTexture(0, newTexture);
     newMeshNode->setVisible(true);
+    newMeshNode->setDebugDataVisible(true);
     renderComp->setMesh(newMeshNode);
 }
 
-void Indie::Systems::MeshSystem::onUpdate(int ticks, EntityManager &entityManager)
+void Indie::Systems::MeshSystem::onUpdate(int ticks, EntityManager &entityManager) const
 {
     for (auto entity : entityManager.each<Indie::Components::MeshComponent, Indie::Components::VelocityComponent, Indie::Components::RenderComponent>()) {
-        auto velComponent = entity->getComponent<Indie::Components::VelocityComponent>(); // get le vel
-        auto meshComponent = entity->getComponent<Indie::Components::MeshComponent>(); // get le vel
-        auto renderComponent = entity->getComponent<Indie::Components::RenderComponent>(); // get le vel
+        auto velComponent = entity->getComponent<Indie::Components::VelocityComponent>();
+        auto meshComponent = entity->getComponent<Indie::Components::MeshComponent>();
+        auto renderComponent = entity->getComponent<Indie::Components::RenderComponent>();
 
         if (velComponent->getVelocity() != 0 && meshComponent->getCurrentPosition() != Indie::Components::MeshComponent::RUN) {
             this->changeMesh(renderComponent, meshComponent->getMeshPathByPosition(Indie::Components::MeshComponent::RUN), meshComponent->getTexturePath());

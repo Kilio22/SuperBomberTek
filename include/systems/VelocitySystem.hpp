@@ -18,7 +18,7 @@ namespace Indie::Systems
             VelocitySystem() = default;
             ~VelocitySystem() = default;
 
-            void onUpdate(int ticks, EntityManager &) final;
+            void onUpdate(int ticks, EntityManager &) const final;
 
         protected:
         private:

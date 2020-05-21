@@ -18,7 +18,7 @@ namespace Indie::Systems
             RotationSystem() = default;
             ~RotationSystem() = default;
 
-            void onUpdate(int ticks, EntityManager &);
+            void onUpdate(int ticks, EntityManager &) const final;
 
         protected:
         private:

@@ -21,13 +21,13 @@ namespace Indie::Systems
             InputSystem();
             ~InputSystem() = default;
 
-            void onUpdate(int ticks, EntityManager &);
+            void onUpdate(int ticks, EntityManager &) const final;
 
         protected:
         private:
             EventHandler &eventHandler;
 
-            std::map<irr::EKEY_CODE, bool> updateKeys(std::map<irr::EKEY_CODE, bool>, Indie::Components::InputComponent *inputComp);
+            std::map<irr::EKEY_CODE, bool> updateKeys(std::map<irr::EKEY_CODE, bool>, Indie::Components::InputComponent *inputComp) const;
     };
 }
 

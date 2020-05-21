@@ -64,13 +64,13 @@ bool GameScene::init(ContextManager &_context)
     for (size_t i = 0; i < 15; i++) {
         for (size_t j = 0; j < 15; j++) {
             if (map[i][j] == -1)
-                Indie::EntityBuilder::createGround(entityManager, irr::core::vector3df(20 * i, 20, 20 * j), "../ressources/static_mesh/map_dirt/wall_side.obj", "../ressources/static_mesh/map_dirt/wall_side.png", _context);
+                Indie::EntityBuilder::createWall(entityManager, irr::core::vector3df(20 * i, 20, 20 * j), "../ressources/static_mesh/map_dirt/wall_side.obj", "../ressources/static_mesh/map_dirt/wall_side.png", _context);
             else if (map[i][j] == 1)
-                Indie::EntityBuilder::createGround(entityManager, irr::core::vector3df(20 * i, 20, 20 * j), "../ressources/static_mesh/map_dirt/box.obj", "../ressources/static_mesh/map_dirt/box.png", _context);
+                Indie::EntityBuilder::createWall(entityManager, irr::core::vector3df(20 * i, 20, 20 * j), "../ressources/static_mesh/map_dirt/box.obj", "../ressources/static_mesh/map_dirt/box.png", _context);
             else if (map[i][j] == 2)
-                Indie::EntityBuilder::createGround(entityManager, irr::core::vector3df(20 * i, 20, 20 * j), "../ressources/static_mesh/map_dirt/wall_middle.obj", "../ressources/static_mesh/map_dirt/wall_middle.png", _context);
+                Indie::EntityBuilder::createWall(entityManager, irr::core::vector3df(20 * i, 20, 20 * j), "../ressources/static_mesh/map_dirt/wall_middle.obj", "../ressources/static_mesh/map_dirt/wall_middle.png", _context);
             else if (map[i][j] == 3)
-                Indie::EntityBuilder::createGround(entityManager, irr::core::vector3df(20 * i, 20, 20 * j), "../ressources/static_mesh/map_stone/ground.obj", "../ressources/static_mesh/map_stone/ground.png", _context);
+                Indie::EntityBuilder::createWall(entityManager, irr::core::vector3df(20 * i, 20, 20 * j), "../ressources/static_mesh/map_stone/ground.obj", "../ressources/static_mesh/map_stone/ground.png", _context);
         }
     }
     Indie::EntityBuilder::createPlayer(entityManager, irr::core::vector3df(20, 20, 20), "../ressources/static_mesh/character/red.obj", "../ressources/textures/character/red.png", _context, {{irr::KEY_UP, Indie::Components::UP}, {irr::KEY_DOWN, Indie::Components::DOWN}, {irr::KEY_RIGHT, Indie::Components::RIGHT}, {irr::KEY_LEFT, Indie::Components::LEFT}});
@@ -97,6 +97,7 @@ void GameScene::update()
     moveSystem.onUpdate(0, entityManager);
     velocitySystem.onUpdate(0, entityManager);
     rotationSystem.onUpdate(0, entityManager);
+    collisionSystem.onUpdate(0, entityManager);
     meshSystem.onUpdate(0, entityManager);
     renderSystem.onUpdate(0, entityManager);
 }

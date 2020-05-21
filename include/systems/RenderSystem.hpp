@@ -18,7 +18,7 @@ namespace Indie::Systems
             RenderSystem() = default;
             ~RenderSystem() = default;
 
-            void onUpdate(int ticks, EntityManager &) final;
+            void onUpdate(int ticks, EntityManager &) const final;
 
         protected:
         private:

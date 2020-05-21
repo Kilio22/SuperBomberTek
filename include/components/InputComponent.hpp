@@ -9,6 +9,7 @@
 #define INPUTCOMPONENT_HPP_
 
 #include <map>
+#include <irrlicht.h>
 
 namespace Indie::Components
 {
