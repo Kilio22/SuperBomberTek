@@ -27,8 +27,8 @@ void GameEngine::startGame()
     SceneManager::AddScene<TitleScene>(context); //id 1
     SceneManager::AddScene<GameScene>(context); //id 2
     SceneManager::setScene(2, context);
-    SceneManager::setSceneUpdateActive(true);
-    SceneManager::setSceneRenderActive(true);
+    // SceneManager::setSceneUpdateActive(true);
+    // SceneManager::setSceneRenderActive(true);
     //SceneManager::setSubScene(1, context);
     //SceneManager::setSubSceneUpdateActive(true);
     //SceneManager::setSubSceneRenderActive(true);

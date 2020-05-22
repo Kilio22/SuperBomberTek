@@ -19,6 +19,12 @@ void Indie::Systems::VelocitySystem::onUpdate(irr::f32 deltaTime, EntityManager 
         irr::core::vector3df posVector = positionComponent->getPosition();
 
         velocityComponent->setVelocity(0);
+        if (moveComponent->getLeft() == true && moveComponent->getRight() == true) {
+            continue;
+        }
+        if (moveComponent->getUp() == true && moveComponent->getDown() == true) {
+            continue;
+        }
         if (moveComponent->getUp() == true) {
             velocityComponent->setVelocity(this->VELOCITY);
             posVector.Z += VELOCITY * deltaTime;
