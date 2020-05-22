@@ -8,7 +8,7 @@
 #include "CollisionSystem.hpp"
 #include "Components.h"
 
-void Indie::Systems::CollisionSystem::onUpdate(int ticks, EntityManager &entityManager, const ContextManager &) const
+void Indie::Systems::CollisionSystem::onUpdate(irr::f32 deltaTime, EntityManager &entityManager, const ContextManager &) const
 {
     for (auto character : entityManager.each<Components::MoveComponent, Components::VelocityComponent, Components::PositionComponent, Components::HitboxComponent>()) {
         Components::HitboxComponent *characterHitBoxComponent = character->getComponent<Components::HitboxComponent>();

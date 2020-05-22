@@ -71,16 +71,16 @@ bool GameScene::reset(ContextManager &_context)
 
 // LOOP ORDER:
 // beginScene -> events -> update -> renderPre3D -> render3D -> renderPost3D -> endScene
-void GameScene::update()
+void GameScene::update(irr::f32 deltaTime)
 {
     // FAUT QU'ON VOIT POUR LES TICKS AVANT QUE CE SOIT LE BORDEL A AJOUTER.
-    inputSystem.onUpdate(0, entityManager, *this->context);
-    moveSystem.onUpdate(0, entityManager, *this->context);
-    velocitySystem.onUpdate(0, entityManager, *this->context);
-    rotationSystem.onUpdate(0, entityManager, *this->context);
-    collisionSystem.onUpdate(0, entityManager, *this->context);
-    meshSystem.onUpdate(0, entityManager, *this->context);
-    renderSystem.onUpdate(0, entityManager, *this->context);
+    inputSystem.onUpdate(deltaTime, entityManager, *this->context);
+    moveSystem.onUpdate(deltaTime, entityManager, *this->context);
+    velocitySystem.onUpdate(deltaTime, entityManager, *this->context);
+    rotationSystem.onUpdate(deltaTime, entityManager, *this->context);
+    collisionSystem.onUpdate(deltaTime, entityManager, *this->context);
+    meshSystem.onUpdate(deltaTime, entityManager, *this->context);
+    renderSystem.onUpdate(deltaTime, entityManager, *this->context);
 }
 
 void GameScene::renderPre3D() {}

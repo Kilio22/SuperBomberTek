@@ -8,15 +8,17 @@
 #ifndef MESHCOMPONENT_HPP_
 #define MESHCOMPONENT_HPP_
 
+#include <irrlicht.h>
 #include <string>
 #include <map>
+#include "ContextManager.hpp"
 
 namespace Indie::Components
 {
     class MeshComponent
     {
         public:
-            MeshComponent(const std::string &texturePath);
+            MeshComponent(const ContextManager &contextManager, const std::string &texturePath);
             ~MeshComponent() = default;
 
             enum POSITION {
@@ -24,18 +26,20 @@ namespace Indie::Components
                 RUN
             };
 
-            const std::string &getTexturePath(void) const;
-            void setTexturePath(const std::string &newPath);
+            irr::video::ITexture *getTexture(void) const;
 
             const POSITION &getCurrentPosition(void) const;
             void setCurrentPosition(POSITION newPostition);
 
-            std::string getMeshPathByPosition(POSITION position) const;
+            irr::scene::IAnimatedMesh *getMeshByPosition(POSITION position) const;
 
         protected:
         private:
-            static const std::map<POSITION, std::string> meshPaths;
-            std::string texturePath;
+            static const std::string STAND_MESH_PATH;
+            static const std::string RUN_MESH_PATH;
+
+            std::map<POSITION, irr::scene::IAnimatedMesh *> meshs;
+            irr::video::ITexture *texture;
             POSITION currentPosition;
     };
 }

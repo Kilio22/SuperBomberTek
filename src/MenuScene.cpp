@@ -42,7 +42,7 @@ bool MenuScene::reset(ContextManager &_context)
     return (init(_context));
 }
 
-void MenuScene::update()
+void MenuScene::update(irr::f32 deltaTime)
 {
     for (size_t i = 0; i < parallax.size(); i++)
         parallax[i].update();

@@ -6,23 +6,35 @@
 */
 
 #include "MeshComponent.hpp"
+#include "Exceptions.h"
 
-const std::map<Indie::Components::MeshComponent::POSITION, std::string> Indie::Components::MeshComponent::meshPaths = {{STAND, "../ressources/static_mesh/character/red.obj"}, {RUN, "../ressources/animated_mesh/character/untitled_walk.b3d"}};
+const std::string Indie::Components::MeshComponent::STAND_MESH_PATH = "../ressources/static_mesh/character/red.obj";
+const std::string Indie::Components::MeshComponent::RUN_MESH_PATH = "../ressources/animated_mesh/character/untitled_walk.b3d";
 
-Indie::Components::MeshComponent::MeshComponent(const std::string &texturePath)
+Indie::Components::MeshComponent::MeshComponent(const ContextManager &contextManager, const std::string &texturePath)
 {
-    this->texturePath = texturePath;
+    irr::scene::IAnimatedMesh *newMesh = contextManager.getSceneManager()->getMesh(STAND_MESH_PATH.c_str());
+    irr::video::ITexture *newTexture = contextManager.getDriver()->getTexture(texturePath.c_str());
+
+    if (newMesh == nullptr) {
+        throw Indie::Exceptions::FileNotFoundException("HitboxComponent::HitboxComponent", "Cannot found file: ");
+    }
+    if (newTexture == nullptr) {
+        throw Indie::Exceptions::FileNotFoundException("HitboxComponent::HitboxComponent", "Cannot found file: " + texturePath);
+    }
+    this->texture = newTexture;
+    this->meshs.insert({STAND, newMesh});
+    newMesh = contextManager.getSceneManager()->getMesh(RUN_MESH_PATH.c_str());
+    if (newMesh == nullptr) {
+        throw Indie::Exceptions::FileNotFoundException("HitboxComponent::HitboxComponent", "Cannot found file: ");
+    }
+    this->meshs.insert({RUN, newMesh});
     this->currentPosition = STAND;
 }
 
-const std::string &Indie::Components::MeshComponent::getTexturePath() const
+irr::video::ITexture *Indie::Components::MeshComponent::getTexture() const
 {
-    return this->texturePath;
-}
-
-void Indie::Components::MeshComponent::setTexturePath(const std::string &newPath)
-{
-    this->texturePath = newPath;
+    return this->texture;
 }
 
 const Indie::Components::MeshComponent::POSITION &Indie::Components::MeshComponent::getCurrentPosition() const
@@ -35,11 +47,11 @@ void Indie::Components::MeshComponent::setCurrentPosition(POSITION newPostition)
     this->currentPosition = newPostition;
 }
 
-std::string Indie::Components::MeshComponent::getMeshPathByPosition(POSITION pos) const
+irr::scene::IAnimatedMesh *Indie::Components::MeshComponent::getMeshByPosition(POSITION pos) const
 {
-    auto found = this->meshPaths.find(pos);
+    auto found = this->meshs.find(pos);
 
-    if (found == this->meshPaths.end())
-        return "";
+    if (found == this->meshs.end())
+        return nullptr;
     return found->second;
 }

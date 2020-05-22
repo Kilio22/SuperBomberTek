@@ -8,7 +8,7 @@
 #include "MoveSystem.hpp"
 #include "Components.h"
 
-void Indie::Systems::MoveSystem::onUpdate(int ticks, Indie::EntityManager &entityManager, const ContextManager &) const
+void Indie::Systems::MoveSystem::onUpdate(irr::f32 deltaTime, Indie::EntityManager &entityManager, const ContextManager &) const
 {
     for (auto entity : entityManager.each<Indie::Components::MoveComponent, Indie::Components::InputComponent>()) {
         auto inputComponent = entity->getComponent<Indie::Components::InputComponent>();

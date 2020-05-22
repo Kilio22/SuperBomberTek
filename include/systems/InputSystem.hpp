@@ -11,7 +11,7 @@
 #include <map>
 #include "ISystem.hpp"
 #include "EventHandler.hpp"
-#include "InputComponent.hpp"
+#include "Components.h"
 
 namespace Indie::Systems
 {
@@ -21,7 +21,7 @@ namespace Indie::Systems
             InputSystem();
             ~InputSystem() = default;
 
-            void onUpdate(int ticks, EntityManager &entityManager, const ContextManager &contextManager) const final;
+            void onUpdate(irr::f32 deltaTime, EntityManager &entityManager, const ContextManager &contextManager) const final;
 
         protected:
         private:

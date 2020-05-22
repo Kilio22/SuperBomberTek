@@ -47,7 +47,7 @@ class EntityBuilder {
             entity->addComponent<Components::InputComponent>(keys);
             entity->addComponent<Components::MoveComponent>();
             entity->addComponent<Components::VelocityComponent>();
-            entity->addComponent<Components::MeshComponent>(texturePath);
+            entity->addComponent<Components::MeshComponent>(contextManager, texturePath);
             entity->addComponent<Components::RotationComponent>();
             return entity;
         }

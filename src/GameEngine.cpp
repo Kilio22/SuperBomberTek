@@ -28,15 +28,24 @@ void GameEngine::startGame()
     SceneManager::AddScene<GameScene>(context); //id 2
     SceneManager::setScene(2, context);
     SceneManager::setSceneUpdateActive(true);
-	SceneManager::setSceneRenderActive(true);
+    SceneManager::setSceneRenderActive(true);
     //SceneManager::setSubScene(1, context);
     //SceneManager::setSubSceneUpdateActive(true);
-	//SceneManager::setSubSceneRenderActive(true);
+    //SceneManager::setSubSceneRenderActive(true);
     /* ================================================================================ */
     /* LOOP */
+    this->context.getDevice()->getTimer()->stop();
+    this->context.getDevice()->getTimer()->start();
+
+    irr::u32 lastTime = this->context.getDevice()->getTimer()->getTime();
+    irr::u32 currentTime = 0;
+    irr::f32 deltaTime = 0;
     while (context.getDevice()->run()) {
+        currentTime = this->context.getDevice()->getTimer()->getTime();
+        deltaTime = (irr::f32)(currentTime - lastTime) / 1000.f;
         MusicManager::update();
-        SceneManager::update(context);
+        SceneManager::update(context, deltaTime);
+        lastTime = currentTime;
     }
     /* ================================================================================ */
     /* MEMORY STUFF */

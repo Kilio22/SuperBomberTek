@@ -18,10 +18,11 @@ namespace Indie::Systems
             VelocitySystem() = default;
             ~VelocitySystem() = default;
 
-            void onUpdate(int ticks, EntityManager &entityManager, const ContextManager &contextManager) const final;
+            void onUpdate(irr::f32 deltaTime, EntityManager &entityManager, const ContextManager &contextManager) const final;
 
         protected:
         private:
+            static const irr::f32 VELOCITY;
     };
 }
 

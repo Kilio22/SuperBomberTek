@@ -8,7 +8,9 @@
 #include "VelocitySystem.hpp"
 #include "Components.h"
 
-void Indie::Systems::VelocitySystem::onUpdate(int ticks, EntityManager &entityManager, const ContextManager &) const
+const irr::f32 Indie::Systems::VelocitySystem::VELOCITY = 25.0f;
+
+void Indie::Systems::VelocitySystem::onUpdate(irr::f32 deltaTime, EntityManager &entityManager, const ContextManager &) const
 {
     for (auto entity : entityManager.each<Indie::Components::PositionComponent, Indie::Components::MoveComponent, Indie::Components::VelocityComponent>()) {
         auto moveComponent = entity->getComponent<Indie::Components::MoveComponent>();
@@ -18,20 +20,20 @@ void Indie::Systems::VelocitySystem::onUpdate(int ticks, EntityManager &entityMa
 
         velocityComponent->setVelocity(0);
         if (moveComponent->getUp() == true) {
-            velocityComponent->setVelocity(1);
-            posVector.Z += 1;
+            velocityComponent->setVelocity(this->VELOCITY);
+            posVector.Z += VELOCITY * deltaTime;
         }
         if (moveComponent->getDown() == true) {
-            velocityComponent->setVelocity(1);
-            posVector.Z -= 1;
+            velocityComponent->setVelocity(this->VELOCITY);
+            posVector.Z -= VELOCITY * deltaTime;
         }
         if (moveComponent->getRight() == true) {
-            velocityComponent->setVelocity(1);
-            posVector.X += 1;
+            velocityComponent->setVelocity(this->VELOCITY);
+            posVector.X += VELOCITY * deltaTime;
         }
         if (moveComponent->getLeft() == true) {
-            velocityComponent->setVelocity(1);
-            posVector.X -= 1;
+            velocityComponent->setVelocity(this->VELOCITY);
+            posVector.X -= VELOCITY * deltaTime;
         }
         positionComponent->setPosition(posVector);
     }

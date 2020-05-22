@@ -22,7 +22,7 @@ class MenuScene : public IScene {
 
         bool init(ContextManager &context);
         bool reset(ContextManager &context);
-        void update();
+        void update(irr::f32 deltaTime);
         void renderPre3D();
         void renderPost3D();
 

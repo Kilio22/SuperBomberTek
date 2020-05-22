@@ -76,7 +76,7 @@ class SceneManager {
     static void setSubSceneUpdateActive(bool status);
     static void setSceneRenderActive(bool status);
     static void setSubSceneRenderActive(bool status);
-    static void update(ContextManager &contextManager);
+    static void update(ContextManager &contextManager, irr::f32 deltaTime);
 
     static void drop();
 

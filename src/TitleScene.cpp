@@ -26,7 +26,7 @@ bool TitleScene::reset(ContextManager &_context)
     return (init(_context));
 }
 
-void TitleScene::update()
+void TitleScene::update(irr::f32 deltaTime)
 {
     offsetY = (offsetY < 2 * M_PI) ? offsetY + updateRate : 0;
     offsetAlpha = (offsetAlpha < 2 * M_PI) ? offsetAlpha + 0.001 : 0;

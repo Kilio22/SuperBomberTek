@@ -18,7 +18,7 @@ namespace Indie::Systems
         public:
             virtual ~ISystem() = default;
 
-            virtual void onUpdate(int ticks, EntityManager &entityManager, const ContextManager &contextManager) const = 0;
+            virtual void onUpdate(irr::f32 deltaTime, EntityManager &entityManager, const ContextManager &contextManager) const = 0;
 
         protected:
         private:

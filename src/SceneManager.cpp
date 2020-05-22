@@ -112,7 +112,7 @@ void SceneManager::setSubSceneRenderActive(bool status)
     SceneManager::renderSubScene = status;
 }
 
-void SceneManager::update(ContextManager &contextManager)
+void SceneManager::update(ContextManager &contextManager, irr::f32 deltaTime)
 {
         try {
             contextManager.getDriver()->beginScene(true, true, irr::video::SColor(0,0,0,0));
@@ -123,9 +123,9 @@ void SceneManager::update(ContextManager &contextManager)
                 throw (InvalidIndex_("Scene at index " + std::to_string(SceneManager::currentSubScene) + " doesn't exist."));
 
             if (SceneManager::updateScene)
-                SceneManager::scenes[SceneManager::currentScene]->update();
+                SceneManager::scenes[SceneManager::currentScene]->update(deltaTime);
             if (SceneManager::updateSubScene)
-                SceneManager::scenes[SceneManager::currentSubScene]->update();
+                SceneManager::scenes[SceneManager::currentSubScene]->update(deltaTime);
 
             if (SceneManager::renderScene)
                 SceneManager::scenes[SceneManager::currentScene]->renderPre3D();
