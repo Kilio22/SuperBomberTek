@@ -5,6 +5,7 @@
 ** GameScene
 */
 
+#include "systems/AISystem.hpp"
 #include "Scenes/GameScene.hpp"
 
 // return false si un load merde.
@@ -14,6 +15,8 @@ bool GameScene::init(ContextManager &_context)
     device = _context.getDevice();
     driver = _context.getDriver();
     sceneManager = _context.getSceneManager();
+
+    Indie::Systems::AISystem ai;
 
     device->setEventReceiver(&Indie::EventHandler::getInstance());
     irr::SKeyMap keyMap[4];                             // re-assigne les commandes
@@ -49,31 +52,13 @@ bool GameScene::init(ContextManager &_context)
         driver->getTexture("../ressources/skybox/skybox_front.png"),
         driver->getTexture("../ressources/skybox/skybox_back.png"));
 
-    for (size_t i = 0; i < 15; i++) {
-        for (size_t j = 0; j < 15; j++) {
-            Indie::EntityBuilder::createGround(entityManager, irr::core::vector3df(x, 0, y), "../ressources/static_mesh/map_dirt/ground.obj", "../ressources/static_mesh/map_dirt/ground.png", _context);
-            x += 20;
-        }
-        x = 0;
-        y += 20;
-    }
+    int mapX = 15;
+    int mapY = 15;
+    Indie::MapGenerator generator(Indie::MapGenerator::DEFAULT, Indie::MapGenerator::STONE, mapX, mapY);
+    generator.generate(entityManager, _context);
 
-    Indie::MapGenerator generator(Indie::MapGenerator::DEFAULT);
-
-    std::vector<std::vector<int>> map = generator.getMap();
-    for (size_t i = 0; i < 15; i++) {
-        for (size_t j = 0; j < 15; j++) {
-            if (map[i][j] == -1)
-                Indie::EntityBuilder::createWall(entityManager, irr::core::vector3df(20 * i, 20, 20 * j), "../ressources/static_mesh/map_dirt/wall_side.obj", "../ressources/static_mesh/map_dirt/wall_side.png", _context);
-            else if (map[i][j] == 1)
-                Indie::EntityBuilder::createWall(entityManager, irr::core::vector3df(20 * i, 20, 20 * j), "../ressources/static_mesh/map_dirt/box.obj", "../ressources/static_mesh/map_dirt/box.png", _context);
-            else if (map[i][j] == 2)
-                Indie::EntityBuilder::createWall(entityManager, irr::core::vector3df(20 * i, 20, 20 * j), "../ressources/static_mesh/map_dirt/wall_middle.obj", "../ressources/static_mesh/map_dirt/wall_middle.png", _context);
-            else if (map[i][j] == 3)
-                Indie::EntityBuilder::createWall(entityManager, irr::core::vector3df(20 * i, 20, 20 * j), "../ressources/static_mesh/map_stone/ground.obj", "../ressources/static_mesh/map_stone/ground.png", _context);
-        }
-    }
     Indie::EntityBuilder::createPlayer(entityManager, irr::core::vector3df(20, 20, 20), "../ressources/static_mesh/character/red.obj", "../ressources/textures/character/red.png", _context, {{irr::KEY_UP, Indie::Components::UP}, {irr::KEY_DOWN, Indie::Components::DOWN}, {irr::KEY_RIGHT, Indie::Components::RIGHT}, {irr::KEY_LEFT, Indie::Components::LEFT}});
+
     device->getCursorControl()->setVisible(false);
 
     this->context = &_context;
@@ -86,7 +71,6 @@ bool GameScene::reset(ContextManager &_context)
     // vos reset de valeurs et les free etc.
     return (init(_context));
 }
-
 
 // LOOP ORDER:
 // beginScene -> events -> update -> renderPre3D -> render3D -> renderPost3D -> endScene
