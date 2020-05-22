@@ -49,7 +49,6 @@ class EntityBuilder {
             entity->addComponent<Components::VelocityComponent>();
             entity->addComponent<Components::MeshComponent>(texturePath);
             entity->addComponent<Components::RotationComponent>();
-            entity->getComponent<Components::RenderComponent>()->getMesh()->setDebugDataVisible(true);
             return entity;
         }
 

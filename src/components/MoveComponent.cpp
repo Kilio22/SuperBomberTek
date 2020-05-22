@@ -36,27 +36,27 @@ void Indie::Components::MoveComponent::setDrop(bool value)
     this->drop = value;
 }
 
-bool Indie::Components::MoveComponent::getUp()
+bool Indie::Components::MoveComponent::getUp() const
 {
     return this->up;
 }
 
-bool Indie::Components::MoveComponent::getDown()
+bool Indie::Components::MoveComponent::getDown() const
 {
     return this->down;
 }
 
-bool Indie::Components::MoveComponent::getLeft()
+bool Indie::Components::MoveComponent::getLeft() const
 {
     return this->left;
 }
 
-bool Indie::Components::MoveComponent::getRight()
+bool Indie::Components::MoveComponent::getRight() const
 {
     return this->right;
 }
 
-bool Indie::Components::MoveComponent::getDrop()
+bool Indie::Components::MoveComponent::getDrop() const
 {
     return this->drop;
 }

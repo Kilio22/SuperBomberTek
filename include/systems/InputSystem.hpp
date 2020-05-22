@@ -21,7 +21,7 @@ namespace Indie::Systems
             InputSystem();
             ~InputSystem() = default;
 
-            void onUpdate(int ticks, EntityManager &) const final;
+            void onUpdate(int ticks, EntityManager &entityManager, const ContextManager &contextManager) const final;
 
         protected:
         private:

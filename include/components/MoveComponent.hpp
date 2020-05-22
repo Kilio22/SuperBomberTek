@@ -25,11 +25,11 @@ namespace Indie::Components
             void setRight(bool);
             void setDrop(bool);
 
-            bool getUp();
-            bool getDown();
-            bool getLeft();
-            bool getRight();
-            bool getDrop();
+            bool getUp(void) const;
+            bool getDown(void) const;
+            bool getLeft(void) const;
+            bool getRight(void) const;
+            bool getDrop(void) const;
 
         protected:
         private:

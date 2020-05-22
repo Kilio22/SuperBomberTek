@@ -9,6 +9,7 @@
 #define ISYSTEM_HPP_
 
 #include "EntityManager.hpp"
+#include "ContextManager.hpp"
 
 namespace Indie::Systems
 {
@@ -17,7 +18,7 @@ namespace Indie::Systems
         public:
             virtual ~ISystem() = default;
 
-            virtual void onUpdate(int ticks, EntityManager &) const = 0;
+            virtual void onUpdate(int ticks, EntityManager &entityManager, const ContextManager &contextManager) const = 0;
 
         protected:
         private:

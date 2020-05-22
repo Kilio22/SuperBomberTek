@@ -52,7 +52,7 @@ void Indie::Components::InputComponent::setKeysState(std::map<irr::EKEY_CODE, bo
     this->keysState = newKeyStates;
 }
 
-Indie::Components::KEY_TYPE Indie::Components::InputComponent::getKeyType(irr::EKEY_CODE key)
+Indie::Components::KEY_TYPE Indie::Components::InputComponent::getKeyType(irr::EKEY_CODE key) const
 {
     auto toFind = std::find_if(this->keys.begin(), this->keys.end(), [key](const std::pair<irr::EKEY_CODE, KEY_TYPE> &value) {return value.first == key;});
 

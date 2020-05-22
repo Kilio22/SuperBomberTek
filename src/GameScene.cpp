@@ -5,7 +5,6 @@
 ** GameScene
 */
 
-#include "systems/AISystem.hpp"
 #include "Scenes/GameScene.hpp"
 
 // return false si un load merde.
@@ -15,8 +14,6 @@ bool GameScene::init(ContextManager &_context)
     device = _context.getDevice();
     driver = _context.getDriver();
     sceneManager = _context.getSceneManager();
-
-    Indie::Systems::AISystem ai;
 
     device->setEventReceiver(&Indie::EventHandler::getInstance());
     irr::SKeyMap keyMap[4];                             // re-assigne les commandes
@@ -77,13 +74,13 @@ bool GameScene::reset(ContextManager &_context)
 void GameScene::update()
 {
     // FAUT QU'ON VOIT POUR LES TICKS AVANT QUE CE SOIT LE BORDEL A AJOUTER.
-    inputSystem.onUpdate(0, entityManager);
-    moveSystem.onUpdate(0, entityManager);
-    velocitySystem.onUpdate(0, entityManager);
-    rotationSystem.onUpdate(0, entityManager);
-    collisionSystem.onUpdate(0, entityManager);
-    meshSystem.onUpdate(0, entityManager);
-    renderSystem.onUpdate(0, entityManager);
+    inputSystem.onUpdate(0, entityManager, *this->context);
+    moveSystem.onUpdate(0, entityManager, *this->context);
+    velocitySystem.onUpdate(0, entityManager, *this->context);
+    rotationSystem.onUpdate(0, entityManager, *this->context);
+    collisionSystem.onUpdate(0, entityManager, *this->context);
+    meshSystem.onUpdate(0, entityManager, *this->context);
+    renderSystem.onUpdate(0, entityManager, *this->context);
 }
 
 void GameScene::renderPre3D() {}

@@ -7,15 +7,18 @@
 
 #include <iostream>
 #include "RenderComponent.hpp"
+#include "Exceptions.h"
 
-Indie::Components::RenderComponent::RenderComponent(std::string const &modelPath, std::string const &texturePath, const ContextManager &contextManager, irr::core::vector3df position)
-    : contextManager(contextManager)
+Indie::Components::RenderComponent::RenderComponent(std::string const &meshPath, std::string const &texturePath, const ContextManager &contextManager, irr::core::vector3df position)
 {
-    irr::scene::IAnimatedMesh *newMesh = contextManager.getSceneManager()->getMesh(modelPath.c_str());
+    irr::scene::IAnimatedMesh *newMesh = contextManager.getSceneManager()->getMesh(meshPath.c_str());
     irr::video::ITexture *newTexture = contextManager.getDriver()->getTexture(texturePath.c_str());
 
-    if (newMesh == nullptr || newTexture == nullptr) {
-        // TODO: throw exception
+    if (newMesh == nullptr) {
+        throw Indie::Exceptions::FileNotFoundException("HitboxComponent::HitboxComponent", "Cannot found file: " + meshPath);
+    }
+    if (newTexture == nullptr) {
+        throw Indie::Exceptions::FileNotFoundException("HitboxComponent::HitboxComponent", "Cannot found file: " + texturePath);
     }
     this->mesh = contextManager.getSceneManager()->addAnimatedMeshSceneNode(newMesh, 0);
     this->mesh->setMaterialFlag(irr::video::EMF_LIGHTING, true);
@@ -37,9 +40,4 @@ void Indie::Components::RenderComponent::setMesh(irr::scene::IAnimatedMeshSceneN
     }
     this->mesh->remove();
     this->mesh = newMesh;
-}
-
-const ContextManager &Indie::Components::RenderComponent::getContextManager() const
-{
-    return this->contextManager;
 }

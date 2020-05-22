@@ -17,7 +17,7 @@ namespace Indie::Components
             ~WallComponent() = default;
 
             bool getCanBeDestroyed() const;
-            void setCanBeDestroyed(bool);
+            void setCanBeDestroyed(bool value);
 
         protected:
         private:

@@ -11,7 +11,7 @@ Indie::Components::PositionComponent::PositionComponent(float posX, float posY, 
     : position(posX, posY, posZ)
 {}
 
-irr::core::vector3df Indie::Components::PositionComponent::getPosition()
+const irr::core::vector3df &Indie::Components::PositionComponent::getPosition() const
 {
     return this->position;
 }

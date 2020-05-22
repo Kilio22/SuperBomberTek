@@ -16,7 +16,7 @@ namespace Indie::Components
             VelocityComponent();
             ~VelocityComponent() = default;
 
-            float getVelocity();
+            float getVelocity(void) const;
             void setVelocity(float newVel);
 
         protected:

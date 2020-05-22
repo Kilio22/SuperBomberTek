@@ -8,7 +8,7 @@
 #include "VelocitySystem.hpp"
 #include "Components.h"
 
-void Indie::Systems::VelocitySystem::onUpdate(int ticks, EntityManager &entityManager) const
+void Indie::Systems::VelocitySystem::onUpdate(int ticks, EntityManager &entityManager, const ContextManager &) const
 {
     for (auto entity : entityManager.each<Indie::Components::PositionComponent, Indie::Components::MoveComponent, Indie::Components::VelocityComponent>()) {
         auto moveComponent = entity->getComponent<Indie::Components::MoveComponent>();

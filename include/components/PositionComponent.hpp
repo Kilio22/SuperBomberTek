@@ -18,7 +18,7 @@ namespace Indie::Components
             PositionComponent(float posX, float posY, float posZ);
             ~PositionComponent() = default;
 
-            irr::core::vector3df getPosition();
+            const irr::core::vector3df &getPosition(void) const;
             void setPosition(irr::core::vector3df position);
 
         protected:

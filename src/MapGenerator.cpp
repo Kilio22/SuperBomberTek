@@ -9,7 +9,7 @@
 #include "MapGenerator.hpp"
 
 Indie::MapGenerator::MapGenerator(enum type type, enum theme theme, int x, int y)
-{   
+{
     setTheme(theme);
     setDimension(x, y);
     setType(type);
@@ -45,13 +45,13 @@ void Indie::MapGenerator::generate(EntityManager &entityManager, ContextManager 
     for (int i = _y - 1; i >= 0; i--) {
         for (size_t j = 0; j < _x; j++) {
             if (_map[i][j] == -1)
-                Indie::EntityBuilder::createGround(entityManager, irr::core::vector3df(20 * j, 20, 20 * i), path + "wall_side.obj", path + "wall_side.png", contextManager);
+                Indie::EntityBuilder::createWall(entityManager, irr::core::vector3df(20 * j, 20, 20 * i), path + "wall_side.obj", path + "wall_side.png", contextManager);
             else if (_map[i][j] == 1)
-                Indie::EntityBuilder::createGround(entityManager, irr::core::vector3df(20 * j, 20, 20 * i), path + "box.obj", path + "box.png", contextManager);
+                Indie::EntityBuilder::createWall(entityManager, irr::core::vector3df(20 * j, 20, 20 * i), path + "box.obj", path + "box.png", contextManager);
             else if (_map[i][j] == 2)
-                Indie::EntityBuilder::createGround(entityManager, irr::core::vector3df(20 * j, 20, 20 * i), path + "wall_middle.obj", path + "wall_middle.png", contextManager);
+                Indie::EntityBuilder::createWall(entityManager, irr::core::vector3df(20 * j, 20, 20 * i), path + "wall_middle.obj", path + "wall_middle.png", contextManager);
             else if (_map[i][j] == 3)
-                Indie::EntityBuilder::createGround(entityManager, irr::core::vector3df(20 * j, 20, 20 * i), path + "ground.obj", "ground.png", contextManager);
+                Indie::EntityBuilder::createWall(entityManager, irr::core::vector3df(20 * j, 20, 20 * i), path + "ground.obj", "ground.png", contextManager);
         }
     }
 }

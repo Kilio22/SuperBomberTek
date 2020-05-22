@@ -11,7 +11,7 @@ Indie::Components::RotationComponent::RotationComponent()
     : angle(irr::core::vector3df(0, 180, 0))
 {}
 
-irr::core::vector3df Indie::Components::RotationComponent::getAngle()
+const irr::core::vector3df &Indie::Components::RotationComponent::getAngle() const
 {
     return this->angle;
 }

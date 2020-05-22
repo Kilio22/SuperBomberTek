@@ -18,7 +18,7 @@ namespace Indie::Systems
             CollisionSystem() = default;
             ~CollisionSystem() = default;
 
-            void onUpdate(int ticks, EntityManager &) const final;
+            void onUpdate(int ticks, EntityManager &entityManager, const ContextManager &contextManager) const final;
 
         protected:
         private:

@@ -18,7 +18,7 @@ namespace Indie::Components
             RotationComponent();
             ~RotationComponent() = default;
 
-            irr::core::vector3df getAngle();
+            const irr::core::vector3df &getAngle(void) const;
             void setAngle(float newAngle);
 
         protected:

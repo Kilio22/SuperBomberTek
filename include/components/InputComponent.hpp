@@ -30,13 +30,13 @@ namespace Indie::Components
 
             bool isKeyPressed(KEY_TYPE key) const;
 
-            const std::map<irr::EKEY_CODE, KEY_TYPE> &getKeys() const;
-            const std::map<irr::EKEY_CODE, bool> &getKeysState() const;
+            const std::map<irr::EKEY_CODE, KEY_TYPE> &getKeys(void) const;
+            const std::map<irr::EKEY_CODE, bool> &getKeysState(void) const;
 
-            void setKeys(std::map<irr::EKEY_CODE, KEY_TYPE>);
-            void setKeysState(std::map<irr::EKEY_CODE, bool>);
+            void setKeys(std::map<irr::EKEY_CODE, KEY_TYPE> newKeys);
+            void setKeysState(std::map<irr::EKEY_CODE, bool> newKeysState);
 
-            KEY_TYPE getKeyType(irr::EKEY_CODE);
+            KEY_TYPE getKeyType(irr::EKEY_CODE key) const;
 
         protected:
         private:

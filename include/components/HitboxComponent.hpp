@@ -19,7 +19,7 @@ namespace Indie::Components
             HitboxComponent(irr::core::vector3df, const ContextManager &);
             ~HitboxComponent() = default;
 
-            irr::scene::IAnimatedMeshSceneNode *getMesh() const;
+            irr::scene::IAnimatedMeshSceneNode *getMesh(void) const;
 
         protected:
         private:

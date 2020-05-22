@@ -24,11 +24,13 @@ namespace Indie::Components
                 RUN
             };
 
-            const std::string &getTexturePath();
+            const std::string &getTexturePath(void) const;
             void setTexturePath(const std::string &newPath);
-            POSITION getCurrentPosition();
+
+            const POSITION &getCurrentPosition(void) const;
             void setCurrentPosition(POSITION newPostition);
-            std::string getMeshPathByPosition(POSITION);
+
+            std::string getMeshPathByPosition(POSITION position) const;
 
         protected:
         private:

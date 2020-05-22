@@ -12,7 +12,7 @@ Indie::Components::VelocityComponent::VelocityComponent()
 {
 }
 
-float Indie::Components::VelocityComponent::getVelocity()
+float Indie::Components::VelocityComponent::getVelocity() const
 {
     return this->velocity;
 }

@@ -8,7 +8,7 @@
 #include "RenderSystem.hpp"
 #include "Components.h"
 
-void Indie::Systems::RenderSystem::onUpdate(int ticks, EntityManager &entityManager) const
+void Indie::Systems::RenderSystem::onUpdate(int ticks, EntityManager &entityManager, const ContextManager &) const
 {
     for (auto entity : entityManager.each<Indie::Components::RenderComponent, Indie::Components::PositionComponent>()) {
         auto renderComponent = entity->getComponent<Indie::Components::RenderComponent>();

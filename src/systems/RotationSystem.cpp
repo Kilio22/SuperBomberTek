@@ -8,7 +8,7 @@
 #include "RotationSystem.hpp"
 #include "Components.h"
 
-void Indie::Systems::RotationSystem::onUpdate(int ticks, EntityManager &entityManager) const
+void Indie::Systems::RotationSystem::onUpdate(int ticks, EntityManager &entityManager, const ContextManager &) const
 {
     for (auto entity : entityManager.each<Indie::Components::RotationComponent, Indie::Components::MoveComponent>()) {
         auto moveComponent = entity->getComponent<Indie::Components::MoveComponent>();

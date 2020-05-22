@@ -15,7 +15,7 @@ Indie::Components::MeshComponent::MeshComponent(const std::string &texturePath)
     this->currentPosition = STAND;
 }
 
-const std::string &Indie::Components::MeshComponent::getTexturePath()
+const std::string &Indie::Components::MeshComponent::getTexturePath() const
 {
     return this->texturePath;
 }
@@ -25,7 +25,7 @@ void Indie::Components::MeshComponent::setTexturePath(const std::string &newPath
     this->texturePath = newPath;
 }
 
-Indie::Components::MeshComponent::POSITION Indie::Components::MeshComponent::getCurrentPosition()
+const Indie::Components::MeshComponent::POSITION &Indie::Components::MeshComponent::getCurrentPosition() const
 {
     return this->currentPosition;
 }
@@ -35,7 +35,7 @@ void Indie::Components::MeshComponent::setCurrentPosition(POSITION newPostition)
     this->currentPosition = newPostition;
 }
 
-std::string Indie::Components::MeshComponent::getMeshPathByPosition(POSITION pos)
+std::string Indie::Components::MeshComponent::getMeshPathByPosition(POSITION pos) const
 {
     auto found = this->meshPaths.find(pos);
 

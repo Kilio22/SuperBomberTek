@@ -17,16 +17,14 @@ namespace Indie::Components
     class RenderComponent
     {
         public:
-            RenderComponent(std::string const &, std::string const &, ContextManager const &, irr::core::vector3df);
+            RenderComponent(std::string const &meshPath, std::string const &texturePath, ContextManager const &contextManager, irr::core::vector3df position);
             ~RenderComponent() = default;
 
-            irr::scene::IAnimatedMeshSceneNode *getMesh() const;
-            void setMesh(irr::scene::IAnimatedMeshSceneNode *);
-            const ContextManager &getContextManager() const;
+            irr::scene::IAnimatedMeshSceneNode *getMesh(void) const;
+            void setMesh(irr::scene::IAnimatedMeshSceneNode *newMesh);
 
         private:
             irr::scene::IAnimatedMeshSceneNode *mesh;
-            const ContextManager &contextManager;
     };
 }
 
