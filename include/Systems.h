@@ -15,5 +15,6 @@
 #include "RenderSystem.hpp"
 #include "MoveSystem.hpp"
 #include "CollisionSystem.hpp"
+#include "BombSystem.hpp"
 
 #endif /* !SYSTEMS_H_ */

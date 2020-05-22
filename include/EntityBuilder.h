@@ -35,7 +35,7 @@ class EntityBuilder {
         }
 
         static Entity *createPlayer(EntityManager &entityManager, const irr::core::vector3df &vector, const std::string &modelPath,
-    const std::string &texturePath, ContextManager &contextManager, std::map<irr::EKEY_CODE, Components::KEY_TYPE> keys)
+    const std::string &texturePath, const ContextManager &contextManager, std::map<irr::EKEY_CODE, Components::KEY_TYPE> keys)
         {
             Entity *entity = entityManager.createEntity();
 
@@ -53,7 +53,7 @@ class EntityBuilder {
         }
 
         static Entity *createWall(EntityManager &entityManager, const irr::core::vector3df &vector, const std::string &modelPath,
-    const std::string &texturePath, ContextManager &contextManager, bool canBeDestroyed)
+    const std::string &texturePath, const ContextManager &contextManager, bool canBeDestroyed)
         {
             Entity *entity = entityManager.createEntity();
 
@@ -62,6 +62,19 @@ class EntityBuilder {
             entity->addComponent<Components::RenderComponent>(
                 modelPath, texturePath, contextManager, vector);
             entity->addComponent<Components::WallComponent>(canBeDestroyed);
+            return entity;
+        }
+
+        static Entity *createBomb(EntityManager &entityManager, const irr::core::vector3df &vector, const std::string &modelPath,
+    const std::string &texturePath, const ContextManager &contextManager)
+        {
+            Entity *entity = entityManager.createEntity();
+
+            entity->addComponent<Components::PositionComponent>(
+                vector.X, vector.Y, vector.Z);
+            entity->addComponent<Components::RenderComponent>(
+                modelPath, texturePath, contextManager, vector);
+            entity->addComponent<Components::BombComponent>();
             return entity;
         }
     };

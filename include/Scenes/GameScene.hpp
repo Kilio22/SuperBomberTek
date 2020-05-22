@@ -44,6 +44,7 @@ class GameScene : public IScene {
         Indie::Systems::VelocitySystem velocitySystem;
         Indie::Systems::MeshSystem meshSystem;
         Indie::Systems::CollisionSystem collisionSystem;
+        Indie::Systems::BombSystem bombSystem;
 };
 
 #endif /* !GAMESCENE_HPP_ */

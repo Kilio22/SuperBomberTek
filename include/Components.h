@@ -17,5 +17,6 @@
 #include "components/RotationComponent.hpp"
 #include "components/WallComponent.hpp"
 #include "components/HitboxComponent.hpp"
+#include "components/BombComponent.hpp"
 
 #endif /* !COMPONENTS_H_ */

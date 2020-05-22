@@ -45,7 +45,7 @@ bool GameScene::init(ContextManager &_context)
     Indie::MapGenerator generator(Indie::MapGenerator::DEFAULT, Indie::MapGenerator::DIRT, mapX, mapY);
     generator.generate(entityManager, _context);
 
-    Indie::EntityBuilder::createPlayer(entityManager, irr::core::vector3df(20, 20, 20), "../ressources/static_mesh/character/red.obj", "../ressources/textures/character/red.png", _context, {{irr::KEY_UP, Indie::Components::UP}, {irr::KEY_DOWN, Indie::Components::DOWN}, {irr::KEY_RIGHT, Indie::Components::RIGHT}, {irr::KEY_LEFT, Indie::Components::LEFT}});
+    Indie::EntityBuilder::createPlayer(entityManager, irr::core::vector3df(20, 20, 20), "../ressources/static_mesh/character/red.obj", "../ressources/textures/character/red.png", _context, {{irr::KEY_UP, Indie::Components::UP}, {irr::KEY_DOWN, Indie::Components::DOWN}, {irr::KEY_RIGHT, Indie::Components::RIGHT}, {irr::KEY_LEFT, Indie::Components::LEFT}, {irr::KEY_SPACE, Indie::Components::DROP}});
 
     device->getCursorControl()->setVisible(false);
 
@@ -69,6 +69,7 @@ void GameScene::update(irr::f32 deltaTime)
     moveSystem.onUpdate(deltaTime, entityManager, *this->context);
     velocitySystem.onUpdate(deltaTime, entityManager, *this->context);
     rotationSystem.onUpdate(deltaTime, entityManager, *this->context);
+    bombSystem.onUpdate(deltaTime, entityManager, *this->context);
     collisionSystem.onUpdate(deltaTime, entityManager, *this->context);
     meshSystem.onUpdate(deltaTime, entityManager, *this->context);
     renderSystem.onUpdate(deltaTime, entityManager, *this->context);
