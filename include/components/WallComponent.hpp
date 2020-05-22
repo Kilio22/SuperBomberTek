@@ -13,7 +13,7 @@ namespace Indie::Components
     class WallComponent
     {
         public:
-            WallComponent();
+            WallComponent(bool canDestroy);
             ~WallComponent() = default;
 
             bool getCanBeDestroyed() const;

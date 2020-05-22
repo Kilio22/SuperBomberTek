@@ -7,8 +7,8 @@
 
 #include "WallComponent.hpp"
 
-Indie::Components::WallComponent::WallComponent()
-    : canBeDestroyed(false)
+Indie::Components::WallComponent::WallComponent(bool canDestroy)
+    : canBeDestroyed(canDestroy)
 {
 }
 

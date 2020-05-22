@@ -53,7 +53,7 @@ class EntityBuilder {
         }
 
         static Entity *createWall(EntityManager &entityManager, const irr::core::vector3df &vector, const std::string &modelPath,
-    const std::string &texturePath, ContextManager &contextManager)
+    const std::string &texturePath, ContextManager &contextManager, bool canBeDestroyed)
         {
             Entity *entity = entityManager.createEntity();
 
@@ -61,7 +61,7 @@ class EntityBuilder {
                 vector.X, vector.Y, vector.Z);
             entity->addComponent<Components::RenderComponent>(
                 modelPath, texturePath, contextManager, vector);
-            entity->addComponent<Components::WallComponent>();
+            entity->addComponent<Components::WallComponent>(canBeDestroyed);
             return entity;
         }
     };
