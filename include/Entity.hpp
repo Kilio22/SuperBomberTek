@@ -39,7 +39,7 @@ namespace Indie
                 auto container = components.find(getTypeIndex<T>());
 
                 if (container != components.end()) {
-                    return &reinterpret_cast<ComponentContainer<T> *>(container->second)->data;
+                    return &reinterpret_cast<ComponentContainer<T> *>(container->second.get())->data;
                 }
                 return nullptr;
             }
@@ -47,13 +47,13 @@ namespace Indie
             template <typename T, typename... Args>
             void addComponent(Args &&... args)
             {
-                ComponentContainer<T> *container = new ComponentContainer<T>(T(args...));
+                auto ptr = std::make_unique<ComponentContainer<T>>(std::forward<Args>(args)...);
 
-                components.insert({ getTypeIndex<T>(), container });
+                components.insert({ getTypeIndex<T>(), std::move(ptr) });
             }
 
         private:
-            std::unordered_map<TypeIndex, IComponentContainer *> components;
+            std::unordered_map<TypeIndex, std::unique_ptr<IComponentContainer>> components;
             int id;
     };
 }

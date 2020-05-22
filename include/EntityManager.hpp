@@ -94,10 +94,11 @@ namespace Indie
             Entity *createEntity()
             {
                 ++this->count;
-                Entity *entity = new Entity(this->count);
+                auto entity = std::make_unique<Entity>(this->count);
+                auto ptr = entity.get();
 
-                this->entities.push_back(entity);
-                return entity;
+                this->entities.push_back(std::move(entity));
+                return ptr;
             }
 
             template <typename... Types>
@@ -108,7 +109,7 @@ namespace Indie
 
             Entity *getByIndex(size_t index) const
             {
-                return entities[index];
+                return entities[index].get();
             }
 
             size_t getCount() const
@@ -117,7 +118,7 @@ namespace Indie
             }
 
         private:
-            std::vector<Entity *> entities;
+            std::vector<std::unique_ptr<Entity>> entities;
             size_t count;
     };
 

@@ -19,7 +19,7 @@ class EntityBuilder {
         EntityBuilder() = delete;
         EntityBuilder(const EntityBuilder &) = delete;
         void operator=(const EntityBuilder &) = delete;
-        ~EntityBuilder();
+        ~EntityBuilder() = default;
 
         static Entity *createGround(EntityManager &entityManager,
             irr::core::vector3df const &vector, const std::string &modelPath,
