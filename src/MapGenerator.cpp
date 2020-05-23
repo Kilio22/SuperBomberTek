@@ -8,11 +8,12 @@
 
 #include "MapGenerator.hpp"
 
-Indie::MapGenerator::MapGenerator(MAP_TYPE type, THEME theme, int x, int y)
+Indie::MapGenerator::MapGenerator()
 {
-    setTheme(theme);
-    setDimension(x, y);
-    setType(type);
+    std::vector<std::vector<int> > matrix(_y);
+    for (int i = 0 ; i < _y; i++)
+        matrix[i].resize(_x);
+    _map = matrix;
     for (int i = _y - 1; i >= 0; i--) {
         for (int j = 0; j < _x; j++) {
             if (i == 0 || j == 0 || i == _y - 1 || j == _x - 1)
@@ -69,6 +70,11 @@ void Indie::MapGenerator::setType(MAP_TYPE type)
 void Indie::MapGenerator::setTheme(THEME theme)
 {
     _theme = theme;
+}
+
+std::vector<std::vector<int>> Indie::MapGenerator::getMap() const
+{
+    return this->_map;
 }
 
 void Indie::MapGenerator::clearMap()

@@ -40,8 +40,8 @@ bool Indie::GameScene::init(ContextManager &_context)
         driver->getTexture("../ressources/skybox/skybox_front.png"),
         driver->getTexture("../ressources/skybox/skybox_back.png"));
 
-    Indie::MapGenerator generator(Indie::MapGenerator::MAP_TYPE::DEFAULT, Indie::MapGenerator::THEME::DIRT, MAP_SIZE, MAP_SIZE);
-    generator.generate();
+    auto &mapGenerator = ServiceLocator::getInstance().get<Indie::MapGenerator>();
+    mapGenerator.generate();
 
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
     entityBuilder.createPlayer(irr::core::vector3df(20, 20, 20), "../ressources/static_mesh/character/red.obj", "../ressources/textures/character/red.png", {{irr::KEY_UP, Indie::Components::KEY_TYPE::UP}, {irr::KEY_DOWN, Indie::Components::KEY_TYPE::DOWN}, {irr::KEY_RIGHT, Indie::Components::KEY_TYPE::RIGHT}, {irr::KEY_LEFT, Indie::Components::KEY_TYPE::LEFT}, {irr::KEY_SPACE, Indie::Components::KEY_TYPE::DROP}});
