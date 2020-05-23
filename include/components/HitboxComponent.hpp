@@ -21,7 +21,6 @@ namespace Indie::Components
 
             irr::scene::IAnimatedMeshSceneNode *getMesh(void) const;
 
-        protected:
         private:
             irr::scene::IAnimatedMeshSceneNode *mesh;
     };

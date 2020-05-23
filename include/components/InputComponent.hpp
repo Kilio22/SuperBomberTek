@@ -38,7 +38,6 @@ namespace Indie::Components
 
             KEY_TYPE getKeyType(irr::EKEY_CODE key) const;
 
-        protected:
         private:
             std::map<irr::EKEY_CODE, KEY_TYPE> keys;
             std::map<irr::EKEY_CODE, bool> keysState;

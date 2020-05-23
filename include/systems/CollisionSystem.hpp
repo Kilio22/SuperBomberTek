@@ -20,7 +20,6 @@ namespace Indie::Systems
 
             void onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const final;
 
-        protected:
         private:
             bool checkCollisionWithWalls(EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox) const;
             bool checkCollisionWithCharacters(EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox, const irr::core::vector3df &currentCharacterPosition) const;

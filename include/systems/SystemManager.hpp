@@ -48,7 +48,6 @@ namespace Indie
             SystemManager &operator=(const SystemManager &) = delete;
             SystemManager(SystemManager const &) = delete;
 
-        protected:
         private:
             SystemManager() = default;
             ~SystemManager() = default;

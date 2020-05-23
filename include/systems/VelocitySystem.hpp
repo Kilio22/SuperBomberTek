@@ -20,7 +20,6 @@ namespace Indie::Systems
 
             void onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const final;
 
-        protected:
         private:
             static const irr::f32 VELOCITY;
     };

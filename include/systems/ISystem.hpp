@@ -19,9 +19,6 @@ namespace Indie::Systems
             virtual ~ISystem() = default;
 
             virtual void onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const = 0;
-
-        protected:
-        private:
     };
 }
 

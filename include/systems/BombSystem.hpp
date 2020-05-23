@@ -22,7 +22,6 @@ namespace Indie::Systems
 
             void onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const final;
 
-        protected:
         private:
             bool hasBombAtPosition(EntityManager &entityManager, irr::core::vector3df position) const;
             int getCenter(int value) const;

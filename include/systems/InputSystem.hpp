@@ -23,7 +23,6 @@ namespace Indie::Systems
 
             void onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const final;
 
-        protected:
         private:
             std::map<irr::EKEY_CODE, bool> updateKeys(std::map<irr::EKEY_CODE, bool>, Indie::Components::InputComponent *inputComp) const;
     };

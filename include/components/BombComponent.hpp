@@ -16,9 +16,6 @@ namespace Indie::Components
         public:
             BombComponent() = default;
             ~BombComponent() = default;
-
-        protected:
-        private:
     };
 } // namespace Indie::Components
 
