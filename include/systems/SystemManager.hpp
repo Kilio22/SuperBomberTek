@@ -19,8 +19,12 @@ namespace Indie
     class SystemManager
     {
         public:
-            SystemManager() = default;
-            ~SystemManager() = default;
+            static SystemManager &getInstance()
+            {
+                static SystemManager systemManager;
+
+                return systemManager;
+            }
 
             template <typename T>
             T *getSystem()
@@ -38,12 +42,18 @@ namespace Indie
             {
                 auto ptr = std::make_unique<ComponentContainer<T>>(std::forward<Args>(args)...);
 
-                components.insert({ getTypeIndex<T>(), std::move(ptr) });
+                systems.insert({ getTypeIndex<T>(), std::move(ptr) });
             }
+
+            SystemManager &operator=(const SystemManager &) = delete;
+            SystemManager(SystemManager const &) = delete;
 
         protected:
         private:
-            std::unordered_map<TypeIndex, std::unique_ptr<Indie::Systems::ISystem>> systems;
+            SystemManager() = default;
+            ~SystemManager() = default;
+
+            std::unordered_map<TypeIndex, std::unique_ptr<IComponentContainer>> systems;
     };
 } // namespace Indie
 

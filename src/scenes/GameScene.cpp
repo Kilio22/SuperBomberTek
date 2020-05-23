@@ -13,8 +13,15 @@
 #include "ServiceLocator.hpp"
 
 Indie::GameScene::GameScene()
-    : entityManager(ServiceLocator::getInstance().get<EntityManager>())
+    : entityManager(ServiceLocator::getInstance().get<EntityManager>()), systemManager(SystemManager::getInstance())
 {
+    this->systemManager.addSystem<Systems::BombSystem>();
+    this->systemManager.addSystem<Systems::CollisionSystem>();
+    this->systemManager.addSystem<Systems::InputSystem>();
+    this->systemManager.addSystem<Systems::MeshSystem>();
+    this->systemManager.addSystem<Systems::MoveSystem>();
+    this->systemManager.addSystem<Systems::RenderSystem>();
+    this->systemManager.addSystem<Systems::VelocitySystem>();
 }
 
 // return false si un load merde.
@@ -72,14 +79,14 @@ bool Indie::GameScene::reset(ContextManager &_context)
 // beginScene -> events -> update -> renderPre3D -> render3D -> renderPost3D -> endScene
 void Indie::GameScene::update(irr::f32 deltaTime)
 {
-    inputSystem.onUpdate(deltaTime, entityManager);
-    moveSystem.onUpdate(deltaTime, entityManager);
-    velocitySystem.onUpdate(deltaTime, entityManager);
-    rotationSystem.onUpdate(deltaTime, entityManager);
-    bombSystem.onUpdate(deltaTime, entityManager);
-    collisionSystem.onUpdate(deltaTime, entityManager);
-    meshSystem.onUpdate(deltaTime, entityManager);
-    renderSystem.onUpdate(deltaTime, entityManager);
+    this->systemManager.getSystem<Systems::InputSystem>()->onUpdate(deltaTime, entityManager);
+    this->systemManager.getSystem<Systems::MoveSystem>()->onUpdate(deltaTime, entityManager);
+    this->systemManager.getSystem<Systems::VelocitySystem>()->onUpdate(deltaTime, entityManager);
+    this->systemManager.getSystem<Systems::RotationSystem>()->onUpdate(deltaTime, entityManager);
+    this->systemManager.getSystem<Systems::BombSystem>()->onUpdate(deltaTime, entityManager);
+    this->systemManager.getSystem<Systems::CollisionSystem>()->onUpdate(deltaTime, entityManager);
+    this->systemManager.getSystem<Systems::MeshSystem>()->onUpdate(deltaTime, entityManager);
+    this->systemManager.getSystem<Systems::RenderSystem>()->onUpdate(deltaTime, entityManager);
 }
 
 void Indie::GameScene::renderPre3D() {}

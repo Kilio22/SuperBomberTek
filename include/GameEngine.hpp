@@ -26,6 +26,9 @@ namespace Indie {
             void startGame();
 
         private:
+            void setupMusicManager();
+            void setupSceneManager(Indie::ContextManager &context);
+
             ContextManager &context;
     };
 }

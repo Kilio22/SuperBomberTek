@@ -9,6 +9,7 @@
 #define GAMESCENE_HPP_
 
 #include "ContextManager.hpp"
+#include "SystemManager.hpp"
 #include "IScene.hpp"
 #include "Systems.h"
 
@@ -31,15 +32,7 @@ class GameScene : public IScene {
         irr::video::IVideoDriver *driver;
         irr::scene::ISceneManager *sceneManager;
         Indie::EntityManager &entityManager;
-
-        Indie::Systems::RenderSystem renderSystem;
-        Indie::Systems::InputSystem inputSystem;
-        Indie::Systems::MoveSystem moveSystem;
-        Indie::Systems::RotationSystem rotationSystem;
-        Indie::Systems::VelocitySystem velocitySystem;
-        Indie::Systems::MeshSystem meshSystem;
-        Indie::Systems::CollisionSystem collisionSystem;
-        Indie::Systems::BombSystem bombSystem;
+        Indie::SystemManager &systemManager;
 };
 
 }

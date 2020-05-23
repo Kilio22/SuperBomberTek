@@ -22,7 +22,7 @@ void Indie::Systems::MeshSystem::changeMesh(const ContextManager &contextManager
 
 void Indie::Systems::MeshSystem::onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const
 {
-    auto contextManager = ServiceLocator::getInstance().get<ContextManager>();
+    auto &contextManager = ServiceLocator::getInstance().get<ContextManager>();
 
     for (auto entity : entityManager.each<Indie::Components::MeshComponent, Indie::Components::VelocityComponent, Indie::Components::RenderComponent>()) {
         auto velComponent = entity->getComponent<Indie::Components::VelocityComponent>();
