@@ -153,7 +153,6 @@ bool Indie::Components::AIComponent::hasMoved(irr::core::vector3df position, irr
         return false;
     setDirection(NONE);
     return true;
-
 }
 
 void Indie::Components::AIComponent::getShortlessPath(std::vector<std::vector<int>> &map, int initX, int initY, int futurX, int futurY)

@@ -27,6 +27,12 @@ void Indie::MapGenerator::generate()
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
     std::string path = "../ressources/static_mesh/";
 
+    if (_type == MAP_TYPE::DEFAULT)
+        createDefaultMap();
+    else if (_type == MAP_TYPE::RANDOM)
+        createRandomMap(50, 50);
+    else if (_type == MAP_TYPE::EMPTY)
+        clearMap();
     if (_theme == THEME::DIRT)
         path = path + "map_dirt/";
     else
@@ -59,12 +65,6 @@ void Indie::MapGenerator::setDimension(int x, int y)
 void Indie::MapGenerator::setType(MAP_TYPE type)
 {
     _type = type;
-    if (type == MAP_TYPE::DEFAULT)
-        createDefaultMap();
-    else if (type == MAP_TYPE::RANDOM)
-        createRandomMap(50, 50);
-    else if (type == MAP_TYPE::EMPTY)
-        clearMap();
 }
 
 void Indie::MapGenerator::setTheme(THEME theme)
