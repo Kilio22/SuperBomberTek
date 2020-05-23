@@ -15,5 +15,4 @@
 #include "InvalidIndexException.hpp"
 #include "GameEngineException.hpp"
 
-
 #endif /* !EXCEPTIONS_H_ */

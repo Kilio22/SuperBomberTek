@@ -15,20 +15,23 @@
 #include "Parallax.hpp"
 #include "ContextManager.hpp"
 
-class MenuScene : public IScene {
-    public:
-        MenuScene() {}
-        ~MenuScene() {}
+namespace Indie {
+    class MenuScene : public IScene {
+        public:
+            MenuScene() {}
+            ~MenuScene() {}
 
-        bool init(ContextManager &context);
-        bool reset(ContextManager &context);
-        void update(irr::f32 deltaTime);
-        void renderPre3D();
-        void renderPost3D();
+            bool init(ContextManager &context);
+            bool reset(ContextManager &context);
+            void update(irr::f32 deltaTime);
+            void renderPre3D();
+            void renderPost3D();
 
-    private:
-        ContextManager *context;
-        std::vector<Parallax> parallax;
-};
+        private:
+            ContextManager *context;
+            static const irr::core::vector2df velocities[5];
+            std::vector<Parallax> parallax;
+    };
+}
 
 #endif /* !MENUSCENE_HPP_ */

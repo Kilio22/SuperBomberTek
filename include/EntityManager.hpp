@@ -66,18 +66,18 @@ namespace Indie
             EntityView(EntityIterator<Types...> begin, EntityIterator<Types...> end)
                 : _begin(begin), _end(end)
             {
-                if (this->_begin.get()->template has<Types...>() == false)
+                if (this->_begin.get() == nullptr || this->_begin.get()->template has<Types...>() == false)
                     ++this->_begin;
             }
 
             const EntityIterator<Types...> &begin() const
             {
-                return _begin;
+                return this->_begin;
             }
 
             const EntityIterator<Types...> &end() const
             {
-                return _end;
+                return this->_end;
             }
 
         private:
@@ -109,6 +109,8 @@ namespace Indie
 
             Entity *getByIndex(size_t index) const
             {
+                if (index >= count)
+                    return nullptr;
                 return entities[index].get();
             }
 
@@ -140,9 +142,10 @@ namespace Indie
     EntityIterator<Types...> &EntityIterator<Types...>::operator++()
     {
         ++index;
-        while (this->index < this->entityManager->getCount() && this->get()->template has<Types...>() == false) {
+        while (this->index < this->entityManager->getCount() && (this->get() == nullptr || this->get()->template has<Types...>() == false))
             ++index;
-        }
+        if (this->index >= this->entityManager->getCount())
+            this->_isEnd = true;
         return *this;
     }
 }

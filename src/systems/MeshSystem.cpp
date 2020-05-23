@@ -27,12 +27,12 @@ void Indie::Systems::MeshSystem::onUpdate(irr::f32 deltaTime, EntityManager &ent
         auto meshComponent = entity->getComponent<Indie::Components::MeshComponent>();
         auto renderComponent = entity->getComponent<Indie::Components::RenderComponent>();
 
-        if (velComponent->getVelocity() != 0 && meshComponent->getCurrentPosition() != Indie::Components::MeshComponent::RUN) {
-            this->changeMesh(contextManager, renderComponent, meshComponent->getMeshByPosition(Indie::Components::MeshComponent::RUN), meshComponent->getTexture());
-            meshComponent->setCurrentPosition(Indie::Components::MeshComponent::RUN);
-        } else if (velComponent->getVelocity() == 0 && meshComponent->getCurrentPosition() != Indie::Components::MeshComponent::STAND) {
-            this->changeMesh(contextManager, renderComponent, meshComponent->getMeshByPosition(Indie::Components::MeshComponent::STAND), meshComponent->getTexture());
-            meshComponent->setCurrentPosition(Indie::Components::MeshComponent::STAND);
+        if (velComponent->getVelocity() != 0 && meshComponent->getCurrentPosition() != Indie::Components::MeshComponent::POSITION::RUN) {
+            this->changeMesh(contextManager, renderComponent, meshComponent->getMeshByPosition(Indie::Components::MeshComponent::POSITION::RUN), meshComponent->getTexture());
+            meshComponent->setCurrentPosition(Indie::Components::MeshComponent::POSITION::RUN);
+        } else if (velComponent->getVelocity() == 0 && meshComponent->getCurrentPosition() != Indie::Components::MeshComponent::POSITION::STAND) {
+            this->changeMesh(contextManager, renderComponent, meshComponent->getMeshByPosition(Indie::Components::MeshComponent::POSITION::STAND), meshComponent->getTexture());
+            meshComponent->setCurrentPosition(Indie::Components::MeshComponent::POSITION::STAND);
         }
     }
 }

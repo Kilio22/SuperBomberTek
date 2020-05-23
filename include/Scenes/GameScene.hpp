@@ -10,41 +10,50 @@
 
 #include <iostream>
 
+#include "ContextManager.hpp"
 #include "IScene.hpp"
 #include "Parallax.hpp"
-#include "ContextManager.hpp"
 
 #include "Components.h"
 #include "EntityBuilder.h"
 #include "EntityManager.hpp"
 #include "MapGenerator.hpp"
+#include "ServiceLocator.hpp"
 #include "Systems.h"
 
-class GameScene : public IScene {
-    public:
-        GameScene() {}
-        ~GameScene() {}
+namespace Indie {
 
-        bool init(ContextManager &context);
-        bool reset(ContextManager &context);
-        void update(irr::f32 deltaTime);
-        void renderPre3D();
-        void renderPost3D();
+    class GameScene : public IScene {
+        public:
+            GameScene()
+                : entityManager(ServiceLocator::getInstance().get<EntityManager>())
+            {
+            }
 
-    private:
-        ContextManager *context;
-        irr::IrrlichtDevice *device;
-        irr::video::IVideoDriver *driver;
-        irr::scene::ISceneManager *sceneManager;
-        Indie::EntityManager entityManager;
-        Indie::Systems::RenderSystem renderSystem;
-        Indie::Systems::InputSystem inputSystem;
-        Indie::Systems::MoveSystem moveSystem;
-        Indie::Systems::RotationSystem rotationSystem;
-        Indie::Systems::VelocitySystem velocitySystem;
-        Indie::Systems::MeshSystem meshSystem;
-        Indie::Systems::CollisionSystem collisionSystem;
-        Indie::Systems::BombSystem bombSystem;
-};
+            ~GameScene() = default;
+
+            bool init(ContextManager &context);
+            bool reset(ContextManager &context);
+            void update(irr::f32 deltaTime);
+            void renderPre3D();
+            void renderPost3D();
+
+        private:
+            ContextManager *context;
+            irr::IrrlichtDevice *device;
+            irr::video::IVideoDriver *driver;
+            irr::scene::ISceneManager *sceneManager;
+            Indie::EntityManager &entityManager;
+            Indie::Systems::RenderSystem renderSystem;
+            Indie::Systems::InputSystem inputSystem;
+            Indie::Systems::MoveSystem moveSystem;
+            Indie::Systems::RotationSystem rotationSystem;
+            Indie::Systems::VelocitySystem velocitySystem;
+            Indie::Systems::MeshSystem meshSystem;
+            Indie::Systems::CollisionSystem collisionSystem;
+            Indie::Systems::BombSystem bombSystem;
+    };
+
+}
 
 #endif /* !GAMESCENE_HPP_ */

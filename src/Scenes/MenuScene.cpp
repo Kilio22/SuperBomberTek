@@ -16,17 +16,17 @@ const irr::io::path filepaths[5] {
     "../ressources/images/ground.png"
 };
 
-const irr::core::position2d<float> velocities[5] {
-    irr::core::position2d<float>(0.005, 0.005),
-    irr::core::position2d<float>(0.010, 0.000),
-    irr::core::position2d<float>(0.020, 0.000),
-    irr::core::position2d<float>(0.030, 0.000),
-    irr::core::position2d<float>(0.040, 0.000)
+const irr::core::vector2df Indie::MenuScene::velocities[5] = {
+    irr::core::vector2df((irr::f32)0.005, (irr::f32)0.005),
+    irr::core::vector2df((irr::f32)0.010, (irr::f32)0.000),
+    irr::core::vector2df((irr::f32)0.020, (irr::f32)0.000),
+    irr::core::vector2df((irr::f32)0.030, (irr::f32)0.000),
+    irr::core::vector2df((irr::f32)0.040, (irr::f32)0.000)
 };
 
-bool MenuScene::init(ContextManager &_context)
+bool Indie::MenuScene::init(ContextManager &_context)
 {
-    ServiceLocator::musicManager.setMusic(0);
+    Indie::ServiceLocator::getInstance().get<MusicManager>().setMusic(0);
     for (size_t i = 0; i < 5; i++) {
         Parallax tmp;
         if (!tmp.init(_context, filepaths[i], POS(1280, 720), velocities[i]))
@@ -37,22 +37,22 @@ bool MenuScene::init(ContextManager &_context)
     return (true);
 }
 
-bool MenuScene::reset(ContextManager &_context)
+bool Indie::MenuScene::reset(ContextManager &_context)
 {
     parallax.clear();
     return (init(_context));
 }
 
-void MenuScene::update(irr::f32 deltaTime)
+void Indie::MenuScene::update(irr::f32 deltaTime)
 {
     for (size_t i = 0; i < parallax.size(); i++)
         parallax[i].update();
 }
 
-void MenuScene::renderPre3D()
+void Indie::MenuScene::renderPre3D()
 {
     for (size_t i = 0; i < parallax.size(); i++)
         parallax[i].draw(*context);
 }
 
-void MenuScene::renderPost3D() {}
+void Indie::MenuScene::renderPost3D() {}

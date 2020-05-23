@@ -10,13 +10,15 @@
 
 #include <iostream>
 #include <limits>
+#include <vector>
+#include <memory>
 #include <SFML/Audio.hpp>
 #include "Exceptions.h"
 
 class MyMusic {
     public:
         MyMusic(std::string filepath);
-        ~MyMusic() {}
+        ~MyMusic() = default;
 
         void drop();
 
@@ -26,7 +28,7 @@ class MyMusic {
         void unLoop() {isLooped = false;}
         void mute();
         void unMute();
-    
+
         void playMusic();
         void pauseMusic();
         void stopMusic();
@@ -34,9 +36,15 @@ class MyMusic {
         void update();
 
     private:
-        enum Chunks {Intro, Loop, Outro};
-        std::vector<sf::Music*> musics;
-        MyMusic::Chunks currentMusic;
+
+        enum class CHUNKS : int {
+            Intro,
+            Loop,
+            Outro
+        };
+
+        std::vector<std::unique_ptr<sf::Music>> musics;
+        CHUNKS currentMusic;
         float volume;
         bool isMuted;
         bool isLooped;
@@ -48,7 +56,7 @@ class MusicManager {
         MusicManager();
         ~MusicManager() {}
 
-        void addMusic(std::string filepath);
+        void addMusic(const std::string filepath);
         void setMusic(size_t id);
         void setVolume(float _vol);
         void mute();
@@ -61,7 +69,7 @@ class MusicManager {
         void drop();
 
     private:
-        std::vector<MyMusic> musics;
+        std::vector<std::unique_ptr<MyMusic>> musics;
         size_t currentMusic;
         float volume;
         bool isMuted;

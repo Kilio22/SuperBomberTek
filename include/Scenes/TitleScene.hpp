@@ -15,24 +15,27 @@
 #include <math.h>
 #include <cmath>
 
-class TitleScene : public IScene {
-    public:
-        TitleScene() {}
-        ~TitleScene() {}
+namespace Indie {
 
-        bool init(ContextManager &context);
-        bool reset(ContextManager &context);
-        void update(irr::f32 deltaTime);
-        void renderPre3D();
-        void renderPost3D();
+    class TitleScene : public IScene {
+        public:
+            TitleScene() {}
+            ~TitleScene() {}
 
-    private:
-        ContextManager *context;
-        Image *titleLogo = NULL;
-        Image *pressText = NULL;
-        float offsetY = 0;
-        float offsetAlpha = 0;
-        const float updateRate = ((2 * M_PI) / 96) / 32;
-};
+            bool init(ContextManager &context);
+            bool reset(ContextManager &context);
+            void update(irr::f32 deltaTime);
+            void renderPre3D();
+            void renderPost3D();
+
+        private:
+            ContextManager *context;
+            Image *titleLogo = NULL;
+            Image *pressText = NULL;
+            double offsetY = 0;
+            double offsetAlpha = 0;
+            static const double updateRate;
+    };
+}
 
 #endif /* !TITLESCENE_HPP_ */

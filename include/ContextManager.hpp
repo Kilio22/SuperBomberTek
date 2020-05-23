@@ -19,14 +19,14 @@ typedef irr::video::ITexture Image;
 
 class ContextManager {
     public:
-        ContextManager(irr::core::dimension2d<irr::u32> size);
+        ContextManager(irr::core::dimension2d<irr::u32> size = DIM(1280, 720));
         ~ContextManager();
 
         /* Getters */
-        irr::IrrlichtDevice *getDevice() const {return (device);}
-        irr::video::IVideoDriver *getDriver() const {return (driver);}
-        irr::scene::ISceneManager *getSceneManager() const {return (sceneManager);}
-        irr::gui::IGUIEnvironment *getGuiEnv() const {return (guiEnv);}
+        irr::IrrlichtDevice *getDevice() const { return device; }
+        irr::video::IVideoDriver *getDriver() const { return driver; }
+        irr::scene::ISceneManager *getSceneManager() const { return sceneManager; }
+        irr::gui::IGUIEnvironment *getGuiEnv() const { return guiEnv; }
 
         /* Methods */
         void displayImage(irr::video::ITexture *image, irr::core::position2d<irr::s32> pos = irr::core::position2d<irr::s32>(0,0), irr::video::SColor color = irr::video::SColor(255,255,255,255));

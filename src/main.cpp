@@ -5,25 +5,21 @@
 ** main
 */
 
-#include <exception>
-#include "GameEngine.hpp"
 #include "Exceptions.h"
+#include "GameEngine.hpp"
+#include <exception>
 
 int main(void)
 {
-    GameEngine engine;
+    Indie::GameEngine engine;
 
-    try
-    {
+    try {
         engine.startGame();
-    }
-    catch(const Indie::Exceptions::IndieException &e) {
-        std::cerr << "In component \"" << e.getComponent() << "\": " << e.what() << '\n';
+    } catch (const Indie::Exceptions::IndieException &e) {
+        std::cerr << "In component \"" << e.getComponent() << "\": " << e.what() << std::endl;
         return 84;
-    }
-    catch(const std::exception& e)
-    {
-        std::cerr << e.what() << '\n';
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << std::endl;
         return 84;
     }
     return 0;

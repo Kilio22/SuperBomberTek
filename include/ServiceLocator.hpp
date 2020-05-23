@@ -11,15 +11,33 @@
 #include "SceneManager.hpp"
 #include "MusicManager.hpp"
 
-class ServiceLocator {
-    public:
-        ServiceLocator() = delete;
-        ~ServiceLocator() = delete;
+namespace Indie
+{
+    class ServiceLocator
+    {
+        private:
+            ServiceLocator() = default;
 
-        static void drop();
+        public:
+            ServiceLocator(const ServiceLocator &) = delete;
+            ~ServiceLocator() = default;
+            ServiceLocator &operator=(const ServiceLocator &) = delete;
 
-        static MusicManager musicManager;
-        static SceneManager sceneManager;
-};
+            static ServiceLocator &getInstance()
+            {
+                static ServiceLocator serviceLocator;
+
+                return serviceLocator;
+            }
+
+            template <typename T>
+            T &get()
+            {
+                static T service;
+
+                return service;
+            }
+    };
+}
 
 #endif /* !SERVICELOCATOR_HPP_ */

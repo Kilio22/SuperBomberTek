@@ -30,13 +30,16 @@ int Indie::Systems::BombSystem::getCenter(int value) const
 
 void Indie::Systems::BombSystem::onUpdate(irr::f32 deltaTime, EntityManager &entityManager, const ContextManager &contextManager) const
 {
+    auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
+
     for (auto entity : entityManager.each<Components::MoveComponent, Components::RenderComponent, Components::PositionComponent, Components::VelocityComponent, Components::MeshComponent>()) {
         auto positionComponent = entity->getComponent<Components::PositionComponent>();
         auto moveComponent = entity->getComponent<Components::MoveComponent>();
-        int midX = this->getCenter(positionComponent->getPosition().X);
-        int midZ = this->getCenter(positionComponent->getPosition().Z);
+        irr::f32 midX = (irr::f32)this->getCenter((int)positionComponent->getPosition().X);
+        irr::f32 midZ = (irr::f32)this->getCenter((int)positionComponent->getPosition().Z);
+
         if (moveComponent->getDrop() == true && this->hasBombAtPosition(entityManager, irr::core::vector3df(midX, 20, midZ)) == false) {
-            EntityBuilder::createBomb(entityManager, irr::core::vector3df(irr::f32(midX), 20, irr::f32(midZ)), "../ressources/animated_mesh/bomb/bomb.b3d", "../ressources/textures/bomb/bomb.png", contextManager);
+            entityBuilder.createBomb( irr::core::vector3df(irr::f32(midX), 20, irr::f32(midZ)), "../ressources/animated_mesh/bomb/bomb.b3d", "../ressources/textures/bomb/bomb.png");
         }
     }
 }

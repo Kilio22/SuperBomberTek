@@ -18,15 +18,13 @@ namespace Indie::Systems
     class InputSystem : public ISystem
     {
         public:
-            InputSystem();
+            InputSystem() = default;
             ~InputSystem() = default;
 
             void onUpdate(irr::f32 deltaTime, EntityManager &entityManager, const ContextManager &contextManager) const final;
 
         protected:
         private:
-            EventHandler &eventHandler;
-
             std::map<irr::EKEY_CODE, bool> updateKeys(std::map<irr::EKEY_CODE, bool>, Indie::Components::InputComponent *inputComp) const;
     };
 }

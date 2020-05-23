@@ -5,26 +5,25 @@
 ** GameScene
 */
 
+#define MAP_SIZE 15
+
 #include "Scenes/GameScene.hpp"
 #include "ServiceLocator.hpp"
 
 // return false si un load merde.
-bool GameScene::init(ContextManager &_context)
+bool Indie::GameScene::init(ContextManager &_context)
 {
-    ServiceLocator::musicManager.setMusic(1);
+    Indie::ServiceLocator::getInstance().get<MusicManager>().setMusic(1);
     device = _context.getDevice();
     driver = _context.getDriver();
     sceneManager = _context.getSceneManager();
 
-    device->setEventReceiver(&Indie::EventHandler::getInstance());
+    device->setEventReceiver(&EventHandler::getInstance());
 
     irr::scene::ICameraSceneNode *camera = sceneManager->addCameraSceneNodeFPS();
     camera->setPosition(irr::core::vector3df(irr::f32(139.371), irr::f32(170.129), irr::f32(-24.6459)));
 	camera->setRotation(irr::core::vector3df(irr::f32(41.553), irr::f32(359.176), irr::f32(-90)));
     camera->setTarget(irr::core::vector3df(irr::f32(0), irr::f32(0), irr::f32(0)));
-
-    irr::f32 x = 0;
-    irr::f32 y = 0;
 
     // Lumière et brouillard quand on s'éloigne
     driver->setFog(irr::video::SColor(10, 255, 255, 255), irr::video::EFT_FOG_LINEAR, 200.0f, 2000.0f, 0.005f, false, false);
@@ -41,12 +40,13 @@ bool GameScene::init(ContextManager &_context)
         driver->getTexture("../ressources/skybox/skybox_front.png"),
         driver->getTexture("../ressources/skybox/skybox_back.png"));
 
-    int mapX = 15;
-    int mapY = 15;
-    Indie::MapGenerator generator(Indie::MapGenerator::DEFAULT, Indie::MapGenerator::DIRT, mapX, mapY);
-    generator.generate(entityManager, _context);
+    auto &mapGenerator = ServiceLocator::getInstance().get<Indie::MapGenerator>();
+    mapGenerator.generate();
 
-    Indie::EntityBuilder::createPlayer(entityManager, irr::core::vector3df(20, 20, 20), "../ressources/static_mesh/character/red.obj", "../ressources/textures/character/red.png", _context, {{irr::KEY_UP, Indie::Components::UP}, {irr::KEY_DOWN, Indie::Components::DOWN}, {irr::KEY_RIGHT, Indie::Components::RIGHT}, {irr::KEY_LEFT, Indie::Components::LEFT}, {irr::KEY_SPACE, Indie::Components::DROP}});
+    auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
+    entityBuilder.createPlayer(irr::core::vector3df(20, 20, 20), "../ressources/static_mesh/character/red.obj", "../ressources/textures/character/red.png", {{irr::KEY_UP, Indie::Components::KEY_TYPE::UP}, {irr::KEY_DOWN, Indie::Components::KEY_TYPE::DOWN}, {irr::KEY_RIGHT, Indie::Components::KEY_TYPE::RIGHT}, {irr::KEY_LEFT, Indie::Components::KEY_TYPE::LEFT}, {irr::KEY_SPACE, Indie::Components::KEY_TYPE::DROP}});
+
+    entityBuilder.createAi(irr::core::vector3df(260, 20, 20), "../ressources/static_mesh/character/red.obj", "../ressources/textures/character/red.png");
 
     device->getCursorControl()->setVisible(false);
 
@@ -55,7 +55,7 @@ bool GameScene::init(ContextManager &_context)
 }
 
 // return false si un load merde.
-bool GameScene::reset(ContextManager &_context)
+bool Indie::GameScene::reset(ContextManager &_context)
 {
     // vos reset de valeurs et les free etc.
     return (init(_context));
@@ -63,9 +63,8 @@ bool GameScene::reset(ContextManager &_context)
 
 // LOOP ORDER:
 // beginScene -> events -> update -> renderPre3D -> render3D -> renderPost3D -> endScene
-void GameScene::update(irr::f32 deltaTime)
+void Indie::GameScene::update(irr::f32 deltaTime)
 {
-    // FAUT QU'ON VOIT POUR LES TICKS AVANT QUE CE SOIT LE BORDEL A AJOUTER.
     inputSystem.onUpdate(deltaTime, entityManager, *this->context);
     moveSystem.onUpdate(deltaTime, entityManager, *this->context);
     velocitySystem.onUpdate(deltaTime, entityManager, *this->context);
@@ -76,6 +75,6 @@ void GameScene::update(irr::f32 deltaTime)
     renderSystem.onUpdate(deltaTime, entityManager, *this->context);
 }
 
-void GameScene::renderPre3D() {}
+void Indie::GameScene::renderPre3D() {}
 
-void GameScene::renderPost3D() {}
+void Indie::GameScene::renderPost3D() {}
