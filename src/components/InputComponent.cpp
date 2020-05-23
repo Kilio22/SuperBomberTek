@@ -57,6 +57,6 @@ Indie::Components::KEY_TYPE Indie::Components::InputComponent::getKeyType(irr::E
     auto toFind = std::find_if(this->keys.begin(), this->keys.end(), [key](const std::pair<irr::EKEY_CODE, KEY_TYPE> &value) {return value.first == key;});
 
     if (toFind == this->keys.end())
-        return NONE;
+        return KEY_TYPE::NONE;
     return toFind->second;
 }

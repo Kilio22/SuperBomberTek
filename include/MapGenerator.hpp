@@ -22,30 +22,33 @@
 namespace Indie {
     class MapGenerator {
         public:
-            enum type{
+            enum class MAP_TYPE {
                 DEFAULT = 0,
                 RANDOM = 1,
                 EMPTY = 2,
             };
 
-            enum theme{
+            enum class THEME {
                 STONE,
                 DIRT,
             };
-            MapGenerator(enum type type, enum theme theme, int x, int y);
+
+            MapGenerator(MAP_TYPE type, THEME theme, int x, int y);
             ~MapGenerator() = default;
-            void setType(enum type type);
-            void setTheme(enum theme theme);
+            void setType(MAP_TYPE type);
+            void setTheme(THEME theme);
             void setDimension(int x, int y);
             void generate(EntityManager &entityManager, ContextManager &contextManager);
         protected:
         private:
-            enum object{
+
+            enum class OBJECT {
                 EXT_WALL = -1,
                 VOID = 0,
                 BOX = 1,
                 IN_WALL = 2,
             };
+
             void clearMap();
             void createRandomMap(int percentageBox, int percentageWall);
             void createDefaultMap();
@@ -53,8 +56,8 @@ namespace Indie {
             std::vector<std::vector<int>> _map;
             int _x;
             int _y;
-            enum theme _theme;
-            enum type _type;
+            THEME _theme;
+            MAP_TYPE _type;
     };
 }
 

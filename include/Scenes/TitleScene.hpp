@@ -32,7 +32,7 @@ class TitleScene : public IScene {
         Image *pressText = NULL;
         float offsetY = 0;
         float offsetAlpha = 0;
-        const float updateRate = ((2 * M_PI) / 96) / 32;
+        static const float updateRate;
 };
 
 #endif /* !TITLESCENE_HPP_ */

@@ -86,9 +86,15 @@ class MyMusic {
         void update();
 
     private:
-        enum Chunks {Intro, Loop, Outro};
+
+        enum class CHUNKS : int {
+            Intro,
+            Loop,
+            Outro
+        };
+
         std::vector<std::unique_ptr<sf::Music>> musics;
-        MyMusic::Chunks currentMusic;
+        CHUNKS currentMusic;
         float volume;
         bool isMuted;
         bool isLooped;

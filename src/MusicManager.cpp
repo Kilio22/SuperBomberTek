@@ -19,7 +19,7 @@ MyMusic::MyMusic(std::string filepath)
     isMuted = false;
     isLooped = false;
     isPlaying = false;
-    currentMusic = Chunks::Intro;
+    currentMusic = CHUNKS::Intro;
     std::string extension = filepath.substr(filepath.find_last_of("."));
     filepath.resize(filepath.size() - extension.size());
 
@@ -74,7 +74,7 @@ void MyMusic::unMute()
 void MyMusic::playMusic()
 {
     pauseMusic();
-    musics[currentMusic]->play();
+    musics[(int)currentMusic]->play();
     isPlaying = true;
 }
 
@@ -89,7 +89,7 @@ void MyMusic::stopMusic()
 {
     for (size_t i = 0; i < musics.size(); i++)
         musics[i]->stop();
-    currentMusic = Chunks::Intro;
+    currentMusic = CHUNKS::Intro;
     isPlaying = false;
 }
 
@@ -103,26 +103,26 @@ void MyMusic::update()
 {
     if (!isPlaying)
         return;
-    musics[Chunks::Loop]->setLoop(isLooped);
-    if (musics[currentMusic]->getStatus() == sf::SoundSource::Status::Stopped) {
+    musics[(int)CHUNKS::Loop]->setLoop(isLooped);
+    if (musics[(int)currentMusic]->getStatus() == sf::SoundSource::Status::Stopped) {
         switch (currentMusic) {
-        case Chunks::Intro:
-            musics[Chunks::Loop]->stop();
-            musics[Chunks::Loop]->play();
-            musics[Chunks::Loop]->setLoop(isLooped);
-            currentMusic = Chunks::Loop;
+        case CHUNKS::Intro:
+            musics[(int)CHUNKS::Loop]->stop();
+            musics[(int)CHUNKS::Loop]->play();
+            musics[(int)CHUNKS::Loop]->setLoop(isLooped);
+            currentMusic = CHUNKS::Loop;
             break;
-        case Chunks::Loop:
+        case CHUNKS::Loop:
             if (!isLooped) {
-                musics[Chunks::Outro]->stop();
-                musics[Chunks::Outro]->play();
-                currentMusic = Chunks::Outro;
+                musics[(int)CHUNKS::Outro]->stop();
+                musics[(int)CHUNKS::Outro]->play();
+                currentMusic = CHUNKS::Outro;
             } else {
-                musics[currentMusic]->setLoop(isLooped);
-                musics[currentMusic]->play();
+                musics[(int)currentMusic]->setLoop(isLooped);
+                musics[(int)currentMusic]->play();
             }
             break;
-        case Chunks::Outro:
+        case CHUNKS::Outro:
             stopMusic();
             break;
         default:

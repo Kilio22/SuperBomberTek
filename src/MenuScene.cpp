@@ -15,12 +15,12 @@ const irr::io::path filepaths[5] {
     "../ressources/images/ground.png"
 };
 
-const irr::core::position2d<float> velocities[5] {
-    irr::core::position2d<float>(0.005, 0.005),
-    irr::core::position2d<float>(0.010, 0.000),
-    irr::core::position2d<float>(0.020, 0.000),
-    irr::core::position2d<float>(0.030, 0.000),
-    irr::core::position2d<float>(0.040, 0.000)
+const irr::core::vector2df MenuScene::velocities[5] = {
+    irr::core::vector2df(0.005, 0.005),
+    irr::core::vector2df(0.010, 0.000),
+    irr::core::vector2df(0.020, 0.000),
+    irr::core::vector2df(0.030, 0.000),
+    irr::core::vector2df(0.040, 0.000)
 };
 
 bool MenuScene::init(ContextManager &_context)

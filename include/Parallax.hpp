@@ -18,7 +18,7 @@ class Parallax {
         Parallax() {}
         ~Parallax() {}
 
-		bool init(ContextManager &context, const irr::io::path& filepath, irr::core::position2d<irr::s32> _size, irr::core::position2d<float> _vel);
+        bool init(ContextManager &context, const irr::io::path& filepath, irr::core::position2d<irr::s32> _size, irr::core::position2d<float> _vel);
         void update();
         void draw(ContextManager &context);
 

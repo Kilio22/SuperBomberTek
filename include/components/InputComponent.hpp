@@ -13,7 +13,7 @@
 
 namespace Indie::Components
 {
-    enum KEY_TYPE {
+    enum class KEY_TYPE {
         LEFT,
         RIGHT,
         UP,

@@ -9,17 +9,13 @@
 #include "EntityManager.hpp"
 #include "Components.h"
 
-Indie::Systems::InputSystem::InputSystem()
-    : eventHandler(EventHandler::getInstance())
-{}
-
 std::map<irr::EKEY_CODE, bool> Indie::Systems::InputSystem::updateKeys(std::map<irr::EKEY_CODE, bool> keysStates, Indie::Components::InputComponent *inputComponent) const
 {
     for (auto &keyState : keysStates) {
-        if (inputComponent->getKeyType(keyState.first) == Indie::Components::DROP) {
-            keyState.second = this->eventHandler.isKeyReleased(keyState.first);
+        if (inputComponent->getKeyType(keyState.first) == Indie::Components::KEY_TYPE::DROP) {
+            keyState.second = EventHandler::getInstance().isKeyReleased(keyState.first);
         } else {
-            keyState.second = this->eventHandler.isKeyPressed(keyState.first);
+            keyState.second = EventHandler::getInstance().isKeyPressed(keyState.first);
         }
     }
     return keysStates;

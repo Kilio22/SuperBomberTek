@@ -42,10 +42,10 @@ bool GameScene::init(ContextManager &_context)
 
     int mapX = 15;
     int mapY = 15;
-    Indie::MapGenerator generator(Indie::MapGenerator::DEFAULT, Indie::MapGenerator::DIRT, mapX, mapY);
+    Indie::MapGenerator generator(Indie::MapGenerator::MAP_TYPE::DEFAULT, Indie::MapGenerator::THEME::DIRT, mapX, mapY);
     generator.generate(entityManager, _context);
 
-    Indie::EntityBuilder::createPlayer(entityManager, irr::core::vector3df(20, 20, 20), "../ressources/static_mesh/character/red.obj", "../ressources/textures/character/red.png", _context, {{irr::KEY_UP, Indie::Components::UP}, {irr::KEY_DOWN, Indie::Components::DOWN}, {irr::KEY_RIGHT, Indie::Components::RIGHT}, {irr::KEY_LEFT, Indie::Components::LEFT}, {irr::KEY_SPACE, Indie::Components::DROP}});
+    Indie::EntityBuilder::createPlayer(entityManager, irr::core::vector3df(20, 20, 20), "../ressources/static_mesh/character/red.obj", "../ressources/textures/character/red.png", _context, {{irr::KEY_UP, Indie::Components::KEY_TYPE::UP}, {irr::KEY_DOWN, Indie::Components::KEY_TYPE::DOWN}, {irr::KEY_RIGHT, Indie::Components::KEY_TYPE::RIGHT}, {irr::KEY_LEFT, Indie::Components::KEY_TYPE::LEFT}, {irr::KEY_SPACE, Indie::Components::KEY_TYPE::DROP}});
 
     device->getCursorControl()->setVisible(false);
 
@@ -60,11 +60,8 @@ bool GameScene::reset(ContextManager &_context)
     return (init(_context));
 }
 
-// LOOP ORDER:
-// beginScene -> events -> update -> renderPre3D -> render3D -> renderPost3D -> endScene
 void GameScene::update(irr::f32 deltaTime)
 {
-    // FAUT QU'ON VOIT POUR LES TICKS AVANT QUE CE SOIT LE BORDEL A AJOUTER.
     inputSystem.onUpdate(deltaTime, entityManager, *this->context);
     moveSystem.onUpdate(deltaTime, entityManager, *this->context);
     velocitySystem.onUpdate(deltaTime, entityManager, *this->context);

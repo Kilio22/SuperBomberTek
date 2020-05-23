@@ -28,6 +28,7 @@ class MenuScene : public IScene {
 
     private:
         ContextManager *context;
+        static const irr::core::vector2df velocities[5];
         std::vector<Parallax> parallax;
 };
 

@@ -7,6 +7,8 @@
 
 #include "Scenes/TitleScene.hpp"
 
+const float TitleScene::updateRate = ((2 * M_PI) / 96) / 32;
+
 bool TitleScene::init(ContextManager &_context)
 {
     titleLogo = _context.getDriver()->getTexture("../ressources/images/logo.png");

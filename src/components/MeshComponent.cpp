@@ -23,13 +23,13 @@ Indie::Components::MeshComponent::MeshComponent(const ContextManager &contextMan
         throw Indie::Exceptions::FileNotFoundException("HitboxComponent::HitboxComponent", "Cannot found file: " + texturePath);
     }
     this->texture = newTexture;
-    this->meshs.insert({STAND, newMesh});
+    this->meshs.insert({POSITION::STAND, newMesh});
     newMesh = contextManager.getSceneManager()->getMesh(RUN_MESH_PATH.c_str());
     if (newMesh == nullptr) {
         throw Indie::Exceptions::FileNotFoundException("HitboxComponent::HitboxComponent", "Cannot found file: ");
     }
-    this->meshs.insert({RUN, newMesh});
-    this->currentPosition = STAND;
+    this->meshs.insert({POSITION::RUN, newMesh});
+    this->currentPosition = POSITION::STAND;
 }
 
 irr::video::ITexture *Indie::Components::MeshComponent::getTexture() const

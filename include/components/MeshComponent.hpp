@@ -21,7 +21,7 @@ namespace Indie::Components
             MeshComponent(const ContextManager &contextManager, const std::string &texturePath);
             ~MeshComponent() = default;
 
-            enum POSITION {
+            enum class POSITION {
                 STAND,
                 RUN
             };
