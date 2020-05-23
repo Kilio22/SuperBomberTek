@@ -10,7 +10,7 @@
 
 const irr::f32 Indie::Systems::VelocitySystem::VELOCITY = 25.0f;
 
-void Indie::Systems::VelocitySystem::onUpdate(irr::f32 deltaTime, EntityManager &entityManager, const ContextManager &) const
+void Indie::Systems::VelocitySystem::onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const
 {
     for (auto entity : entityManager.each<Indie::Components::PositionComponent, Indie::Components::MoveComponent, Indie::Components::VelocityComponent>()) {
         auto moveComponent = entity->getComponent<Indie::Components::MoveComponent>();

@@ -21,7 +21,7 @@ namespace Indie::Systems
             InputSystem() = default;
             ~InputSystem() = default;
 
-            void onUpdate(irr::f32 deltaTime, EntityManager &entityManager, const ContextManager &contextManager) const final;
+            void onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const final;
 
         protected:
         private:

@@ -19,7 +19,7 @@ namespace Indie::Systems
             MeshSystem() = default;
             ~MeshSystem() = default;
 
-            void onUpdate(irr::f32 deltaTime, EntityManager &entityManager, const ContextManager &contextManager) const final;
+            void onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const final;
 
         protected:
         private:

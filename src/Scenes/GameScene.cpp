@@ -65,14 +65,14 @@ bool Indie::GameScene::reset(ContextManager &_context)
 // beginScene -> events -> update -> renderPre3D -> render3D -> renderPost3D -> endScene
 void Indie::GameScene::update(irr::f32 deltaTime)
 {
-    inputSystem.onUpdate(deltaTime, entityManager, *this->context);
-    moveSystem.onUpdate(deltaTime, entityManager, *this->context);
-    velocitySystem.onUpdate(deltaTime, entityManager, *this->context);
-    rotationSystem.onUpdate(deltaTime, entityManager, *this->context);
-    bombSystem.onUpdate(deltaTime, entityManager, *this->context);
-    collisionSystem.onUpdate(deltaTime, entityManager, *this->context);
-    meshSystem.onUpdate(deltaTime, entityManager, *this->context);
-    renderSystem.onUpdate(deltaTime, entityManager, *this->context);
+    inputSystem.onUpdate(deltaTime, entityManager);
+    moveSystem.onUpdate(deltaTime, entityManager);
+    velocitySystem.onUpdate(deltaTime, entityManager);
+    rotationSystem.onUpdate(deltaTime, entityManager);
+    bombSystem.onUpdate(deltaTime, entityManager);
+    collisionSystem.onUpdate(deltaTime, entityManager);
+    meshSystem.onUpdate(deltaTime, entityManager);
+    renderSystem.onUpdate(deltaTime, entityManager);
 }
 
 void Indie::GameScene::renderPre3D() {}
