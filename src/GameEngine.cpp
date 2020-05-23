@@ -11,27 +11,41 @@
 #include "Scenes/TitleScene.hpp"
 #include "Scenes/GameScene.hpp"
 
+#include "ServiceLocator.hpp"
+
+static void setupMusicManager()
+{
+    ServiceLocator::musicManager.addMusic("../ressources/musics/main_menu.wav"); // id 0
+    ServiceLocator::musicManager.addMusic("../ressources/musics/level_select.wav"); // id 1
+    ServiceLocator::musicManager.mute(); // psk faut pas deconner c'est chiant à la longue
+    ServiceLocator::musicManager.setMusic(0);
+    ServiceLocator::musicManager.setVolume(25);
+    ServiceLocator::musicManager.playMusic();
+}
+
+static void setupSceneManager(ContextManager &context)
+{
+    ServiceLocator::sceneManager.addScene<MenuScene>(context); //id 0
+    ServiceLocator::sceneManager.addScene<TitleScene>(context); //id 1
+    ServiceLocator::sceneManager.addScene<GameScene>(context); //id 2
+    ServiceLocator::sceneManager.setScene(0, context);
+    ServiceLocator::sceneManager.setSceneUpdateActive(true);
+    ServiceLocator::sceneManager.setSceneRenderActive(true);
+    ServiceLocator::sceneManager.setSubScene(1, context);
+    ServiceLocator::sceneManager.setSubSceneUpdateActive(true);
+    ServiceLocator::sceneManager.setSubSceneRenderActive(true);
+}
+
 void GameEngine::startGame()
 {
-    /* ================================================================================ */
-    /* MUSIC MANAGER STUFF */
-    MusicManager::AddMusic("../ressources/musics/main_menu.wav"); // id 0
-    MusicManager::AddMusic("../ressources/musics/level_select.wav"); // id 1
-    //MusicManager::mute(); // psk faut pas deconner c'est chiant à la longue
-    MusicManager::setMusic(0);
-    MusicManager::setVolume(25);
-    MusicManager::playMusic();
-    /* ================================================================================ */
-    /* SCENE MANAGER STUFF */
-    SceneManager::AddScene<MenuScene>(context); //id 0
-    SceneManager::AddScene<TitleScene>(context); //id 1
-    SceneManager::AddScene<GameScene>(context); //id 2
-    SceneManager::setScene(2, context);
-    // SceneManager::setSceneUpdateActive(true);
-    // SceneManager::setSceneRenderActive(true);
-    //SceneManager::setSubScene(1, context);
-    //SceneManager::setSubSceneUpdateActive(true);
-    //SceneManager::setSubSceneRenderActive(true);
+    try {
+        setupMusicManager();
+        setupSceneManager(context);
+    }
+    catch (const Indie::Exceptions::IndieException &e) {
+        std::cerr << e.getComponent() << ": " << e.what() << std::endl;
+        throw (Indie::Exceptions::GameEngineException("GameEngine.cpp line 46", "Setup failed."));
+    }
     /* ================================================================================ */
     /* LOOP */
     this->context.getDevice()->getTimer()->stop();
@@ -43,13 +57,19 @@ void GameEngine::startGame()
     while (context.getDevice()->run()) {
         currentTime = this->context.getDevice()->getTimer()->getTime();
         deltaTime = (irr::f32)(currentTime - lastTime) / 1000.f;
-        MusicManager::update();
-        SceneManager::update(context, deltaTime);
+        try {
+            ServiceLocator::musicManager.update();
+            ServiceLocator::sceneManager.update(context, deltaTime);
+        }
+        catch (const Indie::Exceptions::IndieException &e) {
+            std::cerr << e.getComponent() << ": " << e.what() << std::endl;
+            throw (Indie::Exceptions::GameEngineException("GameEngine.cpp line 64", "Update during the game loop failed."));
+        }
         lastTime = currentTime;
     }
     /* ================================================================================ */
     /* MEMORY STUFF */
-    MusicManager::drop();
-    SceneManager::drop();
+    ServiceLocator::musicManager.drop();
+    ServiceLocator::sceneManager.drop();
     /* ================================================================================ */
 }

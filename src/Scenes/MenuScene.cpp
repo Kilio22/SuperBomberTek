@@ -6,6 +6,7 @@
 */
 
 #include "Scenes/MenuScene.hpp"
+#include "ServiceLocator.hpp"
 
 const irr::io::path filepaths[5] {
     "../ressources/images/bg_boxes.png",
@@ -25,7 +26,7 @@ const irr::core::position2d<float> velocities[5] {
 
 bool MenuScene::init(ContextManager &_context)
 {
-    MusicManager::setMusic(0);
+    ServiceLocator::musicManager.setMusic(0);
     for (size_t i = 0; i < 5; i++) {
         Parallax tmp;
         if (!tmp.init(_context, filepaths[i], POS(1280, 720), velocities[i]))

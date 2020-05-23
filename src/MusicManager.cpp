@@ -7,12 +7,6 @@
 
 #include "MusicManager.hpp"
 
-std::vector<MyMusic> MusicManager::musics;
-size_t MusicManager::currentMusic = 0;
-float MusicManager::volume = 50;
-bool MusicManager::isMuted = false;
-bool MusicManager::isPlaying = false;
-
 MyMusic::MyMusic(std::string filepath)
 {
     volume = 100;
@@ -23,25 +17,18 @@ MyMusic::MyMusic(std::string filepath)
     std::string extension = filepath.substr(filepath.find_last_of(".")); 
     filepath.resize(filepath.size() - extension.size());
 
-    try {
-        auto intro = new sf::Music();
-        auto loop  = new sf::Music();
-        auto outro = new sf::Music();
-        if (!intro->openFromFile(filepath + "_intro" + extension))
-            throw (InvalidPath("File \"" + filepath + "intro" + extension + "\" not found."));
-        if (!loop->openFromFile(filepath + "_loop" + extension))
-            throw (InvalidPath("File \"" + filepath + "loop" + extension + "\" not found."));
-        if (!outro->openFromFile(filepath + "_outro" + extension))
-            throw (InvalidPath("File \"" + filepath + "outro" + extension + "\" not found."));
-        musics.push_back(std::move(intro));
-        musics.push_back(std::move(loop));
-        musics.push_back(std::move(outro));
-    }
-    catch (const MyMusicException& e) {
-        std::cerr << e.type() << ": " << e.what() << std::endl;
-        exit(84);
-    }
-    
+    auto intro = new sf::Music();
+    auto loop  = new sf::Music();
+    auto outro = new sf::Music();
+    if (!intro->openFromFile(filepath + "_intro" + extension))
+        throw (Indie::Exceptions::FileNotFoundException("MusicManager.cpp line 24" ,"File \"" + filepath + "intro" + extension + "\" not found."));
+    if (!loop->openFromFile(filepath + "_loop" + extension))
+        throw (Indie::Exceptions::FileNotFoundException("MusicManager.cpp line 26" ,"File \"" + filepath + "loop" + extension + "\" not found."));
+    if (!outro->openFromFile(filepath + "_outro" + extension))
+        throw (Indie::Exceptions::FileNotFoundException("MusicManager.cpp line 28" ,"File \"" + filepath + "outro" + extension + "\" not found."));
+    musics.push_back(std::move(intro));
+    musics.push_back(std::move(loop));
+    musics.push_back(std::move(outro));
 }
 
 void MyMusic::drop()
@@ -139,94 +126,96 @@ void MyMusic::update()
     }
 }
 
-void MusicManager::AddMusic(std::string filepath)
+MusicManager::MusicManager() :
+musics(),
+currentMusic(0),
+volume(50),
+isMuted(false),
+isPlaying(false)
+{}
+
+void MusicManager::addMusic(std::string filepath)
 {
     MyMusic tmp(filepath);
 
     tmp.loop();
-    tmp.setVolume(MusicManager::volume);
-    if (MusicManager::isMuted)
+    tmp.setVolume(volume);
+    if (isMuted)
         tmp.setVolume(0);
-    MusicManager::musics.push_back(tmp);
+    musics.push_back(tmp);
 }
 
 void MusicManager::setMusic(size_t id)
 {
-    try {
-        if (id >= MusicManager::musics.size())
-            throw (InvalidIndex("Music at index " + std::to_string(id) + " doesn't exist."));
-        if (id == MusicManager::currentMusic)
-            return;
-        for (size_t i = 0; i < MusicManager::musics.size(); i++)
-            MusicManager::musics[i].stopMusic();
-        MusicManager::currentMusic = id;
-        if (MusicManager::isPlaying)
-            MusicManager::musics[currentMusic].playMusic();
-    }    
-    catch (const MusicManagerException& e) {
-        std::cerr << e.type() << ": " << e.what() << std::endl;
-    }
+    if (id >= musics.size())
+        throw (Indie::Exceptions::InvalidIndexException("MusicManager.cpp line 151", "Music at index " + std::to_string(id) + " doesn't exist."));
+    if (id == currentMusic)
+        return;
+    for (size_t i = 0; i < musics.size(); i++)
+        musics[i].stopMusic();
+    currentMusic = id;
+    if (isPlaying)
+        musics[currentMusic].playMusic();
 }
 
 void MusicManager::setVolume(float _vol)
 {
-    for (size_t i = 0; i < MusicManager::musics.size(); i++) {
-        if (!MusicManager::isMuted)
-            MusicManager::musics[i].setVolume(_vol);
+    for (size_t i = 0; i < musics.size(); i++) {
+        if (!isMuted)
+            musics[i].setVolume(_vol);
     }
-    MusicManager::volume = _vol;
+    volume = _vol;
 }
 
 void MusicManager::mute()
 {
-    MusicManager::setVolume(0);
+    setVolume(0);
     isMuted = true;
 }
 
 void MusicManager::unMute()
 {
-    MusicManager::setVolume(MusicManager::volume);
+    setVolume(volume);
     isMuted = false;
 }
 
-
 void MusicManager::playMusic()
 {
-    MusicManager::pauseMusic();
-    MusicManager::musics[currentMusic].playMusic();
-    MusicManager::isPlaying = true;
+    pauseMusic();
+    musics[currentMusic].playMusic();
+    isPlaying = true;
 }
 
 void MusicManager::pauseMusic()
 {
-    for (size_t i = 0; i < MusicManager::musics.size(); i++)
-        MusicManager::musics[i].pauseMusic();
-    MusicManager::isPlaying = false;
+    for (size_t i = 0; i < musics.size(); i++)
+        musics[i].pauseMusic();
+    isPlaying = false;
 }
 
 void MusicManager::stopMusic()
 {
-    for (size_t i = 0; i < MusicManager::musics.size(); i++)
-        MusicManager::musics[i].stopMusic();
-    MusicManager::isPlaying = false;
+    for (size_t i = 0; i < musics.size(); i++)
+        musics[i].stopMusic();
+    isPlaying = false;
 }
 
 void MusicManager::restartMusic()
 {
-    for (size_t i = 0; i < MusicManager::musics.size(); i++)
-        MusicManager::musics[i].restartMusic();
+    for (size_t i = 0; i < musics.size(); i++)
+        musics[i].restartMusic();
 }
 
 void MusicManager::update()
 {
-    for (size_t i = 0; i < MusicManager::musics.size(); i++) {
-        MusicManager::musics[i].update();
+    for (size_t i = 0; i < musics.size(); i++) {
+        musics[i].update();
     }
 }
 
 void MusicManager::drop()
 {
     MusicManager::musics.clear();
-    for (size_t i = 0; i < MusicManager::musics.size(); i++)
-        MusicManager::musics[i].drop();
+    for (size_t i = 0; i < musics.size(); i++)
+        musics[i].drop();
 }

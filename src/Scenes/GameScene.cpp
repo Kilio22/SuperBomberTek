@@ -6,11 +6,12 @@
 */
 
 #include "Scenes/GameScene.hpp"
+#include "ServiceLocator.hpp"
 
 // return false si un load merde.
 bool GameScene::init(ContextManager &_context)
 {
-    MusicManager::setMusic(1);
+    ServiceLocator::musicManager.setMusic(1);
     device = _context.getDevice();
     driver = _context.getDriver();
     sceneManager = _context.getSceneManager();

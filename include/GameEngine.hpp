@@ -17,6 +17,9 @@
 #include "SceneManager.hpp"
 #include "MusicManager.hpp"
 #include "SceneManager.hpp"
+#include "Exceptions.h"
+#include "ServiceLocator.hpp"
+
 //TODO : Add include for EventHandler
 
 class GameEngine {

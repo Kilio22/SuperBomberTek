@@ -10,6 +10,10 @@
 
 #include "IndieException.hpp"
 #include "FileNotFoundException.hpp"
+#include "MusicManagerException.hpp"
+#include "SceneManagerException.hpp"
+#include "InvalidIndexException.hpp"
+#include "GameEngineException.hpp"
 
 
 #endif /* !EXCEPTIONS_H_ */

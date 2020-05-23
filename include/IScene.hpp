@@ -9,7 +9,6 @@
 #define ISCENE_HPP_
 
 #include "ContextManager.hpp"
-#include "MusicManager.hpp"
 class IScene {
     public:
         virtual ~IScene() = default;

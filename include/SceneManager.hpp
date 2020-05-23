@@ -13,80 +13,40 @@
 #include <vector>
 #include "IScene.hpp"
 #include "ContextManager.hpp"
-
-class SceneManagerException : public std::exception
-{
-    public:
-        SceneManagerException(std::string const &message, std::string const type) noexcept {
-            _message = message;
-            _type = type;
-        }
-
-        const char *type() const noexcept {
-            return (_type.data());
-        }
-        const char *what() const noexcept override {
-            return (_message.data());
-        };
-    protected:
-        std::string _message;
-        std::string _type;
-};
-
-class InvalidIndex_ : public SceneManagerException
-{
-    public:
-        InvalidIndex_(std::string const &message) noexcept : SceneManagerException(message, "InvalidIndex")
-        {}
-};
-
-class SceneInitFailed : public SceneManagerException
-{
-    public:
-        SceneInitFailed(std::string const &message) noexcept : SceneManagerException(message, "SceneInitFailed")
-        {}
-};
-
-class SceneRestartFailed : public SceneManagerException
-{
-    public:
-        SceneRestartFailed(std::string const &message) noexcept : SceneManagerException(message, "SceneRestartFailed")
-        {}
-};
+#include "Exceptions.h"
 
 class SceneManager {
     public:
-        SceneManager() = delete;
-        ~SceneManager() = delete;
+        SceneManager();
+        ~SceneManager() {}
 
     template <typename T>
-    static void AddScene(ContextManager &context) {
+    void addScene(ContextManager &context) {
         IScene *scene = new T;
 
-        SceneManager::scenes.push_back(scene);
+        scenes.push_back(scene);
     }
-    static void removeScene(size_t id);
-    static void restartScene(size_t id, ContextManager &context);
-    static void restartScenes(ContextManager &context);
+    void removeScene(size_t id);
+    void restartScene(size_t id, ContextManager &context);
+    void restartScenes(ContextManager &context);
+    void setScene(size_t id, ContextManager &context);
+    void setSubScene(size_t id, ContextManager &context);
+    void setSceneUpdateActive(bool status);
+    void setSubSceneUpdateActive(bool status);
+    void setSceneRenderActive(bool status);
+    void setSubSceneRenderActive(bool status);
+    void update(ContextManager &contextManager, irr::f32 deltaTime);
+    void drop();
+    IScene *getScene(size_t id);
 
-    static void setScene(size_t id, ContextManager &context);
-    static void setSubScene(size_t id, ContextManager &context);
-
-    static void setSceneUpdateActive(bool status);
-    static void setSubSceneUpdateActive(bool status);
-    static void setSceneRenderActive(bool status);
-    static void setSubSceneRenderActive(bool status);
-    static void update(ContextManager &contextManager, irr::f32 deltaTime);
-
-    static void drop();
-
-    static std::vector<IScene*> scenes;
-    static size_t currentScene;
-    static size_t currentSubScene;
-    static bool updateScene;
-    static bool renderScene;
-    static bool updateSubScene;
-    static bool renderSubScene;
+    private:
+        std::vector<IScene*> scenes;
+        size_t currentScene;
+        size_t currentSubScene;
+        bool updateScene;
+        bool updateSubScene;
+        bool renderScene;
+        bool renderSubScene;
 };
 
 #endif /* !SCENEMANAGER_HPP_ */
