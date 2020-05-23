@@ -10,22 +10,27 @@
 
 #include <iostream>
 
+#include "ContextManager.hpp"
 #include "IScene.hpp"
 #include "Parallax.hpp"
-#include "ContextManager.hpp"
 
 #include "Components.h"
 #include "EntityBuilder.h"
 #include "EntityManager.hpp"
 #include "MapGenerator.hpp"
+#include "ServiceLocator.hpp"
 #include "Systems.h"
 
 namespace Indie {
 
 class GameScene : public IScene {
     public:
-        GameScene() {}
-        ~GameScene() {}
+        GameScene()
+            : entityManager(ServiceLocator::getInstance().get<EntityManager>())
+        {
+        }
+
+        ~GameScene() = default;
 
         bool init(ContextManager &context);
         bool reset(ContextManager &context);
@@ -38,7 +43,7 @@ class GameScene : public IScene {
         irr::IrrlichtDevice *device;
         irr::video::IVideoDriver *driver;
         irr::scene::ISceneManager *sceneManager;
-        Indie::EntityManager entityManager;
+        Indie::EntityManager &entityManager;
         Indie::Systems::RenderSystem renderSystem;
         Indie::Systems::InputSystem inputSystem;
         Indie::Systems::MoveSystem moveSystem;

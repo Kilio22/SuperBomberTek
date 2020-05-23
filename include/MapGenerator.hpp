@@ -10,7 +10,6 @@
 
 #include "ContextManager.hpp"
 #include "EntityBuilder.h"
-#include "EntityManager.hpp"
 #include <algorithm>
 #include <cstdlib>
 #include <ctime>
