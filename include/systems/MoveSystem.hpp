@@ -20,9 +20,6 @@ namespace Indie::Systems
             ~MoveSystem() = default;
 
             void onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const final;
-
-        protected:
-        private:
     };
 }
 

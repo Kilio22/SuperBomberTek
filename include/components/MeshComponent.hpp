@@ -33,7 +33,6 @@ namespace Indie::Components
 
             irr::scene::IAnimatedMesh *getMeshByPosition(POSITION position) const;
 
-        protected:
         private:
             static const std::string STAND_MESH_PATH;
             static const std::string RUN_MESH_PATH;
