@@ -53,10 +53,10 @@ void Indie::Components::AIComponent::pathFinder(std::vector<std::vector<int>> &m
         pathFinder(map, initX, initY, value + 1);
 }
 
-void Indie::Components::AIComponent::findPosition(std::vector<std::vector<int>> map, int initX, int initY, std::array<int, 3> &position /*std::vector<std::array<int, 3>> banned_position*/) 
+void Indie::Components::AIComponent::findPosition(std::vector<std::vector<int>> map, int initX, int initY, std::array<int, 3> &position /*std::vector<std::array<int, 3>> banned_position*/)
 {
     int nbBox = 0;
-    
+
     if (initX == 0 || initY == 0 || initX >= 100 || initX >= 100 || map[initY][initX] < 3)
         return;
     if (map[initY + 1][initX] == 1)
@@ -138,6 +138,7 @@ bool Indie::Components::AIComponent::isMoving(enum Direction direction)
 std::vector<std::vector<int>> Indie::Components::AIComponent::getMap() const
 {
     auto &mapGenerator = ServiceLocator::getInstance().get<MapGenerator>();
+
     return mapGenerator.getMap();
 }
 
@@ -156,7 +157,7 @@ bool Indie::Components::AIComponent::hasMoved(irr::core::vector3df position, irr
 }
 
 void Indie::Components::AIComponent::getShortlessPath(std::vector<std::vector<int>> &map, int initX, int initY, int futurX, int futurY)
-{ 
+{
     int value = map[futurY][futurX];
 
     while (map[initY][initX] != -99) {

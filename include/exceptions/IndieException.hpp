@@ -11,6 +11,10 @@
 #include <exception>
 #include <string>
 
+#define __ERROR_STR(f, l, fu) (#f " at line " #l "(" #fu ")")
+#define _ERROR_STR(f, l, fu) __ERROR_STR(f, l, fu)
+#define ERROR_STR _ERROR_STR(__FILE__, __LINE__, __func__)
+
 namespace Indie::Exceptions
 {
     class IndieException : public std::exception
@@ -20,10 +24,8 @@ namespace Indie::Exceptions
             virtual ~IndieException() = default;
 
             const char *what() const noexcept final;
-
             const std::string &getComponent(void) const noexcept;
 
-        protected:
         private:
             std::string _component;
             std::string _message;

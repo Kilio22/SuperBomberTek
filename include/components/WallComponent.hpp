@@ -19,11 +19,9 @@ namespace Indie::Components
             bool getCanBeDestroyed() const;
             void setCanBeDestroyed(bool value);
 
-        protected:
         private:
             bool canBeDestroyed;
     };
 } // namespace Indie::Components
-
 
 #endif /* !WALLCOMPONENT_HPP_ */

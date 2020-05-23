@@ -20,6 +20,6 @@ template <typename T> TypeIndex getTypeIndex()
     return std::type_index(typeid(T));
 }
 
-} // namespace Indie
+}
 
 #endif /* !TYPEINDEX_HPP_ */

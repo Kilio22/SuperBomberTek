@@ -12,18 +12,18 @@
 
 namespace Indie {
 
-    template <class T>
-    class ComponentContainer : public IComponentContainer
-    {
-        public:
-            template <typename... Args>
-            ComponentContainer(Args &&... args)
-                : data(std::forward<Args>(args)...) {}
+template <class T>
+class ComponentContainer : public IComponentContainer {
+    public:
+        template <typename... Args>
+        ComponentContainer(Args &&... args)
+            : data(std::forward<Args>(args)...) {}
 
-            ~ComponentContainer() = default;
+        ~ComponentContainer() = default;
 
-            T data;
-    };
+        T data;
+};
+
 }
 
 #endif /* !COMPONENTCONTAINER_HPP_ */

@@ -7,7 +7,7 @@
 
 #include "BombSystem.hpp"
 #include "Components.h"
-#include "EntityBuilder.h"
+#include "EntityBuilder.hpp"
 
 bool Indie::Systems::BombSystem::hasBombAtPosition(EntityManager &entityManager, irr::core::vector3df position) const
 {

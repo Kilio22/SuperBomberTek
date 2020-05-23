@@ -6,12 +6,11 @@
 */
 
 #include "GameEngine.hpp"
-#include "SceneManager.hpp"
-#include "MenuScene.hpp"
-#include "TitleScene.hpp"
 #include "GameScene.hpp"
-
+#include "MenuScene.hpp"
+#include "SceneManager.hpp"
 #include "ServiceLocator.hpp"
+#include "TitleScene.hpp"
 
 static void setupMusicManager()
 {
@@ -34,6 +33,11 @@ static void setupSceneManager(Indie::ContextManager &context)
     //Indie::ServiceLocator::getInstance().get<SceneManager>().setSubScene(1, context);
     //Indie::ServiceLocator::getInstance().get<SceneManager>().setSubSceneUpdateActive(true);
     //Indie::ServiceLocator::getInstance().get<SceneManager>().setSubSceneRenderActive(true);
+}
+
+Indie::GameEngine::GameEngine()
+    : context(Indie::ServiceLocator::getInstance().get<ContextManager>())
+{
 }
 
 void Indie::GameEngine::startGame()

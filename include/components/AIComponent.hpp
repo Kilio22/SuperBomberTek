@@ -20,13 +20,13 @@ namespace Indie::Components
         public:
             AIComponent() = default;
             ~AIComponent() = default;
-            
+
             enum Direction {
                 UP = 0,
                 RIGHT = 1,
                 DOWN = 2,
                 LEFT = 3,
-                NONE = 5 
+                NONE = 5
             };
             std::vector<std::vector<int>> getMap() const;
 
@@ -49,7 +49,7 @@ namespace Indie::Components
 
             int setZone(std::vector<std::vector<int>> &map, int initX, int initY, int value);
             int getZone();
-        protected:
+
         private:
             int _nextX = -1;
             int _nextY = -1;

@@ -31,7 +31,6 @@ namespace Indie
             void operator=(EventHandler const &) = delete;
             EventHandler(EventHandler const &) = delete;
 
-        protected:
         private:
             EventHandler();
 

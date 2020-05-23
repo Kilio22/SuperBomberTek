@@ -17,9 +17,6 @@ namespace Indie::Exceptions
         public:
             FileNotFoundException(const std::string &component, const std::string &message);
             ~FileNotFoundException() = default;
-
-        protected:
-        private:
     };
 }
 

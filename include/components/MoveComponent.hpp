@@ -31,7 +31,6 @@ namespace Indie::Components
             bool getRight(void) const;
             bool getDrop(void) const;
 
-        protected:
         private:
             bool up;
             bool down;

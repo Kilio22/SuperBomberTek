@@ -15,11 +15,8 @@ namespace Indie::Exceptions
     class InvalidIndexException : public IndieException
     {
         public:
-            InvalidIndexException(const std::string &component, const std::string &message) : IndieException(component, message) {}
+            InvalidIndexException(const std::string &component, const std::string &message);
             ~InvalidIndexException() = default;
-
-        protected:
-        private:
     };
 }
 

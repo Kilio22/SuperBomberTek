@@ -15,11 +15,8 @@ namespace Indie::Exceptions
     class SceneManagerException : public IndieException
     {
         public:
-            SceneManagerException(const std::string &component, const std::string &message) : IndieException(component, message) {}
+            SceneManagerException(const std::string &component, const std::string &message);
             ~SceneManagerException() = default;
-
-        protected:
-        private:
     };
 }
 

@@ -13,40 +13,41 @@
 #include <memory>
 #include <SFML/Audio.hpp>
 
-namespace Indie
-{
-    class Music {
-        public:
-            Music(std::string filepath);
-            ~Music() = default;
+namespace Indie {
 
-            float getVolume() const;
-            void setVolume(float volume);
-            void loop();
-            void unLoop();
-            void mute();
-            void unMute();
+class Music {
+    public:
+        Music(std::string filepath);
+        ~Music() = default;
 
-            void playMusic();
-            void pauseMusic();
-            void stopMusic();
-            void restartMusic();
-            void update();
+        float getVolume() const;
+        void setVolume(float volume);
+        void loop();
+        void unLoop();
+        void mute();
+        void unMute();
 
-        private:
-            enum class CHUNKS : int {
-                Intro,
-                Loop,
-                Outro
-            };
+        void playMusic();
+        void pauseMusic();
+        void stopMusic();
+        void restartMusic();
+        void update();
 
-            std::vector<std::unique_ptr<sf::Music>> musics;
-            CHUNKS currentMusic;
-            float volume;
-            bool isMuted;
-            bool isLooped;
-            bool isPlaying;
-    };
+    private:
+        enum class CHUNKS : int {
+            Intro,
+            Loop,
+            Outro
+        };
+
+        std::vector<std::unique_ptr<sf::Music>> musics;
+        CHUNKS currentMusic;
+        float volume;
+        bool isMuted;
+        bool isLooped;
+        bool isPlaying;
+};
+
 } // namespace Indie::Music
 
 #endif /* !MUSIC_HPP_ */

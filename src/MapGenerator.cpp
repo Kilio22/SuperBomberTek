@@ -5,8 +5,14 @@
 ** MapGenerator
 */
 
-
 #include "MapGenerator.hpp"
+#include "ContextManager.hpp"
+#include "EntityBuilder.hpp"
+#include <algorithm>
+#include <cstdlib>
+#include <ctime>
+#include <iostream>
+#include <utility>
 
 Indie::MapGenerator::MapGenerator()
 {

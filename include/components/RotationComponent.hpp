@@ -21,7 +21,6 @@ namespace Indie::Components
             const irr::core::vector3df &getAngle(void) const;
             void setAngle(float newAngle);
 
-        protected:
         private:
             irr::core::vector3df angle;
     };

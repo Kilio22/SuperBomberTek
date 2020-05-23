@@ -8,18 +8,16 @@
 #ifndef MENUSCENE_HPP_
 #define MENUSCENE_HPP_
 
-#include <iostream>
-#include <vector>
-
 #include "IScene.hpp"
 #include "Parallax.hpp"
 #include "ContextManager.hpp"
+#include <vector>
 
 namespace Indie {
     class MenuScene : public IScene {
         public:
-            MenuScene() {}
-            ~MenuScene() {}
+            MenuScene() = default;
+            ~MenuScene() = default;
 
             bool init(ContextManager &context);
             bool reset(ContextManager &context);

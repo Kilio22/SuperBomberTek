@@ -15,11 +15,8 @@ namespace Indie::Exceptions
     class GameEngineException : public IndieException
     {
         public:
-            GameEngineException(const std::string &component, const std::string &message) : IndieException(component, message) {}
+            GameEngineException(const std::string &component, const std::string &message);
             ~GameEngineException() = default;
-
-        protected:
-        private:
     };
 }
 

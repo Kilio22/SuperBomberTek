@@ -20,11 +20,7 @@
 namespace Indie {
     class GameEngine {
         public:
-            GameEngine()
-                : context(Indie::ServiceLocator::getInstance().get<ContextManager>())
-            {
-            }
-
+            GameEngine();
             ~GameEngine() = default;
 
             void startGame();

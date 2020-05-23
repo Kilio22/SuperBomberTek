@@ -5,10 +5,17 @@
 ** GameScene
 */
 
-#define MAP_SIZE 15
-
 #include "GameScene.hpp"
+#include "Components.h"
+#include "EntityBuilder.hpp"
+#include "MapGenerator.hpp"
+#include "Parallax.hpp"
 #include "ServiceLocator.hpp"
+
+Indie::GameScene::GameScene()
+    : entityManager(ServiceLocator::getInstance().get<EntityManager>())
+{
+}
 
 // return false si un load merde.
 bool Indie::GameScene::init(ContextManager &_context)

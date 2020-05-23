@@ -21,7 +21,6 @@ namespace Indie::Components
             const irr::core::vector3df &getPosition(void) const;
             void setPosition(irr::core::vector3df position);
 
-        protected:
         private:
             irr::core::vector3df position;
     };

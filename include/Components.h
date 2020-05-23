@@ -8,16 +8,16 @@
 #ifndef COMPONENTS_H_
 #define COMPONENTS_H_
 
-#include "components/InputComponent.hpp"
-#include "components/MoveComponent.hpp"
-#include "components/PositionComponent.hpp"
-#include "components/RenderComponent.hpp"
-#include "components/VelocityComponent.hpp"
-#include "components/MeshComponent.hpp"
-#include "components/RotationComponent.hpp"
-#include "components/WallComponent.hpp"
-#include "components/HitboxComponent.hpp"
-#include "components/BombComponent.hpp"
-#include "components/AIComponent.hpp"
+#include "InputComponent.hpp"
+#include "MoveComponent.hpp"
+#include "PositionComponent.hpp"
+#include "RenderComponent.hpp"
+#include "VelocityComponent.hpp"
+#include "MeshComponent.hpp"
+#include "RotationComponent.hpp"
+#include "WallComponent.hpp"
+#include "HitboxComponent.hpp"
+#include "BombComponent.hpp"
+#include "AIComponent.hpp"
 
 #endif /* !COMPONENTS_H_ */

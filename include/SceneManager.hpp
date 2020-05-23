@@ -16,15 +16,16 @@
 #include "Exceptions.h"
 
 namespace Indie {
-    class SceneManager {
-        public:
-            SceneManager();
-            ~SceneManager() {}
-    
+
+class SceneManager {
+    public:
+        SceneManager();
+        ~SceneManager() = default;
+
         template <typename T>
         void addScene(ContextManager &context) {
             IScene *scene = new T;
-    
+
             scenes.push_back(scene);
         }
         void removeScene(size_t id);
@@ -39,16 +40,17 @@ namespace Indie {
         void update(ContextManager &contextManager, irr::f32 deltaTime);
         void drop();
         IScene *getScene(size_t id);
-    
-        private:
-            std::vector<IScene*> scenes;
-            size_t currentScene;
-            size_t currentSubScene;
-            bool updateScene;
-            bool updateSubScene;
-            bool renderScene;
-            bool renderSubScene;
-    };
+
+    private:
+        std::vector<IScene *> scenes;
+        size_t currentScene;
+        size_t currentSubScene;
+        bool updateScene;
+        bool updateSubScene;
+        bool renderScene;
+        bool renderSubScene;
+};
+
 }
 
 #endif /* !SCENEMANAGER_HPP_ */

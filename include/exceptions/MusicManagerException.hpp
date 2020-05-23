@@ -15,11 +15,8 @@ namespace Indie::Exceptions
     class MusicManagerException : public IndieException
     {
         public:
-            MusicManagerException(const std::string &component, const std::string &message) : IndieException(component, message) {}
+            MusicManagerException(const std::string &component, const std::string &message);
             ~MusicManagerException() = default;
-
-        protected:
-        private:
     };
 }
 

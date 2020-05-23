@@ -9,7 +9,8 @@
 
 Indie::MusicManager::MusicManager()
     : musics(), currentMusic(0), volume(50), isMuted(false), isPlaying(false)
-{}
+{
+}
 
 void Indie::MusicManager::addMusic(const std::string filepath)
 {
@@ -25,7 +26,7 @@ void Indie::MusicManager::addMusic(const std::string filepath)
 void Indie::MusicManager::setMusic(size_t id)
 {
     if (id >= musics.size())
-        throw (Indie::Exceptions::InvalidIndexException(__PRETTY_FUNCTION__, "Music at index " + std::to_string(id) + " doesn't exist."));
+        throw Indie::Exceptions::InvalidIndexException(ERROR_STR, "Music at index " + std::to_string(id) + " doesn't exist.");
     if (id == currentMusic)
         return;
     for (size_t i = 0; i < musics.size(); i++)

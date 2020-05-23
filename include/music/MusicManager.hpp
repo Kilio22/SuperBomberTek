@@ -17,28 +17,30 @@
 #include "Music.hpp"
 
 namespace Indie {
-    class MusicManager {
-        public:
-            MusicManager();
-            ~MusicManager() {}
 
-            void addMusic(const std::string filepath);
-            void setMusic(size_t id);
-            void setVolume(float _vol);
-            void mute();
-            void unMute();
-            void playMusic();
-            void pauseMusic();
-            void stopMusic();
-            void restartMusic();
-            void update();
+class MusicManager {
+    public:
+        MusicManager();
+        ~MusicManager() = default;
 
-        private:
-            std::vector<std::unique_ptr<Indie::Music>> musics;
-            size_t currentMusic;
-            float volume;
-            bool isMuted;
-            bool isPlaying;
-    };
+        void addMusic(const std::string filepath);
+        void setMusic(size_t id);
+        void setVolume(float _vol);
+        void mute();
+        void unMute();
+        void playMusic();
+        void pauseMusic();
+        void stopMusic();
+        void restartMusic();
+        void update();
+
+    private:
+        std::vector<std::unique_ptr<Indie::Music>> musics;
+        size_t currentMusic;
+        float volume;
+        bool isMuted;
+        bool isPlaying;
+};
+
 }
 #endif /* !MUSICMANAGER_HPP_ */

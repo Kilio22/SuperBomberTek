@@ -19,7 +19,6 @@ namespace Indie::Components
             float getVelocity(void) const;
             void setVelocity(float newVel);
 
-        protected:
         private:
             float velocity;
     };

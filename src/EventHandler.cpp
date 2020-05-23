@@ -16,7 +16,9 @@ Indie::EventHandler &Indie::EventHandler::getInstance()
 }
 
 Indie::EventHandler::EventHandler()
-    : keysStatus(irr::KEY_KEY_CODES_COUNT, false), keysStatusOnce(irr::KEY_KEY_CODES_COUNT, false), keysStatusReleased(irr::KEY_KEY_CODES_COUNT, false)
+    : keysStatus(irr::KEY_KEY_CODES_COUNT, false)
+    , keysStatusOnce(irr::KEY_KEY_CODES_COUNT, false)
+    , keysStatusReleased(irr::KEY_KEY_CODES_COUNT, false)
 {
 }
 

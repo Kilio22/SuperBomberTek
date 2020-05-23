@@ -8,13 +8,6 @@
 #ifndef MAPGENERATOR_HPP_
 #define MAPGENERATOR_HPP_
 
-#include "ContextManager.hpp"
-#include "EntityBuilder.h"
-#include <algorithm>
-#include <cstdlib>
-#include <ctime>
-#include <iostream>
-#include <utility>
 #include <vector>
 
 namespace Indie {

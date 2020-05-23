@@ -21,9 +21,13 @@ Indie::ContextManager::ContextManager(irr::core::dimension2d<irr::u32> size)
 Indie::ContextManager::~ContextManager()
 {
     device->drop();
+    // MusicManager::drop(); // Why
+    // OUI tkt j'allais le virer
+    // Ok frr
+    // Ptn kylio tu del pas ça là je te vois >:c
 }
 
-void Indie::ContextManager::displayImage(irr::video::ITexture *image, irr::core::position2d<irr::s32> pos, irr::video::SColor color)
+void Indie::ContextManager::displayImage(Image *image, irr::core::position2d<irr::s32> pos, irr::video::SColor color)
 {
     irr::core::dimension2d<irr::u32> size = image->getSize();
     irr::core::rect<irr::s32> rect = irr::core::rect<irr::s32>(0, 0, size.Width, size.Height);
@@ -31,7 +35,7 @@ void Indie::ContextManager::displayImage(irr::video::ITexture *image, irr::core:
     driver->draw2DImage(image, pos, rect, 0, color, true);
 }
 
-void Indie::ContextManager::displayImage(irr::video::ITexture *image, irr::core::rect<irr::s32> rect, irr::core::position2d<irr::s32> pos, irr::video::SColor color)
+void Indie::ContextManager::displayImage(Image *image, irr::core::rect<irr::s32> rect, irr::core::position2d<irr::s32> pos, irr::video::SColor color)
 {
     driver->draw2DImage(image, pos, rect, 0, color, true);
 }
