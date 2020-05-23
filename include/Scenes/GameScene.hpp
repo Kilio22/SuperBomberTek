@@ -20,6 +20,8 @@
 #include "MapGenerator.hpp"
 #include "Systems.h"
 
+namespace Indie {
+
 class GameScene : public IScene {
     public:
         GameScene() {}
@@ -46,5 +48,7 @@ class GameScene : public IScene {
         Indie::Systems::CollisionSystem collisionSystem;
         Indie::Systems::BombSystem bombSystem;
 };
+
+}
 
 #endif /* !GAMESCENE_HPP_ */

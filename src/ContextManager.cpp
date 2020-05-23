@@ -21,7 +21,7 @@ ContextManager::ContextManager(irr::core::dimension2d<irr::u32> size)
 ContextManager::~ContextManager()
 {
     device->drop();
-    MusicManager::drop();
+    // MusicManager::drop(); // Why
 }
 
 void ContextManager::displayImage(irr::video::ITexture *image, irr::core::position2d<irr::s32> pos, irr::video::SColor color)

@@ -8,16 +8,15 @@
 #ifndef MAPGENERATOR_HPP_
 #define MAPGENERATOR_HPP_
 
-#include <algorithm>
-#include <cstdlib>
-#include <iostream>
-#include <ctime>
-#include <vector>
-#include <utility>
-#include "EntityManager.hpp"
 #include "ContextManager.hpp"
 #include "EntityBuilder.h"
-
+#include "EntityManager.hpp"
+#include <algorithm>
+#include <cstdlib>
+#include <ctime>
+#include <iostream>
+#include <utility>
+#include <vector>
 
 namespace Indie {
     class MapGenerator {
@@ -35,13 +34,13 @@ namespace Indie {
 
             MapGenerator(MAP_TYPE type, THEME theme, int x, int y);
             ~MapGenerator() = default;
+
             void setType(MAP_TYPE type);
             void setTheme(THEME theme);
             void setDimension(int x, int y);
-            void generate(EntityManager &entityManager, ContextManager &contextManager);
-        protected:
-        private:
+            void generate();
 
+        private:
             enum class OBJECT {
                 EXT_WALL = -1,
                 VOID = 0,
@@ -53,6 +52,7 @@ namespace Indie {
             void createRandomMap(int percentageBox, int percentageWall);
             void createDefaultMap();
             void setSpawn();
+
             std::vector<std::vector<int>> _map;
             int _x;
             int _y;

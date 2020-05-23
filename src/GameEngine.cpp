@@ -6,32 +6,32 @@
 */
 
 #include "GameEngine.hpp"
-
+#include "SceneManager.hpp"
+#include "Scenes/GameScene.hpp"
 #include "Scenes/MenuScene.hpp"
 #include "Scenes/TitleScene.hpp"
-#include "Scenes/GameScene.hpp"
 
-void GameEngine::startGame()
+void Indie::GameEngine::startGame()
 {
     /* ================================================================================ */
     /* MUSIC MANAGER STUFF */
     MusicManager::addMusic("../ressources/musics/main_menu.wav"); // id 0
     MusicManager::addMusic("../ressources/musics/level_select.wav"); // id 1
-    //MusicManager::mute(); // psk faut pas deconner c'est chiant à la longue
+    // MusicManager::mute(); // psk faut pas deconner c'est chiant à la longue
     MusicManager::setMusic(0);
     MusicManager::setVolume(25);
     MusicManager::playMusic();
     /* ================================================================================ */
     /* SCENE MANAGER STUFF */
-    SceneManager::AddScene<MenuScene>(context); //id 0
-    SceneManager::AddScene<TitleScene>(context); //id 1
-    SceneManager::AddScene<GameScene>(context); //id 2
+    SceneManager::AddScene<MenuScene>(context); // id 0
+    SceneManager::AddScene<TitleScene>(context); // id 1
+    SceneManager::AddScene<GameScene>(context); // id 2
     SceneManager::setScene(2, context);
     // SceneManager::setSceneUpdateActive(true);
     // SceneManager::setSceneRenderActive(true);
-    //SceneManager::setSubScene(1, context);
-    //SceneManager::setSubSceneUpdateActive(true);
-    //SceneManager::setSubSceneRenderActive(true);
+    // SceneManager::setSubScene(1, context);
+    // SceneManager::setSubSceneUpdateActive(true);
+    // SceneManager::setSubSceneRenderActive(true);
     /* ================================================================================ */
     /* LOOP */
     this->context.getDevice()->getTimer()->stop();

@@ -8,26 +8,24 @@
 #ifndef GAMEENGINE_HPP_
 #define GAMEENGINE_HPP_
 
-#include <irrlicht.h>
-#include <iostream>
-#include "EntityManager.hpp"
-#include "RenderSystem.hpp"
 #include "ContextManager.hpp"
-#include "MusicManager.hpp"
-#include "SceneManager.hpp"
-#include "MusicManager.hpp"
-#include "SceneManager.hpp"
-//TODO : Add include for EventHandler
+#include "ServiceLocator.hpp"
 
-class GameEngine {
-    public:
-        GameEngine() : context(DIM(1280, 720)) {}
-        ~GameEngine() {}
+namespace Indie {
+    class GameEngine {
+        public:
+            GameEngine()
+                : context(Indie::ServiceLocator::getInstance().get<ContextManager>())
+            {
+            }
 
-        void startGame();
-    private:
-        ContextManager context;
-        //TODO : Add EventHandler here
-};
+            ~GameEngine() = default;
+
+            void startGame();
+
+        private:
+            ContextManager &context;
+    };
+}
 
 #endif /* !GAMEENGINE_HPP_ */

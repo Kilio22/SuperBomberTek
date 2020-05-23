@@ -6,16 +6,17 @@
 */
 
 #include "Scenes/GameScene.hpp"
+#include "ServiceLocator.hpp"
 
 // return false si un load merde.
-bool GameScene::init(ContextManager &_context)
+bool Indie::GameScene::init(ContextManager &_context)
 {
     MusicManager::setMusic(1);
     device = _context.getDevice();
     driver = _context.getDriver();
     sceneManager = _context.getSceneManager();
 
-    device->setEventReceiver(&Indie::EventHandler::getInstance());
+    device->setEventReceiver(&EventHandler::getInstance());
 
     irr::scene::ICameraSceneNode *camera = sceneManager->addCameraSceneNodeFPS();
     camera->setPosition(irr::core::vector3df(irr::f32(139.371), irr::f32(170.129), irr::f32(-24.6459)));
@@ -43,9 +44,10 @@ bool GameScene::init(ContextManager &_context)
     int mapX = 15;
     int mapY = 15;
     Indie::MapGenerator generator(Indie::MapGenerator::MAP_TYPE::DEFAULT, Indie::MapGenerator::THEME::DIRT, mapX, mapY);
-    generator.generate(entityManager, _context);
+    generator.generate();
 
-    Indie::EntityBuilder::createPlayer(entityManager, irr::core::vector3df(20, 20, 20), "../ressources/static_mesh/character/red.obj", "../ressources/textures/character/red.png", _context, {{irr::KEY_UP, Indie::Components::KEY_TYPE::UP}, {irr::KEY_DOWN, Indie::Components::KEY_TYPE::DOWN}, {irr::KEY_RIGHT, Indie::Components::KEY_TYPE::RIGHT}, {irr::KEY_LEFT, Indie::Components::KEY_TYPE::LEFT}, {irr::KEY_SPACE, Indie::Components::KEY_TYPE::DROP}});
+    auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
+    entityBuilder.createPlayer(irr::core::vector3df(20, 20, 20), "../ressources/static_mesh/character/red.obj", "../ressources/textures/character/red.png", {{irr::KEY_UP, Indie::Components::KEY_TYPE::UP}, {irr::KEY_DOWN, Indie::Components::KEY_TYPE::DOWN}, {irr::KEY_RIGHT, Indie::Components::KEY_TYPE::RIGHT}, {irr::KEY_LEFT, Indie::Components::KEY_TYPE::LEFT}, {irr::KEY_SPACE, Indie::Components::KEY_TYPE::DROP}});
 
     device->getCursorControl()->setVisible(false);
 
@@ -54,13 +56,15 @@ bool GameScene::init(ContextManager &_context)
 }
 
 // return false si un load merde.
-bool GameScene::reset(ContextManager &_context)
+bool Indie::GameScene::reset(ContextManager &_context)
 {
     // vos reset de valeurs et les free etc.
     return (init(_context));
 }
 
-void GameScene::update(irr::f32 deltaTime)
+// LOOP ORDER:
+// beginScene -> events -> update -> renderPre3D -> render3D -> renderPost3D -> endScene
+void Indie::GameScene::update(irr::f32 deltaTime)
 {
     inputSystem.onUpdate(deltaTime, entityManager, *this->context);
     moveSystem.onUpdate(deltaTime, entityManager, *this->context);
@@ -72,6 +76,6 @@ void GameScene::update(irr::f32 deltaTime)
     renderSystem.onUpdate(deltaTime, entityManager, *this->context);
 }
 
-void GameScene::renderPre3D() {}
+void Indie::GameScene::renderPre3D() {}
 
-void GameScene::renderPost3D() {}
+void Indie::GameScene::renderPost3D() {}

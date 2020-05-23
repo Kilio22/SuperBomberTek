@@ -21,8 +21,9 @@ Indie::MapGenerator::MapGenerator(MAP_TYPE type, THEME theme, int x, int y)
     }
 }
 
-void Indie::MapGenerator::generate(EntityManager &entityManager, ContextManager &contextManager)
+void Indie::MapGenerator::generate()
 {
+    auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
     std::string path = "../ressources/static_mesh/";
 
     if (_theme == THEME::DIRT)
@@ -31,15 +32,15 @@ void Indie::MapGenerator::generate(EntityManager &entityManager, ContextManager 
         path = path + "map_stone/";
     for (int i = _y - 1; i >= 0; i--) {
         for (int j = 0; j < _x; j++) {
-            Indie::EntityBuilder::createGround(entityManager, irr::core::vector3df((irr::f32)(20 * j), 0, (irr::f32)(20 * i)), path + "ground.obj", path + "ground.png", contextManager);
+            entityBuilder.createGround(irr::core::vector3df((irr::f32)(20 * j), 0, (irr::f32)(20 * i)), path + "ground.obj", path + "ground.png");
             if (_map[i][j] == -1)
-                Indie::EntityBuilder::createWall(entityManager, irr::core::vector3df((irr::f32)(20 * j), 20, (irr::f32)(20 * i)), path + "wall_side.obj", path + "wall_side.png", contextManager, false);
+                entityBuilder.createWall(irr::core::vector3df((irr::f32)(20 * j), 20, (irr::f32)(20 * i)), path + "wall_side.obj", path + "wall_side.png", false);
             else if (_map[i][j] == 1)
-                Indie::EntityBuilder::createWall(entityManager, irr::core::vector3df((irr::f32)(20 * j), 20, (irr::f32)(20 * i)), path + "box.obj", path + "box.png", contextManager, false);
+                entityBuilder.createWall(irr::core::vector3df((irr::f32)(20 * j), 20, (irr::f32)(20 * i)), path + "box.obj", path + "box.png", false);
             else if (_map[i][j] == 2)
-                Indie::EntityBuilder::createWall(entityManager, irr::core::vector3df((irr::f32)(20 * j), 20, (irr::f32)(20 * i)), path + "wall_middle.obj", path + "wall_middle.png", contextManager, false);
+                entityBuilder.createWall(irr::core::vector3df((irr::f32)(20 * j), 20, (irr::f32)(20 * i)), path + "wall_middle.obj", path + "wall_middle.png", false);
             else if (_map[i][j] == 3)
-                Indie::EntityBuilder::createWall(entityManager, irr::core::vector3df((irr::f32)(20 * j), 20, (irr::f32)(20 * i)), path + "ground.obj", "ground.png", contextManager, false);
+                entityBuilder.createWall(irr::core::vector3df((irr::f32)(20 * j), 20, (irr::f32)(20 * i)), path + "ground.obj", "ground.png", false);
         }
     }
 }
