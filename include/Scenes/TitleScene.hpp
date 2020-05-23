@@ -30,9 +30,9 @@ class TitleScene : public IScene {
         ContextManager *context;
         Image *titleLogo = NULL;
         Image *pressText = NULL;
-        float offsetY = 0;
-        float offsetAlpha = 0;
-        static const float updateRate;
+        double offsetY = 0;
+        double offsetAlpha = 0;
+        static const double updateRate;
 };
 
 #endif /* !TITLESCENE_HPP_ */

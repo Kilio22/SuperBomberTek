@@ -7,7 +7,7 @@
 
 #include "Scenes/TitleScene.hpp"
 
-const float TitleScene::updateRate = ((2 * M_PI) / 96) / 32;
+const double TitleScene::updateRate = ((2 * M_PI) / 96) / 32;
 
 bool TitleScene::init(ContextManager &_context)
 {
@@ -41,9 +41,9 @@ void TitleScene::renderPost3D()
     irr::u32 posY;
 
     if (sin(offsetY) < 0)
-        posY = sin(offsetY) * 20;
+        posY = (irr::u32)(sin(offsetY) * 20);
     else
-        posY = sin(offsetY) * 10;
+        posY = (irr::u32)(sin(offsetY) * 10);
     context->displayImage(titleLogo, POS(0, posY));
-    context->displayImage(pressText, POS(0, 0), irr::video::SColor((sin(offsetAlpha) + 1) / 2 * 255,255,255,255));
+    context->displayImage(pressText, POS(0, 0), irr::video::SColor((irr::u32)((sin(offsetAlpha) + 1) / 2 * 255),255,255,255));
 }

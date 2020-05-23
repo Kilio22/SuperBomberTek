@@ -16,11 +16,11 @@ const irr::io::path filepaths[5] {
 };
 
 const irr::core::vector2df MenuScene::velocities[5] = {
-    irr::core::vector2df(0.005, 0.005),
-    irr::core::vector2df(0.010, 0.000),
-    irr::core::vector2df(0.020, 0.000),
-    irr::core::vector2df(0.030, 0.000),
-    irr::core::vector2df(0.040, 0.000)
+    irr::core::vector2df((irr::f32)0.005, (irr::f32)0.005),
+    irr::core::vector2df((irr::f32)0.010, (irr::f32)0.000),
+    irr::core::vector2df((irr::f32)0.020, (irr::f32)0.000),
+    irr::core::vector2df((irr::f32)0.030, (irr::f32)0.000),
+    irr::core::vector2df((irr::f32)0.040, (irr::f32)0.000)
 };
 
 bool MenuScene::init(ContextManager &_context)
