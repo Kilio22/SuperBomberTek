@@ -7,7 +7,7 @@
 
 #include "MusicManager.hpp"
 
-std::vector<MyMusic> MusicManager::musics;
+std::vector<std::unique_ptr<MyMusic>> MusicManager::musics;
 size_t MusicManager::currentMusic = 0;
 float MusicManager::volume = 50;
 bool MusicManager::isMuted = false;
@@ -20,37 +20,35 @@ MyMusic::MyMusic(std::string filepath)
     isLooped = false;
     isPlaying = false;
     currentMusic = Chunks::Intro;
-    std::string extension = filepath.substr(filepath.find_last_of(".")); 
+    std::string extension = filepath.substr(filepath.find_last_of("."));
     filepath.resize(filepath.size() - extension.size());
 
     try {
-        auto intro = new sf::Music();
-        auto loop  = new sf::Music();
-        auto outro = new sf::Music();
+        auto intro = std::make_unique<sf::Music>();
+        auto loop = std::make_unique<sf::Music>();
+        auto outro = std::make_unique<sf::Music>();
         if (!intro->openFromFile(filepath + "_intro" + extension))
-            throw (InvalidPath("File \"" + filepath + "intro" + extension + "\" not found."));
+            throw InvalidPath("File \"" + filepath + "intro" + extension + "\" not found.");
         if (!loop->openFromFile(filepath + "_loop" + extension))
-            throw (InvalidPath("File \"" + filepath + "loop" + extension + "\" not found."));
+            throw InvalidPath("File \"" + filepath + "loop" + extension + "\" not found.");
         if (!outro->openFromFile(filepath + "_outro" + extension))
-            throw (InvalidPath("File \"" + filepath + "outro" + extension + "\" not found."));
+            throw InvalidPath("File \"" + filepath + "outro" + extension + "\" not found.");
         musics.push_back(std::move(intro));
         musics.push_back(std::move(loop));
         musics.push_back(std::move(outro));
-    }
-    catch (const MyMusicException& e) {
+    } catch (const MyMusicException &e) {
         std::cerr << e.type() << ": " << e.what() << std::endl;
         exit(84);
     }
-    
 }
 
 void MyMusic::drop()
 {
-    while (musics.size() > 0) {
-        auto tmp = musics[0];
-        musics.erase(musics.begin());
-        delete tmp;
-    }
+    // while (musics.size() > 0) {
+    //     auto tmp = musics[0];
+    //     musics.erase(musics.begin());
+    //     delete tmp;
+    // }
 }
 
 void MyMusic::setVolume(float _vol)
@@ -62,9 +60,8 @@ void MyMusic::setVolume(float _vol)
 
 void MyMusic::mute()
 {
-    for (size_t i = 0; i < musics.size(); i++) {
+    for (size_t i = 0; i < musics.size(); i++)
         musics[i]->setVolume(0);
-    }
     isMuted = true;
 }
 
@@ -83,17 +80,15 @@ void MyMusic::playMusic()
 
 void MyMusic::pauseMusic()
 {
-    for (size_t i = 0; i < musics.size(); i++) {
+    for (size_t i = 0; i < musics.size(); i++)
         musics[i]->pause();
-    }
     isPlaying = false;
 }
 
 void MyMusic::stopMusic()
 {
-    for (size_t i = 0; i < musics.size(); i++) {
+    for (size_t i = 0; i < musics.size(); i++)
         musics[i]->stop();
-    }
     currentMusic = Chunks::Intro;
     isPlaying = false;
 }
@@ -108,62 +103,59 @@ void MyMusic::update()
 {
     if (!isPlaying)
         return;
-
     musics[Chunks::Loop]->setLoop(isLooped);
     if (musics[currentMusic]->getStatus() == sf::SoundSource::Status::Stopped) {
-        switch (currentMusic)
-        {
-            case Chunks::Intro:
-                musics[Chunks::Loop]->stop();
-                musics[Chunks::Loop]->play();
-                musics[Chunks::Loop]->setLoop(isLooped);
-                currentMusic = Chunks::Loop;
-                break;
-            case Chunks::Loop:
-                if (!isLooped) {
-                    musics[Chunks::Outro]->stop();
-                    musics[Chunks::Outro]->play();
-                    currentMusic = Chunks::Outro;
-                } else {
-                    musics[currentMusic]->setLoop(isLooped);
-                    musics[currentMusic]->play();
-                }
-                break;
-            case Chunks::Outro:
-                stopMusic();
-                break;
-            default:
-                stopMusic();
-                break;
+        switch (currentMusic) {
+        case Chunks::Intro:
+            musics[Chunks::Loop]->stop();
+            musics[Chunks::Loop]->play();
+            musics[Chunks::Loop]->setLoop(isLooped);
+            currentMusic = Chunks::Loop;
+            break;
+        case Chunks::Loop:
+            if (!isLooped) {
+                musics[Chunks::Outro]->stop();
+                musics[Chunks::Outro]->play();
+                currentMusic = Chunks::Outro;
+            } else {
+                musics[currentMusic]->setLoop(isLooped);
+                musics[currentMusic]->play();
+            }
+            break;
+        case Chunks::Outro:
+            stopMusic();
+            break;
+        default:
+            stopMusic();
+            break;
         }
     }
 }
 
-void MusicManager::AddMusic(std::string filepath)
+void MusicManager::addMusic(const std::string &filepath)
 {
-    MyMusic tmp(filepath);
+    auto ptr = std::make_unique<MyMusic>(filepath);
 
-    tmp.loop();
-    tmp.setVolume(MusicManager::volume);
+    ptr->loop();
+    ptr->setVolume(MusicManager::volume);
     if (MusicManager::isMuted)
-        tmp.setVolume(0);
-    MusicManager::musics.push_back(tmp);
+        ptr->setVolume(0);
+    MusicManager::musics.push_back(std::move(ptr));
 }
 
 void MusicManager::setMusic(size_t id)
 {
     try {
         if (id >= MusicManager::musics.size())
-            throw (InvalidIndex("Music at index " + std::to_string(id) + " doesn't exist."));
+            throw InvalidIndex("Music at index " + std::to_string(id) + " doesn't exist.");
         if (id == MusicManager::currentMusic)
             return;
         for (size_t i = 0; i < MusicManager::musics.size(); i++)
-            MusicManager::musics[i].stopMusic();
+            MusicManager::musics[i]->stopMusic();
         MusicManager::currentMusic = id;
         if (MusicManager::isPlaying)
-            MusicManager::musics[currentMusic].playMusic();
-    }    
-    catch (const MusicManagerException& e) {
+            MusicManager::musics[currentMusic]->playMusic();
+    } catch (const MusicManagerException &e) {
         std::cerr << e.type() << ": " << e.what() << std::endl;
     }
 }
@@ -172,7 +164,7 @@ void MusicManager::setVolume(float _vol)
 {
     for (size_t i = 0; i < MusicManager::musics.size(); i++) {
         if (!MusicManager::isMuted)
-            MusicManager::musics[i].setVolume(_vol);
+            MusicManager::musics[i]->setVolume(_vol);
     }
     MusicManager::volume = _vol;
 }
@@ -189,44 +181,42 @@ void MusicManager::unMute()
     isMuted = false;
 }
 
-
 void MusicManager::playMusic()
 {
     MusicManager::pauseMusic();
-    MusicManager::musics[currentMusic].playMusic();
+    MusicManager::musics[currentMusic]->playMusic();
     MusicManager::isPlaying = true;
 }
 
 void MusicManager::pauseMusic()
 {
     for (size_t i = 0; i < MusicManager::musics.size(); i++)
-        MusicManager::musics[i].pauseMusic();
+        MusicManager::musics[i]->pauseMusic();
     MusicManager::isPlaying = false;
 }
 
 void MusicManager::stopMusic()
 {
     for (size_t i = 0; i < MusicManager::musics.size(); i++)
-        MusicManager::musics[i].stopMusic();
+        MusicManager::musics[i]->stopMusic();
     MusicManager::isPlaying = false;
 }
 
 void MusicManager::restartMusic()
 {
     for (size_t i = 0; i < MusicManager::musics.size(); i++)
-        MusicManager::musics[i].restartMusic();
+        MusicManager::musics[i]->restartMusic();
 }
 
 void MusicManager::update()
 {
-    for (size_t i = 0; i < MusicManager::musics.size(); i++) {
-        MusicManager::musics[i].update();
-    }
+    for (size_t i = 0; i < MusicManager::musics.size(); i++)
+        MusicManager::musics[i]->update();
 }
 
 void MusicManager::drop()
 {
     MusicManager::musics.clear();
     for (size_t i = 0; i < MusicManager::musics.size(); i++)
-        MusicManager::musics[i].drop();
+        MusicManager::musics[i]->drop();
 }

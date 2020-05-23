@@ -11,5 +11,4 @@
 #include "IndieException.hpp"
 #include "FileNotFoundException.hpp"
 
-
 #endif /* !EXCEPTIONS_H_ */

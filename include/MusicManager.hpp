@@ -10,6 +10,7 @@
 
 #include <iostream>
 #include <limits>
+#include <memory>
 #include <SFML/Audio.hpp>
 
 class MyMusicException : public std::exception
@@ -67,7 +68,7 @@ class InvalidIndex : public MusicManagerException
 class MyMusic {
     public:
         MyMusic(std::string filepath);
-        ~MyMusic() {}
+        ~MyMusic() = default;
 
         void drop();
 
@@ -77,7 +78,7 @@ class MyMusic {
         void unLoop() {isLooped = false;}
         void mute();
         void unMute();
-    
+
         void playMusic();
         void pauseMusic();
         void stopMusic();
@@ -86,7 +87,7 @@ class MyMusic {
 
     private:
         enum Chunks {Intro, Loop, Outro};
-        std::vector<sf::Music*> musics;
+        std::vector<std::unique_ptr<sf::Music>> musics;
         MyMusic::Chunks currentMusic;
         float volume;
         bool isMuted;
@@ -99,7 +100,7 @@ class MusicManager {
         MusicManager() = delete;
         ~MusicManager() = delete;
 
-        static void AddMusic(std::string filepath);
+        static void addMusic(const std::string &filepath);
         static void setMusic(size_t id);
         static void setVolume(float _vol);
 
@@ -115,7 +116,7 @@ class MusicManager {
 
         static void drop();
 
-        static std::vector<MyMusic> musics;
+        static std::vector<std::unique_ptr<MyMusic>> musics;
         static size_t currentMusic;
         static float volume;
         static bool isMuted;

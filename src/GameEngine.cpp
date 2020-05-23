@@ -15,8 +15,8 @@ void GameEngine::startGame()
 {
     /* ================================================================================ */
     /* MUSIC MANAGER STUFF */
-    MusicManager::AddMusic("../ressources/musics/main_menu.wav"); // id 0
-    MusicManager::AddMusic("../ressources/musics/level_select.wav"); // id 1
+    MusicManager::addMusic("../ressources/musics/main_menu.wav"); // id 0
+    MusicManager::addMusic("../ressources/musics/level_select.wav"); // id 1
     //MusicManager::mute(); // psk faut pas deconner c'est chiant à la longue
     MusicManager::setMusic(0);
     MusicManager::setVolume(25);
