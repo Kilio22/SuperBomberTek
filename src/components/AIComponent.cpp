@@ -32,7 +32,7 @@ int Indie::Components::AIComponent::getZone()
 void Indie::Components::AIComponent::pathFinder(std::vector<std::vector<int>> &map, int initX, int initY, int value)
 {
     int canContinue = false;
-    map[1][1] = 3; // Position player need to set
+    map[initY][initX] = 3;
 
     for (int i = 1; i < 15; i++) {
         for (int j = 1; j < 15; j++) {
@@ -53,13 +53,6 @@ void Indie::Components::AIComponent::pathFinder(std::vector<std::vector<int>> &m
         pathFinder(map, initX, initY, value + 1);
 }
 
-// /*
-//     try get Coordonnate where the Ai want to go,
-//     Find the most interesting position
-//     Find explodable box
-// */
-
-// // array : 0 = x , 1 = y, 2 = nbBox;
 void Indie::Components::AIComponent::findPosition(std::vector<std::vector<int>> map, int initX, int initY, std::array<int, 3> &position /*std::vector<std::array<int, 3>> banned_position*/) 
 {
     int nbBox = 0;
