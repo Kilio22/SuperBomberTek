@@ -54,6 +54,22 @@ class EntityBuilder {
             return entity;
         }
 
+        Entity *createAi(const irr::core::vector3df &vector, const std::string &modelPath,
+    const std::string &texturePath)
+        {
+            Entity *entity = this->entityManager.createEntity();
+
+            entity->addComponent<Components::PositionComponent>(vector.X, vector.Y, vector.Z);
+            entity->addComponent<Components::RenderComponent>(modelPath, texturePath, this->contextManager, vector);
+            entity->addComponent<Components::HitboxComponent>(vector, this->contextManager);
+            entity->addComponent<Components::AIComponent>();
+            entity->addComponent<Components::MoveComponent>();
+            entity->addComponent<Components::VelocityComponent>();
+            entity->addComponent<Components::MeshComponent>(contextManager, texturePath);
+            entity->addComponent<Components::RotationComponent>();
+            return entity;
+        }
+
         Entity *createWall(const irr::core::vector3df &vector,
             const std::string &modelPath, const std::string &texturePath,
             bool canBeDestroyed)
