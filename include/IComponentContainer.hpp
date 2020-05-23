@@ -11,9 +11,9 @@
 namespace Indie {
 
 class IComponentContainer {
-public:
-    virtual ~IComponentContainer() = default;
-};
+    public:
+        virtual ~IComponentContainer() = default;
+    };
 }
 
 #endif /* !ICOMPONENTCONTAINER_HPP_ */

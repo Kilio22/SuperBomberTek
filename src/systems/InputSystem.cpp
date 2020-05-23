@@ -5,6 +5,7 @@
 ** InputSystem
 */
 
+#include <iostream>
 #include "InputSystem.hpp"
 #include "EntityManager.hpp"
 #include "Components.h"

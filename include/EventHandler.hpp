@@ -22,9 +22,11 @@ namespace Indie
 
             bool OnEvent(const irr::SEvent &event) final;
 
-            bool isKeyPressed(irr::EKEY_CODE);
-            bool isKeyPressedAtOnce(irr::EKEY_CODE);
-            bool isKeyReleased(irr::EKEY_CODE);
+            bool isKeyPressed(irr::EKEY_CODE key) const;
+            bool isKeyPressedAtOnce(irr::EKEY_CODE key) const;
+            bool isKeyReleased(irr::EKEY_CODE key) const;
+
+            void resetKeys(void);
 
             void operator=(EventHandler const &) = delete;
             EventHandler(EventHandler const &) = delete;

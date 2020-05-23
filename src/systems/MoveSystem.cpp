@@ -7,6 +7,7 @@
 
 #include "MoveSystem.hpp"
 #include "Components.h"
+#include "EventHandler.hpp"
 
 void Indie::Systems::MoveSystem::onUpdate(irr::f32 deltaTime, Indie::EntityManager &entityManager, const ContextManager &) const
 {
@@ -20,4 +21,5 @@ void Indie::Systems::MoveSystem::onUpdate(irr::f32 deltaTime, Indie::EntityManag
         moveComponent->setLeft(inputComponent->isKeyPressed(Indie::Components::KEY_TYPE::LEFT));
         moveComponent->setDrop(inputComponent->isKeyPressed(Indie::Components::KEY_TYPE::DROP));
     }
+    EventHandler::getInstance().resetKeys();
 }
