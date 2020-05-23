@@ -1,25 +1,26 @@
 /*
 ** EPITECH PROJECT, 2020
-** joujou_cmake
+** OOP_indie_studio_2019
 ** File description:
-** MusicManager
+** Music
 */
 
-#include "MusicManager.hpp"
+#include "Music.hpp"
+#include "Exceptions.h"
 
 Indie::Music::Music(std::string filepath)
 {
-    volume = 100;
-    isMuted = false;
-    isLooped = false;
-    isPlaying = false;
-    currentMusic = CHUNKS::Intro;
     std::string extension = filepath.substr(filepath.find_last_of("."));
-    filepath.resize(filepath.size() - extension.size());
-
     auto intro = std::make_unique<sf::Music>();
     auto loop = std::make_unique<sf::Music>();
     auto outro = std::make_unique<sf::Music>();
+
+    filepath.resize(filepath.size() - extension.size());
+    this->volume = 100;
+    this->isMuted = false;
+    this->isLooped = false;
+    this->isPlaying = false;
+    this->currentMusic = CHUNKS::Intro;
     if (!intro->openFromFile(filepath + "_intro" + extension))
         throw Indie::Exceptions::FileNotFoundException(__PRETTY_FUNCTION__, "File \"" + filepath + "intro" + extension + "\" not found.");
     if (!loop->openFromFile(filepath + "_loop" + extension))
@@ -33,7 +34,7 @@ Indie::Music::Music(std::string filepath)
 
 float Indie::Music::getVolume() const
 {
-    return (volume);
+    return volume;
 }
 
 void Indie::Music::loop()
@@ -44,15 +45,6 @@ void Indie::Music::loop()
 void Indie::Music::unLoop()
 {
     isLooped = false;
-}
-
-void Indie::Music::drop()
-{
-    // while (musics.size() > 0) {
-    //     auto tmp = musics[0];
-    //     musics.erase(musics.begin());
-    //     delete tmp;
-    // }
 }
 
 void Indie::Music::setVolume(float _vol)
@@ -134,98 +126,4 @@ void Indie::Music::update()
             break;
         }
     }
-}
-
-Indie::MusicManager::MusicManager() :
-musics(),
-currentMusic(0),
-volume(50),
-isMuted(false),
-isPlaying(false)
-{}
-
-void Indie::MusicManager::addMusic(const std::string filepath)
-{
-    auto ptr = std::make_unique<Indie::Music>(filepath);
-
-    ptr->loop();
-    ptr->setVolume(volume);
-    if (isMuted)
-        ptr->setVolume(0);
-    musics.push_back(std::move(ptr));
-}
-
-void Indie::MusicManager::setMusic(size_t id)
-{
-    if (id >= musics.size())
-        throw (Indie::Exceptions::InvalidIndexException(__PRETTY_FUNCTION__, "Music at index " + std::to_string(id) + " doesn't exist."));
-    if (id == currentMusic)
-        return;
-    for (size_t i = 0; i < musics.size(); i++)
-        musics[i]->stopMusic();
-    currentMusic = id;
-    if (isPlaying)
-        musics[currentMusic]->playMusic();
-}
-
-void Indie::MusicManager::setVolume(float _vol)
-{
-    for (size_t i = 0; i < musics.size(); i++) {
-        if (!isMuted)
-            musics[i]->setVolume(_vol);
-    }
-    volume = _vol;
-}
-
-void Indie::MusicManager::mute()
-{
-    setVolume(0);
-    isMuted = true;
-}
-
-void Indie::MusicManager::unMute()
-{
-    setVolume(volume);
-    isMuted = false;
-}
-
-void Indie::MusicManager::playMusic()
-{
-    pauseMusic();
-    musics[currentMusic]->playMusic();
-    isPlaying = true;
-}
-
-void Indie::MusicManager::pauseMusic()
-{
-    for (size_t i = 0; i < musics.size(); i++)
-        musics[i]->pauseMusic();
-    isPlaying = false;
-}
-
-void Indie::MusicManager::stopMusic()
-{
-    for (size_t i = 0; i < musics.size(); i++)
-        musics[i]->stopMusic();
-    isPlaying = false;
-}
-
-void Indie::MusicManager::restartMusic()
-{
-    for (size_t i = 0; i < musics.size(); i++)
-        musics[i]->restartMusic();
-}
-
-void Indie::MusicManager::update()
-{
-    for (size_t i = 0; i < musics.size(); i++) {
-        musics[i]->update();
-    }
-}
-
-void Indie::MusicManager::drop()
-{
-    MusicManager::musics.clear();
-    for (size_t i = 0; i < musics.size(); i++)
-        musics[i]->drop();
 }

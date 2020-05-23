@@ -7,7 +7,7 @@
 
 #define MAP_SIZE 15
 
-#include "Scenes/GameScene.hpp"
+#include "GameScene.hpp"
 #include "ServiceLocator.hpp"
 
 // return false si un load merde.

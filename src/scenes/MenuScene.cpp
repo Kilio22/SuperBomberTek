@@ -5,7 +5,7 @@
 ** MenuScene
 */
 
-#include "Scenes/MenuScene.hpp"
+#include "MenuScene.hpp"
 #include "ServiceLocator.hpp"
 
 const irr::io::path filepaths[5] {

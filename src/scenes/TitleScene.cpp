@@ -5,7 +5,7 @@
 ** TitleScene
 */
 
-#include "Scenes/TitleScene.hpp"
+#include "TitleScene.hpp"
 
 const double Indie::TitleScene::updateRate = ((2 * M_PI) / 96) / 32;
 

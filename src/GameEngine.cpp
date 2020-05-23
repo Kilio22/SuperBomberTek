@@ -7,9 +7,9 @@
 
 #include "GameEngine.hpp"
 #include "SceneManager.hpp"
-#include "Scenes/MenuScene.hpp"
-#include "Scenes/TitleScene.hpp"
-#include "Scenes/GameScene.hpp"
+#include "MenuScene.hpp"
+#include "TitleScene.hpp"
+#include "GameScene.hpp"
 
 #include "ServiceLocator.hpp"
 
@@ -63,7 +63,6 @@ void Indie::GameEngine::startGame()
     }
     /* ================================================================================ */
     /* MEMORY STUFF */
-    Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().drop();
     Indie::ServiceLocator::getInstance().get<SceneManager>().drop();
     /* ================================================================================ */
 }
