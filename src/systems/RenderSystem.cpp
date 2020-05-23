@@ -8,7 +8,7 @@
 #include "RenderSystem.hpp"
 #include "Components.h"
 
-void Indie::Systems::RenderSystem::onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const
+void Indie::Systems::RenderSystem::onUpdate(irr::f32, EntityManager &entityManager) const
 {
     for (auto entity : entityManager.each<Indie::Components::RenderComponent, Indie::Components::PositionComponent>()) {
         auto renderComponent = entity->getComponent<Indie::Components::RenderComponent>();

@@ -24,15 +24,15 @@ class SceneManager {
 
         template <typename T>
         void addScene(ContextManager &context) {
-            IScene *scene = new T;
+            IScene *scene = new T(context);
 
             scenes.push_back(scene);
         }
         void removeScene(size_t id);
-        void restartScene(size_t id, ContextManager &context);
-        void restartScenes(ContextManager &context);
+        void restartScene(size_t id);
+        void restartScenes();
         void setScene(size_t id, ContextManager &context);
-        void setSubScene(size_t id, ContextManager &context);
+        void setSubScene(size_t id);
         void setSceneUpdateActive(bool status);
         void setSubSceneUpdateActive(bool status);
         void setSceneRenderActive(bool status);

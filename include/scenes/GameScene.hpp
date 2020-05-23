@@ -15,26 +15,25 @@
 
 namespace Indie {
 
-class GameScene : public IScene {
-    public:
-        GameScene();
-        ~GameScene() = default;
+    class GameScene : public IScene {
+        public:
+            GameScene(ContextManager &context);
+            ~GameScene() = default;
 
-        bool init(ContextManager &context);
-        bool reset(ContextManager &context);
-        void update(irr::f32 deltaTime);
-        void renderPre3D();
-        void renderPost3D();
+            void init();
+            void reset();
+            void update(irr::f32 deltaTime);
+            void renderPre3D();
+            void renderPost3D();
 
-    private:
-        ContextManager *context;
-        irr::IrrlichtDevice *device;
-        irr::video::IVideoDriver *driver;
-        irr::scene::ISceneManager *sceneManager;
-        Indie::EntityManager &entityManager;
-        Indie::SystemManager &systemManager;
-};
-
+        private:
+            ContextManager &context;
+            irr::IrrlichtDevice *device;
+            irr::video::IVideoDriver *driver;
+            irr::scene::ISceneManager *sceneManager;
+            Indie::EntityManager &entityManager;
+            Indie::SystemManager &systemManager;
+    };
 }
 
 #endif /* !GAMESCENE_HPP_ */

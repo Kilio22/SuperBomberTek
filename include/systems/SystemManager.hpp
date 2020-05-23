@@ -12,7 +12,7 @@
 #include <memory>
 #include "ISystem.hpp"
 #include "TypeIndex.hpp"
-#include "ComponentContainer.hpp"
+#include "ObjectContainer.hpp"
 
 namespace Indie
 {
@@ -32,7 +32,7 @@ namespace Indie
                 auto container = systems.find(getTypeIndex<T>());
 
                 if (container != systems.end()) {
-                    return &reinterpret_cast<ComponentContainer<T> *>(container->second.get())->data;
+                    return &reinterpret_cast<ObjectContainer<T> *>(container->second.get())->data;
                 }
                 return nullptr;
             }
@@ -40,7 +40,7 @@ namespace Indie
             template <typename T, typename... Args>
             void addSystem(Args &&... args)
             {
-                auto ptr = std::make_unique<ComponentContainer<T>>(std::forward<Args>(args)...);
+                auto ptr = std::make_unique<ObjectContainer<T>>(std::forward<Args>(args)...);
 
                 systems.insert({ getTypeIndex<T>(), std::move(ptr) });
             }
@@ -53,7 +53,7 @@ namespace Indie
             SystemManager() = default;
             ~SystemManager() = default;
 
-            std::unordered_map<TypeIndex, std::unique_ptr<IComponentContainer>> systems;
+            std::unordered_map<TypeIndex, std::unique_ptr<IObjectContainer>> systems;
     };
 } // namespace Indie
 

@@ -16,18 +16,20 @@
 namespace Indie {
     class MenuScene : public IScene {
         public:
-            MenuScene() = default;
+            MenuScene(ContextManager &context);
             ~MenuScene() = default;
 
-            bool init(ContextManager &context);
-            bool reset(ContextManager &context);
+            void init();
+            void reset();
             void update(irr::f32 deltaTime);
             void renderPre3D();
             void renderPost3D();
 
         private:
-            ContextManager *context;
             static const irr::core::vector2df velocities[5];
+            static const std::string filepaths[5];
+
+            ContextManager &context;
             std::vector<Parallax> parallax;
     };
 }

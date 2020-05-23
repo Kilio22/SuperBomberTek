@@ -6,16 +6,17 @@
 */
 
 #include "Parallax.hpp"
+#include "Exceptions.h"
 
-bool Indie::Parallax::init(ContextManager &context, const irr::io::path &filepath, irr::core::position2d<irr::s32> _size, irr::core::position2d<float> _vel)
+void Indie::Parallax::init(ContextManager &context, const std::string &filepath, irr::core::position2d<irr::s32> size, irr::core::position2d<float> vel)
 {
-    image = context.getDriver()->getTexture(filepath);
+    image = context.getDriver()->getTexture(filepath.c_str());
     pos = irr::core::position2d<float>(0, 0);
-    size = _size;
-    vel = _vel;
-    if (!image)
-        return (false);
-    return (true);
+    size = size;
+    vel = vel;
+    if (!image) {
+        throw Exceptions::FileNotFoundException(ERROR_STR, "File \"" + filepath + "\" not found.");
+    }
 }
 
 void Indie::Parallax::update()

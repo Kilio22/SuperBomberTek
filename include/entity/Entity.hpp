@@ -10,7 +10,7 @@
 
 #include <unordered_map>
 #include <memory>
-#include "ComponentContainer.hpp"
+#include "ObjectContainer.hpp"
 #include "TypeIndex.hpp"
 
 namespace Indie {
@@ -38,7 +38,7 @@ class Entity {
             auto container = components.find(getTypeIndex<T>());
 
             if (container != components.end()) {
-                return &reinterpret_cast<ComponentContainer<T> *>(container->second.get())->data;
+                return &reinterpret_cast<ObjectContainer<T> *>(container->second.get())->data;
             }
             return nullptr;
         }
@@ -46,13 +46,13 @@ class Entity {
         template <typename T, typename... Args>
         void addComponent(Args &&... args)
         {
-            auto ptr = std::make_unique<ComponentContainer<T>>(std::forward<Args>(args)...);
+            auto ptr = std::make_unique<ObjectContainer<T>>(std::forward<Args>(args)...);
 
             components.insert({ getTypeIndex<T>(), std::move(ptr) });
         }
 
     private:
-        std::unordered_map<TypeIndex, std::unique_ptr<IComponentContainer>> components;
+        std::unordered_map<TypeIndex, std::unique_ptr<IObjectContainer>> components;
         int id;
 };
 

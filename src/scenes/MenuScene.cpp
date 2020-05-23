@@ -8,7 +8,7 @@
 #include "MenuScene.hpp"
 #include "ServiceLocator.hpp"
 
-const irr::io::path filepaths[5] {
+const std::string Indie::MenuScene::filepaths[5] = {
     "../ressources/images/bg_boxes.png",
     "../ressources/images/clouds.png",
     "../ressources/images/mountains.png",
@@ -24,26 +24,28 @@ const irr::core::vector2df Indie::MenuScene::velocities[5] = {
     irr::core::vector2df((irr::f32)0.040, (irr::f32)0.000)
 };
 
-bool Indie::MenuScene::init(ContextManager &_context)
+Indie::MenuScene::MenuScene(ContextManager &context)
+    : context(context)
+{}
+
+void Indie::MenuScene::init()
 {
     Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setMusic(0);
+
     for (size_t i = 0; i < 5; i++) {
         Parallax tmp;
-        if (!tmp.init(_context, filepaths[i], POS(1280, 720), velocities[i]))
-            return (false);
-        parallax.push_back(tmp);
+        tmp.init(this->context, this->filepaths[i], POS(1280, 720), this->velocities[i]);
+        this->parallax.push_back(tmp);
     }
-    this->context = &_context;
-    return (true);
 }
 
-bool Indie::MenuScene::reset(ContextManager &_context)
+void Indie::MenuScene::reset()
 {
     parallax.clear();
-    return (init(_context));
+    init();
 }
 
-void Indie::MenuScene::update(irr::f32 deltaTime)
+void Indie::MenuScene::update(irr::f32)
 {
     for (size_t i = 0; i < parallax.size(); i++)
         parallax[i].update();
@@ -52,7 +54,7 @@ void Indie::MenuScene::update(irr::f32 deltaTime)
 void Indie::MenuScene::renderPre3D()
 {
     for (size_t i = 0; i < parallax.size(); i++)
-        parallax[i].draw(*context);
+        parallax[i].draw(this->context);
 }
 
 void Indie::MenuScene::renderPost3D() {}

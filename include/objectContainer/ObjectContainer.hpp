@@ -2,24 +2,24 @@
 ** EPITECH PROJECT, 2020
 ** OOP_indie_studio_2019
 ** File description:
-** ComponentContainer
+** ObjectContainer
 */
 
 #ifndef COMPONENTCONTAINER_HPP_
 #define COMPONENTCONTAINER_HPP_
 
-#include "IComponentContainer.hpp"
+#include "IObjectContainer.hpp"
 
 namespace Indie {
 
 template <class T>
-class ComponentContainer : public IComponentContainer {
+class ObjectContainer : public IObjectContainer {
     public:
         template <typename... Args>
-        ComponentContainer(Args &&... args)
+        ObjectContainer(Args &&... args)
             : data(std::forward<Args>(args)...) {}
 
-        ~ComponentContainer() = default;
+        ~ObjectContainer() = default;
 
         T data;
 };

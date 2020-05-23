@@ -15,8 +15,6 @@
 #include "Exceptions.h"
 #include "ServiceLocator.hpp"
 
-//TODO : Add include for EventHandler
-
 namespace Indie {
     class GameEngine {
         public:

@@ -21,11 +21,13 @@ find_package(SFML 2.5 COMPONENTS system audio REQUIRED)
 
 # add include directories
 include_directories(include)
-include_directories(include/systems)
 include_directories(include/components)
 include_directories(include/exceptions)
-include_directories(include/scenes)
+include_directories(include/entity)
 include_directories(include/music)
+include_directories(include/objectContainer)
+include_directories(include/scenes)
+include_directories(include/systems)
 include_directories(${Irrlicht_INCLUDE_DIRS})
 
 # add the executable

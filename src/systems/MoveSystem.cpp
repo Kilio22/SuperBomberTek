@@ -9,7 +9,7 @@
 #include "Components.h"
 #include "EventHandler.hpp"
 
-void Indie::Systems::MoveSystem::onUpdate(irr::f32 deltaTime, Indie::EntityManager &entityManager) const
+void Indie::Systems::MoveSystem::onUpdate(irr::f32, Indie::EntityManager &entityManager) const
 {
     for (auto entity : entityManager.each<Indie::Components::MoveComponent, Indie::Components::InputComponent>()) {
         auto inputComponent = entity->getComponent<Indie::Components::InputComponent>();

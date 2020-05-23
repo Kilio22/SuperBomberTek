@@ -13,11 +13,11 @@ namespace Indie {
     class IScene {
         public:
             virtual ~IScene() = default;
-    
-            virtual bool init(ContextManager &context) = 0;
+
+            virtual void init() = 0;
             // Returns false if it couldn't load all the ressources needed in the scene properly.
             // Otherwise returns true.
-            virtual bool reset(ContextManager &context) = 0;
+            virtual void reset() = 0;
             // Returns false if it couldn't load all the ressources needed in the scene properly.
             // Otherwise returns true.
             virtual void update(irr::f32 deltaTime) = 0;

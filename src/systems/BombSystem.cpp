@@ -28,7 +28,7 @@ int Indie::Systems::BombSystem::getCenter(int value) const
     }
 }
 
-void Indie::Systems::BombSystem::onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const
+void Indie::Systems::BombSystem::onUpdate(irr::f32, EntityManager &entityManager) const
 {
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
 

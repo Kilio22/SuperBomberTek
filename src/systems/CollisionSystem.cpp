@@ -51,9 +51,9 @@ irr::core::aabbox3df Indie::Systems::CollisionSystem::updateCharacterBoundingBox
     return characterBoundingBox;
 }
 
-void Indie::Systems::CollisionSystem::onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const
+void Indie::Systems::CollisionSystem::onUpdate(irr::f32, EntityManager &entityManager) const
 {
-    for (auto character : entityManager.each<Components::MoveComponent, Components::VelocityComponent, Components::PositionComponent, Components::HitboxComponent>()) {
+    for (auto character : entityManager.each<Components::VelocityComponent, Components::PositionComponent, Components::HitboxComponent>()) {
         Components::HitboxComponent *characterHitBoxComponent = character->getComponent<Components::HitboxComponent>();
         Components::PositionComponent *characterPositionComponent = character->getComponent<Components::PositionComponent>();
         Components::VelocityComponent *characterVelocityComponent = character->getComponent<Components::VelocityComponent>();

@@ -22,7 +22,7 @@ std::map<irr::EKEY_CODE, bool> Indie::Systems::InputSystem::updateKeys(std::map<
     return keysStates;
 }
 
-void Indie::Systems::InputSystem::onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const
+void Indie::Systems::InputSystem::onUpdate(irr::f32, EntityManager &entityManager) const
 {
     for (auto entity : entityManager.each<Indie::Components::InputComponent>()) {
         auto inputComponent = entity->getComponent<Indie::Components::InputComponent>();

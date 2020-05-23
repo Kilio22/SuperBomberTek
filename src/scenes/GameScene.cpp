@@ -12,9 +12,12 @@
 #include "Parallax.hpp"
 #include "ServiceLocator.hpp"
 
-Indie::GameScene::GameScene()
-    : entityManager(ServiceLocator::getInstance().get<EntityManager>()), systemManager(SystemManager::getInstance())
+Indie::GameScene::GameScene(ContextManager &context)
+    : context(context), entityManager(ServiceLocator::getInstance().get<EntityManager>()), systemManager(SystemManager::getInstance())
 {
+    this->device = this->context.getDevice();
+    this->driver = this->context.getDriver();
+    this->sceneManager = this->context.getSceneManager();
     this->systemManager.addSystem<Systems::BombSystem>();
     this->systemManager.addSystem<Systems::CollisionSystem>();
     this->systemManager.addSystem<Systems::InputSystem>();
@@ -25,28 +28,22 @@ Indie::GameScene::GameScene()
 }
 
 // return false si un load merde.
-bool Indie::GameScene::init(ContextManager &_context)
+void Indie::GameScene::init()
 {
     Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setMusic(1);
-    device = _context.getDevice();
-    driver = _context.getDriver();
-    sceneManager = _context.getSceneManager();
+    irr::scene::ICameraSceneNode *camera = sceneManager->addCameraSceneNodeFPS();
+    auto &mapGenerator = ServiceLocator::getInstance().get<Indie::MapGenerator>();
+    auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
 
+    camera->setPosition(irr::core::vector3df(irr::f32(139.371), irr::f32(170.129), irr::f32(-24.6459)));
+    camera->setRotation(irr::core::vector3df(irr::f32(41.553), irr::f32(359.176), irr::f32(-90)));
+    camera->setTarget(irr::core::vector3df(irr::f32(0), irr::f32(0), irr::f32(0)));
     device->setEventReceiver(&EventHandler::getInstance());
 
-    irr::scene::ICameraSceneNode *camera = sceneManager->addCameraSceneNodeFPS();
-    camera->setPosition(irr::core::vector3df(irr::f32(139.371), irr::f32(170.129), irr::f32(-24.6459)));
-	camera->setRotation(irr::core::vector3df(irr::f32(41.553), irr::f32(359.176), irr::f32(-90)));
-    camera->setTarget(irr::core::vector3df(irr::f32(0), irr::f32(0), irr::f32(0)));
-
-    // Lumière et brouillard quand on s'éloigne
     driver->setFog(irr::video::SColor(10, 255, 255, 255), irr::video::EFT_FOG_LINEAR, 200.0f, 2000.0f, 0.005f, false, false);
-    //sceneManager->setAmbientLight(irr::video::SColorf(0.2,0.2,0.2,1));
-    //J'ai foutu la camera en parent, du coup ça éclaire autours de la cam.
     sceneManager->addLightSceneNode(camera, irr::core::vector3df(0, 0, 0), irr::video::SColorf(0.1f, 0.1f, 0.1f, 0.0f), 700.0f);
     sceneManager->addLightSceneNode(0, irr::core::vector3df(150, 100, 150), irr::video::SColorf(1.0f, 1.0f, 1.0f, 0.5f), 700.0f);
-
-    irr::scene::ISceneNode *skybox = sceneManager->addSkyBoxSceneNode(
+    sceneManager->addSkyBoxSceneNode(
         driver->getTexture("../ressources/skybox/skybox_top.png"),
         driver->getTexture("../ressources/skybox/skybox_bottom.png"),
         driver->getTexture("../ressources/skybox/skybox_left.png"),
@@ -54,25 +51,19 @@ bool Indie::GameScene::init(ContextManager &_context)
         driver->getTexture("../ressources/skybox/skybox_front.png"),
         driver->getTexture("../ressources/skybox/skybox_back.png"));
 
-    auto &mapGenerator = ServiceLocator::getInstance().get<Indie::MapGenerator>();
     mapGenerator.generate();
 
-    auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
     entityBuilder.createPlayer(irr::core::vector3df(20, 20, 20), "../ressources/static_mesh/character/red.obj", "../ressources/textures/character/red.png", {{irr::KEY_UP, Indie::Components::KEY_TYPE::UP}, {irr::KEY_DOWN, Indie::Components::KEY_TYPE::DOWN}, {irr::KEY_RIGHT, Indie::Components::KEY_TYPE::RIGHT}, {irr::KEY_LEFT, Indie::Components::KEY_TYPE::LEFT}, {irr::KEY_SPACE, Indie::Components::KEY_TYPE::DROP}});
-
     entityBuilder.createAi(irr::core::vector3df(260, 20, 20), "../ressources/static_mesh/character/red.obj", "../ressources/textures/character/red.png");
 
     device->getCursorControl()->setVisible(false);
-
-    this->context = &_context;
-    return (true);
 }
 
 // return false si un load merde.
-bool Indie::GameScene::reset(ContextManager &_context)
+void Indie::GameScene::reset()
 {
     // vos reset de valeurs et les free etc.
-    return (init(_context));
+    this->init();
 }
 
 // LOOP ORDER:

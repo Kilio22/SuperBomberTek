@@ -20,14 +20,14 @@ Indie::SceneManager::SceneManager()
 
 Indie::IScene *Indie::SceneManager::getScene(size_t id)
 {
-    if (id >= scenes.size() || id < 0)
+    if (id >= scenes.size())
         throw Indie::Exceptions::InvalidIndexException(ERROR_STR, "Scene at index " + std::to_string(id) + " doesn't exist.");
     return (scenes[id]);
 }
 
 void Indie::SceneManager::removeScene(size_t id)
 {
-    if (id >= scenes.size() || id < 0)
+    if (id >= scenes.size())
         throw Indie::Exceptions::InvalidIndexException(ERROR_STR, "Scene at index " + std::to_string(id) + " doesn't exist.");
     IScene *tmp = scenes[id];
     scenes.erase(scenes.begin() + id);
@@ -44,35 +44,35 @@ void Indie::SceneManager::removeScene(size_t id)
     }
 }
 
-void Indie::SceneManager::restartScene(size_t id, ContextManager &context)
+void Indie::SceneManager::restartScene(size_t id)
 {
-    if (id >= scenes.size() || id < 0)
+    if (id >= scenes.size())
         throw (Indie::Exceptions::InvalidIndexException(ERROR_STR, "Scene at index " + std::to_string(id) + " doesn't exist."));
-    scenes[id]->reset(context);
+    scenes[id]->reset();
 }
 
-void Indie::SceneManager::restartScenes(ContextManager &context)
+void Indie::SceneManager::restartScenes()
 {
     for (size_t i = 0; i < scenes.size(); i++)
-        restartScene(i, context);
+        restartScene(i);
 }
 
 void Indie::SceneManager::setScene(size_t id, ContextManager &context)
 {
     context.getSceneManager()->clear();
-    if (id >= scenes.size() || id < 0)
+    if (id >= scenes.size())
         throw (Indie::Exceptions::InvalidIndexException(ERROR_STR, "Scene at index " + std::to_string(id) + " doesn't exist."));
-    scenes[id]->reset(context);
+    scenes[id]->reset();
     currentScene = id;
     updateScene = true;
     renderScene = true;
 }
 
-void Indie::SceneManager::setSubScene(size_t id, ContextManager &context)
+void Indie::SceneManager::setSubScene(size_t id)
 {
-    if (id >= scenes.size() || id < 0)
+    if (id >= scenes.size())
         throw (Indie::Exceptions::InvalidIndexException(ERROR_STR, "Scene at index " + std::to_string(id) + " doesn't exist."));
-    scenes[id]->reset(context);
+    scenes[id]->reset();
     currentSubScene = id;
     updateSubScene = true;
     renderSubScene = true;
@@ -102,9 +102,9 @@ void Indie::SceneManager::update(ContextManager &contextManager, irr::f32 deltaT
 {
     contextManager.getDriver()->beginScene(true, true, irr::video::SColor(0,0,0,0));
 
-    if (currentScene >= scenes.size() || currentScene < 0)
+    if (currentScene >= scenes.size())
         throw (Indie::Exceptions::InvalidIndexException(ERROR_STR, "Scene at index " + std::to_string(currentScene) + " doesn't exist."));
-    if (currentSubScene >= scenes.size() || currentSubScene < 0)
+    if (currentSubScene >= scenes.size())
         throw (Indie::Exceptions::InvalidIndexException(ERROR_STR, "Scene at index " + std::to_string(currentSubScene) + " doesn't exist."));
 
     if (updateScene)

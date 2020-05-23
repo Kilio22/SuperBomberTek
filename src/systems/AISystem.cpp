@@ -8,7 +8,7 @@
 #include "AISystem.hpp"
 #include "Components.h"
 
-void Indie::Systems::AISystem::onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const
+void Indie::Systems::AISystem::onUpdate(irr::f32, EntityManager &entityManager) const
 {
     std::vector<std::vector<int>> map;
     std::array<int, 3> position;

@@ -18,17 +18,17 @@ namespace Indie {
 
 class TitleScene : public IScene {
     public:
-        TitleScene() = default;
+        TitleScene(ContextManager &context);
         ~TitleScene() = default;
 
-        bool init(ContextManager &context);
-        bool reset(ContextManager &context);
+        void init();
+        void reset();
         void update(irr::f32 deltaTime);
         void renderPre3D();
         void renderPost3D();
 
     private:
-        ContextManager *context;
+        ContextManager &context;
         Image *titleLogo = NULL;
         Image *pressText = NULL;
         double offsetY = 0;

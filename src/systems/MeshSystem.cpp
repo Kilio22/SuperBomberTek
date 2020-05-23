@@ -20,7 +20,7 @@ void Indie::Systems::MeshSystem::changeMesh(const ContextManager &contextManager
     renderComp->setMesh(newMeshNode);
 }
 
-void Indie::Systems::MeshSystem::onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const
+void Indie::Systems::MeshSystem::onUpdate(irr::f32, EntityManager &entityManager) const
 {
     auto &contextManager = ServiceLocator::getInstance().get<ContextManager>();
 
