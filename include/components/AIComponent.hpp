@@ -11,6 +11,7 @@
 #include <array>
 #include <vector>
 #include <irrlicht.h>
+#include "ServiceLocator.hpp"
 
 namespace Indie::Components
 {

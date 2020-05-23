@@ -22,7 +22,7 @@ void Indie::Systems::AISystem::onUpdate(irr::f32 deltaTime, EntityManager &entit
 
         aiX = positionComponent->getPosition().X / 20;
         aiY = positionComponent->getPosition().Y / 20;
-        //map = aiComponent->getMap();
+        map = aiComponent->getMap();
 
         if (aiComponent->getDirection() != Indie::Components::AIComponent::NONE && aiComponent->hasMoved(positionComponent->getPosition(), aiComponent->getNextPosition(aiComponent->getNextXDirection(), aiComponent->getNextYDirection())) == false) {
             moveComponent->setUp(aiComponent->isMoving(Indie::Components::AIComponent::UP));
@@ -31,14 +31,13 @@ void Indie::Systems::AISystem::onUpdate(irr::f32 deltaTime, EntityManager &entit
             moveComponent->setLeft(aiComponent->isMoving(Indie::Components::AIComponent::LEFT));
         }
         else {
-            
-            // if (aiComponent->hasArrived(map) == false) {
-            //     aiComponent->setNextDirection(map, aiX, aiY);
-            // }
-            // else {
-            //     aiComponent->pathFinder(map, aiX, aiY, 3);
-            //     aiComponent->findPosition(map, aiX, aiY, position);
-            // }
+            if (aiComponent->hasArrived(map) == false) {
+                aiComponent->setNextDirection(map, aiX, aiY);
+            }
+            else {
+                aiComponent->pathFinder(map, aiX, aiY, 3);
+                aiComponent->findPosition(map, aiX, aiY, position);
+            }
         }
     }
 }

@@ -32,13 +32,14 @@ namespace Indie {
                 DIRT,
             };
 
-            MapGenerator(MAP_TYPE type, THEME theme, int x, int y);
+            MapGenerator();
             ~MapGenerator() = default;
 
             void setType(MAP_TYPE type);
             void setTheme(THEME theme);
             void setDimension(int x, int y);
             void generate();
+            std::vector<std::vector<int>> getMap() const;
 
         private:
             enum class OBJECT {
@@ -54,10 +55,10 @@ namespace Indie {
             void setSpawn();
 
             std::vector<std::vector<int>> _map;
-            int _x;
-            int _y;
-            THEME _theme;
-            MAP_TYPE _type;
+            int _x = 15;
+            int _y = 15;
+            THEME _theme = THEME::STONE;
+            MAP_TYPE _type = MAP_TYPE::DEFAULT;
     };
 }
 
