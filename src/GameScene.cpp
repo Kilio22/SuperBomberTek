@@ -5,6 +5,8 @@
 ** GameScene
 */
 
+#define MAP_SIZE 15
+
 #include "Scenes/GameScene.hpp"
 #include "ServiceLocator.hpp"
 
@@ -23,9 +25,6 @@ bool Indie::GameScene::init(ContextManager &_context)
 	camera->setRotation(irr::core::vector3df(irr::f32(41.553), irr::f32(359.176), irr::f32(-90)));
     camera->setTarget(irr::core::vector3df(irr::f32(0), irr::f32(0), irr::f32(0)));
 
-    irr::f32 x = 0;
-    irr::f32 y = 0;
-
     // Lumière et brouillard quand on s'éloigne
     driver->setFog(irr::video::SColor(10, 255, 255, 255), irr::video::EFT_FOG_LINEAR, 200.0f, 2000.0f, 0.005f, false, false);
     //sceneManager->setAmbientLight(irr::video::SColorf(0.2,0.2,0.2,1));
@@ -41,13 +40,13 @@ bool Indie::GameScene::init(ContextManager &_context)
         driver->getTexture("../ressources/skybox/skybox_front.png"),
         driver->getTexture("../ressources/skybox/skybox_back.png"));
 
-    int mapX = 15;
-    int mapY = 15;
-    Indie::MapGenerator generator(Indie::MapGenerator::MAP_TYPE::DEFAULT, Indie::MapGenerator::THEME::DIRT, mapX, mapY);
+    Indie::MapGenerator generator(Indie::MapGenerator::MAP_TYPE::DEFAULT, Indie::MapGenerator::THEME::DIRT, MAP_SIZE, MAP_SIZE);
     generator.generate();
 
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
     entityBuilder.createPlayer(irr::core::vector3df(20, 20, 20), "../ressources/static_mesh/character/red.obj", "../ressources/textures/character/red.png", {{irr::KEY_UP, Indie::Components::KEY_TYPE::UP}, {irr::KEY_DOWN, Indie::Components::KEY_TYPE::DOWN}, {irr::KEY_RIGHT, Indie::Components::KEY_TYPE::RIGHT}, {irr::KEY_LEFT, Indie::Components::KEY_TYPE::LEFT}, {irr::KEY_SPACE, Indie::Components::KEY_TYPE::DROP}});
+
+    entityBuilder.createAi(irr::core::vector3df(260, 20, 20), "../ressources/static_mesh/character/red.obj", "../ressources/textures/character/red.png");
 
     device->getCursorControl()->setVisible(false);
 

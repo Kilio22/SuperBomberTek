@@ -18,5 +18,6 @@
 #include "components/WallComponent.hpp"
 #include "components/HitboxComponent.hpp"
 #include "components/BombComponent.hpp"
+#include "components/AIComponent.hpp"
 
 #endif /* !COMPONENTS_H_ */
