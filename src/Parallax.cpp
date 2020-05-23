@@ -7,7 +7,7 @@
 
 #include "Parallax.hpp"
 
-bool Parallax::init(ContextManager &context, const irr::io::path &filepath, irr::core::position2d<irr::s32> _size, irr::core::position2d<float> _vel)
+bool Indie::Parallax::init(ContextManager &context, const irr::io::path &filepath, irr::core::position2d<irr::s32> _size, irr::core::position2d<float> _vel)
 {
     image = context.getDriver()->getTexture(filepath);
     pos = irr::core::position2d<float>(0, 0);
@@ -18,7 +18,7 @@ bool Parallax::init(ContextManager &context, const irr::io::path &filepath, irr:
     return (true);
 }
 
-void Parallax::update()
+void Indie::Parallax::update()
 {
     pos.X += vel.X;
     pos.Y += vel.Y;
@@ -28,7 +28,7 @@ void Parallax::update()
     pos.Y = (pos.Y > size.Y) ? 0 : pos.Y;
 }
 
-void Parallax::draw(ContextManager &context)
+void Indie::Parallax::draw(ContextManager &context)
 {
     // All 9 images arround it so you can move the parrallax in any direction seamlessely;
     context.displayImage(image, RECT(0, 0, size.X, size.Y), POS(pos.X - size.X, pos.Y - size.Y));

@@ -13,7 +13,7 @@
 // return false si un load merde.
 bool Indie::GameScene::init(ContextManager &_context)
 {
-    Indie::ServiceLocator::getInstance().get<MusicManager>().setMusic(1);
+    Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setMusic(1);
     device = _context.getDevice();
     driver = _context.getDriver();
     sceneManager = _context.getSceneManager();

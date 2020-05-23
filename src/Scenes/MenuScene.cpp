@@ -26,7 +26,7 @@ const irr::core::vector2df Indie::MenuScene::velocities[5] = {
 
 bool Indie::MenuScene::init(ContextManager &_context)
 {
-    Indie::ServiceLocator::getInstance().get<MusicManager>().setMusic(0);
+    Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setMusic(0);
     for (size_t i = 0; i < 5; i++) {
         Parallax tmp;
         if (!tmp.init(_context, filepaths[i], POS(1280, 720), velocities[i]))

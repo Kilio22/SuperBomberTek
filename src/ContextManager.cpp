@@ -9,7 +9,7 @@
 #include "MusicManager.hpp"
 #include "SceneManager.hpp"
 
-ContextManager::ContextManager(irr::core::dimension2d<irr::u32> size)
+Indie::ContextManager::ContextManager(irr::core::dimension2d<irr::u32> size)
 {
     this->size = size;
     device = irr::createDevice(irr::video::EDT_OPENGL, size, 32);
@@ -18,14 +18,14 @@ ContextManager::ContextManager(irr::core::dimension2d<irr::u32> size)
     guiEnv = device->getGUIEnvironment();
 }
 
-ContextManager::~ContextManager()
+Indie::ContextManager::~ContextManager()
 {
     device->drop();
     // MusicManager::drop(); // Why
     // OUI tkt j'allais le virer
 }
 
-void ContextManager::displayImage(irr::video::ITexture *image, irr::core::position2d<irr::s32> pos, irr::video::SColor color)
+void Indie::ContextManager::displayImage(irr::video::ITexture *image, irr::core::position2d<irr::s32> pos, irr::video::SColor color)
 {
     irr::core::dimension2d<irr::u32> size = image->getSize();
     irr::core::rect<irr::s32> rect = irr::core::rect<irr::s32>(0, 0, size.Width, size.Height);
@@ -33,7 +33,7 @@ void ContextManager::displayImage(irr::video::ITexture *image, irr::core::positi
     driver->draw2DImage(image, pos, rect, 0, color, true);
 }
 
-void ContextManager::displayImage(irr::video::ITexture *image, irr::core::rect<irr::s32> rect, irr::core::position2d<irr::s32> pos, irr::video::SColor color)
+void Indie::ContextManager::displayImage(irr::video::ITexture *image, irr::core::rect<irr::s32> rect, irr::core::position2d<irr::s32> pos, irr::video::SColor color)
 {
     driver->draw2DImage(image, pos, rect, 0, color, true);
 }

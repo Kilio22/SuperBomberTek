@@ -24,6 +24,7 @@ include_directories(include)
 include_directories(include/systems)
 include_directories(include/components)
 include_directories(include/exceptions)
+include_directories(include/scenes)
 include_directories(${Irrlicht_INCLUDE_DIRS})
 
 # add the executable
@@ -32,7 +33,7 @@ file(GLOB SRCS src/*.cpp)
 file(GLOB SRCS_SYSTEM src/systems/*.cpp)
 file(GLOB SRCS_COMPONENTS src/components/*.cpp)
 file(GLOB SRCS_EXCEPTIONS src/exceptions/*.cpp)
-file(GLOB SRCS_SCENES src/Scenes/*.cpp)
+file(GLOB SRCS_SCENES src/scenes/*.cpp)
 add_executable(Bomberman ${SRCS} ${SRCS_SYSTEM} ${SRCS_COMPONENTS} ${SRCS_EXCEPTIONS} ${SRCS_SCENES})
 
 target_link_libraries(Bomberman ${Irrlicht_LIBRARIES})
