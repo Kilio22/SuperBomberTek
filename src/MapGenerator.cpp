@@ -59,9 +59,9 @@ void Indie::MapGenerator::createDefaultMap(std::vector<std::vector<Indie::Compon
     for (int i = 1; i < dimension.Y - 1; i++) {
         for (int j = 1; j < dimension.X - 1; j++) {
             if (dimension.X % 2 == 1 || dimension.Y % 2 == 1)
-                map[i][j] = (j % 2 == 0 && i % 2 == 0) ? OBJECT::BOX : OBJECT::WALL_IN;
+                map[i][j] = (j % 2 == 0 && i % 2 == 0) ? OBJECT::WALL_IN : OBJECT::BOX;
             else
-                map[i][j] = (j % 2 == 0 && i % 2 == 0 && i < dimension.X - 2 && j < dimension.Y - 2) ? OBJECT::BOX : OBJECT::WALL_IN;
+                map[i][j] = (j % 2 == 0 && i % 2 == 0 && i < dimension.X - 2 && j < dimension.Y - 2) ? OBJECT::WALL_IN : OBJECT::BOX ;
         }
     }
 }
