@@ -21,16 +21,19 @@ namespace Indie::Components
             unsigned int getBombsRange(void) const;
             unsigned int getMaxBombNb(void) const;
             unsigned int getCurrentBombNb(void) const;
+            irr::f32 getVelocity(void) const;
 
             void setBombsRange(unsigned int value);
             void setMaxBombNb(unsigned int value);
             void setCurrentBombNb(unsigned int value);
+            void setVelocity(irr::f32 value);
 
         protected:
         private:
             unsigned int bombsRange;
             unsigned int maxBombNb;
             unsigned int currentBombNb;
+            irr::f32 velocity;
     };
 } // namespace Indie::Components
 
