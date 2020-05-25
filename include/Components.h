@@ -19,5 +19,6 @@
 #include "RotationComponent.hpp"
 #include "VelocityComponent.hpp"
 #include "WallComponent.hpp"
+#include "PlayerComponent.hpp"
 
 #endif /* !COMPONENTS_H_ */

@@ -38,6 +38,7 @@ Indie::Entity *Indie::EntityBuilder::createPlayer(
     entity->addComponent<VelocityComponent>();
     entity->addComponent<MeshComponent>(this->contextManager, texturePath);
     entity->addComponent<RotationComponent>();
+    entity->addComponent<PlayerComponent>();
     return entity;
 }
 
@@ -47,14 +48,15 @@ Indie::Entity *Indie::EntityBuilder::createAi(
 {
     Entity *entity = this->entityManager.createEntity();
 
-    entity->addComponent<Components::PositionComponent>(vector.X, vector.Y, vector.Z);
-    entity->addComponent<Components::RenderComponent>(modelPath, texturePath, this->contextManager, vector);
-    entity->addComponent<Components::HitboxComponent>(vector, this->contextManager);
-    entity->addComponent<Components::AIComponent>();
-    entity->addComponent<Components::MoveComponent>();
-    entity->addComponent<Components::VelocityComponent>();
-    entity->addComponent<Components::MeshComponent>(contextManager, texturePath);
-    entity->addComponent<Components::RotationComponent>();
+    entity->addComponent<PositionComponent>(vector.X, vector.Y, vector.Z);
+    entity->addComponent<RenderComponent>(modelPath, texturePath, this->contextManager, vector);
+    entity->addComponent<HitboxComponent>(vector, this->contextManager);
+    entity->addComponent<AIComponent>();
+    entity->addComponent<MoveComponent>();
+    entity->addComponent<VelocityComponent>();
+    entity->addComponent<MeshComponent>(contextManager, texturePath);
+    entity->addComponent<RotationComponent>();
+    entity->addComponent<PlayerComponent>();
     return entity;
 }
 

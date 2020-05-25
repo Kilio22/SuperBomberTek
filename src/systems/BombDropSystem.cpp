@@ -32,14 +32,16 @@ void Indie::Systems::BombDropSystem::onUpdate(irr::f32, EntityManager &entityMan
 {
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
 
-    for (auto entity : entityManager.each<Components::MoveComponent, Components::PositionComponent>()) {
+    for (auto entity : entityManager.each<Components::MoveComponent, Components::PositionComponent, Components::PlayerComponent>()) {
         auto moveComponent = entity->getComponent<Components::MoveComponent>();
         auto positionComponent = entity->getComponent<Components::PositionComponent>();
+        auto playerComponent = entity->getComponent<Components::PlayerComponent>();
         irr::f32 midX = (irr::f32)this->getCenter((int)positionComponent->getPosition().X);
         irr::f32 midZ = (irr::f32)this->getCenter((int)positionComponent->getPosition().Z);
 
-        if (moveComponent->getDrop() == true && this->hasBombAtPosition(entityManager, irr::core::vector3df(midX, 20, midZ)) == false) {
+        if (moveComponent->getDrop() == true && this->hasBombAtPosition(entityManager, irr::core::vector3df(midX, 20, midZ)) == false && playerComponent->getCurrentBombNb() > 0) {
             entityBuilder.createBomb(irr::core::vector3df(irr::f32(midX), 20, irr::f32(midZ)), "../ressources/animated_mesh/bomb/bomb.b3d", "../ressources/textures/bomb/bomb.png");
+            playerComponent->setCurrentBombNb(playerComponent->getCurrentBombNb() - 1);
         }
     }
 }

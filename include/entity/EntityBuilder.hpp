@@ -17,22 +17,21 @@ namespace Indie {
 
 using namespace Components;
 
-class EntityBuilder {
-    public:
-        EntityBuilder();
-        ~EntityBuilder() = default;
+    class EntityBuilder {
+        public:
+            EntityBuilder();
+            ~EntityBuilder() = default;
 
-        Entity *createGround(const irr::core::vector3df &vector, const std::string &modelPath, const std::string &texturePath);
-        Entity *createPlayer(const irr::core::vector3df &vector, const std::string &modelPath, const std::string &texturePath, std::map<irr::EKEY_CODE, KEY_TYPE> keys);
-        Entity *createAi(const irr::core::vector3df &vector, const std::string &modelPath, const std::string &texturePath);
-        Entity *createWall(const irr::core::vector3df &vector, const std::string &modelPath, const std::string &texturePath, bool canBeDestroyed);
-        Entity *createBomb(const irr::core::vector3df &vector, const std::string &modelPath, const std::string &texturePath);
+            Entity *createGround(const irr::core::vector3df &vector, const std::string &modelPath, const std::string &texturePath);
+            Entity *createPlayer(const irr::core::vector3df &vector, const std::string &modelPath, const std::string &texturePath, std::map<irr::EKEY_CODE, KEY_TYPE> keys);
+            Entity *createAi(const irr::core::vector3df &vector, const std::string &modelPath, const std::string &texturePath);
+            Entity *createWall(const irr::core::vector3df &vector, const std::string &modelPath, const std::string &texturePath, bool canBeDestroyed);
+            Entity *createBomb(const irr::core::vector3df &vector, const std::string &modelPath, const std::string &texturePath);
 
-    private:
-        EntityManager &entityManager;
-        ContextManager &contextManager;
-};
-
+        private:
+            EntityManager &entityManager;
+            ContextManager &contextManager;
+    };
 }
 
 #endif /* !ENTITYBUILDER_HPP_ */
