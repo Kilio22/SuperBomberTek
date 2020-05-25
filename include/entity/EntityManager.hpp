@@ -11,6 +11,7 @@
 #include <vector>
 #include <memory>
 #include <iostream>
+#include <algorithm>
 #include "Entity.hpp"
 
 namespace Indie
@@ -66,7 +67,9 @@ namespace Indie
             EntityView(EntityIterator<Types...> begin, EntityIterator<Types...> end)
                 : _begin(begin), _end(end)
             {
-                if (this->_begin.get() == nullptr || this->_begin.get()->template has<Types...>() == false)
+                if (this->_begin.get() == nullptr
+                    || this->_begin.get()->isPendingDestroy()
+                    || this->_begin.get()->template has<Types...>() == false)
                     ++this->_begin;
             }
 
@@ -114,9 +117,35 @@ namespace Indie
                 return entities[index].get();
             }
 
+            Entity *getById(int id) const
+            {
+                for (auto &entity : this->entities) {
+                    if (entity->getId() == id)
+                        return entity.get();
+                }
+                return nullptr;
+            }
+
             size_t getCount() const
             {
                 return this->count;
+            }
+
+            void cleanup()
+            {
+                size_t nbDeleted = 0;
+
+                entities.erase(std::remove_if(entities.begin(), entities.end(), [&, this](const std::unique_ptr<Entity> &entity) {
+                    if (entity->isPendingDestroy()) {
+                        --this->count;
+                        ++nbDeleted;
+                        return true;
+                    }
+                    return false;
+                }), entities.end());
+
+                if (nbDeleted > 0)
+                    std::cout << "Cleaned " << nbDeleted << " entities." << std::endl;
             }
 
         private:
@@ -142,7 +171,10 @@ namespace Indie
     EntityIterator<Types...> &EntityIterator<Types...>::operator++()
     {
         ++index;
-        while (this->index < this->entityManager->getCount() && (this->get() == nullptr || this->get()->template has<Types...>() == false))
+        while (this->index < this->entityManager->getCount()
+            && (this->get() == nullptr
+                || this->get()->isPendingDestroy()
+                || this->get()->template has<Types...>() == false))
             ++index;
         if (this->index >= this->entityManager->getCount())
             this->_isEnd = true;

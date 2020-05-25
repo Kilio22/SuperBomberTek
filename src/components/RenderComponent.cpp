@@ -28,6 +28,11 @@ Indie::Components::RenderComponent::RenderComponent(std::string const &meshPath,
     this->mesh->setPosition(position);
 }
 
+Indie::Components::RenderComponent::~RenderComponent()
+{
+    this->mesh->remove();
+}
+
 irr::scene::IAnimatedMeshSceneNode *Indie::Components::RenderComponent::getMesh() const
 {
     return this->mesh;

@@ -30,7 +30,6 @@ namespace Indie::Components
             void setVelocity(irr::f32 value);
             void setWallPass(bool value);
 
-        protected:
         private:
             unsigned int bombsRange;
             unsigned int maxBombNb;

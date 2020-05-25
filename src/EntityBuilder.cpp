@@ -74,13 +74,13 @@ Indie::Entity *Indie::EntityBuilder::createWall(
 
 Indie::Entity *Indie::EntityBuilder::createBomb(
     const irr::core::vector3df &position, const std::string &modelPath,
-    const std::string &texturePath)
+    const std::string &texturePath, int idOwner, u_int32_t range)
 {
     Entity *entity = this->entityManager.createEntity();
 
     entity->addComponent<PositionComponent>(position.X, position.Y, position.Z);
     entity->addComponent<RenderComponent>(modelPath, texturePath, this->contextManager, position);
-    entity->addComponent<BombComponent>();
+    entity->addComponent<BombComponent>(idOwner, range);
     entity->addComponent<TimerComponent>(3.f);
     return entity;
 }
@@ -93,7 +93,7 @@ Indie::Entity *Indie::EntityBuilder::createMap(const irr::core::vector2di &dimen
     return entity;
 }
 
-Indie::Entity *Indie::EntityBuilder::createLava(const irr::core::vector3df &position, float angle, const std::string &modelPath, const std::string &texturePath)
+Indie::Entity *Indie::EntityBuilder::createLava(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath, float angle)
 {
     Entity *entity = this->entityManager.createEntity();
 

@@ -31,6 +31,7 @@ namespace Indie::Components
         BOX = 2,
         BOMB = 3,
         PLAYER = 4,
+        LAVA = 5,
     };
 
     class MapComponent

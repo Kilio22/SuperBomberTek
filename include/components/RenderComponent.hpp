@@ -18,7 +18,7 @@ namespace Indie::Components
     {
         public:
             RenderComponent(const std::string &meshPath, const std::string &texturePath, const ContextManager &contextManager, irr::core::vector3df position);
-            ~RenderComponent() = default;
+            ~RenderComponent();
 
             irr::scene::IAnimatedMeshSceneNode *getMesh(void) const;
             void setMesh(irr::scene::IAnimatedMeshSceneNode *newMesh);

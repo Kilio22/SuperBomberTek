@@ -7,27 +7,27 @@
 
 #include "TimerComponent.hpp"
 
-Indie::Components::TimerComponent::TimerComponent(irr::f32 seconds)
-    : ticks(0.f), seconds(seconds)
+Indie::Components::TimerComponent::TimerComponent(irr::f32 timeToEnd)
+    : timePassed(0.f), timeToEnd(timeToEnd)
 {
 }
 
-irr::f32 Indie::Components::TimerComponent::getTicks(void) const
+irr::f32 Indie::Components::TimerComponent::getTimePassed(void) const
 {
-    return this->ticks;
+    return this->timePassed;
 }
 
-irr::f32 Indie::Components::TimerComponent::getSeconds(void) const
+irr::f32 Indie::Components::TimerComponent::getTimeToEnd(void) const
 {
-    return this->seconds;
+    return this->timeToEnd;
 }
 
-void Indie::Components::TimerComponent::setTicks(irr::f32 value)
+void Indie::Components::TimerComponent::setTimePassed(irr::f32 timePassed)
 {
-    this->ticks = value;
+    this->timePassed = timePassed;
 }
 
-void Indie::Components::TimerComponent::setSeconds(irr::f32 value)
+void Indie::Components::TimerComponent::setTimeToEnd(irr::f32 timeToEnd)
 {
-    this->seconds = value;
+    this->timeToEnd = timeToEnd;
 }

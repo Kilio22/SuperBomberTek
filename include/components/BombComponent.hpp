@@ -12,11 +12,18 @@
 
 namespace Indie::Components {
 
-struct BombComponent {
-    BombComponent();
+class BombComponent {
+public:
+    BombComponent(int idOwner, u_int32_t range);
 
-    irr::f32 ticks;
-    bool exploded;
+    u_int32_t getRange() const;
+    int getIdOwner() const;
+
+    void setRange(u_int32_t range);
+
+private:
+    int idOwner;
+    u_int32_t range;
 };
 
 } // namespace Indie::Components

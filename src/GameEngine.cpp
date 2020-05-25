@@ -55,7 +55,7 @@ void Indie::GameEngine::startGame()
     while (context.getDevice()->run()) {
         currentTime = this->context.getDevice()->getTimer()->getTime();
         deltaTime = (irr::f32)(currentTime - lastTime) / 1000.f;
-        std::cout << "Delta time: " << deltaTime << ", FPS: " << this->context.getDriver()->getFPS() << std::endl;
+        // std::cout << "Delta time: " << deltaTime << ", FPS: " << this->context.getDriver()->getFPS() << std::endl;
         ServiceLocator::getInstance().get<MusicManager>().update();
         ServiceLocator::getInstance().get<SceneManager>().update(context, deltaTime);
         lastTime = currentTime;

@@ -10,19 +10,19 @@
 
 void Indie::Systems::RenderSystem::onUpdate(irr::f32, EntityManager &entityManager) const
 {
-    for (auto entity : entityManager.each<Indie::Components::RenderComponent, Indie::Components::PositionComponent>()) {
-        auto renderComponent = entity->getComponent<Indie::Components::RenderComponent>();
-        auto positionComponent = entity->getComponent<Indie::Components::PositionComponent>();
-        auto hitBoxComponent = entity->getComponent<Indie::Components::HitboxComponent>();
+    for (auto entity : entityManager.each<Components::RenderComponent, Components::PositionComponent>()) {
+        auto renderComponent = entity->getComponent<Components::RenderComponent>();
+        auto positionComponent = entity->getComponent<Components::PositionComponent>();
+        auto hitBoxComponent = entity->getComponent<Components::HitboxComponent>();
 
         renderComponent->getMesh()->setPosition(positionComponent->getPosition());
         if (hitBoxComponent != nullptr) {
             hitBoxComponent->getMesh()->setPosition(positionComponent->getPosition());
         }
     }
-    for (auto entity : entityManager.each<Indie::Components::RenderComponent, Indie::Components::RotationComponent>()) {
-        auto renderComponent = entity->getComponent<Indie::Components::RenderComponent>();
-        auto rotationComponent = entity->getComponent<Indie::Components::RotationComponent>();
+    for (auto entity : entityManager.each<Components::RenderComponent, Components::RotationComponent>()) {
+        auto renderComponent = entity->getComponent<Components::RenderComponent>();
+        auto rotationComponent = entity->getComponent<Components::RotationComponent>();
 
         renderComponent->getMesh()->setRotation(rotationComponent->getAngle());
     }

@@ -17,7 +17,7 @@ namespace Indie {
 
 class Entity {
     public:
-        Entity(int id) : id(id) {}
+        Entity(int id) : id(id), pendingDestroy(false) {}
         ~Entity() = default;
 
         template<class T>
@@ -56,9 +56,20 @@ class Entity {
             return this->id;
         }
 
+        bool isPendingDestroy() const
+        {
+            return this->pendingDestroy;
+        }
+
+        void needDestroy()
+        {
+            this->pendingDestroy = true;
+        }
+
     private:
         std::unordered_map<TypeIndex, std::unique_ptr<IObjectContainer>> components;
         int id;
+        bool pendingDestroy;
 };
 
 }
