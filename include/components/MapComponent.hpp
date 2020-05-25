@@ -29,6 +29,8 @@ namespace Indie::Components
         VOID = 0,
         WALL_IN = 1,
         BOX = 2,
+        BOMB = 3,
+        PLAYER = 4,
     };
 
     class MapComponent
