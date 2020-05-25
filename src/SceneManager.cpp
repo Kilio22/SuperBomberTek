@@ -18,7 +18,7 @@ Indie::SceneManager::SceneManager()
 {
 }
 
-Indie::IScene *Indie::SceneManager::getScene(size_t id)
+std::shared_ptr<Indie::IScene> Indie::SceneManager::getScene(size_t id)
 {
     if (id >= scenes.size())
         throw Indie::Exceptions::InvalidIndexException(ERROR_STR, "Scene at index " + std::to_string(id) + " doesn't exist.");
@@ -29,9 +29,8 @@ void Indie::SceneManager::removeScene(size_t id)
 {
     if (id >= scenes.size())
         throw Indie::Exceptions::InvalidIndexException(ERROR_STR, "Scene at index " + std::to_string(id) + " doesn't exist.");
-    IScene *tmp = scenes[id];
+    std::shared_ptr<Indie::IScene> tmp = scenes[id];
     scenes.erase(scenes.begin() + id);
-    delete tmp;
     if (currentScene == id) {
         currentScene = 0;
         setSceneUpdateActive(false);
@@ -126,10 +125,4 @@ void Indie::SceneManager::update(ContextManager &contextManager, irr::f32 deltaT
 
     contextManager.getGuiEnv()->drawAll();
     contextManager.getDriver()->endScene();
-}
-
-void Indie::SceneManager::drop()
-{
-    while (scenes.size() > 0)
-        removeScene(0);
 }
