@@ -17,7 +17,7 @@ void Indie::Systems::BombExplosionSystem::onUpdate(irr::f32 deltaTime, EntityMan
 
         bomb->ticks += deltaTime;
         if (bomb->exploded == false && bomb->ticks >= 3) {
-            std::cout << "Boum" << std::endl;
+            std::cout << "BimBamBoum" << std::endl;
             bomb->exploded = true;
         }
     }
