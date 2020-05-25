@@ -24,6 +24,7 @@ namespace Indie {
             void update(irr::f32 deltaTime);
             void renderPre3D();
             void renderPost3D();
+            void setColor(irr::video::SColor color = irr::video::SColor(255, 255, 255, 255));
 
         private:
             static const irr::core::vector2df velocities[5];

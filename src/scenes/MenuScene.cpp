@@ -28,6 +28,12 @@ Indie::MenuScene::MenuScene(ContextManager &context)
     : context(context)
 {}
 
+void Indie::MenuScene::setColor(irr::video::SColor color)
+{
+    for (size_t i = 0; i < parallax.size(); i++)
+        parallax[i].setColor(color);
+}
+
 void Indie::MenuScene::init()
 {
     Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setMusic(0);

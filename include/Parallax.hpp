@@ -21,12 +21,14 @@ namespace Indie {
             void init(ContextManager &context, const std::string &filepath, irr::core::position2d<irr::s32> size, irr::core::position2d<float> vel);
             void update();
             void draw(ContextManager &context);
+            void setColor(irr::video::SColor color = irr::video::SColor(255,255,255,255));
 
         private:
             Image *image;
             irr::core::position2d<float> pos;
             irr::core::position2d<irr::s32> size;
             irr::core::position2d<float> vel;
+            irr::video::SColor color;
     };
 }
 

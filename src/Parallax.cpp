@@ -17,6 +17,7 @@ void Indie::Parallax::init(ContextManager &context, const std::string &filepath,
     if (!image) {
         throw Exceptions::FileNotFoundException(ERROR_STR, "File \"" + filepath + "\" not found.");
     }
+    color = irr::video::SColor(255,255,255,255);
 }
 
 void Indie::Parallax::update()
@@ -29,16 +30,21 @@ void Indie::Parallax::update()
     pos.Y = (pos.Y > size.Y) ? 0 : pos.Y;
 }
 
+void Indie::Parallax::setColor(irr::video::SColor color)
+{
+    this->color = color;
+}
+
 void Indie::Parallax::draw(ContextManager &context)
 {
     // All 9 images arround it so you can move the parrallax in any direction seamlessely;
-    context.displayImage(image, RECT(0, 0, size.X, size.Y), POS(pos.X - size.X, pos.Y - size.Y));
-    context.displayImage(image, RECT(0, 0, size.X, size.Y), POS(pos.X, pos.Y - size.Y));
-    context.displayImage(image, RECT(0, 0, size.X, size.Y), POS(pos.X + size.X, pos.Y - size.X));
-    context.displayImage(image, RECT(0, 0, size.X, size.Y), POS(pos.X - size.X, pos.Y));
-    context.displayImage(image, RECT(0, 0, size.X, size.Y), POS(pos.X, pos.Y));
-    context.displayImage(image, RECT(0, 0, size.X, size.Y), POS(pos.X + size.X, pos.Y));
-    context.displayImage(image, RECT(0, 0, size.X, size.Y), POS(pos.X - size.X, pos.Y + size.Y));
-    context.displayImage(image, RECT(0, 0, size.X, size.Y), POS(pos.X, pos.Y + size.Y));
-    context.displayImage(image, RECT(0, 0, size.X, size.Y), POS(pos.X + size.X, pos.Y + size.Y));
+    context.displayImage(image, RECT(0, 0, size.X, size.Y), POS(pos.X - size.X, pos.Y - size.Y), color);
+    context.displayImage(image, RECT(0, 0, size.X, size.Y), POS(pos.X, pos.Y - size.Y), color);
+    context.displayImage(image, RECT(0, 0, size.X, size.Y), POS(pos.X + size.X, pos.Y - size.X), color);
+    context.displayImage(image, RECT(0, 0, size.X, size.Y), POS(pos.X - size.X, pos.Y), color);
+    context.displayImage(image, RECT(0, 0, size.X, size.Y), POS(pos.X, pos.Y), color);
+    context.displayImage(image, RECT(0, 0, size.X, size.Y), POS(pos.X + size.X, pos.Y), color);
+    context.displayImage(image, RECT(0, 0, size.X, size.Y), POS(pos.X - size.X, pos.Y + size.Y), color);
+    context.displayImage(image, RECT(0, 0, size.X, size.Y), POS(pos.X, pos.Y + size.Y), color);
+    context.displayImage(image, RECT(0, 0, size.X, size.Y), POS(pos.X + size.X, pos.Y + size.Y), color);
 }
