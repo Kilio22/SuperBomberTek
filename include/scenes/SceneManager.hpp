@@ -40,7 +40,6 @@ class SceneManager {
         void setSceneRenderActive(bool status);
         void setSubSceneRenderActive(bool status);
         void update(ContextManager &contextManager, irr::f32 deltaTime);
-        void drop();
         std::shared_ptr<IScene> getScene(size_t id);
 
     private:

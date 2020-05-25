@@ -126,9 +126,3 @@ void Indie::SceneManager::update(ContextManager &contextManager, irr::f32 deltaT
     contextManager.getGuiEnv()->drawAll();
     contextManager.getDriver()->endScene();
 }
-
-void Indie::SceneManager::drop()
-{
-    while (scenes.size() > 0)
-        removeScene(0);
-}
