@@ -18,12 +18,14 @@ Indie::GameScene::GameScene(ContextManager &context)
     this->device = this->context.getDevice();
     this->driver = this->context.getDriver();
     this->sceneManager = this->context.getSceneManager();
-    this->systemManager.addSystem<Systems::BombSystem>();
+    this->systemManager.addSystem<Systems::BombDropSystem>();
+    this->systemManager.addSystem<Systems::BombExplosionSystem>();
     this->systemManager.addSystem<Systems::CollisionSystem>();
     this->systemManager.addSystem<Systems::InputSystem>();
     this->systemManager.addSystem<Systems::MeshSystem>();
     this->systemManager.addSystem<Systems::MoveSystem>();
     this->systemManager.addSystem<Systems::RenderSystem>();
+    this->systemManager.addSystem<Systems::RotationSystem>();
     this->systemManager.addSystem<Systems::VelocitySystem>();
 }
 
@@ -74,7 +76,8 @@ void Indie::GameScene::update(irr::f32 deltaTime)
     this->systemManager.getSystem<Systems::MoveSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<Systems::VelocitySystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<Systems::RotationSystem>()->onUpdate(deltaTime, entityManager);
-    this->systemManager.getSystem<Systems::BombSystem>()->onUpdate(deltaTime, entityManager);
+    this->systemManager.getSystem<Systems::BombDropSystem>()->onUpdate(deltaTime, entityManager);
+    this->systemManager.getSystem<Systems::BombExplosionSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<Systems::CollisionSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<Systems::MeshSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<Systems::RenderSystem>()->onUpdate(deltaTime, entityManager);

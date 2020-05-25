@@ -8,13 +8,14 @@
 #ifndef SYSTEMS_H_
 #define SYSTEMS_H_
 
-#include "VelocitySystem.hpp"
-#include "InputSystem.hpp"
-#include "RotationSystem.hpp"
-#include "MeshSystem.hpp"
-#include "RenderSystem.hpp"
-#include "MoveSystem.hpp"
+#include "BombDropSystem.hpp"
+#include "BombExplosionSystem.hpp"
 #include "CollisionSystem.hpp"
-#include "BombSystem.hpp"
+#include "InputSystem.hpp"
+#include "MeshSystem.hpp"
+#include "MoveSystem.hpp"
+#include "RenderSystem.hpp"
+#include "RotationSystem.hpp"
+#include "VelocitySystem.hpp"
 
 #endif /* !SYSTEMS_H_ */

@@ -2,11 +2,11 @@
 ** EPITECH PROJECT, 2020
 ** OOP_indie_studio_2019
 ** File description:
-** BombSystem
+** BombDropSystem
 */
 
-#ifndef BOMBSYSTEM_HPP_
-#define BOMBSYSTEM_HPP_
+#ifndef BOMBDROPSYSTEM_HPP_
+#define BOMBDROPSYSTEM_HPP_
 
 #include "ISystem.hpp"
 #include "EntityManager.hpp"
@@ -14,11 +14,11 @@
 
 namespace Indie::Systems
 {
-    class BombSystem : public ISystem
+    class BombDropSystem : public ISystem
     {
         public:
-            BombSystem() = default;
-            ~BombSystem() = default;
+            BombDropSystem() = default;
+            ~BombDropSystem() = default;
 
             void onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const final;
 
@@ -28,4 +28,4 @@ namespace Indie::Systems
     };
 }
 
-#endif /* !BOMBSYSTEM_HPP_ */
+#endif /* !BOMBDropSYSTEM_HPP_ */

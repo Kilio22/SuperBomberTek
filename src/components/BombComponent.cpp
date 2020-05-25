@@ -6,3 +6,9 @@
 */
 
 #include "BombComponent.hpp"
+
+Indie::Components::BombComponent::BombComponent()
+    : ticks(0)
+    , exploded(false)
+{
+}

@@ -21,19 +21,19 @@ class Entity {
         ~Entity() = default;
 
         template<class T>
-        bool has()
+        bool has() const
         {
             return components.find(getTypeIndex<T>()) != components.end();
         }
 
         template <typename T, typename TNext, typename... TList>
-        bool has()
+        bool has() const
         {
             return this->has<T>() && this->has<TNext, TList...>();
         }
 
         template <typename T>
-        T *getComponent()
+        T *getComponent() const
         {
             auto container = components.find(getTypeIndex<T>());
 
@@ -49,6 +49,11 @@ class Entity {
             auto ptr = std::make_unique<ObjectContainer<T>>(std::forward<Args>(args)...);
 
             components.insert({ getTypeIndex<T>(), std::move(ptr) });
+        }
+
+        int getId() const
+        {
+            return this->id;
         }
 
     private:

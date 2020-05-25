@@ -62,7 +62,7 @@ void Indie::MapGenerator::setDimension(int x, int y)
 {
     this->_y = y;
     this->_x = x;
-    std::vector<std::vector<int> > matrix(_y);
+    std::vector<std::vector<int>> matrix(_y);
     for (int i = 0 ; i < _y; i++)
         matrix[i].resize(_x);
     _map = matrix;
