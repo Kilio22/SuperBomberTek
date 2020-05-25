@@ -21,5 +21,6 @@
 #include "WallComponent.hpp"
 #include "PlayerComponent.hpp"
 #include "MapComponent.hpp"
+#include "TimerComponent.hpp"
 
 #endif /* !COMPONENTS_H_ */

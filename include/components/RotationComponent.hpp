@@ -15,7 +15,7 @@ namespace Indie::Components
     class RotationComponent
     {
         public:
-            RotationComponent();
+            RotationComponent(float angle = 180);
             ~RotationComponent() = default;
 
             const irr::core::vector3df &getAngle(void) const;

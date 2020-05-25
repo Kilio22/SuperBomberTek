@@ -51,7 +51,7 @@ void Indie::Systems::BombDropSystem::onUpdate(irr::f32, EntityManager &entityMan
 
                 mapComponent->setMap(this->updateMap(mapComponent->getMap(), midX, midZ));
             }
-            entityBuilder.createBomb(irr::core::vector3df(irr::f32(midX), 20, irr::f32(midZ)), "../ressources/animated_mesh/bomb/bomb.b3d", "../ressources/textures/bomb/bomb.png");
+            entityBuilder.createBomb(irr::core::vector3df(irr::f32(midX), 20, irr::f32(midZ)), "../ressources/animated_mesh/bomb/bomb.b3d", "../ressources/textures/bomb/bomb.png", 3.f);
             playerComponent->setCurrentBombNb(playerComponent->getCurrentBombNb() - 1);
         }
     }
