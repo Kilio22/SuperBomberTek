@@ -17,5 +17,7 @@
 #include "RenderSystem.hpp"
 #include "RotationSystem.hpp"
 #include "VelocitySystem.hpp"
+#include "MapSystem.hpp"
+#include "AISystem.hpp"
 
 #endif /* !SYSTEMS_H_ */

@@ -83,3 +83,11 @@ Indie::Entity *Indie::EntityBuilder::createBomb(
     entity->addComponent<BombComponent>();
     return entity;
 }
+
+Indie::Entity *Indie::EntityBuilder::createMap(const irr::core::vector2di &dimension, const Indie::Components::MAP_TYPE &type, const Indie::Components::THEME &theme)
+{
+    Entity *entity = this->entityManager.createEntity();
+
+    entity->addComponent<MapComponent>(dimension, type, theme);
+    return entity;
+}

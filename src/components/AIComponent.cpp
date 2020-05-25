@@ -6,7 +6,6 @@
 */
 
 #include "AIComponent.hpp"
-#include "MapGenerator.hpp"
 
 int Indie::Components::AIComponent::setZone(std::vector<std::vector<int>> &map, int initX, int initY, int value)
 {
@@ -137,9 +136,7 @@ bool Indie::Components::AIComponent::isMoving(enum Direction direction)
 
 std::vector<std::vector<int>> Indie::Components::AIComponent::getMap() const
 {
-    auto &mapGenerator = ServiceLocator::getInstance().get<MapGenerator>();
-
-    return mapGenerator.getMap();
+    return {{1,1}};
 }
 
 bool Indie::Components::AIComponent::hasMoved(irr::core::vector3df position, irr::core::vector3df nextPosition)

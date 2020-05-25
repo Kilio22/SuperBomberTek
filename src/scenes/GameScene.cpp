@@ -8,7 +8,6 @@
 #include "GameScene.hpp"
 #include "Components.h"
 #include "EntityBuilder.hpp"
-#include "MapGenerator.hpp"
 #include "Parallax.hpp"
 #include "ServiceLocator.hpp"
 
@@ -27,6 +26,8 @@ Indie::GameScene::GameScene(ContextManager &context)
     this->systemManager.addSystem<Systems::RenderSystem>();
     this->systemManager.addSystem<Systems::RotationSystem>();
     this->systemManager.addSystem<Systems::VelocitySystem>();
+    this->systemManager.addSystem<Systems::AISystem>();
+    this->systemManager.addSystem<Systems::MapSystem>();
 }
 
 // return false si un load merde.
@@ -34,7 +35,6 @@ void Indie::GameScene::init()
 {
     Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setMusic(1);
     irr::scene::ICameraSceneNode *camera = sceneManager->addCameraSceneNodeFPS();
-    auto &mapGenerator = ServiceLocator::getInstance().get<Indie::MapGenerator>();
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
 
     camera->setPosition(irr::core::vector3df(irr::f32(139.371), irr::f32(170.129), irr::f32(-24.6459)));
@@ -53,12 +53,12 @@ void Indie::GameScene::init()
         driver->getTexture("../ressources/skybox/skybox_front.png"),
         driver->getTexture("../ressources/skybox/skybox_back.png"));
 
-    mapGenerator.generate();
-
+    entityBuilder.createMap(irr::core::vector2di(15, 15), Indie::Components::MAP_TYPE::DEFAULT, Indie::Components::THEME::STONE);
     entityBuilder.createPlayer(irr::core::vector3df(20, 20, 20), "../ressources/animated_mesh/character/character_idle.b3d", "../ressources/textures/character/blue1.png", {{irr::KEY_UP, Indie::Components::KEY_TYPE::UP}, {irr::KEY_DOWN, Indie::Components::KEY_TYPE::DOWN}, {irr::KEY_RIGHT, Indie::Components::KEY_TYPE::RIGHT}, {irr::KEY_LEFT, Indie::Components::KEY_TYPE::LEFT}, {irr::KEY_SPACE, Indie::Components::KEY_TYPE::DROP}});
     entityBuilder.createAi(irr::core::vector3df(260, 20, 20), "../ressources/animated_mesh/character/character_idle.b3d", "../ressources/textures/character/red1.png");
-
+    
     device->getCursorControl()->setVisible(false);
+    this->systemManager.getSystem<Systems::MapSystem>()->render(entityManager);
 }
 
 // return false si un load merde.
@@ -81,6 +81,7 @@ void Indie::GameScene::update(irr::f32 deltaTime)
     this->systemManager.getSystem<Systems::CollisionSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<Systems::MeshSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<Systems::RenderSystem>()->onUpdate(deltaTime, entityManager);
+    this->systemManager.getSystem<Systems::AISystem>()->onUpdate(deltaTime, entityManager);
 }
 
 void Indie::GameScene::renderPre3D() {}

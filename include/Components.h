@@ -20,5 +20,6 @@
 #include "VelocityComponent.hpp"
 #include "WallComponent.hpp"
 #include "PlayerComponent.hpp"
+#include "MapComponent.hpp"
 
 #endif /* !COMPONENTS_H_ */
