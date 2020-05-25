@@ -10,6 +10,7 @@
 #include "EntityBuilder.hpp"
 #include "Parallax.hpp"
 #include "ServiceLocator.hpp"
+#include "MapGenerator.hpp"
 
 Indie::GameScene::GameScene(ContextManager &context)
     : context(context), entityManager(ServiceLocator::getInstance().get<EntityManager>()), systemManager(SystemManager::getInstance())
@@ -36,6 +37,7 @@ void Indie::GameScene::init()
     Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setMusic(1);
     irr::scene::ICameraSceneNode *camera = sceneManager->addCameraSceneNodeFPS();
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
+    Indie::MapGenerator mapGenerator(entityBuilder, irr::core::vector2di(15 ,15), MAP_TYPE::DEFAULT, THEME::STONE);
 
     camera->setPosition(irr::core::vector3df(irr::f32(139.371), irr::f32(170.129), irr::f32(-24.6459)));
     camera->setRotation(irr::core::vector3df(irr::f32(41.553), irr::f32(359.176), irr::f32(-90)));
@@ -53,12 +55,12 @@ void Indie::GameScene::init()
         driver->getTexture("../ressources/skybox/skybox_front.png"),
         driver->getTexture("../ressources/skybox/skybox_back.png"));
 
-    entityBuilder.createMap(irr::core::vector2di(15, 15), Indie::Components::MAP_TYPE::DEFAULT, Indie::Components::THEME::STONE);
+    mapGenerator.generate(entityManager, entityBuilder);
     entityBuilder.createPlayer(irr::core::vector3df(20, 20, 20), "../ressources/animated_mesh/character/character_idle.b3d", "../ressources/textures/character/blue1.png", {{irr::KEY_UP, Indie::Components::KEY_TYPE::UP}, {irr::KEY_DOWN, Indie::Components::KEY_TYPE::DOWN}, {irr::KEY_RIGHT, Indie::Components::KEY_TYPE::RIGHT}, {irr::KEY_LEFT, Indie::Components::KEY_TYPE::LEFT}, {irr::KEY_SPACE, Indie::Components::KEY_TYPE::DROP}});
     entityBuilder.createAi(irr::core::vector3df(260, 20, 20), "../ressources/animated_mesh/character/character_idle.b3d", "../ressources/textures/character/red1.png");
 
     device->getCursorControl()->setVisible(false);
-    this->systemManager.getSystem<Systems::MapSystem>()->render(entityManager);
+
 }
 
 // return false si un load merde.

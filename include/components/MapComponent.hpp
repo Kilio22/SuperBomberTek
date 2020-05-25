@@ -24,6 +24,13 @@ namespace Indie::Components
         DIRT,
     };
 
+    enum class OBJECT {
+        WALL_OUT = -1,
+        VOID = 0,
+        WALL_IN = 1,
+        BOX = 2,
+    };
+
     class MapComponent
     {
         public:
@@ -39,7 +46,7 @@ namespace Indie::Components
             void setTheme(Indie::Components::THEME theme);
             void setDimension(irr::core::vector2di dimension);
             void setMap(std::vector<std::vector<int>> map);
-            
+
         private:
             Indie::Components::MAP_TYPE type = Indie::Components::MAP_TYPE::DEFAULT;
             Indie::Components::THEME theme = Indie::Components::THEME::STONE;
