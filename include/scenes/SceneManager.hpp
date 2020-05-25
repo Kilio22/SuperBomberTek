@@ -11,6 +11,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <memory>
 #include "IScene.hpp"
 #include "ContextManager.hpp"
 #include "Exceptions.h"
@@ -25,8 +26,9 @@ class SceneManager {
         template <typename T>
         void addScene(ContextManager &context) {
             IScene *scene = new T(context);
+            std::shared_ptr<IScene> smartPtr(scene);
 
-            scenes.push_back(scene);
+            scenes.push_back(smartPtr);
         }
         void removeScene(size_t id);
         void restartScene(size_t id);
@@ -38,11 +40,11 @@ class SceneManager {
         void setSceneRenderActive(bool status);
         void setSubSceneRenderActive(bool status);
         void update(ContextManager &contextManager, irr::f32 deltaTime);
-        void drop();
-        IScene *getScene(size_t id);
+        std::shared_ptr<IScene> getSceneById(size_t id);
+        template <typename T> T *getScene();
 
     private:
-        std::vector<IScene *> scenes;
+        std::vector<std::shared_ptr<IScene>> scenes;
         size_t currentScene;
         size_t currentSubScene;
         bool updateScene;
