@@ -8,6 +8,43 @@
 #include "CollisionSystem.hpp"
 #include "Components.h"
 
+bool Indie::Systems::CollisionSystem::checkCollisionWithPowerUp(EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox, Indie::Components::POWERUP_TYPE type) const
+{
+    for (auto powerUp : entityManager.each<Components::RenderComponent, Components::PowerUpComponent>()) {
+        Components::PowerUpComponent *powerUpComponent = powerUp->getComponent<Components::PowerUpComponent>();
+
+        if (powerUpComponent->getType() != type)
+            continue;
+        Components::RenderComponent *renderComponent = powerUp->getComponent<Components::RenderComponent>();
+        if (renderComponent->getMesh()->getTransformedBoundingBox().intersectsWithBox(characterBoundingBox) == true) {
+            // TODO: delete l'entity
+            return true;
+        }
+    }
+    return false;
+}
+
+void Indie::Systems::CollisionSystem::checkCollisionWithPowerUps(EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox,
+                                                                    Components::PlayerComponent *playerComponent) const
+{
+    if (this->checkCollisionWithPowerUp(entityManager, characterBoundingBox, Components::POWERUP_TYPE::BOMB_UP) == true) {
+        playerComponent->setMaxBombNb(playerComponent->getMaxBombNb() + 1);
+        return;
+    }
+    if (this->checkCollisionWithPowerUp(entityManager, characterBoundingBox, Components::POWERUP_TYPE::FIRE_UP) == true) {
+        playerComponent->setBombsRange(playerComponent->getBombsRange() + 1);
+        return;
+    }
+    if (this->checkCollisionWithPowerUp(entityManager, characterBoundingBox, Components::POWERUP_TYPE::SPEED_UP) == true) {
+        playerComponent->setVelocity(playerComponent->getVelocity() + 1);
+        return;
+    }
+    if (this->checkCollisionWithPowerUp(entityManager, characterBoundingBox, Components::POWERUP_TYPE::WALL_PASS) == true) {
+        playerComponent->setWallPass(true);
+        return;
+    }
+}
+
 bool Indie::Systems::CollisionSystem::checkCollisionWithWalls(EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox) const
 {
     for (auto wall : entityManager.each<Components::WallComponent, Components::RenderComponent, Components::PositionComponent>()) {
@@ -53,10 +90,11 @@ irr::core::aabbox3df Indie::Systems::CollisionSystem::updateCharacterBoundingBox
 
 void Indie::Systems::CollisionSystem::onUpdate(irr::f32, EntityManager &entityManager) const
 {
-    for (auto character : entityManager.each<Components::VelocityComponent, Components::PositionComponent, Components::HitboxComponent>()) {
+    for (auto character : entityManager.each<Components::VelocityComponent, Components::PositionComponent, Components::HitboxComponent, Components::PlayerComponent>()) {
         Components::HitboxComponent *characterHitBoxComponent = character->getComponent<Components::HitboxComponent>();
         Components::PositionComponent *characterPositionComponent = character->getComponent<Components::PositionComponent>();
         Components::VelocityComponent *characterVelocityComponent = character->getComponent<Components::VelocityComponent>();
+        Components::PlayerComponent *characterPlayerComponent = character->getComponent<Components::PlayerComponent>();
 
         irr::core::vector3df currentPosition = characterHitBoxComponent->getMesh()->getPosition();
         irr::core::vector3df wantedPosition = characterPositionComponent->getPosition();
@@ -75,6 +113,7 @@ void Indie::Systems::CollisionSystem::onUpdate(irr::f32, EntityManager &entityMa
                 characterVelocityComponent->setVelocity(0);
                 continue;
             }
+            this->checkCollisionWithPowerUps(entityManager, updatedBoundingBox, characterPlayerComponent);
         }
     }
 }

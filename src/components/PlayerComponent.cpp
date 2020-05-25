@@ -8,7 +8,7 @@
 #include "PlayerComponent.hpp"
 
 Indie::Components::PlayerComponent::PlayerComponent()
-    : bombsRange(2), maxBombNb(1), currentBombNb(1), velocity(25.f)
+    : bombsRange(2), maxBombNb(1), currentBombNb(1), velocity(25.f), wallPass(false)
 {
 }
 
@@ -32,6 +32,11 @@ irr::f32 Indie::Components::PlayerComponent::getVelocity(void) const
     return this->velocity;
 }
 
+bool Indie::Components::PlayerComponent::getWallPass(void) const
+{
+    return this->wallPass;
+}
+
 void Indie::Components::PlayerComponent::setBombsRange(unsigned int value)
 {
     this->bombsRange = value;
@@ -50,4 +55,9 @@ void Indie::Components::PlayerComponent::setCurrentBombNb(unsigned int value)
 void Indie::Components::PlayerComponent::setVelocity(irr::f32 value)
 {
     this->velocity = value;
+}
+
+void Indie::Components::PlayerComponent::setWallPass(bool value)
+{
+    this->wallPass = value;
 }

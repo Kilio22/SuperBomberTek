@@ -29,6 +29,7 @@ using namespace Components;
             Entity *createBomb(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath);
             Entity *createMap(const irr::core::vector2di &dimension, const Indie::Components::MAP_TYPE &type, const Indie::Components::THEME &theme);
             Entity *createLava(const irr::core::vector3df &position, float angle, const std::string &modelPath, const std::string &texturePath);
+            Entity *createPowerUp(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath, Components::POWERUP_TYPE type);
 
         private:
             EntityManager &entityManager;

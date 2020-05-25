@@ -103,3 +103,13 @@ Indie::Entity *Indie::EntityBuilder::createLava(const irr::core::vector3df &posi
     entity->addComponent<TimerComponent>(2.f);
     return entity;
 }
+
+Indie::Entity *Indie::EntityBuilder::createPowerUp(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath, Components::POWERUP_TYPE type)
+{
+    Entity *entity = this->entityManager.createEntity();
+
+    entity->addComponent<PositionComponent>(position.X, position.Y, position.Z);
+    entity->addComponent<RenderComponent>(modelPath, texturePath, this->contextManager, position);
+    entity->addComponent<PowerUpComponent>(type);
+    return entity;
+}

@@ -22,5 +22,6 @@
 #include "PlayerComponent.hpp"
 #include "MapComponent.hpp"
 #include "TimerComponent.hpp"
+#include "PowerUpComponent.hpp"
 
 #endif /* !COMPONENTS_H_ */
