@@ -40,7 +40,8 @@ class SceneManager {
         void setSceneRenderActive(bool status);
         void setSubSceneRenderActive(bool status);
         void update(ContextManager &contextManager, irr::f32 deltaTime);
-        std::shared_ptr<IScene> getScene(size_t id);
+        std::shared_ptr<IScene> getSceneById(size_t id);
+        template <typename T> T *getScene();
 
     private:
         std::vector<std::shared_ptr<IScene>> scenes;
