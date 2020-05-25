@@ -26,9 +26,9 @@ using namespace Components;
             Entity *createPlayer(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath, std::map<irr::EKEY_CODE, KEY_TYPE> keys);
             Entity *createAi(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath);
             Entity *createWall(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath, bool canBeDestroyed);
-            Entity *createBomb(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath, irr::f32 seconds);
+            Entity *createBomb(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath);
             Entity *createMap(const irr::core::vector2di &dimension, const Indie::Components::MAP_TYPE &type, const Indie::Components::THEME &theme);
-            Entity *createLava(const irr::core::vector3df &position, float angle, const std::string &modelPath, const std::string &texturePath, irr::f32 seconds);
+            Entity *createLava(const irr::core::vector3df &position, float angle, const std::string &modelPath, const std::string &texturePath);
 
         private:
             EntityManager &entityManager;

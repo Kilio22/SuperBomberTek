@@ -74,14 +74,14 @@ Indie::Entity *Indie::EntityBuilder::createWall(
 
 Indie::Entity *Indie::EntityBuilder::createBomb(
     const irr::core::vector3df &position, const std::string &modelPath,
-    const std::string &texturePath, irr::f32 seconds)
+    const std::string &texturePath)
 {
     Entity *entity = this->entityManager.createEntity();
 
     entity->addComponent<PositionComponent>(position.X, position.Y, position.Z);
     entity->addComponent<RenderComponent>(modelPath, texturePath, this->contextManager, position);
     entity->addComponent<BombComponent>();
-    entity->addComponent<TimerComponent>(seconds);
+    entity->addComponent<TimerComponent>(3.f);
     return entity;
 }
 
@@ -93,13 +93,13 @@ Indie::Entity *Indie::EntityBuilder::createMap(const irr::core::vector2di &dimen
     return entity;
 }
 
-Indie::Entity *Indie::EntityBuilder::createLava(const irr::core::vector3df &position, float angle, const std::string &modelPath, const std::string &texturePath, irr::f32 seconds)
+Indie::Entity *Indie::EntityBuilder::createLava(const irr::core::vector3df &position, float angle, const std::string &modelPath, const std::string &texturePath)
 {
     Entity *entity = this->entityManager.createEntity();
 
     entity->addComponent<PositionComponent>(position.X, position.Y, position.Z);
     entity->addComponent<RenderComponent>(modelPath, texturePath, this->contextManager, position);
     entity->addComponent<RotationComponent>(angle);
-    entity->addComponent<TimerComponent>(seconds);
+    entity->addComponent<TimerComponent>(2.f);
     return entity;
 }
