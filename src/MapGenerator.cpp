@@ -18,7 +18,7 @@ void Indie::MapGenerator::generate(Indie::EntityManager &entityManager, Indie::E
 
     for (auto entity : entityManager.each<Indie::Components::MapComponent>()) {
         auto mapComponent = entity->getComponent<Indie::Components::MapComponent>();
-        std::vector<std::vector<int>> map = mapComponent->getMap();
+        std::vector<std::vector<Components::OBJECT>> map = mapComponent->getMap();
 
         createWallMap(map, mapComponent->getDimension());
         if (mapComponent->getType() == Indie::Components::MAP_TYPE::RANDOM)
@@ -32,11 +32,11 @@ void Indie::MapGenerator::generate(Indie::EntityManager &entityManager, Indie::E
         for (int i = mapComponent->getDimension().Y - 1; i >= 0; i--) {
             for (int j = 0; j < mapComponent->getDimension().X; j++) {
                 entityBuilder.createGround(irr::core::vector3df((irr::f32)(20 * j), 0, (irr::f32)(20 * i)), path + "ground.obj", path + "ground.png");
-                if (map[i][j] == (int)OBJECT::WALL_OUT)
+                if (map[i][j] == OBJECT::WALL_OUT)
                     entityBuilder.createWall(irr::core::vector3df((irr::f32)(20 * j), 20, (irr::f32)(20 * i)), path + "wall_side.obj", path + "wall_side.png", false);
-                else if (map[i][j] == (int)OBJECT::BOX)
+                else if (map[i][j] == OBJECT::BOX)
                     entityBuilder.createWall(irr::core::vector3df((irr::f32)(20 * j), 20, (irr::f32)(20 * i)), path + "box.obj", path + "box.png", false);
-                else if (map[i][j] == (int)OBJECT::WALL_IN)
+                else if (map[i][j] == OBJECT::WALL_IN)
                     entityBuilder.createWall(irr::core::vector3df((irr::f32)(20 * j), 20, (irr::f32)(20 * i)), path + "wall_middle.obj", path + "wall_middle.png", false);
             }
         }
@@ -44,29 +44,29 @@ void Indie::MapGenerator::generate(Indie::EntityManager &entityManager, Indie::E
     }
 }
 
-void Indie::MapGenerator::createWallMap(std::vector<std::vector<int>> &map, irr::core::vector2di dimension)
+void Indie::MapGenerator::createWallMap(std::vector<std::vector<Indie::Components::OBJECT>> &map, irr::core::vector2di dimension)
 {
     for (int i = dimension.Y - 1; i >= 0; i--) {
         for (int j = 0; j < dimension.X; j++) {
             if (i == 0 || j == 0 || i == dimension.Y - 1 || j == dimension.X - 1)
-                map[i][j] = (int)OBJECT::WALL_OUT;
+                map[i][j] = OBJECT::WALL_OUT;
         }
     }
 }
 
-void Indie::MapGenerator::createDefaultMap(std::vector<std::vector<int>> &map, irr::core::vector2di dimension)
+void Indie::MapGenerator::createDefaultMap(std::vector<std::vector<Indie::Components::OBJECT>> &map, irr::core::vector2di dimension)
 {
     for (int i = 1; i < dimension.Y - 1; i++) {
         for (int j = 1; j < dimension.X - 1; j++) {
             if (dimension.X % 2 == 1 || dimension.Y % 2 == 1)
-                map[i][j] = (j % 2 == 0 && i % 2 == 0) ? (int)OBJECT::BOX : (int)OBJECT::WALL_IN;
+                map[i][j] = (j % 2 == 0 && i % 2 == 0) ? OBJECT::BOX : OBJECT::WALL_IN;
             else
-                map[i][j] = (j % 2 == 0 && i % 2 == 0 && i < dimension.X - 2 && j < dimension.Y - 2) ? (int)OBJECT::BOX : (int)OBJECT::WALL_IN;
+                map[i][j] = (j % 2 == 0 && i % 2 == 0 && i < dimension.X - 2 && j < dimension.Y - 2) ? OBJECT::BOX : OBJECT::WALL_IN;
         }
     }
 }
 
-void Indie::MapGenerator::createRandomMap(std::vector<std::vector<int>> &map, irr::core::vector2di dimension)
+void Indie::MapGenerator::createRandomMap(std::vector<std::vector<Indie::Components::OBJECT>> &map, irr::core::vector2di dimension)
 {
     std::srand((unsigned int)std::time(nullptr));
     int random = 0;
@@ -75,46 +75,46 @@ void Indie::MapGenerator::createRandomMap(std::vector<std::vector<int>> &map, ir
         for (int j = 1; j < dimension.X - 1; j++) {
             random = 1 + std::rand()/((RAND_MAX + 1u) / 100);
             if (random <= 50)
-                map[i][j] = (int)OBJECT::WALL_IN;
+                map[i][j] = OBJECT::WALL_IN;
             else {
                 random = 1 + std::rand()/((RAND_MAX + 1u) / 100);
-                map[i][j] = (random <= 40) ? (int)OBJECT::BOX : (int)OBJECT::VOID;
+                map[i][j] = (random <= 40) ? OBJECT::BOX : OBJECT::VOID;
             }
         }
     }
 }
 
-void Indie::MapGenerator::createEmptyMap(std::vector<std::vector<int>> &map, irr::core::vector2di dimension)
+void Indie::MapGenerator::createEmptyMap(std::vector<std::vector<Indie::Components::OBJECT>> &map, irr::core::vector2di dimension)
 {
     for (int i = 1; i < dimension.Y - 1; i++) {
         for (int j = 1; j < dimension.X - 1; j++) {
-            map[i][j] = (int)OBJECT::VOID;
+            map[i][j] = OBJECT::VOID;
         }
     }
 }
 
-void Indie::MapGenerator::setSpawn(std::vector<std::vector<int>> &map, irr::core::vector2di dimension)
+void Indie::MapGenerator::setSpawn(std::vector<std::vector<Indie::Components::OBJECT>> &map, irr::core::vector2di dimension)
 {
-    map[1][1] = (int)OBJECT::VOID;
-    map[1][2] = (int)OBJECT::VOID;
-    map[2][1] = (int)OBJECT::VOID;
-    map[1][dimension.X - 2] = (int)OBJECT::VOID;
-    map[1][dimension.X - 3] = (int)OBJECT::VOID;
-    map[2][dimension.X - 2] = (int)OBJECT::VOID;
-    map[dimension.Y - 2][dimension.X - 2] = (int)OBJECT::VOID;
-    map[dimension.Y - 2][dimension.X - 3] = (int)OBJECT::VOID;
-    map[dimension.Y - 3][dimension.X - 2] = (int)OBJECT::VOID;
-    map[dimension.Y - 2][1] = (int)OBJECT::VOID;
-    map[dimension.Y - 2][2] = (int)OBJECT::VOID;
-    map[dimension.Y - 3][1] = (int)OBJECT::VOID;
+    map[1][1] = OBJECT::VOID;
+    map[1][2] = OBJECT::VOID;
+    map[2][1] = OBJECT::VOID;
+    map[1][dimension.X - 2] = OBJECT::VOID;
+    map[1][dimension.X - 3] = OBJECT::VOID;
+    map[2][dimension.X - 2] = OBJECT::VOID;
+    map[dimension.Y - 2][dimension.X - 2] = OBJECT::VOID;
+    map[dimension.Y - 2][dimension.X - 3] = OBJECT::VOID;
+    map[dimension.Y - 3][dimension.X - 2] = OBJECT::VOID;
+    map[dimension.Y - 2][1] = OBJECT::VOID;
+    map[dimension.Y - 2][2] = OBJECT::VOID;
+    map[dimension.Y - 3][1] = OBJECT::VOID;
     if (dimension.X >= 11  && dimension.Y >= 11) {
-        map[1][3] = (int)OBJECT::VOID;
-        map[3][1] = (int)OBJECT::VOID;
-        map[3][dimension.X - 2] = (int)OBJECT::VOID;
-        map[1][dimension.X - 4] = (int)OBJECT::VOID;
-        map[dimension.Y - 2][dimension.X - 4] = (int)OBJECT::VOID;
-        map[dimension.Y - 4][dimension.X - 2] = (int)OBJECT::VOID;
-        map[dimension.Y - 2][3] = (int)OBJECT::VOID;
-        map[dimension.Y - 4][1] = (int)OBJECT::VOID;
+        map[1][3] = OBJECT::VOID;
+        map[3][1] = OBJECT::VOID;
+        map[3][dimension.X - 2] = OBJECT::VOID;
+        map[1][dimension.X - 4] = OBJECT::VOID;
+        map[dimension.Y - 2][dimension.X - 4] = OBJECT::VOID;
+        map[dimension.Y - 4][dimension.X - 2] = OBJECT::VOID;
+        map[dimension.Y - 2][3] = OBJECT::VOID;
+        map[dimension.Y - 4][1] = OBJECT::VOID;
     }
 }

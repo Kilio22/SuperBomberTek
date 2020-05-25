@@ -9,6 +9,7 @@
 #define BOMBDROPSYSTEM_HPP_
 
 #include "ISystem.hpp"
+#include "Components.h"
 #include "EntityManager.hpp"
 #include "ContextManager.hpp"
 
@@ -25,6 +26,7 @@ namespace Indie::Systems
         private:
             bool hasBombAtPosition(EntityManager &entityManager, irr::core::vector3df position) const;
             int getCenter(int value) const;
+            std::vector<std::vector<Indie::Components::OBJECT>> updateMap(std::vector<std::vector<Indie::Components::OBJECT>> currentMap, irr::f32 midX, irr::f32 midZ) const;
     };
 }
 
