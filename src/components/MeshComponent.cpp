@@ -8,8 +8,8 @@
 #include "MeshComponent.hpp"
 #include "Exceptions.h"
 
-const std::string Indie::Components::MeshComponent::STAND_MESH_PATH = "../ressources/static_mesh/character/red.obj";
-const std::string Indie::Components::MeshComponent::RUN_MESH_PATH = "../ressources/animated_mesh/character/untitled_walk.b3d";
+const std::string Indie::Components::MeshComponent::STAND_MESH_PATH = "../ressources/animated_mesh/character/character_idle.b3d";
+const std::string Indie::Components::MeshComponent::RUN_MESH_PATH = "../ressources/animated_mesh/character/character_walk.b3d";
 
 Indie::Components::MeshComponent::MeshComponent(const ContextManager &contextManager, const std::string &texturePath)
 {
