@@ -14,29 +14,29 @@
 
 void Indie::GameEngine::setupMusicManager()
 {
-    Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().addMusic("../ressources/musics/main_menu.wav"); // id 0
-    Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().addMusic("../ressources/musics/level_select.wav"); // id 1
-    Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().mute(); // psk faut pas deconner c'est chiant à la longue
-    Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setMusic(0);
-    Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setVolume(25);
-    Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().playMusic();
+    ServiceLocator::getInstance().get<MusicManager>().addMusic("../ressources/musics/main_menu.wav"); // id 0
+    ServiceLocator::getInstance().get<MusicManager>().addMusic("../ressources/musics/level_select.wav"); // id 1
+    ServiceLocator::getInstance().get<MusicManager>().mute(); // psk faut pas deconner c'est chiant à la longue
+    ServiceLocator::getInstance().get<MusicManager>().setMusic(0);
+    ServiceLocator::getInstance().get<MusicManager>().setVolume(25);
+    ServiceLocator::getInstance().get<MusicManager>().playMusic();
 }
 
-void Indie::GameEngine::setupSceneManager(Indie::ContextManager &context)
+void Indie::GameEngine::setupSceneManager(ContextManager &context)
 {
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().addScene<Indie::MenuScene>(context); //id 0
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().addScene<Indie::TitleScene>(context); //id 1
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().addScene<Indie::GameScene>(context); //id 2
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setScene(2, context);
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(true);
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(true);
-    //Indie::ServiceLocator::getInstance().get<SceneManager>().setSubScene(1, context);
-    //Indie::ServiceLocator::getInstance().get<SceneManager>().setSubSceneUpdateActive(true);
-    //Indie::ServiceLocator::getInstance().get<SceneManager>().setSubSceneRenderActive(true);
+    ServiceLocator::getInstance().get<SceneManager>().addScene<MenuScene>(context); //id 0
+    ServiceLocator::getInstance().get<SceneManager>().addScene<TitleScene>(context); //id 1
+    ServiceLocator::getInstance().get<SceneManager>().addScene<GameScene>(context); //id 2
+    ServiceLocator::getInstance().get<SceneManager>().setScene(2, context);
+    ServiceLocator::getInstance().get<SceneManager>().setSceneUpdateActive(true);
+    ServiceLocator::getInstance().get<SceneManager>().setSceneRenderActive(true);
+    //ServiceLocator::getInstance().get<SceneManager>().setSubScene(1, context);
+    //ServiceLocator::getInstance().get<SceneManager>().setSubSceneUpdateActive(true);
+    //ServiceLocator::getInstance().get<SceneManager>().setSubSceneRenderActive(true);
 }
 
 Indie::GameEngine::GameEngine()
-    : context(Indie::ServiceLocator::getInstance().get<ContextManager>())
+    : context(ServiceLocator::getInstance().get<ContextManager>())
 {
 }
 
@@ -55,12 +55,13 @@ void Indie::GameEngine::startGame()
     while (context.getDevice()->run()) {
         currentTime = this->context.getDevice()->getTimer()->getTime();
         deltaTime = (irr::f32)(currentTime - lastTime) / 1000.f;
-        Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().update();
-        Indie::ServiceLocator::getInstance().get<SceneManager>().update(context, deltaTime);
+        std::cout << "Delta time: " << deltaTime << ", FPS: " << this->context.getDriver()->getFPS() << std::endl;
+        ServiceLocator::getInstance().get<MusicManager>().update();
+        ServiceLocator::getInstance().get<SceneManager>().update(context, deltaTime);
         lastTime = currentTime;
     }
     /* ================================================================================ */
     /* MEMORY STUFF */
-    Indie::ServiceLocator::getInstance().get<SceneManager>().drop();
+    ServiceLocator::getInstance().get<SceneManager>().drop();
     /* ================================================================================ */
 }
