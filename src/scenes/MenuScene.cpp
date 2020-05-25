@@ -51,10 +51,10 @@ void Indie::MenuScene::reset()
     init();
 }
 
-void Indie::MenuScene::update(irr::f32)
+void Indie::MenuScene::update(irr::f32 ticks)
 {
     for (size_t i = 0; i < parallax.size(); i++)
-        parallax[i].update();
+        parallax[i].update(ticks);
 }
 
 void Indie::MenuScene::renderPre3D()

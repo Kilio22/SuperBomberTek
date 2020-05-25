@@ -19,7 +19,7 @@ namespace Indie {
             ~Parallax() = default;
 
             void init(ContextManager &context, const std::string &filepath, irr::core::position2d<irr::s32> size, irr::core::position2d<float> vel);
-            void update();
+            void update(irr::f32 ticks);
             void draw(ContextManager &context);
             void setColor(irr::video::SColor color = irr::video::SColor(255,255,255,255));
 

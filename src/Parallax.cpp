@@ -20,10 +20,10 @@ void Indie::Parallax::init(ContextManager &context, const std::string &filepath,
     color = irr::video::SColor(255,255,255,255);
 }
 
-void Indie::Parallax::update()
+void Indie::Parallax::update(irr::f32 ticks)
 {
-    pos.X += vel.X;
-    pos.Y += vel.Y;
+    pos.X += vel.X * ticks;
+    pos.Y += vel.Y * ticks;
     pos.X =  (pos.X < -size.X) ? 0 : pos.X;
     pos.Y = (pos.Y < -size.Y) ? 0 : pos.Y;
     pos.X = (pos.X > size.X) ? 0 : pos.X;
