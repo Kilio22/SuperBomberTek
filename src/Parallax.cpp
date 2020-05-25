@@ -12,8 +12,8 @@ void Indie::Parallax::init(ContextManager &context, const std::string &filepath,
 {
     image = context.getDriver()->getTexture(filepath.c_str());
     pos = irr::core::position2d<float>(0, 0);
-    size = size;
-    vel = vel;
+    this->size = size;
+    this->vel = vel;
     if (!image) {
         throw Exceptions::FileNotFoundException(ERROR_STR, "File \"" + filepath + "\" not found.");
     }

@@ -61,6 +61,24 @@ bool Indie::EventHandler::isKeyReleased(irr::EKEY_CODE key) const
     return this->keysStatusReleased.at(key);
 }
 
+bool Indie::EventHandler::isAnyKeyPressed() const
+{
+    for (auto key : keysStatus) {
+        if (key)
+            return (true);
+    }
+    return (false);
+}
+
+bool Indie::EventHandler::isAnyKeyPressedAtOnce() const
+{
+    for (auto key : keysStatusOnce) {
+        if (key)
+            return (true);
+    }
+    return (false);
+}
+
 void Indie::EventHandler::resetKeys(void)
 {
     this->keysStatusOnce.assign(irr::KEY_KEY_CODES_COUNT, false);

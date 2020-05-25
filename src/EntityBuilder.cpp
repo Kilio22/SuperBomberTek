@@ -74,7 +74,7 @@ Indie::Entity *Indie::EntityBuilder::createWall(
 
 Indie::Entity *Indie::EntityBuilder::createBomb(
     const irr::core::vector3df &position, const std::string &modelPath,
-    const std::string &texturePath, int idOwner, u_int32_t range)
+    const std::string &texturePath, int idOwner, unsigned int range)
 {
     Entity *entity = this->entityManager.createEntity();
 

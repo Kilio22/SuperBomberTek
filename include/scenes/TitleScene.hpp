@@ -8,8 +8,10 @@
 #ifndef TITLESCENE_HPP_
 #define TITLESCENE_HPP_
 
+#include "EventHandler.hpp"
 #include "ContextManager.hpp"
 #include "IScene.hpp"
+#include "ServiceLocator.hpp"
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <math.h>

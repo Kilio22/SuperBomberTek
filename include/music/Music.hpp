@@ -20,6 +20,13 @@ class Music {
         Music(std::string filepath);
         ~Music() = default;
 
+        enum class Status : int {
+            Intro,
+            Loop,
+            Outro,
+            NotPlaying
+        };
+
         float getVolume() const;
         void setVolume(float volume);
         void loop();
@@ -32,16 +39,12 @@ class Music {
         void stopMusic();
         void restartMusic();
         void update();
+        void setStatus(Status);
+        Status getStatus();
 
     private:
-        enum class CHUNKS : int {
-            Intro,
-            Loop,
-            Outro
-        };
-
         std::vector<std::unique_ptr<sf::Music>> musics;
-        CHUNKS currentMusic;
+        Status currentMusic;
         float volume;
         bool isMuted;
         bool isLooped;

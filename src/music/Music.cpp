@@ -20,7 +20,7 @@ Indie::Music::Music(std::string filepath)
     this->isMuted = false;
     this->isLooped = false;
     this->isPlaying = false;
-    this->currentMusic = CHUNKS::Intro;
+    this->currentMusic = Status::Intro;
     if (!intro->openFromFile(filepath + "_intro" + extension))
         throw Indie::Exceptions::FileNotFoundException(ERROR_STR, "File \"" + filepath + "intro" + extension + "\" not found.");
     if (!loop->openFromFile(filepath + "_loop" + extension))
@@ -85,7 +85,7 @@ void Indie::Music::stopMusic()
 {
     for (size_t i = 0; i < musics.size(); i++)
         musics[i]->stop();
-    currentMusic = CHUNKS::Intro;
+    currentMusic = Status::Intro;
     isPlaying = false;
 }
 
@@ -99,26 +99,26 @@ void Indie::Music::update()
 {
     if (!isPlaying)
         return;
-    musics[(int)CHUNKS::Loop]->setLoop(isLooped);
+    musics[(int)Status::Loop]->setLoop(isLooped);
     if (musics[(int)currentMusic]->getStatus() == sf::SoundSource::Status::Stopped) {
         switch (currentMusic) {
-        case CHUNKS::Intro:
-            musics[(int)CHUNKS::Loop]->stop();
-            musics[(int)CHUNKS::Loop]->play();
-            musics[(int)CHUNKS::Loop]->setLoop(isLooped);
-            currentMusic = CHUNKS::Loop;
+        case Status::Intro:
+            musics[(int)Status::Loop]->stop();
+            musics[(int)Status::Loop]->play();
+            musics[(int)Status::Loop]->setLoop(isLooped);
+            currentMusic = Status::Loop;
             break;
-        case CHUNKS::Loop:
+        case Status::Loop:
             if (!isLooped) {
-                musics[(int)CHUNKS::Outro]->stop();
-                musics[(int)CHUNKS::Outro]->play();
-                currentMusic = CHUNKS::Outro;
+                musics[(int)Status::Outro]->stop();
+                musics[(int)Status::Outro]->play();
+                currentMusic = Status::Outro;
             } else {
                 musics[(int)currentMusic]->setLoop(isLooped);
                 musics[(int)currentMusic]->play();
             }
             break;
-        case CHUNKS::Outro:
+        case Status::Outro:
             stopMusic();
             break;
         default:
@@ -126,4 +126,22 @@ void Indie::Music::update()
             break;
         }
     }
+}
+
+Indie::Music::Status Indie::Music::getStatus()
+{
+    if (!isPlaying)
+        return Music::Status::NotPlaying;
+    return currentMusic;
+}
+
+void Indie::Music::setStatus(Indie::Music::Status status)
+{
+    if (status == Status::NotPlaying)
+        return;
+    restartMusic();
+    if (status == Status::Loop)
+        musics[0]->stop();
+    if (status == Status::Outro)
+        musics[1]->stop();
 }

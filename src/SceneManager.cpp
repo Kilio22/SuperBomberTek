@@ -25,17 +25,6 @@ std::shared_ptr<Indie::IScene> Indie::SceneManager::getSceneById(size_t id)
     return (scenes[id]);
 }
 
- template <typename T> T *Indie::SceneManager::getScene() {
-    for (size_t i = 0; i < scenes.size(); i++) {
-        T *scene = dynamic_cast<T*>(scenes[i]);
-        if (scene)
-            return (scene);
-    }
-    //TODO
-    //throw SceneNotFound(ERROR_STR, typeid(T).name(), + " isn't a valid Scene.");
-    return NULL;
-}
-
 void Indie::SceneManager::removeScene(size_t id)
 {
     if (id >= scenes.size())

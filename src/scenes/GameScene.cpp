@@ -45,8 +45,7 @@ void Indie::GameScene::init()
 
     camera->setPosition(irr::core::vector3df(irr::f32(139.371), irr::f32(170.129), irr::f32(-24.6459)));
     camera->setRotation(irr::core::vector3df(irr::f32(41.553), irr::f32(359.176), irr::f32(-90)));
-    camera->setTarget(irr::core::vector3df(irr::f32(139.24), irr::f32(-0.34), irr::f32(116.47)));
-    device->setEventReceiver(&EventHandler::getInstance());
+    camera->setTarget(irr::core::vector3df(irr::f32(0), irr::f32(0), irr::f32(0)));
 
     driver->setFog(irr::video::SColor(10, 255, 255, 255), irr::video::EFT_FOG_LINEAR, 200.0f, 2000.0f, 0.005f, false, false);
     sceneManager->addLightSceneNode(camera, irr::core::vector3df(0, 0, 0), irr::video::SColorf(0.1f, 0.1f, 0.1f, 0.0f), 700.0f);

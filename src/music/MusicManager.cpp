@@ -90,3 +90,13 @@ void Indie::MusicManager::update()
         musics[i]->update();
     }
 }
+
+Indie::Music::Status Indie::MusicManager::getStatus()
+{
+    return musics[currentMusic]->getStatus();
+}
+
+void Indie::MusicManager::setStatus(Indie::Music::Status status)
+{
+    musics[currentMusic]->setStatus(status);
+}

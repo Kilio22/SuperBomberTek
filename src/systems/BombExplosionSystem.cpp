@@ -34,7 +34,7 @@ void Indie::Systems::BombExplosionSystem::explodeBomb(std::vector<std::vector<OB
     auto player = entityManager.getById(bomb->getIdOwner())->getComponent<PlayerComponent>();
     int mapX = position->getPosition().X / 20;
     int mapZ = position->getPosition().Z / 20;
-    u_int32_t range = bomb->getRange();
+    unsigned int range = bomb->getRange();
 
     this->explodeRight(map, range, mapX, mapZ);
     this->explodeLeft(map, range, mapX, mapZ);
@@ -43,13 +43,13 @@ void Indie::Systems::BombExplosionSystem::explodeBomb(std::vector<std::vector<OB
     player->setCurrentBombNb(player->getCurrentBombNb() + 1);
 }
 
-void Indie::Systems::BombExplosionSystem::explodeRight(std::vector<std::vector<OBJECT>> &map, u_int32_t range, int mapX, int mapZ) const
+void Indie::Systems::BombExplosionSystem::explodeRight(std::vector<std::vector<OBJECT>> &map, unsigned int range, int mapX, int mapZ) const
 {
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
 
     if (map[mapX + 1][mapZ] == OBJECT::WALL_OUT || map[mapX + 1][mapZ] == OBJECT::WALL_IN)
         return;
-    for (u_int32_t i = 0; i <= range; ++i) {
+    for (unsigned int i = 0; i <= range; ++i) {
         if (map[mapX + i][mapZ] == OBJECT::WALL_OUT || map[mapX + i][mapZ] == OBJECT::WALL_IN)
             break;
         if (map[mapX + i][mapZ] == OBJECT::BOX) {
@@ -63,13 +63,13 @@ void Indie::Systems::BombExplosionSystem::explodeRight(std::vector<std::vector<O
     }
 }
 
-void Indie::Systems::BombExplosionSystem::explodeLeft(std::vector<std::vector<OBJECT>> &map, u_int32_t range, int mapX, int mapZ) const
+void Indie::Systems::BombExplosionSystem::explodeLeft(std::vector<std::vector<OBJECT>> &map, unsigned int range, int mapX, int mapZ) const
 {
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
 
     if (map[mapX - 1][mapZ] == OBJECT::WALL_OUT || map[mapX - 1][mapZ] == OBJECT::WALL_IN)
         return;
-    for (u_int32_t i = 0; i <= range; ++i) {
+    for (unsigned int i = 0; i <= range; ++i) {
         if (map[mapX - i][mapZ] == OBJECT::WALL_OUT || map[mapX - i][mapZ] == OBJECT::WALL_IN)
             break;
         if (map[mapX - i][mapZ] == OBJECT::BOX) {
@@ -83,13 +83,13 @@ void Indie::Systems::BombExplosionSystem::explodeLeft(std::vector<std::vector<OB
     }
 }
 
-void Indie::Systems::BombExplosionSystem::explodeUp(std::vector<std::vector<OBJECT>> &map, u_int32_t range, int mapX, int mapZ) const
+void Indie::Systems::BombExplosionSystem::explodeUp(std::vector<std::vector<OBJECT>> &map, unsigned int range, int mapX, int mapZ) const
 {
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
 
     if (map[mapX][mapZ + 1] == OBJECT::WALL_OUT || map[mapX][mapZ + 1] == OBJECT::WALL_IN)
         return;
-    for (u_int32_t i = 0; i <= range; ++i) {
+    for (unsigned int i = 0; i <= range; ++i) {
         if (map[mapX][mapZ + i] == OBJECT::WALL_OUT || map[mapX][mapZ + i] == OBJECT::WALL_IN)
             break;
         if (map[mapX][mapZ + i] == OBJECT::BOX) {
@@ -103,13 +103,13 @@ void Indie::Systems::BombExplosionSystem::explodeUp(std::vector<std::vector<OBJE
     }
 }
 
-void Indie::Systems::BombExplosionSystem::explodeDown(std::vector<std::vector<OBJECT>> &map, u_int32_t range, int mapX, int mapZ) const
+void Indie::Systems::BombExplosionSystem::explodeDown(std::vector<std::vector<OBJECT>> &map, unsigned int range, int mapX, int mapZ) const
 {
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
 
     if (map[mapX][mapZ - 1] == OBJECT::WALL_OUT || map[mapX][mapZ - 1] == OBJECT::WALL_IN)
         return;
-    for (u_int32_t i = 0; i <= range; ++i) {
+    for (unsigned int i = 0; i <= range; ++i) {
         if (map[mapX][mapZ - i] == OBJECT::WALL_OUT || map[mapX][mapZ - i] == OBJECT::WALL_IN)
             break;
         if (map[mapX][mapZ - i] == OBJECT::BOX) {

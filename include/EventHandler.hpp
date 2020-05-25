@@ -25,6 +25,8 @@ namespace Indie
             bool isKeyPressed(irr::EKEY_CODE key) const;
             bool isKeyPressedAtOnce(irr::EKEY_CODE key) const;
             bool isKeyReleased(irr::EKEY_CODE key) const;
+            bool isAnyKeyPressed() const;
+            bool isAnyKeyPressedAtOnce() const;
 
             void resetKeys(void);
 

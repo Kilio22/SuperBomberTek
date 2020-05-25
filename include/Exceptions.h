@@ -14,5 +14,6 @@
 #include "SceneManagerException.hpp"
 #include "InvalidIndexException.hpp"
 #include "GameEngineException.hpp"
+#include "SceneNotFoundException.hpp"
 
 #endif /* !EXCEPTIONS_H_ */

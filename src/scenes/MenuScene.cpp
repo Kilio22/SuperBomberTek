@@ -54,7 +54,7 @@ void Indie::MenuScene::update(irr::f32)
 void Indie::MenuScene::renderPre3D()
 {
     for (size_t i = 0; i < parallax.size(); i++)
-        parallax[i].draw(this->context);
+        parallax[i].draw(context);
 }
 
 void Indie::MenuScene::renderPost3D() {}

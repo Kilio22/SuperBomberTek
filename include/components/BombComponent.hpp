@@ -14,16 +14,16 @@ namespace Indie::Components {
 
 class BombComponent {
 public:
-    BombComponent(int idOwner, u_int32_t range);
+    BombComponent(int idOwner, unsigned int range);
 
-    u_int32_t getRange() const;
+    unsigned int getRange() const;
     int getIdOwner() const;
 
-    void setRange(u_int32_t range);
+    void setRange(unsigned int range);
 
 private:
     int idOwner;
-    u_int32_t range;
+    unsigned int range;
 };
 
 } // namespace Indie::Components

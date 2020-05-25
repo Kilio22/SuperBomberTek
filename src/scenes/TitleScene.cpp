@@ -8,6 +8,16 @@
 #include "TitleScene.hpp"
 #include "Exceptions.h"
 
+static void skipScene(Indie::ContextManager &context)
+{
+    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setScene(3, context);
+    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(true);
+    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(true);
+    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneUpdateActive(false);
+    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneRenderActive(false);
+    Indie::EventHandler::getInstance().resetKeys();
+}
+
 const double Indie::TitleScene::updateRate = ((2 * M_PI) / 96) / 32;
 
 Indie::TitleScene::TitleScene(ContextManager &context)
@@ -35,10 +45,14 @@ void Indie::TitleScene::reset()
     init();
 }
 
-void Indie::TitleScene::update(irr::f32)
+void Indie::TitleScene::update(irr::f32 ticks)
 {
-    this->offsetY = (this->offsetY < 2 * M_PI) ? this->offsetY + this->updateRate : 0;
-    this->offsetAlpha = (this->offsetAlpha < 2 * M_PI) ? this->offsetAlpha + 0.001 : 0;
+    if (EventHandler::getInstance().isAnyKeyPressedAtOnce()) {
+        skipScene(context);
+    }
+//    if (handler.getInstance().isKeyPressed(irr::EKEY_CODE::))
+    this->offsetY = (this->offsetY < 2 * M_PI) ? this->offsetY + this->updateRate * ticks : 0;
+    this->offsetAlpha = (this->offsetAlpha < 2 * M_PI) ? this->offsetAlpha + 0.001 * ticks : 0;
 }
 
 void Indie::TitleScene::renderPre3D() {}

@@ -33,6 +33,8 @@ class MusicManager {
         void stopMusic();
         void restartMusic();
         void update();
+        Music::Status getStatus();
+        void setStatus(Music::Status);
 
     private:
         std::vector<std::unique_ptr<Indie::Music>> musics;

@@ -7,13 +7,13 @@
 
 #include "BombComponent.hpp"
 
-Indie::Components::BombComponent::BombComponent(int idOwner, u_int32_t range)
+Indie::Components::BombComponent::BombComponent(int idOwner, unsigned int range)
     : idOwner(idOwner)
     , range(range)
 {
 }
 
-u_int32_t Indie::Components::BombComponent::getRange() const
+unsigned int Indie::Components::BombComponent::getRange() const
 {
     return this->range;
 }
@@ -23,7 +23,7 @@ int Indie::Components::BombComponent::getIdOwner() const
     return this->idOwner;
 }
 
-void Indie::Components::BombComponent::setRange(u_int32_t range)
+void Indie::Components::BombComponent::setRange(unsigned int range)
 {
     this->range = range;
 }
