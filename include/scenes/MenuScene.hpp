@@ -12,6 +12,7 @@
 #include "Parallax.hpp"
 #include "ContextManager.hpp"
 #include <vector>
+#include <memory>
 
 namespace Indie {
     class MenuScene : public IScene {

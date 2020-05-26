@@ -57,6 +57,7 @@ Indie::Entity *Indie::EntityBuilder::createAi(
     entity->addComponent<MeshComponent>(contextManager, texturePath);
     entity->addComponent<RotationComponent>();
     entity->addComponent<PlayerComponent>();
+    entity->addComponent<PathFinderComponent>();
     return entity;
 }
 
