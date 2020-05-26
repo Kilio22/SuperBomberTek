@@ -6,11 +6,7 @@
 */
 
 #include "GameEngine.hpp"
-#include "GameScene.hpp"
-#include "MenuScene.hpp"
-#include "MainMenuScene.hpp"
-#include "SplashScene.hpp"
-#include "TitleScene.hpp"
+#include "Scenes.hpp"
 #include "SceneManager.hpp"
 #include "ServiceLocator.hpp"
 
