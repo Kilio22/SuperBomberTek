@@ -37,6 +37,9 @@ void Indie::Systems::BombExplosionSystem::explodeBomb(std::vector<std::vector<OB
     int mapZ = position->getPosition().Z / 20;
     unsigned int range = bomb->getRange();
 
+    if (bomb->hasExploded() == true)
+        return;
+    bomb->setExploded(true);
     this->explodeRight(entityManager, map, range, mapX, mapZ);
     this->explodeLeft(entityManager, map, range, mapX, mapZ);
     this->explodeUp(entityManager, map, range, mapX, mapZ);
