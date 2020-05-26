@@ -20,7 +20,7 @@ Indie::Entity *Indie::EntityBuilder::createGround(
     Entity *entity = this->entityManager.createEntity();
 
     entity->addComponent<PositionComponent>(position.X, position.Y, position.Z);
-    entity->addComponent<RenderComponent>(modelPath, texturePath, this->contextManager, position);
+    entity->addComponent<RenderComponent>(modelPath, texturePath, this->contextManager, position, true);
     return entity;
 }
 
@@ -31,7 +31,7 @@ Indie::Entity *Indie::EntityBuilder::createPlayer(
     Entity *entity = this->entityManager.createEntity();
 
     entity->addComponent<PositionComponent>(position.X, position.Y, position.Z);
-    entity->addComponent<RenderComponent>(modelPath, texturePath, this->contextManager, position);
+    entity->addComponent<RenderComponent>(modelPath, texturePath, this->contextManager, position, true);
     entity->addComponent<HitboxComponent>(position, this->contextManager);
     entity->addComponent<InputComponent>(keys);
     entity->addComponent<MoveComponent>();
@@ -49,7 +49,7 @@ Indie::Entity *Indie::EntityBuilder::createAi(
     Entity *entity = this->entityManager.createEntity();
 
     entity->addComponent<PositionComponent>(position.X, position.Y, position.Z);
-    entity->addComponent<RenderComponent>(modelPath, texturePath, this->contextManager, position);
+    entity->addComponent<RenderComponent>(modelPath, texturePath, this->contextManager, position, true);
     entity->addComponent<HitboxComponent>(position, this->contextManager);
     entity->addComponent<AIComponent>();
     entity->addComponent<MoveComponent>();
@@ -67,7 +67,7 @@ Indie::Entity *Indie::EntityBuilder::createWall(
     Entity *entity = this->entityManager.createEntity();
 
     entity->addComponent<PositionComponent>(position.X, position.Y, position.Z);
-    entity->addComponent<RenderComponent>(modelPath, texturePath, this->contextManager, position);
+    entity->addComponent<RenderComponent>(modelPath, texturePath, this->contextManager, position, true);
     entity->addComponent<WallComponent>(canBeDestroyed);
     return entity;
 }
@@ -79,7 +79,7 @@ Indie::Entity *Indie::EntityBuilder::createBomb(
     Entity *entity = this->entityManager.createEntity();
 
     entity->addComponent<PositionComponent>(position.X, position.Y, position.Z);
-    entity->addComponent<RenderComponent>(modelPath, texturePath, this->contextManager, position);
+    entity->addComponent<RenderComponent>(modelPath, texturePath, this->contextManager, position, true);
     entity->addComponent<BombComponent>(idOwner, range);
     entity->addComponent<TimerComponent>(3.f);
     return entity;
@@ -98,18 +98,20 @@ Indie::Entity *Indie::EntityBuilder::createLava(const irr::core::vector3df &posi
     Entity *entity = this->entityManager.createEntity();
 
     entity->addComponent<PositionComponent>(position.X, position.Y, position.Z);
-    entity->addComponent<RenderComponent>(modelPath, texturePath, this->contextManager, position);
+    entity->addComponent<RenderComponent>(modelPath, texturePath, this->contextManager, position, true);
     entity->addComponent<RotationComponent>(angle);
     entity->addComponent<TimerComponent>(2.f);
     return entity;
 }
 
-Indie::Entity *Indie::EntityBuilder::createPowerUp(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath, Components::POWERUP_TYPE type)
+Indie::Entity *Indie::EntityBuilder::createPowerUp(irr::core::vector3df position, const std::string &modelPath, const std::string &texturePath, Components::POWERUP_TYPE type)
 {
     Entity *entity = this->entityManager.createEntity();
 
+    position.Z -= 10;
     entity->addComponent<PositionComponent>(position.X, position.Y, position.Z);
-    entity->addComponent<RenderComponent>(modelPath, texturePath, this->contextManager, position);
+    entity->addComponent<RenderComponent>(modelPath, texturePath, this->contextManager, position, false);
+    entity->addComponent<RotationComponent>(0, 50);
     entity->addComponent<PowerUpComponent>(type);
     return entity;
 }
