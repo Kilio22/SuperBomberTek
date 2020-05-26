@@ -55,7 +55,8 @@ void Indie::Components::PathFinderComponent::getShortlessPath(irr::core::vector2
 {
     int value = (int)map[nextPos.Y][nextPos.X];
 
-    std::cout << "ici" << nextPos.X << " " << nextPos.Y << std::endl;
+    if (nextPos.X < 1 || nextPos.Y < 1 || nextPos.X > 14 || nextPos.Y > 14)
+        return;
 
     while (map[acPos.Y][acPos.X] != static_cast<OBJECT>(-99)) {
         map[nextPos.Y][nextPos.X] = static_cast<OBJECT>(-99);
