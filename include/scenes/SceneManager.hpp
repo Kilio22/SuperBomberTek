@@ -48,7 +48,7 @@ class SceneManager {
                 if (scene)
                     return (scene);
             }
-            throw SceneNotFound(ERROR_STR, typeid(T).name(), + " isn't a valid Scene.");
+            //throw SceneNotFound(ERROR_STR, typeid(T).name(), + " isn't a valid Scene.");
             return NULL;
         }
 
