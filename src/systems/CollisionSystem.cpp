@@ -29,6 +29,7 @@ void Indie::Systems::CollisionSystem::checkCollisionWithPowerUps(EntityManager &
 {
     if (this->checkCollisionWithPowerUp(entityManager, characterBoundingBox, Components::POWERUP_TYPE::BOMB_UP) == true) {
         playerComponent->setMaxBombNb(playerComponent->getMaxBombNb() + 1);
+        playerComponent->setCurrentBombNb(playerComponent->getCurrentBombNb() + 1);
         return;
     }
     if (this->checkCollisionWithPowerUp(entityManager, characterBoundingBox, Components::POWERUP_TYPE::FIRE_UP) == true) {
