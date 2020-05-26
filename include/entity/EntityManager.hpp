@@ -97,7 +97,7 @@ namespace Indie
             Entity *createEntity()
             {
                 ++this->count;
-                auto entity = std::make_unique<Entity>(this->count);
+                auto entity = std::make_unique<Entity>((int)this->count);
                 auto ptr = entity.get();
 
                 this->entities.push_back(std::move(entity));

@@ -111,7 +111,7 @@ Indie::Entity *Indie::EntityBuilder::createPowerUp(irr::core::vector3df position
     position.Z -= 10;
     entity->addComponent<PositionComponent>(position.X, position.Y, position.Z);
     entity->addComponent<RenderComponent>(modelPath, texturePath, this->contextManager, position, false);
-    entity->addComponent<RotationComponent>(0, 50);
+    entity->addComponent<RotationComponent>(0.f, 50.f);
     entity->addComponent<PowerUpComponent>(type);
     return entity;
 }

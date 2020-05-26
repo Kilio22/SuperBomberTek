@@ -24,15 +24,15 @@ void Indie::Systems::AISystem::onUpdate(irr::f32, EntityManager &entityManager) 
             auto moveComponent = entity->getComponent<Indie::Components::MoveComponent>();
             auto positionComponent = entity->getComponent<Indie::Components::PositionComponent>();
 
-            aiX = positionComponent->getPosition().X / 20;
-            aiY = positionComponent->getPosition().Y / 20;
+            aiX = (int)(positionComponent->getPosition().X / 20);
+            aiY = (int)(positionComponent->getPosition().Y / 20);
 
             if (aiX == aiComponent->getNextXDirection() && aiY == aiComponent->getNextYDirection()) {
                 aiComponent->setDirection(Indie::Components::DIRECTION::NONE);
                 return;
             }
 
-            if (aiComponent->getDirection() != Indie::Components::DIRECTION::NONE && aiComponent->hasMoved(irr::core::vector3df(aiX * 20, 20, aiY * 20), irr::core::vector3df(aiComponent->getNextXDirection() * 20, 20, aiComponent->getNextYDirection() * 20)) == false) {
+            if (aiComponent->getDirection() != Indie::Components::DIRECTION::NONE && aiComponent->hasMoved(irr::core::vector3df(aiX * 20.f, 20, aiY * 20.f), irr::core::vector3df(aiComponent->getNextXDirection() * 20.f, 20, aiComponent->getNextYDirection() * 20.f)) == false) {
                 moveComponent->setUp(aiComponent->isMoving(Indie::Components::DIRECTION::UP));
                 moveComponent->setDown(aiComponent->isMoving(Indie::Components::DIRECTION::DOWN));
                 moveComponent->setRight(aiComponent->isMoving(Indie::Components::DIRECTION::RIGHT));

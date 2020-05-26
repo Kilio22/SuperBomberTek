@@ -8,6 +8,7 @@
 #include "BombExplosionSystem.hpp"
 #include "EntityBuilder.hpp"
 #include "ServiceLocator.hpp"
+#include "IndieException.hpp"
 
 using namespace Indie::Components;
 
@@ -20,11 +21,13 @@ const std::map<Indie::Components::POWERUP_TYPE, std::pair<std::string, std::stri
 
 void Indie::Systems::BombExplosionSystem::onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const
 {
-    MapComponent *mapComponent;
+    MapComponent *mapComponent = nullptr;
     std::vector<std::vector<OBJECT>> map;
 
     for (auto entity : entityManager.each<MapComponent>())
         mapComponent = entity->getComponent<MapComponent>();
+    if (mapComponent == nullptr)
+        throw Exceptions::IndieException(ERROR_STR, "Map was not found.");
     map = mapComponent->getMap();
     for (auto entity : entityManager.each<BombComponent, PositionComponent, TimerComponent>()) {
         auto timer = entity->getComponent<TimerComponent>();
@@ -40,8 +43,8 @@ void Indie::Systems::BombExplosionSystem::explodeBomb(std::vector<std::vector<OB
     auto bomb = entity->getComponent<BombComponent>();
     auto position = entity->getComponent<PositionComponent>();
     auto player = entityManager.getById(bomb->getIdOwner())->getComponent<PlayerComponent>();
-    int mapX = position->getPosition().X / 20;
-    int mapZ = position->getPosition().Z / 20;
+    int mapX = (int)(position->getPosition().X / 20);
+    int mapZ = (int)(position->getPosition().Z / 20);
     unsigned int range = bomb->getRange();
 
     if (bomb->hasExploded() == true)
