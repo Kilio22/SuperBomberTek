@@ -41,7 +41,7 @@ void Indie::GameScene::init()
     Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setMusic(1);
     irr::scene::ICameraSceneNode *camera = sceneManager->addCameraSceneNodeFPS();
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
-    Indie::MapGenerator mapGenerator(entityBuilder, irr::core::vector2di(15 ,15), MAP_TYPE::DEFAULT, THEME::STONE);
+    Indie::MapGenerator mapGenerator(entityBuilder, irr::core::vector2di(15, 15), MAP_TYPE::DEFAULT, THEME::STONE);
 
     camera->setPosition(irr::core::vector3df(irr::f32(139.371), irr::f32(170.129), irr::f32(-24.6459)));
     camera->setRotation(irr::core::vector3df(irr::f32(41.553), irr::f32(359.176), irr::f32(-90)));

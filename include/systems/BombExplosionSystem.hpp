@@ -24,11 +24,12 @@ class BombExplosionSystem : public ISystem
 
     private:
         void explodeBomb(std::vector<std::vector<Components::OBJECT>> &map, EntityManager &entityManager, Entity *entity) const;
-        void explodeRight(std::vector<std::vector<Components::OBJECT>> &map, unsigned int range, int mapX, int mapZ) const;
-        void explodeLeft(std::vector<std::vector<Components::OBJECT>> &map, unsigned int range, int mapX, int mapZ) const;
-        void explodeUp(std::vector<std::vector<Components::OBJECT>> &map, unsigned int range, int mapX, int mapZ) const;
-        void explodeDown(std::vector<std::vector<Components::OBJECT>> &map, unsigned int range, int mapX, int mapZ) const;
+        void explodeRight(EntityManager &entityManager, std::vector<std::vector<Components::OBJECT>> &map, unsigned int range, int mapX, int mapZ) const;
+        void explodeLeft(EntityManager &entityManager, std::vector<std::vector<Components::OBJECT>> &map, unsigned int range, int mapX, int mapZ) const;
+        void explodeUp(EntityManager &entityManager, std::vector<std::vector<Components::OBJECT>> &map, unsigned int range, int mapX, int mapZ) const;
+        void explodeDown(EntityManager &entityManager, std::vector<std::vector<Components::OBJECT>> &map, unsigned int range, int mapX, int mapZ) const;
 
+        void explodeBox(EntityManager &entityManager, int mapX, int mapZ) const;
         void recursiveExplosion() const;
 };
 

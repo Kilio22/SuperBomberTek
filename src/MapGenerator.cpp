@@ -35,7 +35,7 @@ void Indie::MapGenerator::generate(Indie::EntityManager &entityManager, Indie::E
                 if (map[i][j] == OBJECT::WALL_OUT)
                     entityBuilder.createWall(irr::core::vector3df((irr::f32)(20 * j), 20, (irr::f32)(20 * i)), path + "wall_side.obj", path + "wall_side.png", false);
                 else if (map[i][j] == OBJECT::BOX)
-                    entityBuilder.createWall(irr::core::vector3df((irr::f32)(20 * j), 20, (irr::f32)(20 * i)), path + "box.obj", path + "box.png", false);
+                    entityBuilder.createWall(irr::core::vector3df((irr::f32)(20 * j), 20, (irr::f32)(20 * i)), path + "box.obj", path + "box.png", true);
                 else if (map[i][j] == OBJECT::WALL_IN)
                     entityBuilder.createWall(irr::core::vector3df((irr::f32)(20 * j), 20, (irr::f32)(20 * i)), path + "wall_middle.obj", path + "wall_middle.png", false);
             }

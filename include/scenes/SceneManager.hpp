@@ -24,12 +24,24 @@ class SceneManager {
         ~SceneManager() = default;
 
         template <typename T>
+        T *getScene() {
+            for (size_t i = 0; i < scenes.size(); i++) {
+                T *scene = dynamic_cast<T*>(scenes[i]);
+                if (scene)
+                    return (scene);
+            }
+            throw Exceptions::SceneNotFoundException(ERROR_STR, typeid(T).name(), + " isn't a valid Scene.");
+            return NULL;
+        }
+
+        template <typename T>
         void addScene(ContextManager &context) {
             IScene *scene = new T(context);
             std::shared_ptr<IScene> smartPtr(scene);
 
             scenes.push_back(smartPtr);
         }
+
         void removeScene(size_t id);
         void restartScene(size_t id);
         void restartScenes();
@@ -41,16 +53,6 @@ class SceneManager {
         void setSubSceneRenderActive(bool status);
         void update(ContextManager &contextManager, irr::f32 deltaTime);
         std::shared_ptr<IScene> getSceneById(size_t id);
-        template <typename T>
-        T *getScene() {
-            for (size_t i = 0; i < scenes.size(); i++) {
-                T *scene = dynamic_cast<T*>(scenes[i]);
-                if (scene)
-                    return (scene);
-            }
-            throw SceneNotFound(ERROR_STR, typeid(T).name(), + " isn't a valid Scene.");
-            return NULL;
-        }
 
     private:
         std::vector<std::shared_ptr<IScene>> scenes;

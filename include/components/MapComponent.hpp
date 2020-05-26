@@ -37,24 +37,24 @@ namespace Indie::Components
     class MapComponent
     {
         public:
-            MapComponent(const irr::core::vector2di &dimension, const Indie::Components::MAP_TYPE &type, const Indie::Components::THEME &theme);
+            MapComponent(const irr::core::vector2di &dimension = irr::core::vector2di(15, 15), MAP_TYPE type = MAP_TYPE::DEFAULT, THEME theme = THEME::STONE);
             ~MapComponent() = default;
 
-            const Indie::Components::MAP_TYPE &getType() const;
-            const Indie::Components::THEME  &getTheme() const;
+            const MAP_TYPE &getType() const;
+            const THEME  &getTheme() const;
             const irr::core::vector2di &getDimension() const;
-            const std::vector<std::vector<Components::OBJECT>> &getMap() const;
+            const std::vector<std::vector<OBJECT>> &getMap() const;
 
-            void setType(Indie::Components::MAP_TYPE type);
-            void setTheme(Indie::Components::THEME theme);
-            void setDimension(irr::core::vector2di dimension);
-            void setMap(std::vector<std::vector<Components::OBJECT>> map);
+            void setType(MAP_TYPE type);
+            void setTheme(THEME theme);
+            void setDimension(const irr::core::vector2di &dimension);
+            void setMap(const std::vector<std::vector<OBJECT>> &map);
 
         private:
-            Indie::Components::MAP_TYPE type = Indie::Components::MAP_TYPE::DEFAULT;
-            Indie::Components::THEME theme = Indie::Components::THEME::STONE;
-            irr::core::vector2di dimension = irr::core::vector2di(15, 15);
-            std::vector<std::vector<Components::OBJECT>> map;
+            irr::core::vector2di dimension;
+            MAP_TYPE type;
+            THEME theme;
+            std::vector<std::vector<OBJECT>> map;
     };
 }
 

@@ -21,6 +21,7 @@ namespace Indie
             ~MapGenerator() = default;
 
             void generate(Indie::EntityManager &entityManager, Indie::EntityBuilder &entityBuilder);
+
         private:
             void createWallMap(std::vector<std::vector<Components::OBJECT>> &map, irr::core::vector2di dimension);
             void createDefaultMap(std::vector<std::vector<Components::OBJECT>> &map, irr::core::vector2di dimension);
@@ -29,7 +30,5 @@ namespace Indie
             void setSpawn(std::vector<std::vector<Components::OBJECT>> &map, irr::core::vector2di dimension);
     };
 }
-
-
 
 #endif /* !MAPGENERATOR_HPP_ */

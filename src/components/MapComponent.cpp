@@ -7,13 +7,11 @@
 
 #include "MapComponent.hpp"
 
-Indie::Components::MapComponent::MapComponent(const irr::core::vector2di &dimension, const Indie::Components::MAP_TYPE &type, const Indie::Components::THEME &theme)
-    : type(type), theme(theme), dimension(dimension)
+Indie::Components::MapComponent::MapComponent(const irr::core::vector2di &dimension, Indie::Components::MAP_TYPE type, Indie::Components::THEME theme)
+    : dimension(dimension), type(type), theme(theme), map(dimension.Y)
 {
-    std::vector<std::vector<Components::OBJECT>> matrix(dimension.Y);
     for (int i = 0 ; i < dimension.Y; i++)
-        matrix[i].resize(dimension.X);
-    this->map = matrix;
+        this->map[i].resize(dimension.X);
 }
 
 const Indie::Components::MAP_TYPE &Indie::Components::MapComponent::getType() const
@@ -46,12 +44,12 @@ void Indie::Components::MapComponent::setTheme(Indie::Components::THEME theme)
     this->theme = theme;
 }
 
-void Indie::Components::MapComponent::setDimension(irr::core::vector2di dimension)
+void Indie::Components::MapComponent::setDimension(const irr::core::vector2di &dimension)
 {
     this->dimension = dimension;
 }
 
-void Indie::Components::MapComponent::setMap(std::vector<std::vector<Indie::Components::OBJECT>> map)
+void Indie::Components::MapComponent::setMap(const std::vector<std::vector<Indie::Components::OBJECT>> &map)
 {
     this->map = map;
 }

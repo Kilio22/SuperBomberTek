@@ -13,18 +13,19 @@ using namespace Indie::Components;
 
 void Indie::Systems::BombExplosionSystem::onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const
 {
+    MapComponent *mapComponent;
     std::vector<std::vector<OBJECT>> map;
 
     for (auto entity : entityManager.each<MapComponent>())
-        map = entity->getComponent<MapComponent>()->getMap();
+        mapComponent = entity->getComponent<MapComponent>();
+    map = mapComponent->getMap();
     for (auto entity : entityManager.each<BombComponent, PositionComponent, TimerComponent>()) {
         auto timer = entity->getComponent<TimerComponent>();
 
-        if (timer->getTimePassed() >= timer->getTimeToEnd()) {
-            std::cout << "BimBamBoum" << std::endl;
+        if (timer->getTimePassed() >= timer->getTimeToEnd())
             this->explodeBomb(map, entityManager, entity);
-        }
     }
+    mapComponent->setMap(map);
 }
 
 void Indie::Systems::BombExplosionSystem::explodeBomb(std::vector<std::vector<OBJECT>> &map, EntityManager &entityManager, Entity *entity) const
@@ -36,25 +37,27 @@ void Indie::Systems::BombExplosionSystem::explodeBomb(std::vector<std::vector<OB
     int mapZ = position->getPosition().Z / 20;
     unsigned int range = bomb->getRange();
 
-    this->explodeRight(map, range, mapX, mapZ);
-    this->explodeLeft(map, range, mapX, mapZ);
-    this->explodeUp(map, range, mapX, mapZ);
-    this->explodeDown(map, range, mapX, mapZ);
+    this->explodeRight(entityManager, map, range, mapX, mapZ);
+    this->explodeLeft(entityManager, map, range, mapX, mapZ);
+    this->explodeUp(entityManager, map, range, mapX, mapZ);
+    this->explodeDown(entityManager, map, range, mapX, mapZ);
     player->setCurrentBombNb(player->getCurrentBombNb() + 1);
 }
 
-void Indie::Systems::BombExplosionSystem::explodeRight(std::vector<std::vector<OBJECT>> &map, unsigned int range, int mapX, int mapZ) const
+void Indie::Systems::BombExplosionSystem::explodeRight(EntityManager &entityManager, std::vector<std::vector<OBJECT>> &map, unsigned int range, int mapX, int mapZ) const
 {
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
 
     if (map[mapX + 1][mapZ] == OBJECT::WALL_OUT || map[mapX + 1][mapZ] == OBJECT::WALL_IN)
         return;
     for (unsigned int i = 0; i <= range; ++i) {
+        // if (map[mapX + i][mapZ] == OBJECT::BOMB)
+        //     return this->recursiveExplosion();
         if (map[mapX + i][mapZ] == OBJECT::WALL_OUT || map[mapX + i][mapZ] == OBJECT::WALL_IN)
             break;
         if (map[mapX + i][mapZ] == OBJECT::BOX) {
             map[mapX + i][mapZ] = OBJECT::LAVA;
-            // remove box
+            this->explodeBox(entityManager, mapX + i, mapZ);
             entityBuilder.createLava(irr::core::vector3df((irr::f32)((mapX + i) * 20), 20, (irr::f32)(mapZ * 20)), "../ressources/static_mesh/effects/lava.obj", "../ressources/static_mesh/effects/lava.png", 90.f);
             break;
         }
@@ -63,7 +66,7 @@ void Indie::Systems::BombExplosionSystem::explodeRight(std::vector<std::vector<O
     }
 }
 
-void Indie::Systems::BombExplosionSystem::explodeLeft(std::vector<std::vector<OBJECT>> &map, unsigned int range, int mapX, int mapZ) const
+void Indie::Systems::BombExplosionSystem::explodeLeft(EntityManager &entityManager, std::vector<std::vector<OBJECT>> &map, unsigned int range, int mapX, int mapZ) const
 {
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
 
@@ -74,7 +77,7 @@ void Indie::Systems::BombExplosionSystem::explodeLeft(std::vector<std::vector<OB
             break;
         if (map[mapX - i][mapZ] == OBJECT::BOX) {
             map[mapX - i][mapZ] = OBJECT::LAVA;
-            // remove box
+            this->explodeBox(entityManager, mapX - i, mapZ);
             entityBuilder.createLava(irr::core::vector3df((irr::f32)((mapX - i) * 20), 20, (irr::f32)(mapZ * 20)), "../ressources/static_mesh/effects/lava.obj", "../ressources/static_mesh/effects/lava.png", 270.f);
             break;
         }
@@ -83,7 +86,7 @@ void Indie::Systems::BombExplosionSystem::explodeLeft(std::vector<std::vector<OB
     }
 }
 
-void Indie::Systems::BombExplosionSystem::explodeUp(std::vector<std::vector<OBJECT>> &map, unsigned int range, int mapX, int mapZ) const
+void Indie::Systems::BombExplosionSystem::explodeUp(EntityManager &entityManager, std::vector<std::vector<OBJECT>> &map, unsigned int range, int mapX, int mapZ) const
 {
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
 
@@ -94,7 +97,7 @@ void Indie::Systems::BombExplosionSystem::explodeUp(std::vector<std::vector<OBJE
             break;
         if (map[mapX][mapZ + i] == OBJECT::BOX) {
             map[mapX][mapZ + i] = OBJECT::LAVA;
-            // remove box
+            this->explodeBox(entityManager, mapX, mapZ + i);
             entityBuilder.createLava(irr::core::vector3df((irr::f32)(mapX * 20), 20, (irr::f32)((mapZ + i) * 20)), "../ressources/static_mesh/effects/lava.obj", "../ressources/static_mesh/effects/lava.png", 180.f);
             break;
         }
@@ -103,7 +106,7 @@ void Indie::Systems::BombExplosionSystem::explodeUp(std::vector<std::vector<OBJE
     }
 }
 
-void Indie::Systems::BombExplosionSystem::explodeDown(std::vector<std::vector<OBJECT>> &map, unsigned int range, int mapX, int mapZ) const
+void Indie::Systems::BombExplosionSystem::explodeDown(EntityManager &entityManager, std::vector<std::vector<OBJECT>> &map, unsigned int range, int mapX, int mapZ) const
 {
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
 
@@ -114,11 +117,31 @@ void Indie::Systems::BombExplosionSystem::explodeDown(std::vector<std::vector<OB
             break;
         if (map[mapX][mapZ - i] == OBJECT::BOX) {
             map[mapX][mapZ - i] = OBJECT::LAVA;
-            // remove box
+            this->explodeBox(entityManager, mapX, mapZ - i);
             entityBuilder.createLava(irr::core::vector3df((irr::f32)(mapX * 20), 20, (irr::f32)((mapZ - i) * 20)), "../ressources/static_mesh/effects/lava.obj", "../ressources/static_mesh/effects/lava.png", 180.f);
             break;
         }
         map[mapX][mapZ - i] = OBJECT::LAVA;
         entityBuilder.createLava(irr::core::vector3df((irr::f32)(mapX * 20), 20, (irr::f32)((mapZ - i) * 20)), "../ressources/static_mesh/effects/lava.obj", "../ressources/static_mesh/effects/lava.png", 180.f);
     }
+}
+
+void Indie::Systems::BombExplosionSystem::explodeBox(EntityManager &entityManager, int mapX, int mapZ) const
+{
+    for (auto entity : entityManager.each<WallComponent, PositionComponent>()) {
+        if (entity->getComponent<WallComponent>()->getCanBeDestroyed() == false)
+            continue;
+
+        auto position = entity->getComponent<PositionComponent>();
+        if ((irr::f32)(mapX * 20) == position->getPosition().X && (irr::f32)(mapZ * 20) == position->getPosition().Z) {
+            entity->needDestroy();
+            return;
+        }
+    }
+}
+
+void Indie::Systems::BombExplosionSystem::recursiveExplosion() const
+{
+    // for (auto entity : entityManager.each<BombComponent, PositionComponent, TimerComponent>()) {
+    // }
 }
