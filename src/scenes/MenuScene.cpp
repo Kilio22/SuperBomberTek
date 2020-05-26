@@ -28,10 +28,15 @@ Indie::MenuScene::MenuScene(ContextManager &context)
     : context(context)
 {}
 
+Indie::MenuScene::~MenuScene()
+{
+    parallax.clear();
+}
+
 void Indie::MenuScene::setColor(irr::video::SColor color)
 {
     for (size_t i = 0; i < parallax.size(); i++)
-        parallax[i].setColor(color);
+        parallax[i]->setColor(color);
 }
 
 void Indie::MenuScene::init()
@@ -39,9 +44,9 @@ void Indie::MenuScene::init()
     Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setMusic(0);
 
     for (size_t i = 0; i < 5; i++) {
-        Parallax tmp;
-        tmp.init(this->context, this->filepaths[i], POS(1280, 720), this->velocities[i]);
-        this->parallax.push_back(tmp);
+        std::unique_ptr<Parallax> tmp = std::make_unique<Parallax>(context);
+        tmp->init(this->context, this->filepaths[i], POS(1280, 720), this->velocities[i]);
+        this->parallax.push_back(std::move(tmp));
     }
 }
 
@@ -54,13 +59,13 @@ void Indie::MenuScene::reset()
 void Indie::MenuScene::update(irr::f32 ticks)
 {
     for (size_t i = 0; i < parallax.size(); i++)
-        parallax[i].update(ticks);
+        parallax[i]->update(1);
 }
 
 void Indie::MenuScene::renderPre3D()
 {
     for (size_t i = 0; i < parallax.size(); i++)
-        parallax[i].draw(context);
+        parallax[i]->draw();
 }
 
 void Indie::MenuScene::renderPost3D() {}

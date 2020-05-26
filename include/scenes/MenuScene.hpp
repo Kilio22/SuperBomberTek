@@ -17,21 +17,21 @@ namespace Indie {
     class MenuScene : public IScene {
         public:
             MenuScene(ContextManager &context);
-            ~MenuScene() = default;
+            ~MenuScene();
 
             void init();
             void reset();
             void update(irr::f32 deltaTime);
             void renderPre3D();
             void renderPost3D();
-            void setColor(irr::video::SColor color = irr::video::SColor(255, 255, 255, 255));
+            void setColor(irr::video::SColor color);
 
         private:
             static const irr::core::vector2df velocities[5];
             static const std::string filepaths[5];
 
             ContextManager &context;
-            std::vector<Parallax> parallax;
+            std::vector<std::unique_ptr<Parallax>> parallax;
     };
 }
 

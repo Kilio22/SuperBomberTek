@@ -14,6 +14,7 @@
 #include <memory>
 #include "IScene.hpp"
 #include "ContextManager.hpp"
+#include "EventHandler.hpp"
 #include "Exceptions.h"
 
 namespace Indie {

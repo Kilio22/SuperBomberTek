@@ -10,12 +10,11 @@
 
 static void skipScene(Indie::ContextManager &context)
 {
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setScene(3, context);
+    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene(3); // set to 3
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(true);
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(true);
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneUpdateActive(false);
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneRenderActive(false);
-    Indie::EventHandler::getInstance().resetKeys();
+    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneUpdateActive(true);
+    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneRenderActive(true);
 }
 
 const double Indie::TitleScene::updateRate = ((2 * M_PI) / 96) / 32;
@@ -23,6 +22,14 @@ const double Indie::TitleScene::updateRate = ((2 * M_PI) / 96) / 32;
 Indie::TitleScene::TitleScene(ContextManager &context)
     : context(context)
 {}
+
+Indie::TitleScene::~TitleScene()
+{
+    if (titleLogo)
+        context.getDriver()->removeTexture(titleLogo);
+    if (pressText)
+        context.getDriver()->removeTexture(pressText);
+}
 
 void Indie::TitleScene::init()
 {
@@ -50,9 +57,8 @@ void Indie::TitleScene::update(irr::f32 ticks)
     if (EventHandler::getInstance().isAnyKeyPressedAtOnce()) {
         skipScene(context);
     }
-//    if (handler.getInstance().isKeyPressed(irr::EKEY_CODE::))
-    this->offsetY = (this->offsetY < 2 * M_PI) ? this->offsetY + this->updateRate * ticks : 0;
-    this->offsetAlpha = (this->offsetAlpha < 2 * M_PI) ? this->offsetAlpha + 0.001 * ticks : 0;
+    this->offsetY = (this->offsetY < 2 * M_PI) ? this->offsetY + this->updateRate : 0;
+    this->offsetAlpha = (this->offsetAlpha < 2 * M_PI) ? this->offsetAlpha + 0.001 : 0;
 }
 
 void Indie::TitleScene::renderPre3D() {}
