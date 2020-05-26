@@ -69,6 +69,19 @@ bool Indie::Systems::CollisionSystem::checkCollisionWithCharacters(EntityManager
     return false;
 }
 
+bool Indie::Systems::CollisionSystem::checkCollisionWithBombs(EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox, int characterId) const
+{
+    for (auto bomb : entityManager.each<Components::BombComponent, Components::RenderComponent>()) {
+        Components::RenderComponent *renderComponent = bomb->getComponent<Components::RenderComponent>();
+        Components::BombComponent *bombComponent = bomb->getComponent<Components::BombComponent>();
+
+        if (characterBoundingBox.intersectsWithBox(renderComponent->getMesh()->getTransformedBoundingBox()) == true && bombComponent->getIdOwner() != characterId) {
+            return true;
+        }
+    }
+    return false;
+}
+
 irr::core::aabbox3df Indie::Systems::CollisionSystem::updateCharacterBoundingBox(irr::core::aabbox3df characterBoundingBox, const irr::core::vector3df &currentPosition, const irr::core::vector3df &wantedPosition) const
 {
     if (wantedPosition.X < currentPosition.X) {
@@ -103,6 +116,7 @@ void Indie::Systems::CollisionSystem::onUpdate(irr::f32, EntityManager &entityMa
             irr::core::aabbox3df updatedBoundingBox = this->updateCharacterBoundingBox(
                 characterHitBoxComponent->getMesh()->getTransformedBoundingBox(), currentPosition, wantedPosition);
 
+            this->checkCollisionWithPowerUps(entityManager, updatedBoundingBox, characterPlayerComponent);
             if (this->checkCollisionWithWalls(entityManager, updatedBoundingBox) == true) {
                 characterPositionComponent->setPosition(currentPosition);
                 characterVelocityComponent->setVelocity(0);
@@ -113,7 +127,11 @@ void Indie::Systems::CollisionSystem::onUpdate(irr::f32, EntityManager &entityMa
                 characterVelocityComponent->setVelocity(0);
                 continue;
             }
-            this->checkCollisionWithPowerUps(entityManager, updatedBoundingBox, characterPlayerComponent);
+            if (this->checkCollisionWithBombs(entityManager, updatedBoundingBox, character->getId()) == true) {
+                characterPositionComponent->setPosition(currentPosition);
+                characterVelocityComponent->setVelocity(0);
+                continue;
+            }
         }
     }
 }
