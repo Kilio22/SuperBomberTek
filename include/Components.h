@@ -21,6 +21,7 @@
 #include "WallComponent.hpp"
 #include "PlayerComponent.hpp"
 #include "MapComponent.hpp"
+#include "PathFinderComponent.hpp"
 #include "TimerComponent.hpp"
 #include "PowerUpComponent.hpp"
 #include "KillComponent.hpp"
