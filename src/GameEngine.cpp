@@ -8,6 +8,7 @@
 #include "GameEngine.hpp"
 #include "GameScene.hpp"
 #include "MenuScene.hpp"
+#include "MainMenuScene.hpp"
 #include "SplashScene.hpp"
 #include "TitleScene.hpp"
 #include "SceneManager.hpp"
@@ -28,7 +29,8 @@ void Indie::GameEngine::setupSceneManager(ContextManager &context)
     ServiceLocator::getInstance().get<SceneManager>().addScene<SplashScene>(context); //id 0
     ServiceLocator::getInstance().get<SceneManager>().addScene<MenuScene>(context); //id 1
     ServiceLocator::getInstance().get<SceneManager>().addScene<TitleScene>(context); //id 2
-    ServiceLocator::getInstance().get<SceneManager>().addScene<GameScene>(context); //id 3
+    ServiceLocator::getInstance().get<SceneManager>().addScene<MainMenuScene>(context); //id 3
+    ServiceLocator::getInstance().get<SceneManager>().addScene<GameScene>(context); //id 4
     ServiceLocator::getInstance().get<SceneManager>().setScene(0, context);
     ServiceLocator::getInstance().get<SceneManager>().setSceneUpdateActive(true);
     ServiceLocator::getInstance().get<SceneManager>().setSceneRenderActive(true);

@@ -16,7 +16,6 @@ static void skipScene(Indie::ContextManager &context)
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(true);
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneUpdateActive(true);
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneRenderActive(true);
-    Indie::EventHandler::getInstance().resetKeys();
 }
 
 Indie::SplashScene::SplashScene(ContextManager &context)

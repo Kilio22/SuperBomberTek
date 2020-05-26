@@ -37,7 +37,7 @@ void Indie::Systems::CollisionSystem::checkCollisionWithPowerUps(EntityManager &
         return;
     }
     if (this->checkCollisionWithPowerUp(entityManager, characterBoundingBox, Components::POWERUP_TYPE::SPEED_UP) == true) {
-        playerComponent->setVelocity(playerComponent->getVelocity() + 1);
+        playerComponent->setVelocity(playerComponent->getVelocity() + 15);
         return;
     }
     if (this->checkCollisionWithPowerUp(entityManager, characterBoundingBox, Components::POWERUP_TYPE::WALL_PASS) == true) {

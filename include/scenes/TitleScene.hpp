@@ -21,7 +21,7 @@ namespace Indie {
 class TitleScene : public IScene {
     public:
         TitleScene(ContextManager &context);
-        ~TitleScene() = default;
+        ~TitleScene();
 
         void init();
         void reset();

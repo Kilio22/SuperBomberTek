@@ -15,15 +15,16 @@
 namespace Indie {
     class Parallax {
         public:
-            Parallax() = default;
-            ~Parallax() = default;
+            Parallax(ContextManager &context);
+            ~Parallax();
 
             void init(ContextManager &context, const std::string &filepath, irr::core::position2d<irr::s32> size, irr::core::position2d<float> vel);
             void update(irr::f32 ticks);
-            void draw(ContextManager &context);
+            void draw();
             void setColor(irr::video::SColor color = irr::video::SColor(255,255,255,255));
 
         private:
+            ContextManager &context;
             Image *image;
             irr::core::position2d<float> pos;
             irr::core::position2d<irr::s32> size;
