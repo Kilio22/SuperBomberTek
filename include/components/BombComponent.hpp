@@ -18,12 +18,15 @@ public:
 
     unsigned int getRange() const;
     int getIdOwner() const;
+    bool hasExploded() const;
 
     void setRange(unsigned int range);
+    void setExploded(bool exploded);
 
 private:
     int idOwner;
     unsigned int range;
+    bool exploded;
 };
 
 } // namespace Indie::Components
