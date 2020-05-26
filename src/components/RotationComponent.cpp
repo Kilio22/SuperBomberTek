@@ -7,8 +7,8 @@
 
 #include "RotationComponent.hpp"
 
-Indie::Components::RotationComponent::RotationComponent(float angle)
-    : angle(irr::core::vector3df(0, angle, 0))
+Indie::Components::RotationComponent::RotationComponent(float angleY, float angleX)
+    : angle(irr::core::vector3df(angleX, angleY, 0))
 {}
 
 const irr::core::vector3df &Indie::Components::RotationComponent::getAngle() const
@@ -16,7 +16,12 @@ const irr::core::vector3df &Indie::Components::RotationComponent::getAngle() con
     return this->angle;
 }
 
-void Indie::Components::RotationComponent::setAngle(float newAngle)
+void Indie::Components::RotationComponent::setYAngle(float newAngle)
 {
     this->angle.Y = newAngle;
+}
+
+void Indie::Components::RotationComponent::setXAngle(float newAngle)
+{
+    this->angle.X = newAngle;
 }

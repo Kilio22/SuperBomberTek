@@ -11,6 +11,13 @@
 
 using namespace Indie::Components;
 
+const std::map<Indie::Components::POWERUP_TYPE, std::pair<std::string, std::string>> Indie::Systems::BombExplosionSystem::powerups = {
+    {POWERUP_TYPE::BOMB_UP, {"../ressources/static_mesh/effects/bombup.obj", "../ressources/static_mesh/effects/bombup.png"}},
+    {POWERUP_TYPE::FIRE_UP, {"../ressources/static_mesh/effects/fireup.obj", "../ressources/static_mesh/effects/fireup.png"}},
+    {POWERUP_TYPE::SPEED_UP, {"../ressources/static_mesh/effects/speedup.obj", "../ressources/static_mesh/effects/speedup.png"}},
+    {POWERUP_TYPE::WALL_PASS, {"../ressources/static_mesh/effects/wallpass.obj", "../ressources/static_mesh/effects/wallpass.png"}}
+};
+
 void Indie::Systems::BombExplosionSystem::onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const
 {
     MapComponent *mapComponent;
@@ -144,9 +151,18 @@ void Indie::Systems::BombExplosionSystem::explodeBox(EntityManager &entityManage
         auto position = entity->getComponent<PositionComponent>();
         if ((irr::f32)(mapX * 20) == position->getPosition().X && (irr::f32)(mapZ * 20) == position->getPosition().Z) {
             entity->needDestroy();
+            this->spawnPowerUp(position->getPosition());
             return;
         }
     }
+}
+
+void Indie::Systems::BombExplosionSystem::spawnPowerUp(const irr::core::vector3df &position) const
+{
+    if (std::rand() % 5 != 0)
+        return;
+    int index = std::rand() % 4;
+    ServiceLocator::getInstance().get<EntityBuilder>().createPowerUp(position, this->powerups.at((POWERUP_TYPE)index).first, this->powerups.at((POWERUP_TYPE)index).second, (POWERUP_TYPE)index);
 }
 
 void Indie::Systems::BombExplosionSystem::recursiveExplosion(EntityManager &entityManager, std::vector<std::vector<OBJECT>> &map, int mapX, int mapZ) const

@@ -17,7 +17,7 @@ bool Indie::Systems::CollisionSystem::checkCollisionWithPowerUp(EntityManager &e
             continue;
         Components::RenderComponent *renderComponent = powerUp->getComponent<Components::RenderComponent>();
         if (renderComponent->getMesh()->getTransformedBoundingBox().intersectsWithBox(characterBoundingBox) == true) {
-            // TODO: delete l'entity
+            powerUp->needDestroy();
             return true;
         }
     }

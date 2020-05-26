@@ -9,7 +9,7 @@
 #include "RenderComponent.hpp"
 #include "Exceptions.h"
 
-Indie::Components::RenderComponent::RenderComponent(std::string const &meshPath, std::string const &texturePath, const ContextManager &contextManager, irr::core::vector3df position)
+Indie::Components::RenderComponent::RenderComponent(std::string const &meshPath, std::string const &texturePath, const ContextManager &contextManager, irr::core::vector3df position, bool lightSensible)
 {
     irr::scene::IAnimatedMesh *newMesh = contextManager.getSceneManager()->getMesh(meshPath.c_str());
     irr::video::ITexture *newTexture = contextManager.getDriver()->getTexture(texturePath.c_str());
@@ -21,7 +21,7 @@ Indie::Components::RenderComponent::RenderComponent(std::string const &meshPath,
         throw Indie::Exceptions::FileNotFoundException("HitboxComponent::HitboxComponent", "Cannot found file: " + texturePath);
     }
     this->mesh = contextManager.getSceneManager()->addAnimatedMeshSceneNode(newMesh, 0);
-    this->mesh->setMaterialFlag(irr::video::EMF_LIGHTING, true);
+    this->mesh->setMaterialFlag(irr::video::EMF_LIGHTING, lightSensible);
     this->mesh->setMaterialFlag(irr::video::EMF_FOG_ENABLE, true);
     this->mesh->setMaterialTexture(0, newTexture);
     this->mesh->setVisible(true);
