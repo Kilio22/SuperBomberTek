@@ -36,7 +36,7 @@ class BombExplosionSystem : public ISystem
         void explodeDown(EntityManager &entityManager, std::vector<std::vector<Components::OBJECT>> &map, unsigned int range, int mapX, int mapZ) const;
 
         void explodeBox(EntityManager &entityManager, int mapX, int mapZ) const;
-        void recursiveExplosion() const;
+        void recursiveExplosion(EntityManager &entityManager, std::vector<std::vector<Components::OBJECT>> &map, int mapX, int mapZ) const;
 };
 
 }
