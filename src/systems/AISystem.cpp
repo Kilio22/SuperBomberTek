@@ -11,9 +11,6 @@
 
 bool Indie::Systems::AISystem::hasMoved(irr::core::vector3df position, irr::core::vector3df nextPosition, Indie::Components::AIComponent *aiComponent) const
 {
-    // std::cout << "AiX: " << position.X << " aiZ: " << position.Z << std::endl;
-    // std::cout << "Next: " << nextPosition.X << " NextY: " << nextPosition.Z << std::endl;
-
     if (aiComponent->getDirection() == Indie::Components::DIRECTION::UP && position.Z < nextPosition.Z)
         return false;
     if (aiComponent->getDirection() == Indie::Components::DIRECTION::DOWN && position.Z > nextPosition.Z)
@@ -22,6 +19,8 @@ bool Indie::Systems::AISystem::hasMoved(irr::core::vector3df position, irr::core
         return false;
     if (aiComponent->getDirection() == Indie::Components::DIRECTION::LEFT && position.X > nextPosition.X)
         return false;
+        std::cout << "AiX: " << position.X << " aiZ: " << position.Z << std::endl;
+    std::cout << "Next: " << nextPosition.X << " NextY: " << nextPosition.Z << std::endl;
     return true;
 }
 
