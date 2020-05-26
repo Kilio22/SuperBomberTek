@@ -29,10 +29,13 @@ void Indie::MainMenuScene::init()
 {
     Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setMusic(0);
 
+    std::string path1 = std::string("../ressources/placeholder/jouer.png");
+    std::string path2 = std::string("../ressources/placeholder/options.png");
+
     play.reset(new Button(context));
     options.reset(new Button(context));
-    play->init(context, std::string("../ressources/placeholder/jouer.png"), 0, 0, POS(0, 0));
-    options->init(context, std::string("../ressources/placeholder/options.png"), 0, 1, POS(0, 0));
+    play->init(context, path1, 0, 0, POS(0, 0));
+    options->init(context, path2, 0, 1, POS(0, 0));
 }
 
 void Indie::MainMenuScene::reset()
