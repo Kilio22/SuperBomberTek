@@ -25,10 +25,16 @@ void Indie::Systems::MeshSystem::onUpdate(irr::f32, EntityManager &entityManager
     auto &contextManager = ServiceLocator::getInstance().get<ContextManager>();
 
     for (auto entity : entityManager.each<Indie::Components::MeshComponent, Indie::Components::VelocityComponent, Indie::Components::RenderComponent>()) {
-        auto velComponent = entity->getComponent<Indie::Components::VelocityComponent>();
-        auto meshComponent = entity->getComponent<Indie::Components::MeshComponent>();
-        auto renderComponent = entity->getComponent<Indie::Components::RenderComponent>();
+        Components::VelocityComponent *velComponent = entity->getComponent<Indie::Components::VelocityComponent>();
+        Components::MeshComponent *meshComponent = entity->getComponent<Indie::Components::MeshComponent>();
+        Components::RenderComponent *renderComponent = entity->getComponent<Indie::Components::RenderComponent>();
 
+        if (entity->has<Indie::Components::TimerComponent>() == true && (int)meshComponent->getCurrentPosition() != (int)Indie::Components::MeshComponent::POSITION::DIE) {
+            this->changeMesh(contextManager, renderComponent, meshComponent->getMeshByPosition(Indie::Components::MeshComponent::POSITION::DIE), meshComponent->getTexture());
+            meshComponent->setCurrentPosition(Indie::Components::MeshComponent::POSITION::DIE);
+            continue;
+        } else if (entity->has<Indie::Components::TimerComponent>() == true)
+            continue;
         if (velComponent->getVelocity() != 0 && meshComponent->getCurrentPosition() != Indie::Components::MeshComponent::POSITION::RUN) {
             this->changeMesh(contextManager, renderComponent, meshComponent->getMeshByPosition(Indie::Components::MeshComponent::POSITION::RUN), meshComponent->getTexture());
             meshComponent->setCurrentPosition(Indie::Components::MeshComponent::POSITION::RUN);

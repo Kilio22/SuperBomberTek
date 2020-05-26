@@ -46,22 +46,11 @@ void Indie::Systems::CollisionSystem::checkCollisionWithPowerUps(EntityManager &
     }
 }
 
-bool Indie::Systems::CollisionSystem::checkCollisionWithWalls(EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox) const
-{
-    for (auto wall : entityManager.each<Components::WallComponent, Components::RenderComponent, Components::PositionComponent>()) {
-        Components::RenderComponent *wallRenderComponent = wall->getComponent<Components::RenderComponent>();
-
-        if (characterBoundingBox.intersectsWithBox(wallRenderComponent->getMesh()->getTransformedBoundingBox()) == true) {
-            return true;
-        }
-    }
-    return false;
-}
-
 bool Indie::Systems::CollisionSystem::checkCollisionWithCharacters(EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox, const irr::core::vector3df &currentCharacterPosition) const
 {
     for (auto character : entityManager.each<Components::MoveComponent, Components::VelocityComponent, Components::PositionComponent, Components::HitboxComponent>()) {
         Components::HitboxComponent *characterHitBoxComponent = character->getComponent<Components::HitboxComponent>();
+
         if (characterHitBoxComponent->getMesh()->getPosition() != currentCharacterPosition) {
             if (characterBoundingBox.intersectsWithBox(characterHitBoxComponent->getMesh()->getTransformedBoundingBox()) == true)
                 return true;
@@ -113,12 +102,12 @@ void Indie::Systems::CollisionSystem::onUpdate(irr::f32, EntityManager &entityMa
         irr::core::vector3df currentPosition = characterHitBoxComponent->getMesh()->getPosition();
         irr::core::vector3df wantedPosition = characterPositionComponent->getPosition();
 
-        if (currentPosition != wantedPosition) {
+        if (currentPosition != wantedPosition && character->has<Components::TimerComponent>() == false) {
             irr::core::aabbox3df updatedBoundingBox = this->updateCharacterBoundingBox(
                 characterHitBoxComponent->getMesh()->getTransformedBoundingBox(), currentPosition, wantedPosition);
 
             this->checkCollisionWithPowerUps(entityManager, updatedBoundingBox, characterPlayerComponent);
-            if (this->checkCollisionWithWalls(entityManager, updatedBoundingBox) == true) {
+            if (this->checkCollisionWithEntities<Components::WallComponent, Components::RenderComponent, Components::PositionComponent>(entityManager, updatedBoundingBox) == true) {
                 characterPositionComponent->setPosition(currentPosition);
                 characterVelocityComponent->setVelocity(0);
                 continue;
@@ -133,6 +122,17 @@ void Indie::Systems::CollisionSystem::onUpdate(irr::f32, EntityManager &entityMa
                 characterVelocityComponent->setVelocity(0);
                 continue;
             }
+            if (this->checkCollisionWithEntities<Components::RenderComponent, Components::KillComponent>(entityManager, updatedBoundingBox) == true) {
+                characterPositionComponent->setPosition(currentPosition);
+                characterVelocityComponent->setVelocity(0);
+                character->addComponent<Components::TimerComponent>(1.75);
+                continue;
+            }
+        }
+        if (this->checkCollisionWithEntities<Components::RenderComponent, Components::KillComponent>(entityManager, characterHitBoxComponent->getMesh()->getTransformedBoundingBox()) == true) {
+            characterPositionComponent->setPosition(currentPosition);
+            characterVelocityComponent->setVelocity(0);
+            character->addComponent<Components::TimerComponent>(1.75);
         }
     }
 }

@@ -17,6 +17,7 @@ using namespace Indie::Systems;
 Indie::GameScene::GameScene(ContextManager &context)
     : context(context), entityManager(ServiceLocator::getInstance().get<EntityManager>()), systemManager(SystemManager::getInstance())
 {
+    std::srand(time(NULL));
     this->device = this->context.getDevice();
     this->driver = this->context.getDriver();
     this->sceneManager = this->context.getSceneManager();

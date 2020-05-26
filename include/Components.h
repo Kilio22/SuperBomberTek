@@ -23,5 +23,6 @@
 #include "MapComponent.hpp"
 #include "TimerComponent.hpp"
 #include "PowerUpComponent.hpp"
+#include "KillComponent.hpp"
 
 #endif /* !COMPONENTS_H_ */

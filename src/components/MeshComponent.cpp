@@ -10,6 +10,7 @@
 
 const std::string Indie::Components::MeshComponent::STAND_MESH_PATH = "../ressources/animated_mesh/character/character_idle.b3d";
 const std::string Indie::Components::MeshComponent::RUN_MESH_PATH = "../ressources/animated_mesh/character/character_walk.b3d";
+const std::string Indie::Components::MeshComponent::DIE_MESH_PATH = "../ressources/animated_mesh/character/character_die.b3d";
 
 Indie::Components::MeshComponent::MeshComponent(const ContextManager &contextManager, const std::string &texturePath)
 {
@@ -29,6 +30,11 @@ Indie::Components::MeshComponent::MeshComponent(const ContextManager &contextMan
         throw Indie::Exceptions::FileNotFoundException("HitboxComponent::HitboxComponent", "Cannot found file: ");
     }
     this->meshs.insert({POSITION::RUN, newMesh});
+    newMesh = contextManager.getSceneManager()->getMesh(DIE_MESH_PATH.c_str());
+    if (newMesh == nullptr) {
+        throw Indie::Exceptions::FileNotFoundException("HitboxComponent::HitboxComponent", "Cannot found file: ");
+    }
+    this->meshs.insert({POSITION::DIE, newMesh});
     this->currentPosition = POSITION::STAND;
 }
 

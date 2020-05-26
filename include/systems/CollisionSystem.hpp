@@ -22,7 +22,20 @@ namespace Indie::Systems
             void onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const final;
 
         private:
-            bool checkCollisionWithWalls(EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox) const;
+
+            template <typename... Args>
+            bool checkCollisionWithEntities(EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox) const
+            {
+                for (Entity *entity : entityManager.each<Args...>()) {
+                    Components::RenderComponent *renderComponent = entity->getComponent<Components::RenderComponent>();
+
+                    if (characterBoundingBox.intersectsWithBox(renderComponent->getMesh()->getTransformedBoundingBox()) == true) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
             bool checkCollisionWithCharacters(EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox, const irr::core::vector3df &currentCharacterPosition) const;
             bool checkCollisionWithBombs(EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox, int characterId) const;
             bool checkCollisionWithPowerUp(EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox, Components::POWERUP_TYPE type) const;

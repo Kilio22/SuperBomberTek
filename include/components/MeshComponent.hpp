@@ -23,7 +23,8 @@ namespace Indie::Components
 
             enum class POSITION {
                 STAND,
-                RUN
+                RUN,
+                DIE
             };
 
             irr::video::ITexture *getTexture(void) const;
@@ -36,6 +37,7 @@ namespace Indie::Components
         private:
             static const std::string STAND_MESH_PATH;
             static const std::string RUN_MESH_PATH;
+            static const std::string DIE_MESH_PATH;
 
             std::map<POSITION, irr::scene::IAnimatedMesh *> meshs;
             irr::video::ITexture *texture;

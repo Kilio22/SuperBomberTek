@@ -14,6 +14,8 @@ void Indie::Systems::RotationSystem::onUpdate(irr::f32, EntityManager &entityMan
         auto moveComponent = entity->getComponent<Indie::Components::MoveComponent>();
         auto rotationComponent = entity->getComponent<Indie::Components::RotationComponent>();
 
+        if (entity->has<Components::TimerComponent>() == true && entity->has<Components::PlayerComponent>() == true)
+            continue;
         if (moveComponent->getUp() == true) {
             rotationComponent->setYAngle(180);
         } else if (moveComponent->getDown() == true) {

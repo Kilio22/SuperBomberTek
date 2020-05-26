@@ -101,6 +101,7 @@ Indie::Entity *Indie::EntityBuilder::createLava(const irr::core::vector3df &posi
     entity->addComponent<RenderComponent>(modelPath, texturePath, this->contextManager, position, true);
     entity->addComponent<RotationComponent>(angle);
     entity->addComponent<TimerComponent>(2.f);
+    entity->addComponent<KillComponent>();
     return entity;
 }
 

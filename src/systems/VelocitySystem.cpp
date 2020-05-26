@@ -19,6 +19,8 @@ void Indie::Systems::VelocitySystem::onUpdate(irr::f32 deltaTime, EntityManager 
         irr::f32 velocity = playerComponent->getVelocity();
 
         velocityComponent->setVelocity(0);
+        if (entity->has<Components::TimerComponent>())
+            continue;
         if (moveComponent->getLeft() == true && moveComponent->getRight() == true) {
             continue;
         }
