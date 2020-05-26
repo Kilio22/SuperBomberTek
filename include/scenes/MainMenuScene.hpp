@@ -13,6 +13,7 @@
 #include "ContextManager.hpp"
 #include "Button.hpp"
 #include <vector>
+#include <memory>
 
 namespace Indie {
     class MainMenuScene : public IScene {
