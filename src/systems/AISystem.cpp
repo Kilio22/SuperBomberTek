@@ -11,6 +11,9 @@
 
 bool Indie::Systems::AISystem::hasMoved(irr::core::vector3df position, irr::core::vector3df nextPosition, Indie::Components::AIComponent *aiComponent) const
 {
+    // std::cout << "AiX: " << position.X << " AiY: " << position.Z << std::endl;
+    // std::cout << "Next: " << nextPosition.X << " NextY: " << nextPosition.Z << std::endl;
+
     if (aiComponent->getDirection() == Indie::Components::DIRECTION::UP && position.Z < nextPosition.Z)
         return false;
     if (aiComponent->getDirection() == Indie::Components::DIRECTION::DOWN && position.Z > nextPosition.Z)
@@ -19,8 +22,6 @@ bool Indie::Systems::AISystem::hasMoved(irr::core::vector3df position, irr::core
         return false;
     if (aiComponent->getDirection() == Indie::Components::DIRECTION::LEFT && position.X > nextPosition.X)
         return false;
-    std::cout << "AiX: " << position.X << " AiY: " << position.Z << std::endl;
-    std::cout << "Next: " << nextPosition.X << " NextY: " << nextPosition.Z << std::endl;
     return true;
 }
 
@@ -55,27 +56,18 @@ void Indie::Systems::AISystem::onUpdate(irr::f32, EntityManager &entityManager) 
         auto mapComponent = entity->getComponent<Indie::Components::MapComponent>();
 
         map = mapComponent->getMap();
-        for (auto entity : entityManager.each<Indie::Components::MoveComponent, Indie::Components::AIComponent, Indie::Components::PositionComponent, Indie::Components::PlayerComponent, Indie::Components::PathFinderComponent>()) {
+        for (auto entity : entityManager.each<Indie::Components::MoveComponent, Indie::Components::AIComponent, Indie::Components::PositionComponent, Indie::Components::PathFinderComponent, Indie::Components::PlayerComponent>()) {
             auto aiComponent = entity->getComponent<Indie::Components::AIComponent>();
             auto pathFinderComponent = entity->getComponent<Indie::Components::PathFinderComponent>();
             auto moveComponent = entity->getComponent<Indie::Components::MoveComponent>();
             auto positionComponent = entity->getComponent<Indie::Components::PositionComponent>();
-            auto playerComponent = entity->getComponent<Indie::Components::PlayerComponent>();
-
 
             if (pathFinderComponent->getMap().empty())
                 pathFinderComponent->setMap(map);
             mapPath = pathFinderComponent->getMap();
 
-            for (int i = 14; i >= 0; i--) {
-                for (int j = 0; j < 15; j++) {
-                    std::cout << (int)mapPath[i][j] << " ";
-                }
-                std::cout << std::endl;
-            }
-
             aiX = positionComponent->getPosition().X;
-            aiY = positionComponent->getPosition().Y;
+            aiY = positionComponent->getPosition().Z;
 
             if (aiComponent->getAction() == Indie::Components::ACTION::PLACE_BOMB) {
                 moveComponent->setDrop(false);
@@ -90,9 +82,16 @@ void Indie::Systems::AISystem::onUpdate(irr::f32, EntityManager &entityManager) 
                 return;
             }
             aiX = getCenter(aiX) / 20;
-            aiY = getCenter(aiY) / 20;
+            aiY = (14 - getCenter(aiY) / 20);
+
+            for (int i = 0; i < 15; i++) {
+                for (int j = 0; j < 15; j++) {
+                    std::cout << (int)mapPath[i][j] << " ";
+                }
+                std::cout << std::endl;
+            }
             if (aiComponent->getDirection() != Indie::Components::DIRECTION::NONE &&
-            hasMoved(irr::core::vector3df(positionComponent->getPosition().X, 20, positionComponent->getPosition().Y),irr::core::vector3df(aiComponent->getNextPosition().X * 20, 20, aiComponent->getNextPosition().Y * 20), aiComponent) == false) {
+            hasMoved(irr::core::vector3df(positionComponent->getPosition().X, 20, positionComponent->getPosition().Z),irr::core::vector3df((aiComponent->getNextPosition().X) * 20, 20, (14 - aiComponent->getNextPosition().Y) * 20), aiComponent) == false) {
                 moveComponent->setUp(isMoving(Indie::Components::DIRECTION::UP, aiComponent));
                 moveComponent->setDown(isMoving(Indie::Components::DIRECTION::DOWN, aiComponent));
                 moveComponent->setRight(isMoving(Indie::Components::DIRECTION::RIGHT, aiComponent));
@@ -115,7 +114,7 @@ void Indie::Systems::AISystem::onUpdate(irr::f32, EntityManager &entityManager) 
                     aiComponent->setAction(Indie::Components::ACTION::GO_BOX);
                     pathFinderComponent->setMap(mapPath);
                 }
-           }
+            }
         }
     }
 }
