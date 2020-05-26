@@ -125,14 +125,14 @@ void Indie::Systems::CollisionSystem::onUpdate(irr::f32, EntityManager &entityMa
             if (this->checkCollisionWithEntities<Components::RenderComponent, Components::KillComponent>(entityManager, updatedBoundingBox) == true) {
                 characterPositionComponent->setPosition(currentPosition);
                 characterVelocityComponent->setVelocity(0);
-                character->addComponent<Components::TimerComponent>(1.75);
+                character->addComponent<Components::TimerComponent>(1.75f);
                 continue;
             }
         }
         if (this->checkCollisionWithEntities<Components::RenderComponent, Components::KillComponent>(entityManager, characterHitBoxComponent->getMesh()->getTransformedBoundingBox()) == true) {
             characterPositionComponent->setPosition(currentPosition);
             characterVelocityComponent->setVelocity(0);
-            character->addComponent<Components::TimerComponent>(1.75);
+            character->addComponent<Components::TimerComponent>(1.75f);
         }
     }
 }
