@@ -51,8 +51,8 @@ void Indie::Systems::BombExplosionSystem::explodeRight(EntityManager &entityMana
     if (map[mapX + 1][mapZ] == OBJECT::WALL_OUT || map[mapX + 1][mapZ] == OBJECT::WALL_IN)
         return;
     for (unsigned int i = 0; i <= range; ++i) {
-        // if (map[mapX + i][mapZ] == OBJECT::BOMB)
-        //     return this->recursiveExplosion();
+        if (i > 0 && map[mapX + i][mapZ] == OBJECT::BOMB)
+            return this->recursiveExplosion(entityManager, map, mapX + i, mapZ);
         if (map[mapX + i][mapZ] == OBJECT::WALL_OUT || map[mapX + i][mapZ] == OBJECT::WALL_IN)
             break;
         if (map[mapX + i][mapZ] == OBJECT::BOX) {
@@ -73,6 +73,8 @@ void Indie::Systems::BombExplosionSystem::explodeLeft(EntityManager &entityManag
     if (map[mapX - 1][mapZ] == OBJECT::WALL_OUT || map[mapX - 1][mapZ] == OBJECT::WALL_IN)
         return;
     for (unsigned int i = 0; i <= range; ++i) {
+        if (i > 0 && map[mapX - i][mapZ] == OBJECT::BOMB)
+            return this->recursiveExplosion(entityManager, map, mapX - i, mapZ);
         if (map[mapX - i][mapZ] == OBJECT::WALL_OUT || map[mapX - i][mapZ] == OBJECT::WALL_IN)
             break;
         if (map[mapX - i][mapZ] == OBJECT::BOX) {
@@ -93,6 +95,8 @@ void Indie::Systems::BombExplosionSystem::explodeUp(EntityManager &entityManager
     if (map[mapX][mapZ + 1] == OBJECT::WALL_OUT || map[mapX][mapZ + 1] == OBJECT::WALL_IN)
         return;
     for (unsigned int i = 0; i <= range; ++i) {
+        if (i > 0 && map[mapX][mapZ + i] == OBJECT::BOMB)
+            return this->recursiveExplosion(entityManager, map, mapX, mapZ + i);
         if (map[mapX][mapZ + i] == OBJECT::WALL_OUT || map[mapX][mapZ + i] == OBJECT::WALL_IN)
             break;
         if (map[mapX][mapZ + i] == OBJECT::BOX) {
@@ -113,6 +117,8 @@ void Indie::Systems::BombExplosionSystem::explodeDown(EntityManager &entityManag
     if (map[mapX][mapZ - 1] == OBJECT::WALL_OUT || map[mapX][mapZ - 1] == OBJECT::WALL_IN)
         return;
     for (unsigned int i = 0; i <= range; ++i) {
+        if (i > 0 && map[mapX][mapZ - i] == OBJECT::BOMB)
+            return this->recursiveExplosion(entityManager, map, mapX, mapZ - i);
         if (map[mapX][mapZ - i] == OBJECT::WALL_OUT || map[mapX][mapZ - i] == OBJECT::WALL_IN)
             break;
         if (map[mapX][mapZ - i] == OBJECT::BOX) {
@@ -140,8 +146,16 @@ void Indie::Systems::BombExplosionSystem::explodeBox(EntityManager &entityManage
     }
 }
 
-void Indie::Systems::BombExplosionSystem::recursiveExplosion() const
+void Indie::Systems::BombExplosionSystem::recursiveExplosion(EntityManager &entityManager, std::vector<std::vector<OBJECT>> &map, int mapX, int mapZ) const
 {
-    // for (auto entity : entityManager.each<BombComponent, PositionComponent, TimerComponent>()) {
-    // }
+    for (auto entity : entityManager.each<BombComponent, PositionComponent, TimerComponent>()) {
+        auto position = entity->getComponent<PositionComponent>();
+
+        if ((irr::f32)(mapX * 20) == position->getPosition().X && (irr::f32)(mapZ * 20) == position->getPosition().Z) {
+            auto timer = entity->getComponent<TimerComponent>();
+
+            timer->setTimePassed(timer->getTimeToEnd());
+            this->explodeBomb(map, entityManager, entity);
+        }
+    }
 }
