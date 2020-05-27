@@ -14,8 +14,6 @@ void Indie::Components::AIComponent::setNextDirection(std::vector<std::vector<OB
     nextPosX = acPos.X;
     nextPosY = acPos.Y;
 
-    std::cout << acPos.X << " " << acPos.Y << std::endl;
-
     map[acPos.Y][acPos.X] = static_cast<OBJECT>(0);
     if (map[acPos.Y - 1][acPos.X] == static_cast<OBJECT>(-99)) {
         setDirection(Indie::Components::DIRECTION::UP);
@@ -34,7 +32,6 @@ void Indie::Components::AIComponent::setNextDirection(std::vector<std::vector<OB
     }
     if (map[acPos.Y][acPos.X - 1] == static_cast<OBJECT>(-99)) {
         setDirection(Indie::Components::DIRECTION::LEFT);
-        std::cout << (int)getDirection() << std::endl;
         nextPosX -= 1;
         return;
     }

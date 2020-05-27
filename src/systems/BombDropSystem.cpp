@@ -9,7 +9,8 @@
 #include "Components.h"
 #include "EntityBuilder.hpp"
 
-std::vector<std::vector<Indie::Components::OBJECT>> Indie::Systems::BombDropSystem::updateMap(std::vector<std::vector<Components::OBJECT>> currentMap, irr::f32 midX, irr::f32 midZ) const
+std::vector<std::vector<Indie::Components::OBJECT>> Indie::Systems::BombDropSystem::updateMap(
+    std::vector<std::vector<Components::OBJECT>> currentMap, irr::f32 midX, irr::f32 midZ) const
 {
     currentMap[(int)(midX / 20)][(int)(midZ / 20)] = OBJECT::BOMB;
     return currentMap;
@@ -45,18 +46,15 @@ void Indie::Systems::BombDropSystem::onUpdate(irr::f32, EntityManager &entityMan
         irr::f32 midX = (irr::f32)this->getCenter((int)positionComponent->getPosition().X);
         irr::f32 midZ = (irr::f32)this->getCenter((int)positionComponent->getPosition().Z);
 
-        if (moveComponent->getDrop() == true && this->hasBombAtPosition(entityManager, irr::core::vector3df(midX, 20, midZ)) == false && playerComponent->getCurrentBombNb() > 0) {
+        if (moveComponent->getDrop() == true && this->hasBombAtPosition(entityManager, irr::core::vector3df(midX, 20, midZ)) == false
+            && playerComponent->getCurrentBombNb() > 0 && entity->has<TimerComponent>() == false) {
             for (auto map : entityManager.each<MapComponent>()) {
                 auto mapComponent = map->getComponent<MapComponent>();
 
                 mapComponent->setMap(this->updateMap(mapComponent->getMap(), midX, midZ));
             }
-            entityBuilder.createBomb(
-                irr::core::vector3df(irr::f32(midX), 20, irr::f32(midZ)),
-                "../ressources/animated_mesh/bomb/bomb.b3d",
-                "../ressources/textures/bomb/bomb.png",
-                entity->getId(),
-                playerComponent->getBombsRange());
+            entityBuilder.createBomb(irr::core::vector3df(irr::f32(midX), 20, irr::f32(midZ)), "../ressources/animated_mesh/bomb/bomb.b3d",
+                "../ressources/textures/bomb/bomb.png", entity->getId(), playerComponent->getBombsRange());
             playerComponent->setCurrentBombNb(playerComponent->getCurrentBombNb() - 1);
         }
     }
