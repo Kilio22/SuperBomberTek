@@ -35,10 +35,10 @@ class Entity {
         template <typename T>
         T *getComponent() const
         {
-            auto container = components.find(getTypeIndex<T>());
+            auto found = components.find(getTypeIndex<T>());
 
-            if (container != components.end()) {
-                return &reinterpret_cast<ObjectContainer<T> *>(container->second.get())->data;
+            if (found != components.end()) {
+                return &reinterpret_cast<ObjectContainer<T> *>(found->second.get())->data;
             }
             return nullptr;
         }

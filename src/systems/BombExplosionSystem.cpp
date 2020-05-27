@@ -12,11 +12,11 @@
 
 using namespace Indie::Components;
 
-const std::map<Indie::Components::POWERUP_TYPE, std::pair<std::string, std::string>> Indie::Systems::BombExplosionSystem::powerups = {
-    {POWERUP_TYPE::BOMB_UP, {"../ressources/static_mesh/effects/bombup.obj", "../ressources/static_mesh/effects/bombup.png"}},
-    {POWERUP_TYPE::FIRE_UP, {"../ressources/static_mesh/effects/fireup.obj", "../ressources/static_mesh/effects/fireup.png"}},
-    {POWERUP_TYPE::SPEED_UP, {"../ressources/static_mesh/effects/speedup.obj", "../ressources/static_mesh/effects/speedup.png"}},
-    {POWERUP_TYPE::WALL_PASS, {"../ressources/static_mesh/effects/wallpass.obj", "../ressources/static_mesh/effects/wallpass.png"}}
+const std::unordered_map<POWERUP_TYPE, std::pair<std::string, std::string>> Indie::Systems::BombExplosionSystem::powerups = {
+    { POWERUP_TYPE::BOMB_UP, { "../ressources/static_mesh/effects/bombup.obj", "../ressources/static_mesh/effects/bombup.png" } },
+    { POWERUP_TYPE::FIRE_UP, { "../ressources/static_mesh/effects/fireup.obj", "../ressources/static_mesh/effects/fireup.png" } },
+    { POWERUP_TYPE::SPEED_UP, { "../ressources/static_mesh/effects/speedup.obj", "../ressources/static_mesh/effects/speedup.png" } },
+    { POWERUP_TYPE::WALL_PASS, { "../ressources/static_mesh/effects/wallpass.obj", "../ressources/static_mesh/effects/wallpass.png" } }
 };
 
 void Indie::Systems::BombExplosionSystem::onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const
@@ -42,7 +42,7 @@ void Indie::Systems::BombExplosionSystem::explodeBomb(std::vector<std::vector<OB
 {
     auto bomb = entity->getComponent<BombComponent>();
     auto position = entity->getComponent<PositionComponent>();
-    auto player = entityManager.getById(bomb->getIdOwner())->getComponent<PlayerComponent>();
+    auto playerEntity = entityManager.getById(bomb->getIdOwner());
     int mapX = (int)(position->getPosition().X / 20);
     int mapZ = (int)(position->getPosition().Z / 20);
     unsigned int range = bomb->getRange();
@@ -54,7 +54,11 @@ void Indie::Systems::BombExplosionSystem::explodeBomb(std::vector<std::vector<OB
     this->explodeLeft(entityManager, map, range, mapX, mapZ);
     this->explodeUp(entityManager, map, range, mapX, mapZ);
     this->explodeDown(entityManager, map, range, mapX, mapZ);
-    player->setCurrentBombNb(player->getCurrentBombNb() + 1);
+    if (playerEntity != nullptr) {
+        auto player = playerEntity->getComponent<PlayerComponent>();
+
+        player->setCurrentBombNb(player->getCurrentBombNb() + 1);
+    }
 }
 
 void Indie::Systems::BombExplosionSystem::explodeRight(EntityManager &entityManager, std::vector<std::vector<OBJECT>> &map, unsigned int range, int mapX, int mapZ) const
