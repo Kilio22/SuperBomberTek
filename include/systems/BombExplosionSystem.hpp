@@ -8,9 +8,9 @@
 #ifndef BOMBEXPLOSIONSYSTEM_HPP_
 #define BOMBEXPLOSIONSYSTEM_HPP_
 
-#include <map>
 #include "ISystem.hpp"
 #include "Components.h"
+#include <unordered_map>
 
 namespace Indie::Systems
 {
@@ -24,8 +24,7 @@ class BombExplosionSystem : public ISystem
         void onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const final;
 
     private:
-
-        static const std::map<Components::POWERUP_TYPE, std::pair<std::string, std::string>> powerups;
+        static const std::unordered_map<Components::POWERUP_TYPE, std::pair<std::string, std::string>> powerups;
 
         void spawnPowerUp(const irr::core::vector3df &position) const;
 

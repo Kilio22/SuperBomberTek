@@ -137,7 +137,7 @@ void Indie::Systems::CollisionSystem::onUpdate(irr::f32, EntityManager &entityMa
                 == true) {
                 characterPositionComponent->setPosition(currentPosition);
                 characterVelocityComponent->setVelocity(0);
-                character->addComponent<Components::TimerComponent>(1.75);
+                character->addComponent<Components::TimerComponent>(1.75f);
                 continue;
             }
         }
@@ -146,7 +146,7 @@ void Indie::Systems::CollisionSystem::onUpdate(irr::f32, EntityManager &entityMa
             == true) {
             characterPositionComponent->setPosition(currentPosition);
             characterVelocityComponent->setVelocity(0);
-            character->addComponent<Components::TimerComponent>(1.75);
+            character->addComponent<Components::TimerComponent>(1.75f);
         }
     }
 }

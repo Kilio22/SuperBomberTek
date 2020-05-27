@@ -131,3 +131,4 @@ unit_test*
 vgcore*
 results.html
 build/
+/.vs

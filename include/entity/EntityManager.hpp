@@ -91,13 +91,13 @@ namespace Indie
     class EntityManager
     {
         public:
-            EntityManager() : count(0) {}
+            EntityManager() : idCount(0) {}
             ~EntityManager() = default;
 
             Entity *createEntity()
             {
-                ++this->count;
-                auto entity = std::make_unique<Entity>((int)this->count);
+                ++this->idCount;
+                auto entity = std::make_unique<Entity>(this->idCount);
                 auto ptr = entity.get();
 
                 this->entities.push_back(std::move(entity));
@@ -112,13 +112,14 @@ namespace Indie
 
             Entity *getByIndex(size_t index) const
             {
-                if (index >= count)
+                if (index >= this->getCount())
                     return nullptr;
                 return entities[index].get();
             }
 
             Entity *getById(int id) const
             {
+                // TODO: opti ça chacal
                 for (auto &entity : this->entities) {
                     if (entity->getId() == id)
                         return entity.get();
@@ -128,7 +129,7 @@ namespace Indie
 
             size_t getCount() const
             {
-                return this->count;
+                return this->entities.size();
             }
 
             void cleanup()
@@ -137,7 +138,6 @@ namespace Indie
 
                 entities.erase(std::remove_if(entities.begin(), entities.end(), [&, this](const std::unique_ptr<Entity> &entity) {
                     if (entity->isPendingDestroy()) {
-                        --this->count;
                         ++nbDeleted;
                         return true;
                     }
@@ -150,7 +150,7 @@ namespace Indie
 
         private:
             std::vector<std::unique_ptr<Entity>> entities;
-            size_t count;
+            int idCount;
     };
 
     template <typename... Types>
