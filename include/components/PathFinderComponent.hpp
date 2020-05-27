@@ -21,14 +21,17 @@ namespace Indie::Components
             PathFinderComponent() = default;
             ~PathFinderComponent() = default;
 
-            void setPathFinding(irr::core::vector2di aiPosition, int value);
+            void setPathFinding(irr::core::vector2di aiPosition, int value,  std::vector<std::vector<Indie::Components::OBJECT>> mapBomb);
             void findPosition(std::array<int, 3> &position);
+            void findFirstPosition(std::array<int, 3> &position);
+            void setPathFindingBombDodge(irr::core::vector2di aiPosition, int value, std::vector<std::vector<Indie::Components::OBJECT>> mapBomb);
             void getShortlessPath(irr::core::vector2di acPos, irr::core::vector2di nextPos);
 
             irr::core::vector2di getEndPosition() const;
             std::vector<std::vector<Indie::Components::OBJECT>> getMap() const;
 
             void setMap(std::vector<std::vector<OBJECT>> map);
+            void cleanMap();
 
         private:
             std::vector<std::vector<OBJECT>> map;

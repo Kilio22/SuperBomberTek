@@ -26,7 +26,6 @@ Indie::GameScene::GameScene(ContextManager &context)
     this->systemManager.addSystem<BombExplosionSystem>();
     this->systemManager.addSystem<CollisionSystem>();
     this->systemManager.addSystem<InputSystem>();
-    this->systemManager.addSystem<MapSystem>();
     this->systemManager.addSystem<MeshSystem>();
     this->systemManager.addSystem<MoveSystem>();
     this->systemManager.addSystem<RenderSystem>();
@@ -61,9 +60,9 @@ void Indie::GameScene::init()
 
     mapGenerator.generate(entityManager, entityBuilder);
     entityBuilder.createPlayer(irr::core::vector3df(20, 20, 20), "../ressources/animated_mesh/character/character_idle.b3d", "../ressources/textures/character/blue1.png", {{irr::KEY_UP, Indie::Components::KEY_TYPE::UP}, {irr::KEY_DOWN, Indie::Components::KEY_TYPE::DOWN}, {irr::KEY_RIGHT, Indie::Components::KEY_TYPE::RIGHT}, {irr::KEY_LEFT, Indie::Components::KEY_TYPE::LEFT}, {irr::KEY_SPACE, Indie::Components::KEY_TYPE::DROP}}, "1");
-    //entityBuilder.createAi(irr::core::vector3df(260, 20, 260), "../ressources/animated_mesh/character/character_idle.b3d", "../ressources/textures/character/yellow1.png");
-    //entityBuilder.createAi(irr::core::vector3df(260, 20, 20), "../ressources/animated_mesh/character/character_idle.b3d", "../ressources/textures/character/green1.png");
-    //entityBuilder.createAi(irr::core::vector3df(20, 20, 260), "../ressources/animated_mesh/character/character_idle.b3d", "../ressources/textures/character/red1.png");
+    entityBuilder.createAi(irr::core::vector3df(260, 20, 260), "../ressources/animated_mesh/character/character_idle.b3d", "../ressources/textures/character/yellow1.png", "2");
+    entityBuilder.createAi(irr::core::vector3df(260, 20, 20), "../ressources/animated_mesh/character/character_idle.b3d", "../ressources/textures/character/green1.png", "3");
+    entityBuilder.createAi(irr::core::vector3df(20, 20, 260), "../ressources/animated_mesh/character/character_idle.b3d", "../ressources/textures/character/red1.png", "4");
 
     device->getCursorControl()->setVisible(false);
 }
@@ -82,8 +81,8 @@ void Indie::GameScene::update(irr::f32 deltaTime)
     this->entityManager.cleanup();
     this->systemManager.getSystem<TimerTickSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<InputSystem>()->onUpdate(deltaTime, entityManager);
-    this->systemManager.getSystem<AISystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<MoveSystem>()->onUpdate(deltaTime, entityManager);
+    this->systemManager.getSystem<AISystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<VelocitySystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<BombDropSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<BombExplosionSystem>()->onUpdate(deltaTime, entityManager);

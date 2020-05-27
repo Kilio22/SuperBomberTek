@@ -21,6 +21,17 @@ void Indie::Systems::MoveSystem::onUpdate(irr::f32, Indie::EntityManager &entity
         moveComponent->setLeft(inputComponent->isKeyPressed(Indie::Components::KEY_TYPE::LEFT));
         moveComponent->setDrop(inputComponent->isKeyPressed(Indie::Components::KEY_TYPE::DROP));
     }
+
+    for (auto entity : entityManager.each<Indie::Components::MoveComponent, Indie::Components::AIComponent>()) {
+        auto aiComponent = entity->getComponent<Indie::Components::AIComponent>();
+        auto moveComponent = entity->getComponent<Indie::Components::MoveComponent>();
+
+        moveComponent->setUp(false);
+        moveComponent->setDown(false);
+        moveComponent->setRight(false);
+        moveComponent->setLeft(false);
+        moveComponent->setDrop(false);
+    }
     EventHandler::getInstance().resetKeysReleased();
     EventHandler::getInstance().resetKeysStatusOnce();
 }

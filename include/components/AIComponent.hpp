@@ -29,7 +29,11 @@ namespace Indie::Components
         GO_PLAYER,
         PLACE_BOMB,
         BOMB_PLACED,
+        DODGE,
+        HAS_DODGE,
+        CAN_MOVE,
         STANDBY
+
     };
 
     class AIComponent

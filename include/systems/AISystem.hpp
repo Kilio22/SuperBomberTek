@@ -15,6 +15,8 @@
 #include "AIComponent.hpp"
 #include "MapComponent.hpp"
 #include "PathFinderComponent.hpp"
+#include "MoveComponent.hpp"
+#include "PositionComponent.hpp"
 
 namespace Indie::Systems
 {
@@ -30,6 +32,9 @@ namespace Indie::Systems
             bool isMoving(Indie::Components::DIRECTION direction, Indie::Components::AIComponent *aiComponent) const;
             bool hasArrived(std::vector<std::vector<Indie::Components::OBJECT>> &map, Indie::Components::PathFinderComponent *pathFinderComponent) const;
             int getCenter(int value) const;
+            void stopMove(Indie::Components::MoveComponent *moveComponent) const;
+            void determineBomb(std::vector<std::vector<Indie::Components::OBJECT>> &map, EntityManager &entityManager) const;
+            bool isOnBomb(std::vector<std::vector<Indie::Components::OBJECT>> &map, Indie::Components::PositionComponent *positionComponent) const;
 
     };
 }
