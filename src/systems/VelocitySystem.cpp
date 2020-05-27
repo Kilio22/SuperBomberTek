@@ -10,7 +10,8 @@
 
 void Indie::Systems::VelocitySystem::onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const
 {
-    for (auto entity : entityManager.each<Indie::Components::PositionComponent, Indie::Components::MoveComponent, Indie::Components::VelocityComponent, Indie::Components::PlayerComponent>()) {
+    for (auto entity : entityManager.each<Indie::Components::PositionComponent, Indie::Components::MoveComponent,
+                       Indie::Components::VelocityComponent, Indie::Components::PlayerComponent>()) {
         auto moveComponent = entity->getComponent<Indie::Components::MoveComponent>();
         auto positionComponent = entity->getComponent<Indie::Components::PositionComponent>();
         auto velocityComponent = entity->getComponent<Indie::Components::VelocityComponent>();
@@ -21,12 +22,10 @@ void Indie::Systems::VelocitySystem::onUpdate(irr::f32 deltaTime, EntityManager 
         velocityComponent->setVelocity(0);
         if (entity->has<Components::TimerComponent>())
             continue;
-        if (moveComponent->getLeft() == true && moveComponent->getRight() == true) {
+        if (moveComponent->getLeft() == true && moveComponent->getRight() == true)
             continue;
-        }
-        if (moveComponent->getUp() == true && moveComponent->getDown() == true) {
+        if (moveComponent->getUp() == true && moveComponent->getDown() == true)
             continue;
-        }
         if (moveComponent->getUp() == true) {
             velocityComponent->setVelocity(velocity);
             posVector.Z += velocity * deltaTime;

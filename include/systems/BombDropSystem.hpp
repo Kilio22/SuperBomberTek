@@ -25,6 +25,7 @@ namespace Indie::Systems
 
         private:
             bool hasBombAtPosition(EntityManager &entityManager, irr::core::vector3df position) const;
+            bool checkBombPositionWallPass(EntityManager &entityManager, int midX, int midZ) const;
             int getCenter(int value) const;
             std::vector<std::vector<Indie::Components::OBJECT>> updateMap(std::vector<std::vector<Indie::Components::OBJECT>> currentMap, irr::f32 midX, irr::f32 midZ) const;
     };

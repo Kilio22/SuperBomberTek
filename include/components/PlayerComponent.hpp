@@ -9,13 +9,14 @@
 #define PLAYERCOMPONENT_HPP_
 
 #include <irrlicht.h>
+#include <string>
 
 namespace Indie::Components
 {
     class PlayerComponent
     {
         public:
-            PlayerComponent();
+            PlayerComponent(const std::string &playerNb);
             ~PlayerComponent() = default;
 
             unsigned int getBombsRange(void) const;
@@ -23,6 +24,7 @@ namespace Indie::Components
             unsigned int getCurrentBombNb(void) const;
             irr::f32 getVelocity(void) const;
             bool getWallPass(void) const;
+            const std::string &getName(void) const;
 
             void setBombsRange(unsigned int value);
             void setMaxBombNb(unsigned int value);
@@ -36,8 +38,8 @@ namespace Indie::Components
             unsigned int currentBombNb;
             irr::f32 velocity;
             bool wallPass;
+            std::string name;
     };
 } // namespace Indie::Components
-
 
 #endif /* !PLAYERCOMPONENT_HPP_ */

@@ -8,6 +8,7 @@
 #include "BombDropSystem.hpp"
 #include "Components.h"
 #include "EntityBuilder.hpp"
+#include <iostream>
 
 std::vector<std::vector<Indie::Components::OBJECT>> Indie::Systems::BombDropSystem::updateMap(
     std::vector<std::vector<Components::OBJECT>> currentMap, irr::f32 midX, irr::f32 midZ) const
@@ -35,6 +36,23 @@ int Indie::Systems::BombDropSystem::getCenter(int value) const
     }
 }
 
+bool Indie::Systems::BombDropSystem::checkBombPositionWallPass(EntityManager &entityManager, int midX, int midZ) const
+{
+    for (auto map : entityManager.each<MapComponent>()) {
+        auto mapComponent = map->getComponent<MapComponent>();
+        auto array = mapComponent->getMap();
+
+        for (size_t i = 0; i < mapComponent->getDimension().Y ; i++) {
+            for (size_t j = 0; j < mapComponent->getDimension().X; j++) {
+                if (array[i][j] == OBJECT::VOID && j * 20 == midX && i * 20 == midZ) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
 void Indie::Systems::BombDropSystem::onUpdate(irr::f32, EntityManager &entityManager) const
 {
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
@@ -48,6 +66,9 @@ void Indie::Systems::BombDropSystem::onUpdate(irr::f32, EntityManager &entityMan
 
         if (moveComponent->getDrop() == true && this->hasBombAtPosition(entityManager, irr::core::vector3df(midX, 20, midZ)) == false
             && playerComponent->getCurrentBombNb() > 0 && entity->has<TimerComponent>() == false) {
+            if (playerComponent->getWallPass() == true && this->checkBombPositionWallPass(entityManager, midX, midZ) == false) {
+                continue;
+            }
             for (auto map : entityManager.each<MapComponent>()) {
                 auto mapComponent = map->getComponent<MapComponent>();
 

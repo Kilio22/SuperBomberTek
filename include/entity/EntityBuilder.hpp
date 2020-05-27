@@ -13,23 +13,29 @@
 #include "ServiceLocator.hpp"
 #include <irrlicht.h>
 
-namespace Indie {
+namespace Indie
+{
 
-using namespace Components;
+    using namespace Components;
 
-    class EntityBuilder {
+    class EntityBuilder
+    {
         public:
             EntityBuilder();
             ~EntityBuilder() = default;
 
             Entity *createGround(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath);
-            Entity *createPlayer(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath, std::map<irr::EKEY_CODE, KEY_TYPE> keys);
-            Entity *createAi(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath);
+            Entity *createPlayer(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath,
+                std::map<irr::EKEY_CODE, KEY_TYPE> keys, const std::string &playerNb);
+            Entity *createAi(
+                const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath, const std::string &playerNb);
             Entity *createWall(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath, bool canBeDestroyed);
-            Entity *createBomb(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath, int idOwner, unsigned int range);
+            Entity *createBomb(
+                const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath, int idOwner, unsigned int range);
             Entity *createMap(const irr::core::vector2di &dimension, const Indie::Components::MAP_TYPE &type, const Indie::Components::THEME &theme);
             Entity *createLava(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath, float angle);
-            Entity *createPowerUp(irr::core::vector3df position, const std::string &modelPath, const std::string &texturePath, Components::POWERUP_TYPE type);
+            Entity *createPowerUp(
+                irr::core::vector3df position, const std::string &modelPath, const std::string &texturePath, Components::POWERUP_TYPE type);
 
         private:
             EntityManager &entityManager;

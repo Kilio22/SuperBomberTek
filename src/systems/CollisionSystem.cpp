@@ -8,7 +8,8 @@
 #include "CollisionSystem.hpp"
 #include "Components.h"
 
-bool Indie::Systems::CollisionSystem::checkCollisionWithPowerUp(EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox, Indie::Components::POWERUP_TYPE type) const
+bool Indie::Systems::CollisionSystem::checkCollisionWithPowerUp(
+    EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox, Indie::Components::POWERUP_TYPE type) const
 {
     for (auto powerUp : entityManager.each<Components::RenderComponent, Components::PowerUpComponent>()) {
         Components::PowerUpComponent *powerUpComponent = powerUp->getComponent<Components::PowerUpComponent>();
@@ -24,8 +25,8 @@ bool Indie::Systems::CollisionSystem::checkCollisionWithPowerUp(EntityManager &e
     return false;
 }
 
-void Indie::Systems::CollisionSystem::checkCollisionWithPowerUps(EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox,
-                                                                    Components::PlayerComponent *playerComponent) const
+void Indie::Systems::CollisionSystem::checkCollisionWithPowerUps(
+    EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox, Components::PlayerComponent *playerComponent) const
 {
     if (this->checkCollisionWithPowerUp(entityManager, characterBoundingBox, Components::POWERUP_TYPE::BOMB_UP) == true) {
         playerComponent->setMaxBombNb(playerComponent->getMaxBombNb() + 1);
@@ -46,9 +47,11 @@ void Indie::Systems::CollisionSystem::checkCollisionWithPowerUps(EntityManager &
     }
 }
 
-bool Indie::Systems::CollisionSystem::checkCollisionWithCharacters(EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox, const irr::core::vector3df &currentCharacterPosition) const
+bool Indie::Systems::CollisionSystem::checkCollisionWithCharacters(
+    EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox, const irr::core::vector3df &currentCharacterPosition) const
 {
-    for (auto character : entityManager.each<Components::MoveComponent, Components::VelocityComponent, Components::PositionComponent, Components::HitboxComponent>()) {
+    for (auto character :
+        entityManager.each<Components::MoveComponent, Components::VelocityComponent, Components::PositionComponent, Components::HitboxComponent>()) {
         Components::HitboxComponent *characterHitBoxComponent = character->getComponent<Components::HitboxComponent>();
 
         if (characterHitBoxComponent->getMesh()->getPosition() != currentCharacterPosition) {
@@ -59,20 +62,23 @@ bool Indie::Systems::CollisionSystem::checkCollisionWithCharacters(EntityManager
     return false;
 }
 
-bool Indie::Systems::CollisionSystem::checkCollisionWithBombs(EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox, int characterId) const
+bool Indie::Systems::CollisionSystem::checkCollisionWithBombs(
+    EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox, int characterId) const
 {
     for (auto bomb : entityManager.each<Components::BombComponent, Components::RenderComponent>()) {
         Components::RenderComponent *renderComponent = bomb->getComponent<Components::RenderComponent>();
         Components::BombComponent *bombComponent = bomb->getComponent<Components::BombComponent>();
 
-        if (characterBoundingBox.intersectsWithBox(renderComponent->getMesh()->getTransformedBoundingBox()) == true && bombComponent->getIdOwner() != characterId) {
+        if (characterBoundingBox.intersectsWithBox(renderComponent->getMesh()->getTransformedBoundingBox()) == true
+            && bombComponent->getIdOwner() != characterId) {
             return true;
         }
     }
     return false;
 }
 
-irr::core::aabbox3df Indie::Systems::CollisionSystem::updateCharacterBoundingBox(irr::core::aabbox3df characterBoundingBox, const irr::core::vector3df &currentPosition, const irr::core::vector3df &wantedPosition) const
+irr::core::aabbox3df Indie::Systems::CollisionSystem::updateCharacterBoundingBox(
+    irr::core::aabbox3df characterBoundingBox, const irr::core::vector3df &currentPosition, const irr::core::vector3df &wantedPosition) const
 {
     if (wantedPosition.X < currentPosition.X) {
         characterBoundingBox.MaxEdge.X -= currentPosition.X - wantedPosition.X;
@@ -93,7 +99,9 @@ irr::core::aabbox3df Indie::Systems::CollisionSystem::updateCharacterBoundingBox
 
 void Indie::Systems::CollisionSystem::onUpdate(irr::f32, EntityManager &entityManager) const
 {
-    for (auto character : entityManager.each<Components::VelocityComponent, Components::PositionComponent, Components::HitboxComponent, Components::PlayerComponent>()) {
+    for (auto character :
+        entityManager
+            .each<Components::VelocityComponent, Components::PositionComponent, Components::HitboxComponent, Components::PlayerComponent>()) {
         Components::HitboxComponent *characterHitBoxComponent = character->getComponent<Components::HitboxComponent>();
         Components::PositionComponent *characterPositionComponent = character->getComponent<Components::PositionComponent>();
         Components::VelocityComponent *characterVelocityComponent = character->getComponent<Components::VelocityComponent>();
@@ -103,11 +111,13 @@ void Indie::Systems::CollisionSystem::onUpdate(irr::f32, EntityManager &entityMa
         irr::core::vector3df wantedPosition = characterPositionComponent->getPosition();
 
         if (currentPosition != wantedPosition && character->has<Components::TimerComponent>() == false) {
-            irr::core::aabbox3df updatedBoundingBox = this->updateCharacterBoundingBox(
-                characterHitBoxComponent->getMesh()->getTransformedBoundingBox(), currentPosition, wantedPosition);
+            irr::core::aabbox3df updatedBoundingBox
+                = this->updateCharacterBoundingBox(characterHitBoxComponent->getMesh()->getTransformedBoundingBox(), currentPosition, wantedPosition);
 
             this->checkCollisionWithPowerUps(entityManager, updatedBoundingBox, characterPlayerComponent);
-            if (this->checkCollisionWithEntities<Components::WallComponent, Components::RenderComponent, Components::PositionComponent>(entityManager, updatedBoundingBox) == true) {
+            if (this->checkCollisionWithEntities<Components::WallComponent, Components::RenderComponent, Components::PositionComponent>(
+                    entityManager, updatedBoundingBox, characterPlayerComponent)
+                    == true) {
                 characterPositionComponent->setPosition(currentPosition);
                 characterVelocityComponent->setVelocity(0);
                 continue;
@@ -122,14 +132,18 @@ void Indie::Systems::CollisionSystem::onUpdate(irr::f32, EntityManager &entityMa
                 characterVelocityComponent->setVelocity(0);
                 continue;
             }
-            if (this->checkCollisionWithEntities<Components::RenderComponent, Components::KillComponent>(entityManager, updatedBoundingBox) == true) {
+            if (this->checkCollisionWithEntities<Components::RenderComponent, Components::KillComponent>(
+                    entityManager, updatedBoundingBox, characterPlayerComponent)
+                == true) {
                 characterPositionComponent->setPosition(currentPosition);
                 characterVelocityComponent->setVelocity(0);
                 character->addComponent<Components::TimerComponent>(1.75);
                 continue;
             }
         }
-        if (this->checkCollisionWithEntities<Components::RenderComponent, Components::KillComponent>(entityManager, characterHitBoxComponent->getMesh()->getTransformedBoundingBox()) == true) {
+        if (this->checkCollisionWithEntities<Components::RenderComponent, Components::KillComponent>(
+                entityManager, characterHitBoxComponent->getMesh()->getTransformedBoundingBox(), characterPlayerComponent)
+            == true) {
             characterPositionComponent->setPosition(currentPosition);
             characterVelocityComponent->setVelocity(0);
             character->addComponent<Components::TimerComponent>(1.75);

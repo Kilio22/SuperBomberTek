@@ -13,9 +13,7 @@ Indie::EntityBuilder::EntityBuilder()
 {
 }
 
-Indie::Entity *Indie::EntityBuilder::createGround(
-    const irr::core::vector3df &position, const std::string &modelPath,
-    const std::string &texturePath)
+Indie::Entity *Indie::EntityBuilder::createGround(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath)
 {
     Entity *entity = this->entityManager.createEntity();
 
@@ -24,9 +22,8 @@ Indie::Entity *Indie::EntityBuilder::createGround(
     return entity;
 }
 
-Indie::Entity *Indie::EntityBuilder::createPlayer(
-    const irr::core::vector3df &position, const std::string &modelPath,
-    const std::string &texturePath, std::map<irr::EKEY_CODE, KEY_TYPE> keys)
+Indie::Entity *Indie::EntityBuilder::createPlayer(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath,
+    std::map<irr::EKEY_CODE, KEY_TYPE> keys, const std::string &playerNb)
 {
     Entity *entity = this->entityManager.createEntity();
 
@@ -38,13 +35,12 @@ Indie::Entity *Indie::EntityBuilder::createPlayer(
     entity->addComponent<VelocityComponent>();
     entity->addComponent<MeshComponent>(this->contextManager, texturePath);
     entity->addComponent<RotationComponent>();
-    entity->addComponent<PlayerComponent>();
+    entity->addComponent<PlayerComponent>(playerNb);
     return entity;
 }
 
 Indie::Entity *Indie::EntityBuilder::createAi(
-    const irr::core::vector3df &position, const std::string &modelPath,
-    const std::string &texturePath)
+    const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath, const std::string &playerNb)
 {
     Entity *entity = this->entityManager.createEntity();
 
@@ -56,14 +52,13 @@ Indie::Entity *Indie::EntityBuilder::createAi(
     entity->addComponent<VelocityComponent>();
     entity->addComponent<MeshComponent>(contextManager, texturePath);
     entity->addComponent<RotationComponent>();
-    entity->addComponent<PlayerComponent>();
+    entity->addComponent<PlayerComponent>(playerNb);
     entity->addComponent<PathFinderComponent>();
     return entity;
 }
 
 Indie::Entity *Indie::EntityBuilder::createWall(
-    const irr::core::vector3df &position, const std::string &modelPath,
-    const std::string &texturePath, bool canBeDestroyed)
+    const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath, bool canBeDestroyed)
 {
     Entity *entity = this->entityManager.createEntity();
 
@@ -74,8 +69,7 @@ Indie::Entity *Indie::EntityBuilder::createWall(
 }
 
 Indie::Entity *Indie::EntityBuilder::createBomb(
-    const irr::core::vector3df &position, const std::string &modelPath,
-    const std::string &texturePath, int idOwner, unsigned int range)
+    const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath, int idOwner, unsigned int range)
 {
     Entity *entity = this->entityManager.createEntity();
 
@@ -86,7 +80,8 @@ Indie::Entity *Indie::EntityBuilder::createBomb(
     return entity;
 }
 
-Indie::Entity *Indie::EntityBuilder::createMap(const irr::core::vector2di &dimension, const Indie::Components::MAP_TYPE &type, const Indie::Components::THEME &theme)
+Indie::Entity *Indie::EntityBuilder::createMap(
+    const irr::core::vector2di &dimension, const Indie::Components::MAP_TYPE &type, const Indie::Components::THEME &theme)
 {
     Entity *entity = this->entityManager.createEntity();
 
@@ -94,7 +89,8 @@ Indie::Entity *Indie::EntityBuilder::createMap(const irr::core::vector2di &dimen
     return entity;
 }
 
-Indie::Entity *Indie::EntityBuilder::createLava(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath, float angle)
+Indie::Entity *Indie::EntityBuilder::createLava(
+    const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath, float angle)
 {
     Entity *entity = this->entityManager.createEntity();
 
@@ -106,7 +102,8 @@ Indie::Entity *Indie::EntityBuilder::createLava(const irr::core::vector3df &posi
     return entity;
 }
 
-Indie::Entity *Indie::EntityBuilder::createPowerUp(irr::core::vector3df position, const std::string &modelPath, const std::string &texturePath, Components::POWERUP_TYPE type)
+Indie::Entity *Indie::EntityBuilder::createPowerUp(
+    irr::core::vector3df position, const std::string &modelPath, const std::string &texturePath, Components::POWERUP_TYPE type)
 {
     Entity *entity = this->entityManager.createEntity();
 
