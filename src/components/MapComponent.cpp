@@ -8,7 +8,7 @@
 #include "MapComponent.hpp"
 
 Indie::Components::MapComponent::MapComponent(const irr::core::vector2di &dimension, Indie::Components::MAP_TYPE type, Indie::Components::THEME theme)
-    : dimension(dimension), type(type), theme(theme), map(dimension.Y)
+    : dimension(dimension), type(type), theme(theme), map(dimension.Y), mapState(MAP_STATE::DEFAULT)
 {
     for (int i = 0 ; i < dimension.Y; i++)
         this->map[i].resize(dimension.X);
@@ -32,6 +32,16 @@ const irr::core::vector2di &Indie::Components::MapComponent::getDimension() cons
 const std::vector<std::vector<Indie::Components::OBJECT>> &Indie::Components::MapComponent::getMap() const
 {
     return this->map;
+}
+
+const Indie::Components::MAP_STATE &Indie::Components::MapComponent::getMapState() const
+{
+    return this->mapState;
+}
+
+void Indie::Components::MapComponent::setMapState(Indie::Components::MAP_STATE newState)
+{
+    this->mapState = newState;
 }
 
 void Indie::Components::MapComponent::setType(Indie::Components::MAP_TYPE type)

@@ -10,6 +10,7 @@
 #include "Exceptions.h"
 
 Indie::Components::RenderComponent::RenderComponent(std::string const &meshPath, std::string const &texturePath, const ContextManager &contextManager, irr::core::vector3df position, bool lightSensible)
+    : meshPath(meshPath), texturePath(texturePath)
 {
     irr::scene::IAnimatedMesh *newMesh = contextManager.getSceneManager()->getMesh(meshPath.c_str());
     irr::video::ITexture *newTexture = contextManager.getDriver()->getTexture(texturePath.c_str());
@@ -26,6 +27,7 @@ Indie::Components::RenderComponent::RenderComponent(std::string const &meshPath,
     this->mesh->setMaterialTexture(0, newTexture);
     this->mesh->setVisible(true);
     this->mesh->setPosition(position);
+    this->texture = newTexture;
 }
 
 Indie::Components::RenderComponent::~RenderComponent()
@@ -45,4 +47,19 @@ void Indie::Components::RenderComponent::setMesh(irr::scene::IAnimatedMeshSceneN
     }
     this->mesh->remove();
     this->mesh = newMesh;
+}
+
+irr::video::ITexture *Indie::Components::RenderComponent::getTexture(void) const
+{
+    return this->texture;
+}
+
+const std::string &Indie::Components::RenderComponent::getMeshPath(void) const
+{
+    return this->meshPath;
+}
+
+const std::string &Indie::Components::RenderComponent::getTexturePath(void) const
+{
+    return this->texturePath;
 }

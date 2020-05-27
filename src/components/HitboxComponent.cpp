@@ -14,7 +14,8 @@ Indie::Components::HitboxComponent::HitboxComponent(irr::core::vector3df positio
     irr::scene::IAnimatedMesh *newMesh = contextManager.getSceneManager()->getMesh("../ressources/static_mesh/character/characterBox.b3d");
 
     if (newMesh == nullptr) {
-        throw Indie::Exceptions::FileNotFoundException("HitboxComponent::HitboxComponent", "Cannot found file: ../ressources/static_mesh/character/characterBox.b3d");
+        throw Indie::Exceptions::FileNotFoundException("HitboxComponent::HitboxComponent",
+"Cannot found file: ../ressources/static_mesh/character/characterBox.b3d");
     }
     contextManager.getSceneManager()->getMeshManipulator()->setVertexColors(newMesh, irr::video::SColor(0, 20, 20, 20));
     this->mesh = contextManager.getSceneManager()->addAnimatedMeshSceneNode(newMesh, 0);

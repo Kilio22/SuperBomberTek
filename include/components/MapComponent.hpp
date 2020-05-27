@@ -34,6 +34,11 @@ namespace Indie::Components
         LAVA = 5,
     };
 
+    enum class MAP_STATE {
+        DEFAULT,
+        TRANSPARENT
+    };
+
     class MapComponent
     {
         public:
@@ -44,17 +49,20 @@ namespace Indie::Components
             const THEME  &getTheme() const;
             const irr::core::vector2di &getDimension() const;
             const std::vector<std::vector<OBJECT>> &getMap() const;
+            const MAP_STATE &getMapState() const;
 
             void setType(MAP_TYPE type);
             void setTheme(THEME theme);
             void setDimension(const irr::core::vector2di &dimension);
             void setMap(const std::vector<std::vector<OBJECT>> &map);
+            void setMapState(MAP_STATE newState);
 
         private:
             irr::core::vector2di dimension;
             MAP_TYPE type;
             THEME theme;
             std::vector<std::vector<OBJECT>> map;
+            MAP_STATE mapState;
     };
 }
 

@@ -21,10 +21,17 @@ namespace Indie::Components
             ~RenderComponent();
 
             irr::scene::IAnimatedMeshSceneNode *getMesh(void) const;
+            irr::video::ITexture *getTexture(void) const;
+            const std::string &getMeshPath(void) const;
+            const std::string &getTexturePath(void) const;
+
             void setMesh(irr::scene::IAnimatedMeshSceneNode *newMesh);
 
         private:
             irr::scene::IAnimatedMeshSceneNode *mesh;
+            irr::video::ITexture *texture;
+            std::string meshPath;
+            std::string texturePath;
     };
 }
 

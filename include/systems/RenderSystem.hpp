@@ -9,6 +9,7 @@
 #define RENDERSYSTEM_HPP_
 
 #include "ISystem.hpp"
+#include "Components.h"
 
 namespace Indie::Systems
 {
@@ -19,6 +20,10 @@ namespace Indie::Systems
             ~RenderSystem() = default;
 
             void onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const final;
+        private:
+            void checkMapState(EntityManager &entityManager) const;
+            void changeBoxes(EntityManager &entityManager, Components::MAP_STATE state) const;
+            void changeBox(Entity *wall, Components::MAP_STATE state) const;
     };
 }
 
