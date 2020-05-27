@@ -22,19 +22,15 @@ std::pair<int, int> Indie::UiSelector::getPos() const
 
 void Indie::UiSelector::update()
 {
-    if (EventHandler::getInstance().isKeyPressedAtOnce(up)) {
+    if (EventHandler::getInstance().isKeyPressedAtOnce(up))
         posY = (posY >= 1) ? posY - 1 : posY;
-        std::cout << "UP" << std::endl;
-    }
     if (EventHandler::getInstance().isKeyPressedAtOnce(left))
         posX = (posX >= 1) ? posX - 1 : posX;
-    if (EventHandler::getInstance().isKeyPressedAtOnce(down)) {
+    if (EventHandler::getInstance().isKeyPressedAtOnce(down))
         posY = (posY < sizeY - 1) ? posY + 1: posY;
-        std::cout << "DOWN" << std::endl;
-    }
     if (EventHandler::getInstance().isKeyPressedAtOnce(right))
         posX = (posX < sizeX - 1) ? posX + 1: posX;
-    EventHandler::getInstance().resetKeys();
+    EventHandler::getInstance().resetKeysStatusOnce();
 }
 
 void Indie::UiSelector::setPos(int posX, int posY)

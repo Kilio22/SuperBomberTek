@@ -8,40 +8,42 @@
 #include "CollisionSystem.hpp"
 #include "Components.h"
 
-bool Indie::Systems::CollisionSystem::checkCollisionWithPowerUp(
-    EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox, Indie::Components::POWERUP_TYPE type) const
+Indie::Components::POWERUP_TYPE Indie::Systems::CollisionSystem::checkCollisionWithPowerUp(
+    EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox) const
 {
     for (auto powerUp : entityManager.each<Components::RenderComponent, Components::PowerUpComponent>()) {
         Components::PowerUpComponent *powerUpComponent = powerUp->getComponent<Components::PowerUpComponent>();
-
-        if (powerUpComponent->getType() != type)
-            continue;
         Components::RenderComponent *renderComponent = powerUp->getComponent<Components::RenderComponent>();
+
         if (renderComponent->getMesh()->getTransformedBoundingBox().intersectsWithBox(characterBoundingBox) == true) {
             powerUp->needDestroy();
-            return true;
+            return powerUpComponent->getType();
         }
     }
-    return false;
+    return Components::POWERUP_TYPE::NONE;
 }
 
 void Indie::Systems::CollisionSystem::checkCollisionWithPowerUps(
     EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox, Components::PlayerComponent *playerComponent) const
 {
-    if (this->checkCollisionWithPowerUp(entityManager, characterBoundingBox, Components::POWERUP_TYPE::BOMB_UP) == true) {
+    Components::POWERUP_TYPE powerUpType = this->checkCollisionWithPowerUp(entityManager, characterBoundingBox);
+
+    if (powerUpType == Components::POWERUP_TYPE::NONE)
+        return;
+    if (powerUpType == Components::POWERUP_TYPE::BOMB_UP) {
         playerComponent->setMaxBombNb(playerComponent->getMaxBombNb() + 1);
         playerComponent->setCurrentBombNb(playerComponent->getCurrentBombNb() + 1);
         return;
     }
-    if (this->checkCollisionWithPowerUp(entityManager, characterBoundingBox, Components::POWERUP_TYPE::FIRE_UP) == true) {
+    if (powerUpType == Components::POWERUP_TYPE::FIRE_UP) {
         playerComponent->setBombsRange(playerComponent->getBombsRange() + 1);
         return;
     }
-    if (this->checkCollisionWithPowerUp(entityManager, characterBoundingBox, Components::POWERUP_TYPE::SPEED_UP) == true) {
+    if (powerUpType == Components::POWERUP_TYPE::SPEED_UP) {
         playerComponent->setVelocity(playerComponent->getVelocity() + 5);
         return;
     }
-    if (this->checkCollisionWithPowerUp(entityManager, characterBoundingBox, Components::POWERUP_TYPE::WALL_PASS) == true) {
+    if (powerUpType == Components::POWERUP_TYPE::WALL_PASS) {
         playerComponent->setWallPass(true);
         return;
     }
@@ -117,7 +119,7 @@ void Indie::Systems::CollisionSystem::onUpdate(irr::f32, EntityManager &entityMa
             this->checkCollisionWithPowerUps(entityManager, updatedBoundingBox, characterPlayerComponent);
             if (this->checkCollisionWithEntities<Components::WallComponent, Components::RenderComponent, Components::PositionComponent>(
                     entityManager, updatedBoundingBox, characterPlayerComponent)
-                    == true) {
+                == true) {
                 characterPositionComponent->setPosition(currentPosition);
                 characterVelocityComponent->setVelocity(0);
                 continue;
@@ -132,20 +134,10 @@ void Indie::Systems::CollisionSystem::onUpdate(irr::f32, EntityManager &entityMa
                 characterVelocityComponent->setVelocity(0);
                 continue;
             }
-            if (this->checkCollisionWithEntities<Components::RenderComponent, Components::KillComponent>(
-                    entityManager, updatedBoundingBox, characterPlayerComponent)
-                == true) {
-                characterPositionComponent->setPosition(currentPosition);
-                characterVelocityComponent->setVelocity(0);
-                character->addComponent<Components::TimerComponent>(1.75f);
-                continue;
-            }
         }
         if (this->checkCollisionWithEntities<Components::RenderComponent, Components::KillComponent>(
                 entityManager, characterHitBoxComponent->getMesh()->getTransformedBoundingBox(), characterPlayerComponent)
             == true) {
-            characterPositionComponent->setPosition(currentPosition);
-            characterVelocityComponent->setVelocity(0);
             character->addComponent<Components::TimerComponent>(1.75f);
         }
     }

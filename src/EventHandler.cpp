@@ -24,6 +24,8 @@ Indie::EventHandler::EventHandler()
 
 bool Indie::EventHandler::OnEvent(const irr::SEvent &event)
 {
+    this->resetKeysStatusOnce();
+    this->resetKeysReleased();
     if (event.EventType == irr::EET_KEY_INPUT_EVENT) {
         if (event.KeyInput.PressedDown == true) {
             this->keysStatus.at(event.KeyInput.Key) = true;
@@ -81,6 +83,22 @@ bool Indie::EventHandler::isAnyKeyPressedAtOnce() const
 
 void Indie::EventHandler::resetKeys(void)
 {
+    this->resetKeysReleased();
+    this->resetKeysStatus();
+    this->resetKeysStatusOnce();
+}
+
+void Indie::EventHandler::resetKeysStatus(void)
+{
+    this->keysStatus.assign(irr::KEY_KEY_CODES_COUNT, false);
+}
+
+void Indie::EventHandler::resetKeysStatusOnce(void)
+{
     this->keysStatusOnce.assign(irr::KEY_KEY_CODES_COUNT, false);
+}
+
+void Indie::EventHandler::resetKeysReleased(void)
+{
     this->keysStatusReleased.assign(irr::KEY_KEY_CODES_COUNT, false);
 }

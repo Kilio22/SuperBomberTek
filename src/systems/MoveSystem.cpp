@@ -21,5 +21,6 @@ void Indie::Systems::MoveSystem::onUpdate(irr::f32, Indie::EntityManager &entity
         moveComponent->setLeft(inputComponent->isKeyPressed(Indie::Components::KEY_TYPE::LEFT));
         moveComponent->setDrop(inputComponent->isKeyPressed(Indie::Components::KEY_TYPE::DROP));
     }
-    EventHandler::getInstance().resetKeys();
+    EventHandler::getInstance().resetKeysReleased();
+    EventHandler::getInstance().resetKeysStatusOnce();
 }

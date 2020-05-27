@@ -46,8 +46,8 @@ namespace Indie::Systems
             bool checkCollisionWithCharacters(EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox,
                 const irr::core::vector3df &currentCharacterPosition) const;
             bool checkCollisionWithBombs(EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox, int characterId) const;
-            bool checkCollisionWithPowerUp(
-                EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox, Components::POWERUP_TYPE type) const;
+            Components::POWERUP_TYPE checkCollisionWithPowerUp(
+                EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox) const;
             void checkCollisionWithPowerUps(
                 EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox, Components::PlayerComponent *playerComponent) const;
             irr::core::aabbox3df updateCharacterBoundingBox(

@@ -29,6 +29,9 @@ namespace Indie
             bool isAnyKeyPressedAtOnce() const;
 
             void resetKeys(void);
+            void resetKeysStatus(void);
+            void resetKeysStatusOnce(void);
+            void resetKeysReleased(void);
 
             void operator=(EventHandler const &) = delete;
             EventHandler(EventHandler const &) = delete;
