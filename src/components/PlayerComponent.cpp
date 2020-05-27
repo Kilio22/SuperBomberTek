@@ -8,12 +8,7 @@
 #include "PlayerComponent.hpp"
 
 Indie::Components::PlayerComponent::PlayerComponent(const std::string &playerNb)
-    : bombsRange(2)
-    , maxBombNb(4)
-    , currentBombNb(4)
-    , velocity(25.f)
-    , wallPass(false)
-    , name("Player " + name)
+    : bombsRange(2), maxBombNb(4), currentBombNb(4), velocity(25.f), wallPass(false), name("Player " + playerNb)
 {
 }
 
