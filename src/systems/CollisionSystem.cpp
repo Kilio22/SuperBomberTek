@@ -128,6 +128,7 @@ void Indie::Systems::CollisionSystem::onUpdate(irr::f32, EntityManager &entityMa
                     && character->has<Components::TimerComponent>() == false) {
                     character->addComponent<Components::TimerComponent>(1.75f);
                 }
+                continue;
             }
             if (this->checkCollisionWithCharacters(entityManager, updatedBoundingBox, currentPosition) == true) {
                 characterPositionComponent->setPosition(currentPosition);
@@ -138,6 +139,7 @@ void Indie::Systems::CollisionSystem::onUpdate(irr::f32, EntityManager &entityMa
                     && character->has<Components::TimerComponent>() == false) {
                     character->addComponent<Components::TimerComponent>(1.75f);
                 }
+                continue;
             }
             if (this->checkCollisionWithBombs(entityManager, updatedBoundingBox, character->getId()) == true) {
                 characterPositionComponent->setPosition(currentPosition);
@@ -148,6 +150,7 @@ void Indie::Systems::CollisionSystem::onUpdate(irr::f32, EntityManager &entityMa
                     && character->has<Components::TimerComponent>() == false) {
                     character->addComponent<Components::TimerComponent>(1.75f);
                 }
+                continue;
             }
         }
     }
