@@ -94,15 +94,6 @@ void Indie::GameScene::update(irr::f32 deltaTime)
     this->systemManager.getSystem<MeshSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<RenderSystem>()->onUpdate(deltaTime, entityManager);
     auto &map = this->entityManager.each<MapComponent>().begin().get()->getComponent<MapComponent>()->getMap();
-    for (auto oui : map) {
-        for (auto non : oui) {
-            std::cout << (int)non;
-            if ((int)non >= 0)
-                std::cout << " ";
-        }
-        std::cout << std::endl;
-    }
-    std::cout << std::endl;
 }
 
 void Indie::GameScene::renderPre3D() {}
