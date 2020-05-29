@@ -17,11 +17,11 @@ const std::string Indie::MenuScene::filepaths[5] = {
 };
 
 const irr::core::vector2df Indie::MenuScene::velocities[5] = {
-    irr::core::vector2df((irr::f32)0.005, (irr::f32)0.005),
-    irr::core::vector2df((irr::f32)0.010, (irr::f32)0.000),
-    irr::core::vector2df((irr::f32)0.020, (irr::f32)0.000),
-    irr::core::vector2df((irr::f32)0.030, (irr::f32)0.000),
-    irr::core::vector2df((irr::f32)0.040, (irr::f32)0.000)
+    irr::core::vector2df((irr::f32)10.f, (irr::f32)10.f),
+    irr::core::vector2df((irr::f32)15.f, (irr::f32)0.000),
+    irr::core::vector2df((irr::f32)20.f, (irr::f32)0.000),
+    irr::core::vector2df((irr::f32)25.f, (irr::f32)0.000),
+    irr::core::vector2df((irr::f32)30.f, (irr::f32)0.000)
 };
 
 Indie::MenuScene::MenuScene(ContextManager &context)
@@ -59,7 +59,7 @@ void Indie::MenuScene::reset()
 void Indie::MenuScene::update(irr::f32 ticks)
 {
     for (size_t i = 0; i < parallax.size(); i++)
-        parallax[i]->update(1);
+        parallax[i]->update(ticks);
 }
 
 void Indie::MenuScene::renderPre3D()
