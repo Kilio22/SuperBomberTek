@@ -21,6 +21,8 @@ void Indie::PauseScene::init()
     std::string menuPath = std::string("../ressources/images/pause/Menu.png");
     std::string quitPath = std::string("../ressources/images/pause/Quitter.png");
     std::string restartPath = std::string("../ressources/images/pause/Recommencer.png");
+    std::string bomberPath = std::string("../ressources/images/pause/Pause.png");
+    std::string titlePath = std::string("../ressources/images/pause/Title.png");
 
     this->play.reset(new Button(context));
     this->menu.reset(new Button(context));
@@ -30,6 +32,14 @@ void Indie::PauseScene::init()
     this->restart->init(context, restartPath, 0, 1, POS(0, 0));
     this->menu->init(context, menuPath, 0, 2, POS(0, 0));
     this->quit->init(context, quitPath, 0, 3, POS(0, 0));
+    this->bomber = context.getDriver()->getTexture(bomberPath.c_str());
+    if (this->bomber == nullptr) {
+        throw Exceptions::FileNotFoundException(ERROR_STR, "File \"" + bomberPath + "\" not found.");
+    }
+    this->title = context.getDriver()->getTexture(titlePath.c_str());
+    if (this->title == nullptr) {
+        throw Exceptions::FileNotFoundException(ERROR_STR, "File \"" + titlePath + "\" not found.");
+    }
 }
 
 void Indie::PauseScene::reset()
@@ -78,4 +88,6 @@ void Indie::PauseScene::renderPost3D()
     this->menu->draw();
     this->quit->draw();
     this->restart->draw();
+    this->context.displayImage(this->bomber);
+    this->context.displayImage(this->title);
 }
