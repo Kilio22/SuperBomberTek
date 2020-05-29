@@ -2,26 +2,24 @@
 ** EPITECH PROJECT, 2020
 ** OOP_indie_studio_2019
 ** File description:
-** MainMenuScene
+** PauseSubScene | Author: Kylian BALAN - kylian.balan@epitech.eu
 */
 
-#ifndef MAINMENUSCENE_HPP_
-#define MAINMENUSCENE_HPP_
+#ifndef PAUSESUBSCENE_HPP_
+#define PAUSESUBSCENE_HPP_
 
 #include "Button.hpp"
-#include "ContextManager.hpp"
 #include "IScene.hpp"
 #include "UiSelector.hpp"
 #include <memory>
-#include <vector>
 
 namespace Indie
 {
-    class MainMenuScene : public IScene
+    class PauseScene : public IScene
     {
         public:
-        MainMenuScene(ContextManager &context);
-        ~MainMenuScene();
+        PauseScene(ContextManager &context);
+        ~PauseScene() = default;
 
         void init() final;
         void reset() final;
@@ -33,8 +31,10 @@ namespace Indie
         ContextManager &context;
         UiSelector selector;
         std::unique_ptr<Button> play;
-        std::unique_ptr<Button> options;
+        std::unique_ptr<Button> menu;
+        std::unique_ptr<Button> restart;
+        std::unique_ptr<Button> quit;
     };
 }
 
-#endif /* !MAINMENUSCENE_HPP_ */
+#endif /* !PAUSESUBSCENE_HPP_ */

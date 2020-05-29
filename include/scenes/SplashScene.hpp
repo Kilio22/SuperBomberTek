@@ -8,28 +8,30 @@
 #ifndef SPLASHSCENE_HPP_
 #define SPLASHSCENE_HPP_
 
+#include "ContextManager.hpp"
+#include "EventHandler.hpp"
 #include "IScene.hpp"
 #include "Parallax.hpp"
-#include "ContextManager.hpp"
 #include "ServiceLocator.hpp"
-#include "EventHandler.hpp"
 #include <vector>
 
-namespace Indie {
-    class SplashScene : public IScene {
+namespace Indie
+{
+    class SplashScene : public IScene
+    {
         public:
-            SplashScene(ContextManager &context);
-            ~SplashScene() = default;
+        SplashScene(ContextManager &context);
+        ~SplashScene() = default;
 
-            void init();
-            void reset();
-            void update(irr::f32 deltaTime);
-            void renderPre3D();
-            void renderPost3D();
+        void init() final;
+        void reset() final;
+        void update(irr::f32 deltaTime) final;
+        void renderPre3D() final;
+        void renderPost3D() final;
 
         private:
-            ContextManager &context;
-            Image *background;
+        ContextManager &context;
+        Image *background;
     };
 }
 

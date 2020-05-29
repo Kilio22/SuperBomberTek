@@ -10,6 +10,7 @@
 #include "EntityBuilder.hpp"
 #include "MapGenerator.hpp"
 #include "Parallax.hpp"
+#include "PauseScene.hpp"
 #include "ServiceLocator.hpp"
 
 using namespace Indie::Systems;
@@ -76,6 +77,7 @@ void Indie::GameScene::init()
 // return false si un load merde.
 void Indie::GameScene::reset()
 {
+    ServiceLocator::getInstance().get<EntityManager>().reset();
     // vos reset de valeurs et les free etc.
     this->init();
 }
@@ -98,6 +100,11 @@ void Indie::GameScene::update(irr::f32 deltaTime)
     this->systemManager.getSystem<CollisionSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<MeshSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<RenderSystem>()->onUpdate(deltaTime, entityManager);
+    if (EventHandler::getInstance().isKeyPressed(irr::EKEY_CODE::KEY_ESCAPE) == true) {
+        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(false);
+        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(false);
+        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::PauseScene>();
+    }
 }
 
 void Indie::GameScene::renderPre3D() {}
