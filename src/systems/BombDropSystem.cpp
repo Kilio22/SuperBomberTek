@@ -42,8 +42,8 @@ bool Indie::Systems::BombDropSystem::checkBombPositionWallPass(EntityManager &en
         auto mapComponent = map->getComponent<MapComponent>();
         auto array = mapComponent->getMap();
 
-        for (size_t i = 0; i < mapComponent->getDimension().Y; i++) {
-            for (size_t j = 0; j < mapComponent->getDimension().X; j++) {
+        for (int i = 0; i < (int)mapComponent->getDimension().Y; i++) {
+            for (int j = 0; j < (int)mapComponent->getDimension().X; j++) {
                 if (array[i][j] == OBJECT::VOID && j * 20 == midX && i * 20 == midZ) {
                     return true;
                 }
