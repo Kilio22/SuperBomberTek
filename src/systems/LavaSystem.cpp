@@ -9,7 +9,7 @@
 
 using namespace Indie::Components;
 
-void Indie::Systems::LavaSystem::onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const
+void Indie::Systems::LavaSystem::onUpdate(irr::f32, EntityManager &entityManager) const
 {
     MapComponent *mapComponent = nullptr;
     std::vector<std::vector<OBJECT>> map;

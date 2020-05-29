@@ -9,8 +9,7 @@
 #include "Exceptions.h"
 #include "MainMenuScene.hpp"
 
-// Passer ça en méthode de TitleScene ??
-static void skipScene(Indie::ContextManager &context)
+static void skipScene(Indie::ContextManager &)
 {
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::MainMenuScene>(); // set to 3
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(true);
@@ -21,9 +20,7 @@ static void skipScene(Indie::ContextManager &context)
 
 const double Indie::TitleScene::updateRate = ((2 * M_PI) / 96) / 32;
 
-Indie::TitleScene::TitleScene(ContextManager &context)
-    : context(context)
-{}
+Indie::TitleScene::TitleScene(ContextManager &context) : context(context) {}
 
 Indie::TitleScene::~TitleScene()
 {
@@ -54,7 +51,7 @@ void Indie::TitleScene::reset()
     init();
 }
 
-void Indie::TitleScene::update(irr::f32 ticks)
+void Indie::TitleScene::update(irr::f32)
 {
     if (EventHandler::getInstance().isAnyKeyPressedAtOnce()) {
         skipScene(context);
@@ -74,5 +71,5 @@ void Indie::TitleScene::renderPost3D()
     else
         posY = (irr::u32)(sin(this->offsetY) * 10);
     this->context.displayImage(this->titleLogo, POS(0, posY));
-    this->context.displayImage(this->pressText, POS(0, 0), irr::video::SColor((irr::u32)((sin(this->offsetAlpha) + 1) / 2 * 255),255,255,255));
+    this->context.displayImage(this->pressText, POS(0, 0), irr::video::SColor((irr::u32)((sin(this->offsetAlpha) + 1) / 2 * 255), 255, 255, 255));
 }

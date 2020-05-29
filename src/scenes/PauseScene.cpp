@@ -48,7 +48,7 @@ void Indie::PauseScene::reset()
     this->init();
 }
 
-void Indie::PauseScene::update(irr::f32 deltaTime)
+void Indie::PauseScene::update(irr::f32)
 {
     this->selector.update();
     this->play->update(this->selector.getPos());

@@ -21,11 +21,10 @@ static void skipScene(Indie::ContextManager &context)
 
 Indie::MainMenuScene::MainMenuScene(ContextManager &context)
     : context(context), selector(1, 2, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
-{}
-
-Indie::MainMenuScene::~MainMenuScene()
 {
 }
+
+Indie::MainMenuScene::~MainMenuScene() {}
 
 void Indie::MainMenuScene::init()
 {
@@ -46,7 +45,7 @@ void Indie::MainMenuScene::reset()
     init();
 }
 
-void Indie::MainMenuScene::update(irr::f32 ticks)
+void Indie::MainMenuScene::update(irr::f32)
 {
     selector.update();
     play->update(selector.getPos());
@@ -57,8 +56,7 @@ void Indie::MainMenuScene::update(irr::f32 ticks)
     }
 }
 
-void Indie::MainMenuScene::renderPre3D()
-{}
+void Indie::MainMenuScene::renderPre3D() {}
 
 void Indie::MainMenuScene::renderPost3D()
 {
