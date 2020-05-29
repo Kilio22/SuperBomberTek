@@ -66,7 +66,7 @@ void Indie::Systems::BombDropSystem::onUpdate(irr::f32, EntityManager &entityMan
 
         if (moveComponent->getDrop() == true && playerComponent->getCurrentBombNb() > 0 && entity->has<TimerComponent>() == false
             && this->hasBombAtPosition(entityManager, irr::core::vector3df(midX, 20, midZ)) == false) {
-            if (playerComponent->getWallPass() == true && this->checkBombPositionWallPass(entityManager, midX, midZ) == false) {
+            if (playerComponent->getWallPass() == true && this->checkBombPositionWallPass(entityManager, (int)midX, (int)midZ) == false) {
                 continue;
             }
             for (auto map : entityManager.each<MapComponent>()) {
