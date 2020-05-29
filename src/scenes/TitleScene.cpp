@@ -7,10 +7,12 @@
 
 #include "TitleScene.hpp"
 #include "Exceptions.h"
+#include "MainMenuScene.hpp"
 
+// Passer ça en méthode de TitleScene ??
 static void skipScene(Indie::ContextManager &context)
 {
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene(3); // set to 3
+    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::MainMenuScene>(); // set to 3
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(true);
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(true);
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneUpdateActive(true);

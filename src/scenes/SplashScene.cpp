@@ -6,12 +6,15 @@
 */
 
 #include "SplashScene.hpp"
+#include "MenuScene.hpp"
 #include "ServiceLocator.hpp"
+#include "TitleScene.hpp"
 
+// Passer ça en méthode de SplashScene ??
 static void skipScene(Indie::ContextManager &context)
 {
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setScene(1, context);
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene(2);
+    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setScene<Indie::MenuScene>(context);
+    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::TitleScene>();
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(true);
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(true);
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneUpdateActive(true);

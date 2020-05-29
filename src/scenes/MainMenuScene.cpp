@@ -6,11 +6,13 @@
 */
 
 #include "MainMenuScene.hpp"
+#include "GameScene.hpp"
 #include "ServiceLocator.hpp"
 
+// Passer ça en méthode de MainMenuScene ??
 static void skipScene(Indie::ContextManager &context)
 {
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setScene(4, context);
+    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setScene<Indie::GameScene>(context);
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(true);
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(true);
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneUpdateActive(false);
