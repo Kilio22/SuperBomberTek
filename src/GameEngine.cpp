@@ -53,12 +53,17 @@ void Indie::GameEngine::startGame()
     irr::u32 lastTime = this->context.getDevice()->getTimer()->getTime();
     irr::u32 currentTime = 0;
     irr::f32 deltaTime = 0;
+    irr::f32 totalDeltaTime = 0;
     while (context.getDevice()->run()) {
         currentTime = this->context.getDevice()->getTimer()->getTime();
-        deltaTime = (irr::f32)(currentTime - lastTime) / 1000.f;
+        deltaTime = (irr::f32)((currentTime - lastTime) / 1000.f);
+        totalDeltaTime += deltaTime;
         // std::cout << "Delta time: " << deltaTime << ", FPS: " << this->context.getDriver()->getFPS() << std::endl;
-        ServiceLocator::getInstance().get<MusicManager>().update();
-        ServiceLocator::getInstance().get<SceneManager>().update(context, deltaTime);
+        if (totalDeltaTime >= 0.016f) {
+            ServiceLocator::getInstance().get<MusicManager>().update();
+            ServiceLocator::getInstance().get<SceneManager>().update(context, totalDeltaTime);
+            totalDeltaTime = 0.f;
+        }
         lastTime = currentTime;
     }
     /* ================================================================================ */
