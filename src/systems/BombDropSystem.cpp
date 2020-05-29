@@ -13,13 +13,7 @@
 std::vector<std::vector<Indie::Components::OBJECT>> Indie::Systems::BombDropSystem::updateMap(
     std::vector<std::vector<Components::OBJECT>> currentMap, irr::f32 midX, irr::f32 midZ) const
 {
-    currentMap[(int)(midX / 20)][(int)(midZ / 20)] = OBJECT::BOMB;
-    for (auto oui : currentMap) {
-        for (auto non : oui) {
-            std::cout << (int)non;
-        }
-        std::cout << std::endl;
-    }
+    currentMap[(int)(midZ / 20)][(int)(midX / 20)] = OBJECT::BOMB;
     return currentMap;
 }
 
@@ -63,10 +57,10 @@ void Indie::Systems::BombDropSystem::onUpdate(irr::f32, EntityManager &entityMan
 {
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
 
-    for (auto entity : entityManager.each<Components::MoveComponent, Components::PositionComponent, Components::PlayerComponent>()) {
-        auto moveComponent = entity->getComponent<Components::MoveComponent>();
-        auto positionComponent = entity->getComponent<Components::PositionComponent>();
-        auto playerComponent = entity->getComponent<Components::PlayerComponent>();
+    for (auto entity : entityManager.each<MoveComponent, PositionComponent, PlayerComponent>()) {
+        auto moveComponent = entity->getComponent<MoveComponent>();
+        auto positionComponent = entity->getComponent<PositionComponent>();
+        auto playerComponent = entity->getComponent<PlayerComponent>();
         irr::f32 midX = (irr::f32)this->getCenter((int)positionComponent->getPosition().X);
         irr::f32 midZ = (irr::f32)this->getCenter((int)positionComponent->getPosition().Z);
 

@@ -13,6 +13,7 @@
 #include "BombExplosionSystem.hpp"
 #include "CollisionSystem.hpp"
 #include "InputSystem.hpp"
+#include "LavaSystem.hpp"
 #include "MeshSystem.hpp"
 #include "MoveSystem.hpp"
 #include "RenderSystem.hpp"

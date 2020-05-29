@@ -12,14 +12,12 @@
 #include <typeinfo>
 
 namespace Indie {
+    using TypeIndex = std::type_index;
 
-using TypeIndex = std::type_index;
-
-template <typename T> TypeIndex getTypeIndex()
-{
-    return std::type_index(typeid(T));
-}
-
+    template <typename T> TypeIndex getTypeIndex()
+    {
+        return std::type_index(typeid(T));
+    }
 }
 
 #endif /* !TYPEINDEX_HPP_ */

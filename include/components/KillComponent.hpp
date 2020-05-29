@@ -15,12 +15,7 @@ namespace Indie::Components
         public:
             KillComponent() = default;
             ~KillComponent() = default;
-
-        protected:
-        private:
     };
 } // namespace Indie::Components
-
-
 
 #endif /* !KILLCOMPONENT_HPP_ */

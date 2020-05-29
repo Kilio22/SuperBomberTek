@@ -26,6 +26,7 @@ Indie::GameScene::GameScene(ContextManager &context)
     this->systemManager.addSystem<BombExplosionSystem>();
     this->systemManager.addSystem<CollisionSystem>();
     this->systemManager.addSystem<InputSystem>();
+    this->systemManager.addSystem<LavaSystem>();
     this->systemManager.addSystem<MeshSystem>();
     this->systemManager.addSystem<MoveSystem>();
     this->systemManager.addSystem<RenderSystem>();
@@ -86,11 +87,22 @@ void Indie::GameScene::update(irr::f32 deltaTime)
     this->systemManager.getSystem<VelocitySystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<BombDropSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<BombExplosionSystem>()->onUpdate(deltaTime, entityManager);
+    this->systemManager.getSystem<LavaSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<TimerStopSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<RotationSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<CollisionSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<MeshSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<RenderSystem>()->onUpdate(deltaTime, entityManager);
+    auto &map = this->entityManager.each<MapComponent>().begin().get()->getComponent<MapComponent>()->getMap();
+    for (auto oui : map) {
+        for (auto non : oui) {
+            std::cout << (int)non;
+            if ((int)non >= 0)
+                std::cout << " ";
+        }
+        std::cout << std::endl;
+    }
+    std::cout << std::endl;
 }
 
 void Indie::GameScene::renderPre3D() {}
