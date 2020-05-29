@@ -56,10 +56,12 @@ void Indie::PauseScene::update(irr::f32 deltaTime)
         this->context.getDevice()->closeDevice();
     }
     if (this->menu->getStatus() == Button::Status::Pressed) {
+        ServiceLocator::getInstance().get<EntityManager>().reset();
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setScene<Indie::MenuScene>(context);
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::MainMenuScene>();
     }
     if (this->restart->getStatus() == Button::Status::Pressed) {
+        ServiceLocator::getInstance().get<EntityManager>().reset();
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::GameScene>()->reset();
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(true);
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(true);

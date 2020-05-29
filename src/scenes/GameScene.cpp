@@ -77,8 +77,6 @@ void Indie::GameScene::init()
 // return false si un load merde.
 void Indie::GameScene::reset()
 {
-    ServiceLocator::getInstance().get<EntityManager>().reset();
-    // vos reset de valeurs et les free etc.
     this->init();
 }
 
