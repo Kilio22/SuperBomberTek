@@ -68,7 +68,6 @@ void Indie::MapGenerator::createDefaultMap(std::vector<std::vector<Indie::Compon
 
 void Indie::MapGenerator::createRandomMap(std::vector<std::vector<Indie::Components::OBJECT>> &map, irr::core::vector2di dimension)
 {
-    std::srand((unsigned int)std::time(nullptr));
     int random = 0;
 
     for (int i = 1; i < dimension.Y - 1; i++) {
