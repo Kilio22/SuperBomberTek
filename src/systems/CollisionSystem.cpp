@@ -124,8 +124,7 @@ void Indie::Systems::CollisionSystem::onUpdate(irr::f32, EntityManager &entityMa
                 characterVelocityComponent->setVelocity(0);
                 if (this->checkCollisionWithEntities<Components::RenderComponent, Components::KillComponent>(
                         entityManager, updatedBoundingBox, characterPlayerComponent)
-                        == true
-                    && character->has<Components::TimerComponent>() == false) {
+                    == true) {
                     character->addComponent<Components::TimerComponent>(1.75f);
                 }
                 continue;
@@ -135,8 +134,7 @@ void Indie::Systems::CollisionSystem::onUpdate(irr::f32, EntityManager &entityMa
                 characterVelocityComponent->setVelocity(0);
                 if (this->checkCollisionWithEntities<Components::RenderComponent, Components::KillComponent>(
                         entityManager, updatedBoundingBox, characterPlayerComponent)
-                        == true
-                    && character->has<Components::TimerComponent>() == false) {
+                    == true) {
                     character->addComponent<Components::TimerComponent>(1.75f);
                 }
                 continue;
@@ -146,12 +144,17 @@ void Indie::Systems::CollisionSystem::onUpdate(irr::f32, EntityManager &entityMa
                 characterVelocityComponent->setVelocity(0);
                 if (this->checkCollisionWithEntities<Components::RenderComponent, Components::KillComponent>(
                         entityManager, updatedBoundingBox, characterPlayerComponent)
-                        == true
-                    && character->has<Components::TimerComponent>() == false) {
+                    == true) {
                     character->addComponent<Components::TimerComponent>(1.75f);
                 }
                 continue;
             }
+        }
+        if (this->checkCollisionWithEntities<Components::RenderComponent, Components::KillComponent>(
+                entityManager, updatedBoundingBox, characterPlayerComponent)
+                == true
+            && character->has<Components::TimerComponent>() == false) {
+            character->addComponent<Components::TimerComponent>(1.75f);
         }
     }
 }
