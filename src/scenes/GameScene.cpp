@@ -8,9 +8,9 @@
 #include "GameScene.hpp"
 #include "Components.h"
 #include "EntityBuilder.hpp"
+#include "MapGenerator.hpp"
 #include "Parallax.hpp"
 #include "ServiceLocator.hpp"
-#include "MapGenerator.hpp"
 
 using namespace Indie::Systems;
 
@@ -40,30 +40,35 @@ Indie::GameScene::GameScene(ContextManager &context)
 void Indie::GameScene::init()
 {
     Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setMusic(1);
-    irr::scene::ICameraSceneNode *camera = sceneManager->addCameraSceneNodeFPS();
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
+    irr::scene::ICameraSceneNode *camera = sceneManager->addCameraSceneNodeFPS();
     Indie::MapGenerator mapGenerator(entityBuilder, irr::core::vector2di(15, 15), MAP_TYPE::DEFAULT, THEME::STONE);
 
-    camera->setPosition(irr::core::vector3df(irr::f32(139.371), irr::f32(170.129), irr::f32(-24.6459)));
+    camera->setPosition(irr::core::vector3df(irr::f32(138.577), irr::f32(230.299), irr::f32(47.7832)));
     camera->setRotation(irr::core::vector3df(irr::f32(41.553), irr::f32(359.176), irr::f32(-90)));
-    camera->setTarget(irr::core::vector3df(irr::f32(139.24), irr::f32(-0.34), irr::f32(116.47)));
+    camera->setTarget(irr::core::vector3df(irr::f32(138.593), irr::f32(-33.5216), irr::f32(130.061)));
 
     driver->setFog(irr::video::SColor(10, 255, 255, 255), irr::video::EFT_FOG_LINEAR, 200.0f, 2000.0f, 0.005f, false, false);
     sceneManager->addLightSceneNode(camera, irr::core::vector3df(0, 0, 0), irr::video::SColorf(0.1f, 0.1f, 0.1f, 0.0f), 700.0f);
     sceneManager->addLightSceneNode(0, irr::core::vector3df(150, 100, 150), irr::video::SColorf(1.0f, 1.0f, 1.0f, 0.5f), 700.0f);
-    sceneManager->addSkyBoxSceneNode(
-        driver->getTexture("../ressources/skybox/skybox_top.png"),
-        driver->getTexture("../ressources/skybox/skybox_bottom.png"),
-        driver->getTexture("../ressources/skybox/skybox_left.png"),
-        driver->getTexture("../ressources/skybox/skybox_right.png"),
-        driver->getTexture("../ressources/skybox/skybox_front.png"),
+    sceneManager->addSkyBoxSceneNode(driver->getTexture("../ressources/skybox/skybox_top.png"),
+        driver->getTexture("../ressources/skybox/skybox_bottom.png"), driver->getTexture("../ressources/skybox/skybox_left.png"),
+        driver->getTexture("../ressources/skybox/skybox_right.png"), driver->getTexture("../ressources/skybox/skybox_front.png"),
         driver->getTexture("../ressources/skybox/skybox_back.png"));
 
     mapGenerator.generate(entityManager, entityBuilder);
-    entityBuilder.createPlayer(irr::core::vector3df(20, 20, 20), "../ressources/animated_mesh/character/character_idle.b3d", "../ressources/textures/character/blue1.png", {{irr::KEY_UP, Indie::Components::KEY_TYPE::UP}, {irr::KEY_DOWN, Indie::Components::KEY_TYPE::DOWN}, {irr::KEY_RIGHT, Indie::Components::KEY_TYPE::RIGHT}, {irr::KEY_LEFT, Indie::Components::KEY_TYPE::LEFT}, {irr::KEY_SPACE, Indie::Components::KEY_TYPE::DROP}}, "1");
-    entityBuilder.createAi(irr::core::vector3df(260, 20, 260), "../ressources/animated_mesh/character/character_idle.b3d", "../ressources/textures/character/yellow1.png", "2");
-    entityBuilder.createAi(irr::core::vector3df(260, 20, 20), "../ressources/animated_mesh/character/character_idle.b3d", "../ressources/textures/character/green1.png", "3");
-    entityBuilder.createAi(irr::core::vector3df(20, 20, 260), "../ressources/animated_mesh/character/character_idle.b3d", "../ressources/textures/character/red1.png", "4");
+    entityBuilder.createPlayer(irr::core::vector3df(20, 20, 20), "../ressources/animated_mesh/character/character_idle.b3d",
+        "../ressources/textures/character/blue1.png",
+        { { irr::KEY_UP, Indie::Components::KEY_TYPE::UP }, { irr::KEY_DOWN, Indie::Components::KEY_TYPE::DOWN },
+            { irr::KEY_RIGHT, Indie::Components::KEY_TYPE::RIGHT }, { irr::KEY_LEFT, Indie::Components::KEY_TYPE::LEFT },
+            { irr::KEY_SPACE, Indie::Components::KEY_TYPE::DROP } },
+        "1");
+    entityBuilder.createAi(irr::core::vector3df(260, 20, 260), "../ressources/animated_mesh/character/character_idle.b3d",
+        "../ressources/textures/character/yellow1.png", "2");
+    entityBuilder.createAi(irr::core::vector3df(260, 20, 20), "../ressources/animated_mesh/character/character_idle.b3d",
+        "../ressources/textures/character/green1.png", "3");
+    entityBuilder.createAi(irr::core::vector3df(20, 20, 260), "../ressources/animated_mesh/character/character_idle.b3d",
+        "../ressources/textures/character/red1.png", "4");
 
     device->getCursorControl()->setVisible(false);
 }
@@ -93,7 +98,6 @@ void Indie::GameScene::update(irr::f32 deltaTime)
     this->systemManager.getSystem<CollisionSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<MeshSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<RenderSystem>()->onUpdate(deltaTime, entityManager);
-    auto &map = this->entityManager.each<MapComponent>().begin().get()->getComponent<MapComponent>()->getMap();
 }
 
 void Indie::GameScene::renderPre3D() {}

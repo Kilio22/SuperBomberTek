@@ -30,9 +30,9 @@ void Indie::GameEngine::setupSceneManager(ContextManager &context)
     ServiceLocator::getInstance().get<SceneManager>().setScene(0, context);
     ServiceLocator::getInstance().get<SceneManager>().setSceneUpdateActive(true);
     ServiceLocator::getInstance().get<SceneManager>().setSceneRenderActive(true);
-    //ServiceLocator::getInstance().get<SceneManager>().setSubScene(2);
-    //ServiceLocator::getInstance().get<SceneManager>().setSubSceneUpdateActive(true);
-    //ServiceLocator::getInstance().get<SceneManager>().setSubSceneRenderActive(true);
+    // ServiceLocator::getInstance().get<SceneManager>().setSubScene(2);
+    // ServiceLocator::getInstance().get<SceneManager>().setSubSceneUpdateActive(true);
+    // ServiceLocator::getInstance().get<SceneManager>().setSubSceneRenderActive(true);
 }
 
 Indie::GameEngine::GameEngine()
