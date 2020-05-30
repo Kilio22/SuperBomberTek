@@ -26,19 +26,14 @@ Indie::MainMenuScene::MainMenuScene(ContextManager &context)
 {}
 
 Indie::MainMenuScene::~MainMenuScene()
-{
-    if (title)
-        context.getDriver()->removeTexture(title);
-    if (bomb)
-        context.getDriver()->removeTexture(bomb);
-}
+{}
 
 void Indie::MainMenuScene::init()
 {
     Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setMusic(0);
 
-    title = context.getDriver()->getTexture("../ressources/images/menu/title.png");
-    bomb = context.getDriver()->getTexture("../ressources/images/menu/bomb.png");
+    title = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/menu/title.png");
+    bomb = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/menu/bomb.png");
     solo.reset(new Button(context));
     multi.reset(new Button(context));
     options.reset(new Button(context));
@@ -49,20 +44,11 @@ void Indie::MainMenuScene::init()
     options->init(context, "../ressources/images/menu/Options.png", 0, 2, POS(0, 0));
     credits->init(context, "../ressources/images/menu/Credits.png", 0, 3, POS(0, 0));
     quitter->init(context, "../ressources/images/menu/Quitter.png", 0, 4, POS(0, 0));
-
-    if (!title)
-        throw Exceptions::FileNotFoundException(ERROR_STR, "File ../ressources/images/menu/title.png not found.");
-    if (!bomb)
-        throw Exceptions::FileNotFoundException(ERROR_STR, "File ../ressources/images/menu/bomb.png not found.");
 }
 
 void Indie::MainMenuScene::reset()
 {
     selector.setPos(0, 0);
-    if (title)
-        context.getDriver()->removeTexture(title);
-    if (bomb)
-        context.getDriver()->removeTexture(bomb);
     init();
 }
 

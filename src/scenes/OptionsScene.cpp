@@ -28,16 +28,7 @@ soundVolumeSelector(21, 1, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr
 }
 
 Indie::OptionsScene::~OptionsScene()
-{
-    if (title)
-        context.getDriver()->removeTexture(title);
-    if (wrench)
-        context.getDriver()->removeTexture(wrench);
-    if (layout)
-        context.getDriver()->removeTexture(layout);
-    if (font)
-        context.getGuiEnv()->removeFont(font);
-}
+{}
 
 void Indie::OptionsScene::init()
 {
@@ -47,9 +38,9 @@ void Indie::OptionsScene::init()
     std::string path4 = std::string("../ressources/images/options/Check1.png");
     std::string path5 = std::string("../ressources/images/options/Retour.png");
 
-    title = context.getDriver()->getTexture("../ressources/images/options/title.png");
-    wrench = context.getDriver()->getTexture("../ressources/images/options/drawing.png");
-    layout = context.getDriver()->getTexture("../ressources/images/options/Layout.png");
+    title = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/options/title.png");
+    wrench = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/options/drawing.png");
+    layout = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/options/Layout.png");
 
     font = context.getGuiEnv()->getFont("../ressources/font/Banschrift.xml");
 
@@ -67,24 +58,11 @@ void Indie::OptionsScene::init()
 
     musicMute->setStatus(Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().isMusicMuted());
     // TODO : Set the sound checkbox status to the isMuted value of the sound when it's done
-
-    if (!title)
-        throw Exceptions::FileNotFoundException(ERROR_STR, "File ../ressources/images/options/title.png not found.");
-    if (!wrench)
-        throw Exceptions::FileNotFoundException(ERROR_STR, "File ../ressources/images/options/drawing.png not found.");
-    if (!layout)
-        throw Exceptions::FileNotFoundException(ERROR_STR, "File ../ressources/images/options/Layout.png not found.");
 }
 
 void Indie::OptionsScene::reset()
 {
     selector.setPos(0, 0);
-    if (title)
-        context.getDriver()->removeTexture(title);
-    if (wrench)
-        context.getDriver()->removeTexture(wrench);
-    if (layout)
-        context.getDriver()->removeTexture(layout);
     init();
 }
 

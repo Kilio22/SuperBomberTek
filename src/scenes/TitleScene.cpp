@@ -25,17 +25,12 @@ const double Indie::TitleScene::updateRate = (((2 * M_PI) / 96) / 32) * 3000;
 Indie::TitleScene::TitleScene(ContextManager &context) : context(context) {}
 
 Indie::TitleScene::~TitleScene()
-{
-    if (titleLogo)
-        context.getDriver()->removeTexture(titleLogo);
-    if (pressText)
-        context.getDriver()->removeTexture(pressText);
-}
+{}
 
 void Indie::TitleScene::init()
 {
-    this->titleLogo = this->context.getDriver()->getTexture("../ressources/images/logo.png");
-    this->pressText = this->context.getDriver()->getTexture("../ressources/images/press.png");
+    this->titleLogo = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/logo.png");
+    this->pressText = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/press.png");
     if (titleLogo == nullptr) {
         throw Exceptions::FileNotFoundException(ERROR_STR, "File \"../ressources/images/logo.png\" not found.");
     }
@@ -48,8 +43,6 @@ void Indie::TitleScene::init()
 
 void Indie::TitleScene::reset()
 {
-    this->context.getDriver()->removeTexture(titleLogo);
-    this->context.getDriver()->removeTexture(pressText);
     this->offsetY = 0;
     this->offsetAlpha = 0;
     init();

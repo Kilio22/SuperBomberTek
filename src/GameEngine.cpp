@@ -41,15 +41,29 @@ void Indie::GameEngine::setupSceneManager(ContextManager &context)
 Indie::GameEngine::GameEngine()
     : context(ServiceLocator::getInstance().get<ContextManager>())
 {
+    loadImage = context.getDriver()->getTexture("../ressources/images/Loading.png");
+}
+
+Indie::GameEngine::~GameEngine()
+{
+    if (loadImage)
+        context.getDriver()->removeTexture(loadImage);
 }
 
 void Indie::GameEngine::startGame()
 {
+    /* ================================================================================ */
+    /* LOADING SCREEN */
+    /* ================================================================================ */
+    context.getDriver()->beginScene(true, true, irr::video::SColor(0,0,0,0));
+    context.displayImage(loadImage);
+    context.getDriver()->endScene();
+    ServiceLocator::getInstance().get<ImageLoader>();
     this->setupMusicManager();
     this->setupSceneManager(context);
-    this->context.getDevice()->setEventReceiver(&EventHandler::getInstance());
     /* ================================================================================ */
     /* LOOP */
+    this->context.getDevice()->setEventReceiver(&EventHandler::getInstance());
     this->context.getDevice()->getTimer()->stop();
     this->context.getDevice()->getTimer()->start();
 

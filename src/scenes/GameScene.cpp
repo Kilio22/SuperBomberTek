@@ -48,6 +48,10 @@ void Indie::GameScene::init()
     camera->setRotation(irr::core::vector3df(irr::f32(41.553), irr::f32(359.176), irr::f32(-90)));
     camera->setTarget(irr::core::vector3df(irr::f32(138.593), irr::f32(-33.5216), irr::f32(130.061)));
 
+    //irr::core::matrix4 isoMatrix = camera->getProjectionMatrix();
+    //camera->setProjectionMatrix(isoMatrix, true);
+    //camera->setFOV(70);
+
     driver->setFog(irr::video::SColor(10, 255, 255, 255), irr::video::EFT_FOG_LINEAR, 200.0f, 2000.0f, 0.005f, false, false);
     sceneManager->addLightSceneNode(camera, irr::core::vector3df(0, 0, 0), irr::video::SColorf(0.1f, 0.1f, 0.1f, 0.0f), 700.0f);
     sceneManager->addLightSceneNode(0, irr::core::vector3df(150, 100, 150), irr::video::SColorf(1.0f, 1.0f, 1.0f, 0.5f), 700.0f);

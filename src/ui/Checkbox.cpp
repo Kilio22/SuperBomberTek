@@ -6,15 +6,13 @@
 */
 
 #include "Checkbox.hpp"
+#include "ServiceLocator.hpp"
 
 Indie::Checkbox::Checkbox(Indie::ContextManager &context) : context(context), status(false), button(context), pos(POS(0, 0))
 {}
 
 Indie::Checkbox::~Checkbox()
-{
-    if (tick)
-    context.getDriver()->removeTexture(tick);
-}
+{}
 
 void Indie::Checkbox::init(std::string const &filepath, int posX, int posY, irr::core::position2d<irr::s32> pos)
 {
@@ -23,7 +21,7 @@ void Indie::Checkbox::init(std::string const &filepath, int posX, int posY, irr:
     std::copy(filepath.c_str(), filepath.c_str() + filepath.size() - extension.size(), std::back_inserter(strippedFilepath));
 
     this->pos = pos;
-    tick = context.getDriver()->getTexture(std::string(strippedFilepath + "_tick" + extension).c_str());
+    tick = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage(std::string(strippedFilepath + "_tick" + extension).c_str());
     if (tick == nullptr) {
         throw Exceptions::FileNotFoundException(ERROR_STR, "File \"" + strippedFilepath + "\" not found.");
     }

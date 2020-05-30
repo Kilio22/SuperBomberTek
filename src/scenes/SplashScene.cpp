@@ -31,15 +31,10 @@ Indie::SplashScene::~SplashScene()
 void Indie::SplashScene::init()
 {
     Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setMusic(0);
-    this->bg = context.getDriver()->getTexture(this->splashPaths.at(Indie::SplashScene::SPLASH_ASSETS::BG).c_str());
-    if (this->bg == nullptr)
-        throw Exceptions::FileNotFoundException(ERROR_STR, "File \"" + this->splashPaths.at(Indie::SplashScene::SPLASH_ASSETS::BG) + "\" not found.");
+    this->bg = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage(this->splashPaths.at(Indie::SplashScene::SPLASH_ASSETS::BG).c_str());
     for (int type = (int)Indie::SplashScene::SPLASH_ASSETS::LOGO; type < (int)Indie::SplashScene::SPLASH_ASSETS::END; type++) {
-        Image *newImage = context.getDriver()->getTexture(this->splashPaths.at((Indie::SplashScene::SPLASH_ASSETS)type).c_str());
+        Image *newImage = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage(this->splashPaths.at((Indie::SplashScene::SPLASH_ASSETS)type).c_str());
 
-        if (this->bg == nullptr)
-            throw Exceptions::FileNotFoundException(
-                ERROR_STR, "File \"" + this->splashPaths.at((Indie::SplashScene::SPLASH_ASSETS)type) + "\" not found.");
         this->splashScreens.insert({ (Indie::SplashScene::SPLASH_ASSETS)type, newImage });
     }
     this->currentAsset = Indie::SplashScene::SPLASH_ASSETS::LOGO;

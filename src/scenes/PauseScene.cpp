@@ -22,18 +22,10 @@ const std::unordered_map<Indie::PauseScene::PAUSE_ASSETS, std::string> Indie::Pa
 
 Indie::PauseScene::PauseScene(ContextManager &context)
     : context(context), selector(1, 4, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
-{
-}
+{}
 
 Indie::PauseScene::~PauseScene()
-{
-    if (this->bomber)
-        this->context.getDriver()->removeTexture(this->bomber);
-    if (this->title)
-        this->context.getDriver()->removeTexture(this->title);
-    if (this->bg)
-        this->context.getDriver()->removeTexture(this->bg);
-}
+{}
 
 void Indie::PauseScene::init()
 {
@@ -45,20 +37,9 @@ void Indie::PauseScene::init()
     this->restart->init(context, this->assets_paths.at(Indie::PauseScene::PAUSE_ASSETS::RESTART), 0, 1, POS(0, 0));
     this->menu->init(context, this->assets_paths.at(Indie::PauseScene::PAUSE_ASSETS::MENU), 0, 2, POS(0, 0));
     this->quit->init(context, this->assets_paths.at(Indie::PauseScene::PAUSE_ASSETS::QUIT), 0, 3, POS(0, 0));
-    this->bomber = context.getDriver()->getTexture(this->assets_paths.at(Indie::PauseScene::PAUSE_ASSETS::BOMBER).c_str());
-    if (this->bomber == nullptr) {
-        throw Exceptions::FileNotFoundException(
-            ERROR_STR, "File \"" + this->assets_paths.at(Indie::PauseScene::PAUSE_ASSETS::BOMBER) + "\" not found.");
-    }
-    this->title = context.getDriver()->getTexture(this->assets_paths.at(Indie::PauseScene::PAUSE_ASSETS::TITLE).c_str());
-    if (this->title == nullptr) {
-        throw Exceptions::FileNotFoundException(
-            ERROR_STR, "File \"" + this->assets_paths.at(Indie::PauseScene::PAUSE_ASSETS::TITLE) + "\" not found.");
-    }
-    this->bg = context.getDriver()->getTexture(this->assets_paths.at(Indie::PauseScene::PAUSE_ASSETS::BG).c_str());
-    if (this->bg == nullptr) {
-        throw Exceptions::FileNotFoundException(ERROR_STR, "File \"" + this->assets_paths.at(Indie::PauseScene::PAUSE_ASSETS::BG) + "\" not found.");
-    }
+    this->bomber = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage(this->assets_paths.at(Indie::PauseScene::PAUSE_ASSETS::BOMBER).c_str());
+    this->title = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage(this->assets_paths.at(Indie::PauseScene::PAUSE_ASSETS::TITLE).c_str());
+    this->bg = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage(this->assets_paths.at(Indie::PauseScene::PAUSE_ASSETS::BG).c_str());
 }
 
 void Indie::PauseScene::reset()

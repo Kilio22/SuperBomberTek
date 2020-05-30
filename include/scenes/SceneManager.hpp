@@ -66,9 +66,9 @@ namespace Indie
             auto index = getTypeIndex<T>();
 
             // Ecran de chargement quand ça load une scène mais c'est chelou un peu
-            //context.displayImage(loading);
-            //context.getDriver()->endScene();
-            //context.getDriver()->beginScene(true, true, irr::video::SColor(0,0,0,0));
+            context.displayImage(loading);
+            context.getDriver()->endScene();
+            context.getDriver()->beginScene(true, true, irr::video::SColor(0,0,0,0));
             if (scenes.count(index) == 0)
                 throw Exceptions::SceneManagerException(ERROR_STR, "Scene " + std::string(index.name()) + "does not exist.");
             EventHandler::getInstance().resetKeys();
