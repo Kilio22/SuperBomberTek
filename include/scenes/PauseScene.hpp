@@ -19,7 +19,7 @@ namespace Indie
     class PauseScene : public IScene
     {
         public:
-        enum class PAUSE_ASSETS { CONTINUE, MENU, QUIT, RESTART, BOMBER, TITLE };
+        enum class PAUSE_ASSETS { CONTINUE, MENU, QUIT, RESTART, BOMBER, TITLE, BG };
 
         PauseScene(ContextManager &context);
         ~PauseScene();
@@ -33,6 +33,7 @@ namespace Indie
         private:
         ContextManager &context;
         UiSelector selector;
+        Image *bg;
         Image *bomber;
         Image *title;
         std::unique_ptr<Button> play;
