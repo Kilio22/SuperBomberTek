@@ -67,7 +67,7 @@ void Indie::MainMenuScene::reset()
     init();
 }
 
-void Indie::MainMenuScene::update(irr::f32 ticks)
+void Indie::MainMenuScene::update(irr::f32)
 {
     selector.update();
     solo->update(selector.getPos());
@@ -92,8 +92,7 @@ void Indie::MainMenuScene::update(irr::f32 ticks)
     EventHandler::getInstance().resetKeysStatus();
 }
 
-void Indie::MainMenuScene::renderPre3D()
-{}
+void Indie::MainMenuScene::renderPre3D() {}
 
 void Indie::MainMenuScene::renderPost3D()
 {

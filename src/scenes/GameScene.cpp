@@ -18,7 +18,6 @@ using namespace Indie::Systems;
 Indie::GameScene::GameScene(ContextManager &context)
     : context(context), entityManager(ServiceLocator::getInstance().get<EntityManager>()), systemManager(SystemManager::getInstance())
 {
-    std::srand((unsigned int)time(NULL));
     this->device = this->context.getDevice();
     this->driver = this->context.getDriver();
     this->sceneManager = this->context.getSceneManager();
@@ -77,8 +76,6 @@ void Indie::GameScene::init()
 // return false si un load merde.
 void Indie::GameScene::reset()
 {
-    ServiceLocator::getInstance().get<EntityManager>().reset();
-    // vos reset de valeurs et les free etc.
     this->init();
 }
 

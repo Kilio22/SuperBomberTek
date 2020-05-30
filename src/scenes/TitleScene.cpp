@@ -22,9 +22,7 @@ void Indie::TitleScene::skipScene(bool update, bool render, bool subUpdate, bool
 
 const double Indie::TitleScene::updateRate = (((2 * M_PI) / 96) / 32) * 3000;
 
-Indie::TitleScene::TitleScene(ContextManager &context)
-    : context(context)
-{}
+Indie::TitleScene::TitleScene(ContextManager &context) : context(context) {}
 
 Indie::TitleScene::~TitleScene()
 {
@@ -78,5 +76,5 @@ void Indie::TitleScene::renderPost3D()
     else
         posY = (irr::u32)(sin(this->offsetY) * 10);
     this->context.displayImage(this->titleLogo, POS(0, posY));
-    this->context.displayImage(this->pressText, POS(0, 0), irr::video::SColor((irr::u32)((sin(this->offsetAlpha) + 1) / 2 * 255),255,255,255));
+    this->context.displayImage(this->pressText, POS(0, 0), irr::video::SColor((irr::u32)((sin(this->offsetAlpha) + 1) / 2 * 255), 255, 255, 255));
 }

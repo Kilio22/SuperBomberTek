@@ -11,6 +11,7 @@
 
 int main(void)
 {
+    std::srand((unsigned int)time(NULL));
     Indie::GameEngine engine;
 
     try {
@@ -24,5 +25,3 @@ int main(void)
     }
     return 0;
 }
-// WIP : IScene dans le putain d'Indie
-// WIP : Parallax dans le putain d'Indie

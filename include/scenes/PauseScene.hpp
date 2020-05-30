@@ -30,6 +30,8 @@ namespace Indie
         private:
         ContextManager &context;
         UiSelector selector;
+        Image *bomber;
+        Image *title;
         std::unique_ptr<Button> play;
         std::unique_ptr<Button> menu;
         std::unique_ptr<Button> restart;

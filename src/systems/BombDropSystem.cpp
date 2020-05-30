@@ -42,8 +42,8 @@ bool Indie::Systems::BombDropSystem::checkBombPositionWallPass(EntityManager &en
         auto mapComponent = map->getComponent<MapComponent>();
         auto array = mapComponent->getMap();
 
-        for (size_t i = 0; i < mapComponent->getDimension().Y; i++) {
-            for (size_t j = 0; j < mapComponent->getDimension().X; j++) {
+        for (int i = 0; i < (int)mapComponent->getDimension().Y; i++) {
+            for (int j = 0; j < (int)mapComponent->getDimension().X; j++) {
                 if (array[i][j] == OBJECT::VOID && j * 20 == midX && i * 20 == midZ) {
                     return true;
                 }
@@ -66,7 +66,7 @@ void Indie::Systems::BombDropSystem::onUpdate(irr::f32, EntityManager &entityMan
 
         if (moveComponent->getDrop() == true && playerComponent->getCurrentBombNb() > 0 && entity->has<TimerComponent>() == false
             && this->hasBombAtPosition(entityManager, irr::core::vector3df(midX, 20, midZ)) == false) {
-            if (playerComponent->getWallPass() == true && this->checkBombPositionWallPass(entityManager, midX, midZ) == false) {
+            if (playerComponent->getWallPass() == true && this->checkBombPositionWallPass(entityManager, (int)midX, (int)midZ) == false) {
                 continue;
             }
             for (auto map : entityManager.each<MapComponent>()) {
