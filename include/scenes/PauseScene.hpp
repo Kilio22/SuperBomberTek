@@ -12,14 +12,17 @@
 #include "IScene.hpp"
 #include "UiSelector.hpp"
 #include <memory>
+#include <unordered_map>
 
 namespace Indie
 {
     class PauseScene : public IScene
     {
         public:
+        enum class PAUSE_ASSETS { CONTINUE, MENU, QUIT, RESTART, BOMBER, TITLE };
+
         PauseScene(ContextManager &context);
-        ~PauseScene() = default;
+        ~PauseScene();
 
         void init() final;
         void reset() final;
@@ -36,6 +39,8 @@ namespace Indie
         std::unique_ptr<Button> menu;
         std::unique_ptr<Button> restart;
         std::unique_ptr<Button> quit;
+
+        static const std::unordered_map<PAUSE_ASSETS, std::string> assets_paths;
     };
 }
 

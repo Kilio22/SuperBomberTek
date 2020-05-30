@@ -10,35 +10,45 @@
 #include "Scenes.hpp"
 #include "ServiceLocator.hpp"
 
+const std::unordered_map<Indie::PauseScene::PAUSE_ASSETS, std::string> Indie::PauseScene::assets_paths = {
+    {Indie::PauseScene::PAUSE_ASSETS::CONTINUE, "../ressources/images/pause/Continue.png"},
+    {Indie::PauseScene::PAUSE_ASSETS::MENU, "../ressources/images/pause/Menu.png"},
+    {Indie::PauseScene::PAUSE_ASSETS::QUIT, "../ressources/images/pause/Quitter.png"},
+    {Indie::PauseScene::PAUSE_ASSETS::RESTART, "../ressources/images/pause/Recommencer.png"},
+    {Indie::PauseScene::PAUSE_ASSETS::BOMBER, "../ressources/images/pause/Pause.png"},
+    {Indie::PauseScene::PAUSE_ASSETS::TITLE, "../ressources/images/pause/Title.png"},
+};
+
 Indie::PauseScene::PauseScene(ContextManager &context)
     : context(context), selector(1, 4, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
 {
 }
 
+Indie::PauseScene::~PauseScene()
+{
+    if (this->bomber)
+        this->context.getDriver()->removeTexture(this->bomber);
+    if (this->title)
+        this->context.getDriver()->removeTexture(this->title);
+}
+
 void Indie::PauseScene::init()
 {
-    std::string continuePath = std::string("../ressources/images/pause/Continue.png");
-    std::string menuPath = std::string("../ressources/images/pause/Menu.png");
-    std::string quitPath = std::string("../ressources/images/pause/Quitter.png");
-    std::string restartPath = std::string("../ressources/images/pause/Recommencer.png");
-    std::string bomberPath = std::string("../ressources/images/pause/Pause.png");
-    std::string titlePath = std::string("../ressources/images/pause/Title.png");
-
     this->play.reset(new Button(context));
     this->menu.reset(new Button(context));
     this->quit.reset(new Button(context));
     this->restart.reset(new Button(context));
-    this->play->init(context, continuePath, 0, 0, POS(0, 0));
-    this->restart->init(context, restartPath, 0, 1, POS(0, 0));
-    this->menu->init(context, menuPath, 0, 2, POS(0, 0));
-    this->quit->init(context, quitPath, 0, 3, POS(0, 0));
-    this->bomber = context.getDriver()->getTexture(bomberPath.c_str());
+    this->play->init(context, this->assets_paths.at(Indie::PauseScene::PAUSE_ASSETS::CONTINUE), 0, 0, POS(0, 0));
+    this->restart->init(context, this->assets_paths.at(Indie::PauseScene::PAUSE_ASSETS::RESTART), 0, 1, POS(0, 0));
+    this->menu->init(context, this->assets_paths.at(Indie::PauseScene::PAUSE_ASSETS::MENU), 0, 2, POS(0, 0));
+    this->quit->init(context, this->assets_paths.at(Indie::PauseScene::PAUSE_ASSETS::QUIT), 0, 3, POS(0, 0));
+    this->bomber = context.getDriver()->getTexture(this->assets_paths.at(Indie::PauseScene::PAUSE_ASSETS::BOMBER).c_str());
     if (this->bomber == nullptr) {
-        throw Exceptions::FileNotFoundException(ERROR_STR, "File \"" + bomberPath + "\" not found.");
+        throw Exceptions::FileNotFoundException(ERROR_STR, "File \"" + this->assets_paths.at(Indie::PauseScene::PAUSE_ASSETS::BOMBER) + "\" not found.");
     }
-    this->title = context.getDriver()->getTexture(titlePath.c_str());
+    this->title = context.getDriver()->getTexture(this->assets_paths.at(Indie::PauseScene::PAUSE_ASSETS::TITLE).c_str());
     if (this->title == nullptr) {
-        throw Exceptions::FileNotFoundException(ERROR_STR, "File \"" + titlePath + "\" not found.");
+        throw Exceptions::FileNotFoundException(ERROR_STR, "File \"" + this->assets_paths.at(Indie::PauseScene::PAUSE_ASSETS::TITLE) + "\" not found.");
     }
 }
 

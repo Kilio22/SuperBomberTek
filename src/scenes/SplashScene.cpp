@@ -10,10 +10,57 @@
 #include "ServiceLocator.hpp"
 #include "TitleScene.hpp"
 
-// Passer ça en méthode de SplashScene ??
-static void skipScene(Indie::ContextManager &context)
+const std::unordered_map<Indie::SplashScene::SPLASH_ASSETS, std::string> Indie::SplashScene::splashPaths
+    = { { Indie::SplashScene::SPLASH_ASSETS::BG, "../ressources/images/splash/bg.png" },
+          { Indie::SplashScene::SPLASH_ASSETS::LOGO, "../ressources/images/splash/Logo.png" },
+          { Indie::SplashScene::SPLASH_ASSETS::PROJECT, "../ressources/images/splash/Project.png" },
+          { Indie::SplashScene::SPLASH_ASSETS::BOMBER, "../ressources/images/splash/bomberLogos.png" } };
+
+Indie::SplashScene::SplashScene(ContextManager &context) : context(context) {}
+
+Indie::SplashScene::~SplashScene()
 {
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setScene<Indie::MenuScene>(context);
+    if (this->bg)
+        this->context.getDriver()->removeTexture(this->bg);
+    for (auto img : this->splashScreens) {
+        if (img.second)
+            this->context.getDriver()->removeTexture(img.second);
+    }
+}
+
+void Indie::SplashScene::init()
+{
+    Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setMusic(0);
+    this->bg = context.getDriver()->getTexture(this->splashPaths.at(Indie::SplashScene::SPLASH_ASSETS::BG).c_str());
+    if (this->bg == nullptr)
+        throw Exceptions::FileNotFoundException(ERROR_STR, "File \"" + this->splashPaths.at(Indie::SplashScene::SPLASH_ASSETS::BG) + "\" not found.");
+    for (int type = (int)Indie::SplashScene::SPLASH_ASSETS::LOGO; type < (int)Indie::SplashScene::SPLASH_ASSETS::END; type++) {
+        Image *newImage = context.getDriver()->getTexture(this->splashPaths.at((Indie::SplashScene::SPLASH_ASSETS)type).c_str());
+
+        if (this->bg == nullptr)
+            throw Exceptions::FileNotFoundException(
+                ERROR_STR, "File \"" + this->splashPaths.at((Indie::SplashScene::SPLASH_ASSETS)type) + "\" not found.");
+        this->splashScreens.insert({ (Indie::SplashScene::SPLASH_ASSETS)type, newImage });
+    }
+    this->currentAsset = Indie::SplashScene::SPLASH_ASSETS::LOGO;
+    this->lastTime = this->context.getDevice()->getTimer()->getTime();
+}
+
+void Indie::SplashScene::reset()
+{
+    if (this->bg)
+        this->context.getDriver()->removeTexture(this->bg);
+    for (auto img : this->splashScreens) {
+        if (img.second)
+            this->context.getDriver()->removeTexture(img.second);
+    }
+    this->splashScreens.clear();
+    this->init();
+}
+
+void Indie::SplashScene::skipScene(void)
+{
+    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setScene<Indie::MenuScene>(this->context);
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::TitleScene>();
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(true);
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(true);
@@ -21,38 +68,33 @@ static void skipScene(Indie::ContextManager &context)
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneRenderActive(true);
 }
 
-Indie::SplashScene::SplashScene(ContextManager &context)
-    : context(context)
-{}
-
-void Indie::SplashScene::init()
-{
-    std::string bgPath = "../ressources/placeholder/splashscreen.png";
-
-    Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setMusic(0);
-    background = context.getDriver()->getTexture(bgPath.c_str());
-    if (!background)
-        throw Exceptions::FileNotFoundException(ERROR_STR, "File \"" + bgPath + "\" not found.");
-}
-
-void Indie::SplashScene::reset()
-{
-    init();
-}
-
 void Indie::SplashScene::update(irr::f32)
 {
-    if (EventHandler::getInstance().isAnyKeyPressedAtOnce()) {
-        skipScene(context);
-        ServiceLocator::getInstance().get<MusicManager>().setStatus(Music::Status::Loop);
+    irr::u32 currentTime = this->context.getDevice()->getTimer()->getTime();
+    irr::f32 elapsedTime = (irr::f32)((currentTime - this->lastTime) / 1000.f);
+
+    if (EventHandler::getInstance().isAnyKeyPressedAtOnce() || elapsedTime >= 4.f) {
+        if (this->currentAsset == Indie::SplashScene::SPLASH_ASSETS::BOMBER) {
+            this->skipScene();
+            ServiceLocator::getInstance().get<MusicManager>().setStatus(Music::Status::Loop);
+        } else {
+            int currentAsset = (int)this->currentAsset;
+            currentAsset++;
+            this->currentAsset = (Indie::SplashScene::SPLASH_ASSETS)(currentAsset);
+        }
+        if (elapsedTime >= 4.f) {
+            this->lastTime = currentTime;
+        }
     }
     if (Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().getStatus() == Indie::Music::Status::Loop)
-        skipScene(context);
+        this->skipScene();
+    Indie::EventHandler::getInstance().resetKeys();
 }
 
 void Indie::SplashScene::renderPre3D()
 {
-    context.displayImage(background, POS(0, 0));
+    context.displayImage(this->bg, POS(0, 0));
+    context.displayImage(this->splashScreens.at(this->currentAsset), POS(0, 0));
 }
 
 void Indie::SplashScene::renderPost3D() {}

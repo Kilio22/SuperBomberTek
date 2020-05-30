@@ -20,8 +20,17 @@ namespace Indie
     class SplashScene : public IScene
     {
         public:
+
+        enum class SPLASH_ASSETS : int {
+            BG,
+            LOGO,
+            PROJECT,
+            BOMBER,
+            END
+        };
+
         SplashScene(ContextManager &context);
-        ~SplashScene() = default;
+        ~SplashScene();
 
         void init() final;
         void reset() final;
@@ -30,8 +39,15 @@ namespace Indie
         void renderPost3D() final;
 
         private:
+        void skipScene(void);
+
         ContextManager &context;
-        Image *background;
+        Image *bg;
+        SPLASH_ASSETS currentAsset;
+        std::unordered_map<SPLASH_ASSETS, Image *> splashScreens;
+        irr::u32 lastTime;
+
+        static const std::unordered_map<SPLASH_ASSETS, std::string> splashPaths;
     };
 }
 
