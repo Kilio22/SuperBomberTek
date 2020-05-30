@@ -98,6 +98,9 @@ void Indie::GameScene::update(irr::f32 deltaTime)
     this->systemManager.getSystem<MeshSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<RenderSystem>()->onUpdate(deltaTime, entityManager);
     if (EventHandler::getInstance().isKeyPressed(irr::EKEY_CODE::KEY_ESCAPE) == true) {
+        for (auto entity : this->entityManager.each<RenderComponent>()) {
+            entity->getComponent<RenderComponent>()->getMesh()->setAnimationSpeed(0.f);
+        }
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(false);
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(false);
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::PauseScene>();

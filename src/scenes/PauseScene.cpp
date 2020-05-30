@@ -6,6 +6,7 @@
 */
 
 #include "PauseScene.hpp"
+#include "Components.h"
 #include "GameScene.hpp"
 #include "Scenes.hpp"
 #include "ServiceLocator.hpp"
@@ -79,6 +80,10 @@ void Indie::PauseScene::update(irr::f32)
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneRenderActive(false);
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(true);
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(true);
+        for (auto entity : ServiceLocator::getInstance().get<EntityManager>().each<Components::RenderComponent>()) {
+            entity->getComponent<Components::RenderComponent>()->getMesh()->setAnimationSpeed(25.f);
+        }
+        EventHandler::getInstance().resetKeys();
     }
     if (this->quit->getStatus() == Button::Status::Pressed) {
         this->context.getDevice()->closeDevice();
@@ -95,6 +100,7 @@ void Indie::PauseScene::update(irr::f32)
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(true);
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneUpdateActive(false);
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneRenderActive(false);
+        EventHandler::getInstance().resetKeys();
     }
     // TODO : à tester si ça nique rien
     EventHandler::getInstance().resetKeysStatusOnce();
