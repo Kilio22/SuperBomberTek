@@ -19,7 +19,7 @@ namespace Indie
 {
     class OptionsScene : public IScene
     {
-        public:
+    public:
         OptionsScene(ContextManager &context);
         ~OptionsScene();
 
@@ -30,7 +30,7 @@ namespace Indie
         void renderPost3D() final;
         void skipScene(bool update, bool render, bool subUpdate, bool subRender);
 
-        private:
+    private:
         ContextManager &context;
         UiSelector selector;
         UiSelector musicVolumeSelector;
@@ -43,7 +43,7 @@ namespace Indie
         Image *title;
         Image *wrench;
         Image *layout;
-        irr::gui::IGUIFont* font;
+        irr::gui::IGUIFont *font;
     };
 }
 

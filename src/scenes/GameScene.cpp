@@ -36,7 +36,6 @@ Indie::GameScene::GameScene(ContextManager &context)
     this->systemManager.addSystem<VelocitySystem>();
 }
 
-// return false si un load merde.
 void Indie::GameScene::init()
 {
     Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setMusic(1);
@@ -60,6 +59,8 @@ void Indie::GameScene::init()
         driver->getTexture("../ressources/skybox/skybox_right.png"), driver->getTexture("../ressources/skybox/skybox_front.png"),
         driver->getTexture("../ressources/skybox/skybox_back.png"));
 
+    this->font = this->context.getGuiEnv()->getFont("../ressources/font/Banschrift.xml");
+
     mapGenerator.generate(entityManager, entityBuilder);
     entityBuilder.createPlayer(irr::core::vector3df(20, 20, 20), "../ressources/animated_mesh/character/character_idle.b3d",
         "../ressources/textures/character/blue1.png",
@@ -77,7 +78,6 @@ void Indie::GameScene::init()
     device->getCursorControl()->setVisible(false);
 }
 
-// return false si un load merde.
 void Indie::GameScene::reset()
 {
     this->init();
@@ -113,4 +113,24 @@ void Indie::GameScene::update(irr::f32 deltaTime)
 
 void Indie::GameScene::renderPre3D() {}
 
-void Indie::GameScene::renderPost3D() {}
+#include <sstream>
+
+void Indie::GameScene::renderPost3D()
+{
+    std::stringstream ss;
+    int i = 20;
+    int n = 0;
+    std::vector<irr::video::SColor> colors = {{200, 0, 0, 255}, {200, 255, 0, 0}, {200, 0, 255, 0}, {200, 255, 255, 0}}; ///< Codé en dur mdr mais il faudrait une couleur dans les personnages.
+
+    for (auto entity : entityManager.each<PlayerComponent>()) {
+        auto player = entity->getComponent<PlayerComponent>();
+
+        ss << player->getName() << std::endl;
+        ss << "  Bombs: " << player->getCurrentBombNb() << " / " << player->getMaxBombNb() << std::endl;
+        ss << "  Bomb range: " << player->getBombsRange() << std::endl;
+        ss << "  Speed: " << std::string(player->getVelocityLevel(), '>') << std::endl;
+        font->draw(irr::core::stringw(ss.str().c_str()), irr::core::rect<irr::s32>(20, i, 0, 0), colors[n++]);
+        ss.str("");
+        i += 150;
+    }
+}

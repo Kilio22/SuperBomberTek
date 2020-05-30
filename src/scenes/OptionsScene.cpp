@@ -17,11 +17,11 @@ void Indie::OptionsScene::skipScene(bool update, bool render, bool subUpdate, bo
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneRenderActive(subRender);
 }
 
-Indie::OptionsScene::OptionsScene(Indie::ContextManager &context) :
-context(context),
-selector(1, 5, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT),
-musicVolumeSelector(21, 1, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT),
-soundVolumeSelector(21, 1, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
+Indie::OptionsScene::OptionsScene(Indie::ContextManager &context)
+    : context(context)
+    , selector(1, 5, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
+    , musicVolumeSelector(21, 1, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
+    , soundVolumeSelector(21, 1, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
 {
     musicVolumeSelector.setPos(20, 0);
     soundVolumeSelector.setPos(20, 0);
@@ -124,6 +124,6 @@ void Indie::OptionsScene::renderPost3D()
     soundVolume->draw();
     musicMute->draw();
     soundMute->draw();
-    font->draw(musicVol.c_str(), irr::core::rect<irr::s32>(1175 - (8* (musicVol.size() - 1)),218,0,0), irr::video::SColor(255,255,255,255));
-    font->draw(soundVol.c_str(), irr::core::rect<irr::s32>(1175 - (8* (soundVol.size() - 1)),395,0,0), irr::video::SColor(255,255,255,255));
+    font->draw(musicVol.c_str(), irr::core::rect<irr::s32>(1175 - (8 * (musicVol.size() - 1)), 218, 0, 0), irr::video::SColor(255, 255, 255, 255));
+    font->draw(soundVol.c_str(), irr::core::rect<irr::s32>(1175 - (8 * (soundVol.size() - 1)), 395, 0, 0), irr::video::SColor(255, 255, 255, 255));
 }

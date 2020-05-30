@@ -17,7 +17,7 @@ namespace Indie
 {
     class GameScene : public IScene
     {
-        public:
+    public:
         GameScene(ContextManager &context);
         ~GameScene() = default;
 
@@ -27,11 +27,14 @@ namespace Indie
         void renderPre3D() final;
         void renderPost3D() final;
 
-        private:
+    private:
         ContextManager &context;
+
         irr::IrrlichtDevice *device;
         irr::video::IVideoDriver *driver;
         irr::scene::ISceneManager *sceneManager;
+        irr::gui::IGUIFont *font;
+
         Indie::EntityManager &entityManager;
         Indie::SystemManager &systemManager;
     };

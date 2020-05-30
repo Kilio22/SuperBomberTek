@@ -40,7 +40,7 @@ void Indie::Systems::CollisionSystem::checkCollisionWithPowerUps(
         return;
     }
     if (powerUpType == Components::POWERUP_TYPE::SPEED_UP) {
-        playerComponent->setVelocity(playerComponent->getVelocity() + 5);
+        playerComponent->setVelocityLevel(playerComponent->getVelocityLevel() + 1);
         return;
     }
     if (powerUpType == Components::POWERUP_TYPE::WALL_PASS) {
