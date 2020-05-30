@@ -16,7 +16,7 @@ void Indie::GameEngine::setupMusicManager()
     ServiceLocator::getInstance().get<MusicManager>().addMusic("../ressources/musics/level_select.wav"); // id 1
     ServiceLocator::getInstance().get<MusicManager>().mute(); // psk faut pas deconner c'est chiant à la longue
     ServiceLocator::getInstance().get<MusicManager>().setMusic(0);
-    ServiceLocator::getInstance().get<MusicManager>().setVolume(50);
+    ServiceLocator::getInstance().get<MusicManager>().setVolume(25);
     ServiceLocator::getInstance().get<MusicManager>().playMusic();
 }
 

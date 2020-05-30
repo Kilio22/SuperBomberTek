@@ -43,6 +43,7 @@ namespace Indie
         Image *title;
         Image *wrench;
         Image *layout;
+        irr::gui::IGUIFont* font;
     };
 }
 

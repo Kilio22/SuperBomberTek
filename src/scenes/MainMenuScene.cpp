@@ -37,12 +37,6 @@ void Indie::MainMenuScene::init()
 {
     Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setMusic(0);
 
-    std::string path1 = std::string("../ressources/images/menu/Solo.png");
-    std::string path2 = std::string("../ressources/images/menu/Multi.png");
-    std::string path3 = std::string("../ressources/images/menu/Options.png");
-    std::string path4 = std::string("../ressources/images/menu/Credits.png");
-    std::string path5 = std::string("../ressources/images/menu/Quitter.png");
-
     title = context.getDriver()->getTexture("../ressources/images/menu/title.png");
     bomb = context.getDriver()->getTexture("../ressources/images/menu/bomb.png");
     solo.reset(new Button(context));
@@ -50,11 +44,16 @@ void Indie::MainMenuScene::init()
     options.reset(new Button(context));
     credits.reset(new Button(context));
     quitter.reset(new Button(context));
-    solo->init(context, path1, 0, 0, POS(0, 0));
-    multi->init(context, path2, 0, 1, POS(0, 0));
-    options->init(context, path3, 0, 2, POS(0, 0));
-    credits->init(context, path4, 0, 3, POS(0, 0));
-    quitter->init(context, path5, 0, 4, POS(0, 0));
+    solo->init(context, "../ressources/images/menu/Solo.png", 0, 0, POS(0, 0));
+    multi->init(context, "../ressources/images/menu/Multi.png", 0, 1, POS(0, 0));
+    options->init(context, "../ressources/images/menu/Options.png", 0, 2, POS(0, 0));
+    credits->init(context, "../ressources/images/menu/Credits.png", 0, 3, POS(0, 0));
+    quitter->init(context, "../ressources/images/menu/Quitter.png", 0, 4, POS(0, 0));
+
+    if (!title)
+        throw Exceptions::FileNotFoundException(ERROR_STR, "File ../ressources/images/menu/title.png not found.");
+    if (!bomb)
+        throw Exceptions::FileNotFoundException(ERROR_STR, "File ../ressources/images/menu/bomb.png not found.");
 }
 
 void Indie::MainMenuScene::reset()

@@ -20,9 +20,12 @@ void Indie::OptionsScene::skipScene(bool update, bool render, bool subUpdate, bo
 Indie::OptionsScene::OptionsScene(Indie::ContextManager &context) :
 context(context),
 selector(1, 5, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT),
-musicVolumeSelector(25, 1, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT),
-soundVolumeSelector(25, 1, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
-{}
+musicVolumeSelector(21, 1, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT),
+soundVolumeSelector(21, 1, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
+{
+    musicVolumeSelector.setPos(20, 0);
+    soundVolumeSelector.setPos(20, 0);
+}
 
 Indie::OptionsScene::~OptionsScene()
 {
@@ -32,6 +35,8 @@ Indie::OptionsScene::~OptionsScene()
         context.getDriver()->removeTexture(wrench);
     if (layout)
         context.getDriver()->removeTexture(layout);
+    if (font)
+        context.getGuiEnv()->removeFont(font);
 }
 
 void Indie::OptionsScene::init()
@@ -45,6 +50,8 @@ void Indie::OptionsScene::init()
     title = context.getDriver()->getTexture("../ressources/images/options/title.png");
     wrench = context.getDriver()->getTexture("../ressources/images/options/drawing.png");
     layout = context.getDriver()->getTexture("../ressources/images/options/Layout.png");
+
+    font = context.getGuiEnv()->getFont("../ressources/font/Banschrift.xml");
 
     back.reset(new Button(context));
     musicVolume.reset(new Button(context));
@@ -60,6 +67,13 @@ void Indie::OptionsScene::init()
 
     musicMute->setStatus(Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().isMusicMuted());
     // TODO : Set the sound checkbox status to the isMuted value of the sound when it's done
+
+    if (!title)
+        throw Exceptions::FileNotFoundException(ERROR_STR, "File ../ressources/images/options/title.png not found.");
+    if (!wrench)
+        throw Exceptions::FileNotFoundException(ERROR_STR, "File ../ressources/images/options/drawing.png not found.");
+    if (!layout)
+        throw Exceptions::FileNotFoundException(ERROR_STR, "File ../ressources/images/options/Layout.png not found.");
 }
 
 void Indie::OptionsScene::reset()
@@ -104,6 +118,9 @@ void Indie::OptionsScene::update(irr::f32 ticks)
         // TODO : set sound volume
         // Volume =  soundVolumeSelector.getPos().first * 5
     }
+
+
+
     //Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setVolume(float(musicVolumeSelector.getPos().first * 5));
     Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setVolume(float(musicVolumeSelector.getPos().first));
     EventHandler::getInstance().resetKeysStatusOnce();
@@ -115,6 +132,12 @@ void Indie::OptionsScene::renderPre3D()
 
 void Indie::OptionsScene::renderPost3D()
 {
+    irr::core::stringw musicVol = L"";
+    irr::core::stringw soundVol = L"";
+
+    musicVol += irr::core::stringw(musicVolumeSelector.getPos().first * 5);
+    soundVol += irr::core::stringw(soundVolumeSelector.getPos().first * 5);
+
     context.displayImage(title);
     context.displayImage(wrench);
     context.displayImage(layout);
@@ -123,4 +146,6 @@ void Indie::OptionsScene::renderPost3D()
     soundVolume->draw();
     musicMute->draw();
     soundMute->draw();
+    font->draw(musicVol.c_str(), irr::core::rect<irr::s32>(1175 - (8* (musicVol.size() - 1)),218,0,0), irr::video::SColor(255,255,255,255));
+    font->draw(soundVol.c_str(), irr::core::rect<irr::s32>(1175 - (8* (soundVol.size() - 1)),395,0,0), irr::video::SColor(255,255,255,255));
 }
