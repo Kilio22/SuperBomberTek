@@ -19,6 +19,18 @@ Indie::SceneManager::SceneManager()
 {
 }
 
+Indie::SceneManager::~SceneManager()
+{
+    if (loading)
+        context->getDriver()->removeTexture(loading);
+}
+
+void Indie::SceneManager::initLoading(Indie::ContextManager *context)
+{
+    this->context = context;
+    loading = context->getDriver()->getTexture("../ressources/images/Loading.png");
+}
+
 // std::shared_ptr<Indie::IScene> Indie::SceneManager::getSceneById(size_t id)
 // {
 //     if (id >= scenes.size())

@@ -16,18 +16,20 @@ void Indie::GameEngine::setupMusicManager()
     ServiceLocator::getInstance().get<MusicManager>().addMusic("../ressources/musics/level_select.wav"); // id 1
     ServiceLocator::getInstance().get<MusicManager>().mute(); // psk faut pas deconner c'est chiant à la longue
     ServiceLocator::getInstance().get<MusicManager>().setMusic(0);
-    ServiceLocator::getInstance().get<MusicManager>().setVolume(5);
+    ServiceLocator::getInstance().get<MusicManager>().setVolume(50);
     ServiceLocator::getInstance().get<MusicManager>().playMusic();
 }
 
 void Indie::GameEngine::setupSceneManager(ContextManager &context)
 {
+    ServiceLocator::getInstance().get<SceneManager>().initLoading(&context);
     ServiceLocator::getInstance().get<SceneManager>().addScene<SplashScene>(context); //id 0
     ServiceLocator::getInstance().get<SceneManager>().addScene<MenuScene>(context); //id 1
     ServiceLocator::getInstance().get<SceneManager>().addScene<TitleScene>(context); //id 2
     ServiceLocator::getInstance().get<SceneManager>().addScene<MainMenuScene>(context); //id 3
     ServiceLocator::getInstance().get<SceneManager>().addScene<GameScene>(context); //id 4
-    ServiceLocator::getInstance().get<SceneManager>().addScene<PauseScene>(context); //id 4
+    ServiceLocator::getInstance().get<SceneManager>().addScene<PauseScene>(context); //id 5
+    ServiceLocator::getInstance().get<SceneManager>().addScene<OptionsScene>(context); // id 6
     ServiceLocator::getInstance().get<SceneManager>().setScene<SplashScene>(context);
     ServiceLocator::getInstance().get<SceneManager>().setSceneUpdateActive(true);
     ServiceLocator::getInstance().get<SceneManager>().setSceneRenderActive(true);

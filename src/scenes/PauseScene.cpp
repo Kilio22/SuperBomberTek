@@ -66,6 +66,9 @@ void Indie::PauseScene::update(irr::f32 deltaTime)
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneUpdateActive(false);
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneRenderActive(false);
     }
+    // TODO : à tester si ça nique rien
+    EventHandler::getInstance().resetKeysStatusOnce();
+    EventHandler::getInstance().resetKeysStatus();
 }
 
 void Indie::PauseScene::renderPre3D() {}

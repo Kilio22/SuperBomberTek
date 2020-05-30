@@ -100,3 +100,8 @@ void Indie::MusicManager::setStatus(Indie::Music::Status status)
 {
     musics[currentMusic]->setStatus(status);
 }
+
+bool Indie::MusicManager::isMusicMuted() const
+{
+    return isMuted;
+}

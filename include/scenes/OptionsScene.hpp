@@ -2,13 +2,13 @@
 ** EPITECH PROJECT, 2020
 ** OOP_indie_studio_2019
 ** File description:
-** MainMenuScene
+** OptionsScene
 */
 
-#ifndef MAINMENUSCENE_HPP_
-#define MAINMENUSCENE_HPP_
+#ifndef OPTIONSSCENE_HPP_
+#define OPTIONSSCENE_HPP_
 
-#include "Button.hpp"
+#include "Checkbox.hpp"
 #include "ContextManager.hpp"
 #include "IScene.hpp"
 #include "UiSelector.hpp"
@@ -17,11 +17,11 @@
 
 namespace Indie
 {
-    class MainMenuScene : public IScene
+    class OptionsScene : public IScene
     {
         public:
-        MainMenuScene(ContextManager &context);
-        ~MainMenuScene();
+        OptionsScene(ContextManager &context);
+        ~OptionsScene();
 
         void init() final;
         void reset() final;
@@ -33,14 +33,17 @@ namespace Indie
         private:
         ContextManager &context;
         UiSelector selector;
-        std::unique_ptr<Button> solo;
-        std::unique_ptr<Button> multi;
-        std::unique_ptr<Button> options;
-        std::unique_ptr<Button> credits;
-        std::unique_ptr<Button> quitter;
+        UiSelector musicVolumeSelector;
+        UiSelector soundVolumeSelector;
+        std::unique_ptr<Button> back;
+        std::unique_ptr<Button> musicVolume;
+        std::unique_ptr<Button> soundVolume;
+        std::unique_ptr<Checkbox> musicMute;
+        std::unique_ptr<Checkbox> soundMute;
         Image *title;
-        Image *bomb;
+        Image *wrench;
+        Image *layout;
     };
 }
 
-#endif /* !MAINMENUSCENE_HPP_ */
+#endif /* !OPTIONSSCENE_HPP_ */

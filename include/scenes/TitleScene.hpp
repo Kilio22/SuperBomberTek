@@ -30,6 +30,7 @@ namespace Indie
         void update(irr::f32 deltaTime) final;
         void renderPre3D() final;
         void renderPost3D() final;
+        void skipScene(bool update, bool render, bool subUpdate, bool subRender);
 
         private:
         ContextManager &context;

@@ -10,16 +10,17 @@
 #include "MainMenuScene.hpp"
 
 // Passer ça en méthode de TitleScene ??
-static void skipScene(Indie::ContextManager &context)
+// putain t'as commenté chaque fichier enfaite.
+// oui c'est fait
+void Indie::TitleScene::skipScene(bool update, bool render, bool subUpdate, bool subRender)
 {
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::MainMenuScene>(); // set to 3
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(true);
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(true);
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneUpdateActive(true);
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneRenderActive(true);
+    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(update);
+    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(render);
+    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneUpdateActive(subUpdate);
+    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneRenderActive(subRender);
 }
 
-const double Indie::TitleScene::updateRate = ((2 * M_PI) / 96) / 32;
+const double Indie::TitleScene::updateRate = (((2 * M_PI) / 96) / 32) * 3000;
 
 Indie::TitleScene::TitleScene(ContextManager &context)
     : context(context)
@@ -43,6 +44,8 @@ void Indie::TitleScene::init()
     if (pressText == nullptr) {
         throw Exceptions::FileNotFoundException(ERROR_STR, "File \"../ressources/images/press.png\" not found.");
     }
+    EventHandler::getInstance().resetKeysStatusOnce();
+    EventHandler::getInstance().resetKeysStatus();
 }
 
 void Indie::TitleScene::reset()
@@ -57,10 +60,11 @@ void Indie::TitleScene::reset()
 void Indie::TitleScene::update(irr::f32 ticks)
 {
     if (EventHandler::getInstance().isAnyKeyPressedAtOnce()) {
-        skipScene(context);
+        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::MainMenuScene>();
+        skipScene(true, true, true, true);
     }
-    this->offsetY = (this->offsetY < 2 * M_PI) ? this->offsetY + this->updateRate : 0;
-    this->offsetAlpha = (this->offsetAlpha < 2 * M_PI) ? this->offsetAlpha + 0.001 : 0;
+    this->offsetY = (this->offsetY < 2 * M_PI) ? this->offsetY + this->updateRate * ticks : 0;
+    this->offsetAlpha = (this->offsetAlpha < 2 * M_PI) ? this->offsetAlpha + 3 * ticks : 0;
 }
 
 void Indie::TitleScene::renderPre3D() {}
