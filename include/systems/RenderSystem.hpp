@@ -20,6 +20,7 @@ namespace Indie::Systems
             ~RenderSystem() = default;
 
             void onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const final;
+
         private:
             void checkMapState(EntityManager &entityManager) const;
             void changeBoxes(EntityManager &entityManager, Components::MAP_STATE state) const;

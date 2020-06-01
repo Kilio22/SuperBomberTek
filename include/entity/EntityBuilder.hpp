@@ -20,24 +20,20 @@ namespace Indie
 
     class EntityBuilder
     {
-        public:
+    public:
         EntityBuilder();
         ~EntityBuilder() = default;
 
         Entity *createGround(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath);
-        Entity *createPlayer(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath,
-            std::map<irr::EKEY_CODE, KEY_TYPE> keys, const std::string &playerNb, PlayerComponent::PLAYER_COLOR playerColor);
-        Entity *createAi(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath,
-            const std::string &playerNb, PlayerComponent::PLAYER_COLOR playerColor);
+        Entity *createPlayer(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath, std::map<irr::EKEY_CODE, KEY_TYPE> keys, const std::string &playerNb, PlayerComponent::PLAYER_COLOR playerColor, PlayerComponent::PLAYER_START_POSITION startPosition);
+        Entity *createAi(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath, const std::string &playerNb, PlayerComponent::PLAYER_COLOR playerColor, PlayerComponent::PLAYER_START_POSITION startPosition);
         Entity *createWall(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath, bool canBeDestroyed);
-        Entity *createBomb(
-            const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath, int idOwner, unsigned int range);
+        Entity *createBomb(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath, int idOwner, unsigned int range);
         Entity *createMap(const irr::core::vector2di &dimension, const Indie::Components::MAP_TYPE &type, const Indie::Components::THEME &theme, const std::string &mapPath = "");
-        Entity *createLava(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath, float angle);
-        Entity *createPowerUp(
-            irr::core::vector3df position, const std::string &modelPath, const std::string &texturePath, Components::POWERUP_TYPE type);
+        Entity *createLava(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath, float angle, int ownerId);
+        Entity *createPowerUp(irr::core::vector3df position, const std::string &modelPath, const std::string &texturePath, Components::POWERUP_TYPE type);
 
-        private:
+    private:
         EntityManager &entityManager;
         ContextManager &contextManager;
     };

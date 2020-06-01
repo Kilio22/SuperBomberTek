@@ -19,7 +19,7 @@ namespace Indie
 
     class GameScene : public IScene
     {
-        public:
+    public:
         enum class MODE { SOLO, MULTI };
 
         GameScene(ContextManager &context);
@@ -34,8 +34,8 @@ namespace Indie
         Indie::InitGame *getInitGame(void) const;
         void setInitGame(const Indie::InitGame &initGame);
 
-        private:
-        static const std::vector<irr::core::vector3df> defaultPositions;
+    private:
+        static const std::vector<std::pair<irr::core::vector3df, Indie::Components::PlayerComponent::PLAYER_START_POSITION>> defaultPositions;
         static const std::vector<std::pair<std::string, Components::PlayerComponent::PLAYER_COLOR>> skins;
 
         ContextManager &context;

@@ -49,10 +49,10 @@ void Indie::Systems::BombExplosionSystem::explodeBomb(std::vector<std::vector<OB
     if (bomb->hasExploded() == true)
         return;
     bomb->setExploded(true);
-    this->explodeRight(entityManager, map, range, mapX, mapZ);
-    this->explodeLeft(entityManager, map, range, mapX, mapZ);
-    this->explodeUp(entityManager, map, range, mapX, mapZ);
-    this->explodeDown(entityManager, map, range, mapX, mapZ);
+    this->explodeRight(entityManager, map, entity->getId(), range, mapX, mapZ);
+    this->explodeLeft(entityManager, map, entity->getId(), range, mapX, mapZ);
+    this->explodeUp(entityManager, map, entity->getId(), range, mapX, mapZ);
+    this->explodeDown(entityManager, map, entity->getId(), range, mapX, mapZ);
     if (playerEntity != nullptr) {
         auto player = playerEntity->getComponent<PlayerComponent>();
 
@@ -61,7 +61,7 @@ void Indie::Systems::BombExplosionSystem::explodeBomb(std::vector<std::vector<OB
 }
 
 void Indie::Systems::BombExplosionSystem::explodeRight(
-    EntityManager &entityManager, std::vector<std::vector<OBJECT>> &map, unsigned int range, int mapX, int mapZ) const
+    EntityManager &entityManager, std::vector<std::vector<OBJECT>> &map, int ownerId, unsigned int range, int mapX, int mapZ) const
 {
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
 
@@ -76,17 +76,17 @@ void Indie::Systems::BombExplosionSystem::explodeRight(
             map[mapZ][mapX + i] = OBJECT::LAVA;
             this->explodeBox(entityManager, mapX + i, mapZ);
             entityBuilder.createLava(irr::core::vector3df((irr::f32)((mapX + i) * 20), 20, (irr::f32)(mapZ * 20)),
-                "../ressources/static_mesh/effects/lava.obj", "../ressources/static_mesh/effects/lava.png", 90.f);
+                "../ressources/static_mesh/effects/lava.obj", "../ressources/static_mesh/effects/lava.png", 90.f, ownerId);
             break;
         }
         map[mapZ][mapX + i] = OBJECT::LAVA;
         entityBuilder.createLava(irr::core::vector3df((irr::f32)((mapX + i) * 20), 20, (irr::f32)(mapZ * 20)),
-            "../ressources/static_mesh/effects/lava.obj", "../ressources/static_mesh/effects/lava.png", 90.f);
+            "../ressources/static_mesh/effects/lava.obj", "../ressources/static_mesh/effects/lava.png", 90.f, ownerId);
     }
 }
 
 void Indie::Systems::BombExplosionSystem::explodeLeft(
-    EntityManager &entityManager, std::vector<std::vector<OBJECT>> &map, unsigned int range, int mapX, int mapZ) const
+    EntityManager &entityManager, std::vector<std::vector<OBJECT>> &map, int ownerId, unsigned int range, int mapX, int mapZ) const
 {
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
 
@@ -101,18 +101,17 @@ void Indie::Systems::BombExplosionSystem::explodeLeft(
             map[mapZ][mapX - i] = OBJECT::LAVA;
             this->explodeBox(entityManager, mapX - i, mapZ);
             entityBuilder.createLava(irr::core::vector3df((irr::f32)((mapX - i) * 20), 20, (irr::f32)(mapZ * 20)),
-                "../ressources/static_mesh/effects/lava.obj", "../ressources/static_mesh/effects/lava.png", 270.f);
+                "../ressources/static_mesh/effects/lava.obj", "../ressources/static_mesh/effects/lava.png", 270.f, ownerId);
             break;
         }
         map[mapZ][mapX - i] = OBJECT::LAVA;
         entityBuilder.createLava(irr::core::vector3df((irr::f32)((mapX - i) * 20), 20, (irr::f32)(mapZ * 20)),
-            "../ressources/static_mesh/effects/lava.obj", "../ressources/static_mesh/effects/lava.png", 270.f);
-
+            "../ressources/static_mesh/effects/lava.obj", "../ressources/static_mesh/effects/lava.png", 270.f, ownerId);
     }
 }
 
 void Indie::Systems::BombExplosionSystem::explodeUp(
-    EntityManager &entityManager, std::vector<std::vector<OBJECT>> &map, unsigned int range, int mapX, int mapZ) const
+    EntityManager &entityManager, std::vector<std::vector<OBJECT>> &map, int ownerId, unsigned int range, int mapX, int mapZ) const
 {
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
 
@@ -127,17 +126,17 @@ void Indie::Systems::BombExplosionSystem::explodeUp(
             map[mapZ + i][mapX] = OBJECT::LAVA;
             this->explodeBox(entityManager, mapX, mapZ + i);
             entityBuilder.createLava(irr::core::vector3df((irr::f32)(mapX * 20), 20, (irr::f32)((mapZ + i) * 20)),
-                "../ressources/static_mesh/effects/lava.obj", "../ressources/static_mesh/effects/lava.png", 0.f);
+                "../ressources/static_mesh/effects/lava.obj", "../ressources/static_mesh/effects/lava.png", 0.f, ownerId);
             break;
         }
         map[mapZ + i][mapX] = OBJECT::LAVA;
         entityBuilder.createLava(irr::core::vector3df((irr::f32)(mapX * 20), 20, (irr::f32)((mapZ + i) * 20)),
-            "../ressources/static_mesh/effects/lava.obj", "../ressources/static_mesh/effects/lava.png", 0.f);
+            "../ressources/static_mesh/effects/lava.obj", "../ressources/static_mesh/effects/lava.png", 0.f, ownerId);
     }
 }
 
 void Indie::Systems::BombExplosionSystem::explodeDown(
-    EntityManager &entityManager, std::vector<std::vector<OBJECT>> &map, unsigned int range, int mapX, int mapZ) const
+    EntityManager &entityManager, std::vector<std::vector<OBJECT>> &map, int ownerId, unsigned int range, int mapX, int mapZ) const
 {
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
 
@@ -152,12 +151,12 @@ void Indie::Systems::BombExplosionSystem::explodeDown(
             map[mapZ - i][mapX] = OBJECT::LAVA;
             this->explodeBox(entityManager, mapX, mapZ - i);
             entityBuilder.createLava(irr::core::vector3df((irr::f32)(mapX * 20), 20, (irr::f32)((mapZ - i) * 20)),
-                "../ressources/static_mesh/effects/lava.obj", "../ressources/static_mesh/effects/lava.png", 180.f);
+                "../ressources/static_mesh/effects/lava.obj", "../ressources/static_mesh/effects/lava.png", 180.f, ownerId);
             break;
         }
         map[mapZ - i][mapX] = OBJECT::LAVA;
         entityBuilder.createLava(irr::core::vector3df((irr::f32)(mapX * 20), 20, (irr::f32)((mapZ - i) * 20)),
-            "../ressources/static_mesh/effects/lava.obj", "../ressources/static_mesh/effects/lava.png", 180.f);
+            "../ressources/static_mesh/effects/lava.obj", "../ressources/static_mesh/effects/lava.png", 180.f, ownerId);
     }
 }
 

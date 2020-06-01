@@ -12,9 +12,14 @@ namespace Indie::Components
 {
     class KillComponent
     {
-        public:
-            KillComponent() = default;
-            ~KillComponent() = default;
+    public:
+        KillComponent(int ownerId = -1);
+        ~KillComponent() = default;
+
+        int getOwnerId() const;
+
+    private:
+        int ownerId;
     };
 } // namespace Indie::Components
 

@@ -23,7 +23,8 @@ Indie::Entity *Indie::EntityBuilder::createGround(const irr::core::vector3df &po
 }
 
 Indie::Entity *Indie::EntityBuilder::createPlayer(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath,
-    std::map<irr::EKEY_CODE, KEY_TYPE> keys, const std::string &playerNb, PlayerComponent::PLAYER_COLOR playerColor)
+    std::map<irr::EKEY_CODE, KEY_TYPE> keys, const std::string &playerNb, PlayerComponent::PLAYER_COLOR playerColor,
+    PlayerComponent::PLAYER_START_POSITION startPosition)
 {
     Entity *entity = this->entityManager.createEntity();
 
@@ -35,12 +36,12 @@ Indie::Entity *Indie::EntityBuilder::createPlayer(const irr::core::vector3df &po
     entity->addComponent<VelocityComponent>();
     entity->addComponent<MeshComponent>(this->contextManager, texturePath);
     entity->addComponent<RotationComponent>();
-    entity->addComponent<PlayerComponent>(playerNb, playerColor);
+    entity->addComponent<PlayerComponent>(playerNb, playerColor, startPosition);
     return entity;
 }
 
 Indie::Entity *Indie::EntityBuilder::createAi(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath,
-    const std::string &playerNb, PlayerComponent::PLAYER_COLOR playerColor)
+    const std::string &playerNb, PlayerComponent::PLAYER_COLOR playerColor, PlayerComponent::PLAYER_START_POSITION startPosition)
 {
     Entity *entity = this->entityManager.createEntity();
 
@@ -52,7 +53,7 @@ Indie::Entity *Indie::EntityBuilder::createAi(const irr::core::vector3df &positi
     entity->addComponent<VelocityComponent>();
     entity->addComponent<MeshComponent>(contextManager, texturePath);
     entity->addComponent<RotationComponent>();
-    entity->addComponent<PlayerComponent>(playerNb, playerColor);
+    entity->addComponent<PlayerComponent>(playerNb, playerColor, startPosition);
     entity->addComponent<PathFinderComponent>();
     return entity;
 }
@@ -90,7 +91,7 @@ Indie::Entity *Indie::EntityBuilder::createMap(
 }
 
 Indie::Entity *Indie::EntityBuilder::createLava(
-    const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath, float angle)
+    const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath, float angle, int ownerId)
 {
     Entity *entity = this->entityManager.createEntity();
 
@@ -98,7 +99,7 @@ Indie::Entity *Indie::EntityBuilder::createLava(
     entity->addComponent<RenderComponent>(modelPath, texturePath, this->contextManager, position, true);
     entity->addComponent<RotationComponent>(angle);
     entity->addComponent<TimerComponent>(.75f);
-    entity->addComponent<KillComponent>();
+    entity->addComponent<KillComponent>(ownerId);
     return entity;
 }
 

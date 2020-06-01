@@ -145,7 +145,9 @@ void Indie::Systems::CollisionSystem::onUpdate(irr::f32, EntityManager &entityMa
         irr::core::vector3df wantedPosition = characterPositionComponent->getPosition();
         irr::core::aabbox3df updatedBoundingBox = characterHitBoxComponent->getMesh()->getTransformedBoundingBox();
 
-        if (currentPosition != wantedPosition && character->has<Components::TimerComponent>() == false) {
+        if (character->has<Components::TimerComponent>() == true)
+            continue;
+        if (currentPosition != wantedPosition) {
             updatedBoundingBox = this->updateCharacterBoundingBox(updatedBoundingBox, currentPosition, wantedPosition);
 
             this->checkCollisionWithPowerUps(entityManager, updatedBoundingBox, characterPlayerComponent);
@@ -171,8 +173,7 @@ void Indie::Systems::CollisionSystem::onUpdate(irr::f32, EntityManager &entityMa
                 continue;
             }
         }
-        if (character->has<Components::TimerComponent>() == false
-            && this->checkCollisionWithKillingEntities(entityManager, updatedBoundingBox, characterPlayerComponent) == true) {
+        if (this->checkCollisionWithKillingEntities(entityManager, updatedBoundingBox, characterPlayerComponent) == true) {
             character->addComponent<Components::TimerComponent>(1.75f);
         }
     }

@@ -51,6 +51,17 @@ class Entity {
             components.insert({ getTypeIndex<T>(), std::move(ptr) });
         }
 
+        template <typename T>
+        void removeComponent()
+        {
+            this->components.erase(getTypeIndex<T>());
+        }
+
+        void removeAllComponents()
+        {
+            this->components.clear();
+        }
+
         int getId() const
         {
             return this->id;
