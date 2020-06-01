@@ -33,7 +33,7 @@ include_directories(include/ui)
 include_directories(${Irrlicht_INCLUDE_DIRS})
 
 # add the executable
-add_definitions("-Wall -Wall -g")
+#add_definitions("-Wall -g")
 file(GLOB SRCS src/*.cpp)
 file(GLOB SRCS_SYSTEM src/systems/*.cpp)
 file(GLOB SRCS_COMPONENTS src/components/*.cpp)
