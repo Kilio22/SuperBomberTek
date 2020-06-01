@@ -16,6 +16,7 @@ Indie::Components::MapComponent::MapComponent(
     , mapState(MAP_STATE::DEFAULT)
     , mapPath(mapPath)
 {
+    this->map.resize(dimension.Y);
     for (int i = 0; i < dimension.Y; i++)
         this->map[i].resize(dimension.X);
 }

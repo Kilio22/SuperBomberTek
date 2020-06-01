@@ -14,7 +14,7 @@
 Indie::MapGenerator::MapGenerator(Indie::EntityBuilder &entityBuilder, irr::core::vector2di vector, Indie::Components::MAP_TYPE type,
     Indie::Components::THEME theme, const std::string &mapPath)
 {
-    entityBuilder.createMap(vector, type, theme);
+    entityBuilder.createMap(vector, type, theme, mapPath);
 }
 
 void Indie::MapGenerator::generate(Indie::EntityManager &entityManager, Indie::EntityBuilder &entityBuilder)
@@ -115,18 +115,20 @@ void Indie::MapGenerator::createSavedMap(
     if (ifs.is_open() == false) {
         throw Indie::Exceptions::FileNotFoundException(ERROR_STR, "File " + mapPath + " not found.");
     }
+    map.clear();
     while (std::getline(ifs, line)) {
         std::istringstream iss(line);
         std::copy(std::istream_iterator<int>(iss), std::istream_iterator<int>(), std::back_inserter(data));
         std::transform(data.begin(), data.end(), std::back_inserter(transformedData), [](int n) { return static_cast<Components::OBJECT>(n); });
         map.push_back(transformedData);
-        if (transformedData.size() != dimension.X) {
-            throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File " + mapPath + " not found.");
+        if ((int)transformedData.size() != dimension.X) {
+            throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File " + mapPath + " currupted.");
         }
         data.clear();
+        transformedData.clear();
     }
-    if (map.size() != dimension.Y) {
-        throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File " + mapPath + " not found.");
+    if ((int)map.size() != dimension.Y) {
+        throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File " + mapPath + " corrupted.");
     }
 }
 
