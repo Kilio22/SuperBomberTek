@@ -17,6 +17,7 @@
 #include "PathFinderComponent.hpp"
 #include "PositionComponent.hpp"
 #include "PowerUpComponent.hpp"
+#include "PlayerComponent.hpp"
 
 namespace Indie::Systems
 {
@@ -26,7 +27,7 @@ namespace Indie::Systems
             PathFinderSystem() = default;
             ~PathFinderSystem() = default;
 
-            void getZone(std::vector<std::vector<Indie::Components::OBJECT>> &map,  EntityManager &entityManager) const;
+            int getNbPlayerInZone(std::vector<std::vector<Indie::Components::OBJECT>> map,  EntityManager &entityManager, irr::core::vector2di aiPosition) const;
             int getCenter(int value) const;
             void getOposateDirection(Indie::Components::AIComponent *ai, Indie::Components::PathFinderComponent *pathFinder, irr::core::vector2di position) const;
             bool hasArrived(std::vector<std::vector<Indie::Components::OBJECT>> &map, Indie::Components::PathFinderComponent *pathFinder) const;

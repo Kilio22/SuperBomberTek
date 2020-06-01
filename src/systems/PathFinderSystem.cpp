@@ -39,6 +39,7 @@ void Indie::Systems::PathFinderSystem::onUpdate(irr::f32, Indie::EntityManager &
         int aiX = (getCenter((int)position->getPosition().X)) / 20;
         int aiZ = (getCenter((int)position->getPosition().Z)) / 20;
 
+        std::cout << getNbPlayerInZone(map, entityManager, irr::core::vector2di(aiX, aiZ)) << std::endl;
 
         // Init des maps dans le pathfinder
         pathFinder->setMapBomb(mapBomb);
@@ -103,9 +104,21 @@ void Indie::Systems::PathFinderSystem::onUpdate(irr::f32, Indie::EntityManager &
     }
 }
 
-void Indie::Systems::PathFinderSystem::getZone(std::vector<std::vector<OBJECT>> &map,  EntityManager &entityManager) const
+int Indie::Systems::PathFinderSystem::getNbPlayerInZone(std::vector<std::vector<OBJECT>> map,  EntityManager &entityManager, irr::core::vector2di aiPosition) const
 {
+    int nbPlayer = 0;
 
+    setPathFinding(map, irr::core::vector2di(aiPosition.X, aiPosition.Y), 6, map);
+    for (auto entity : entityManager.each<PlayerComponent, PositionComponent>()) {
+        auto position = entity->getComponent<PositionComponent>();
+
+        int playerX = (getCenter((int)position->getPosition().X)) / 20;
+        int playerZ = (getCenter((int)position->getPosition().Z)) / 20;
+
+        if (map[playerZ][playerX] >= static_cast<OBJECT>(6) && (playerX != aiPosition.X && playerZ != aiPosition.Y))
+            nbPlayer += 1;
+    }
+    return nbPlayer;
 }
 
 void Indie::Systems::PathFinderSystem::getOposateDirection(AIComponent *ai, PathFinderComponent *pathFinder, irr::core::vector2di position) const
