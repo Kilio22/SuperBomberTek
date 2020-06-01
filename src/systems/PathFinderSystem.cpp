@@ -90,7 +90,7 @@ void Indie::Systems::PathFinderSystem::onUpdate(irr::f32, Indie::EntityManager &
         //     pathFinder->setMap(map);
         // }
         // Get Direction pour le movement
-        if ((ai->getAction() == ACTION::GO_BOX || ai->getAction() == ACTION::GO_SAFE) &&
+        else if ((ai->getAction() == ACTION::GO_BOX || ai->getAction() == ACTION::GO_SAFE) &&
         ai->hasMoved(irr::core::vector3df(position->getPosition().X, 20, position->getPosition().Z),irr::core::vector3df((ai->getNextPosition().X) * 20, 20, (ai->getNextPosition().Y) * 20), ai)) {
             ai->setNextDirection(mapPathFinding, irr::core::vector2di(aiX, aiZ));
             // Si il est pas coincé il va pas marcher dans la lave ici
@@ -192,9 +192,9 @@ void Indie::Systems::PathFinderSystem::findFirstPosition(std::vector<std::vector
     int maxValue = 0;
     bool outOfRange = false;
 
-    for (int i = 1; i < map[0].size(); i++) {
+    for (int i = 1; i < 15; i++) {
         outOfRange = false;
-        for (int j = 1; j < map.size(); j++) {
+        for (int j = 1; j < 13; j++) {
             if (map[j][i] >= static_cast<OBJECT>(6)) {
                 if (map[j][i - 1] > static_cast<OBJECT>(maxValue)) {
                     maxValue = (int)map[j][i - 1];
@@ -254,7 +254,6 @@ void Indie::Systems::PathFinderSystem::findPosition(std::vector<std::vector<OBJE
                 if (nbBox >= 1 && (getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(i, j)) < position[3])) {
                     if (position[0] != -99) {
                         random = 1 + std::rand()/((RAND_MAX + 1u) / 2);
-                        std::cout << random << std::endl;
                         if (random > 1)
                             position = {i, j, nbBox, getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(i, j))};
                     }
@@ -271,7 +270,7 @@ void Indie::Systems::PathFinderSystem::getShortlessPath(std::vector<std::vector<
 {
     int value = (int)map[nextPos.Y][nextPos.X];
 
-    if (nextPos.X < 1 || nextPos.Y < 1 || nextPos.X > (map.size() - 1) || nextPos.Y > (map[0].size() - 1))
+    if (nextPos.X < 1 || nextPos.Y < 1 || nextPos.X > (map[0].size() - 1) || nextPos.Y > (map.size() - 1))
         return;
     while (map[acPos.Y][acPos.X] != static_cast<OBJECT>(-99)) {
         map[nextPos.Y][nextPos.X] = static_cast<OBJECT>(-99);
