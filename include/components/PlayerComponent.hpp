@@ -22,7 +22,7 @@ namespace Indie::Components
                 YELLOW,
                 GENERIC,
                 GREEN,
-                PURPULE
+                PURPLE
             };
 
             PlayerComponent(const std::string &playerNb, PLAYER_COLOR playerColor);

@@ -28,7 +28,9 @@ const std::vector<std::pair<std::string, Indie::Components::PlayerComponent::PLA
           { "../ressources/textures/character/red1.png", Indie::Components::PlayerComponent::PLAYER_COLOR::RED },
           { "../ressources/textures/character/red3.png", Indie::Components::PlayerComponent::PLAYER_COLOR::RED },
           { "../ressources/textures/character/yellow1.png", Indie::Components::PlayerComponent::PLAYER_COLOR::YELLOW },
-          { "../ressources/textures/character/yellow3.png", Indie::Components::PlayerComponent::PLAYER_COLOR::YELLOW } };
+          { "../ressources/textures/character/yellow3.png", Indie::Components::PlayerComponent::PLAYER_COLOR::YELLOW },
+          { "../ressources/textures/character/purple1.png", Indie::Components::PlayerComponent::PLAYER_COLOR::PURPLE },
+          { "../ressources/textures/character/purple3.png", Indie::Components::PlayerComponent::PLAYER_COLOR::PURPLE } };
 
 Indie::GameScene::GameScene(ContextManager &context)
     : context(context)
@@ -77,8 +79,8 @@ void Indie::GameScene::init()
 
     this->font = this->context.getGuiEnv()->getFont("../ressources/font/Banschrift.xml");
     for (auto player : Indie::ServiceLocator::getInstance().get<InitGame>().playersParams) {
-        entityBuilder.createPlayer(this->defaultPositions.at(idx - 1), "../ressources/animated_mesh/character/character_idle.b3d", player.playerTexture,
-            player.playerKeys, std::to_string(idx), player.playerColor);
+        entityBuilder.createPlayer(this->defaultPositions.at(idx - 1), "../ressources/animated_mesh/character/character_idle.b3d",
+            player.playerTexture, player.playerKeys, std::to_string(idx), player.playerColor);
         idx++;
     }
     for (int i = 0; i < Indie::ServiceLocator::getInstance().get<InitGame>().nbAi && i < 2; i++) {
@@ -98,11 +100,11 @@ void Indie::GameScene::init()
             { irr::KEY_SPACE, Indie::Components::KEY_TYPE::DROP } },
         "1", Components::PlayerComponent::PLAYER_COLOR::BLUE);
     entityBuilder.createAi(irr::core::vector3df(220, 20, 220), "../ressources/animated_mesh/character/character_idle.b3d",
-       "../ressources/textures/character/yellow1.png", "2", Indie::Components::PlayerComponent::PLAYER_COLOR::BLUE);
+        "../ressources/textures/character/yellow1.png", "2", Indie::Components::PlayerComponent::PLAYER_COLOR::BLUE);
     entityBuilder.createAi(irr::core::vector3df(220, 20, 20), "../ressources/animated_mesh/character/character_idle.b3d",
-       "../ressources/textures/character/green1.png", "3", Indie::Components::PlayerComponent::PLAYER_COLOR::BLUE);
+        "../ressources/textures/character/green1.png", "3", Indie::Components::PlayerComponent::PLAYER_COLOR::BLUE);
     entityBuilder.createAi(irr::core::vector3df(20, 20, 220), "../ressources/animated_mesh/character/character_idle.b3d",
-       "../ressources/textures/character/red1.png", "4", Indie::Components::PlayerComponent::PLAYER_COLOR::BLUE);
+        "../ressources/textures/character/red1.png", "4", Indie::Components::PlayerComponent::PLAYER_COLOR::BLUE);
 
     device->getCursorControl()->setVisible(false);
 }
