@@ -77,14 +77,14 @@ void Indie::GameScene::init()
 
     this->font = this->context.getGuiEnv()->getFont("../ressources/font/Banschrift.xml");
     for (auto player : Indie::ServiceLocator::getInstance().get<InitGame>().playersParams) {
-        entityBuilder.createPlayer(this->defaultPositions[idx - 1], "../ressources/animated_mesh/character/character_idle.b3d", player.playerTexture,
+        entityBuilder.createPlayer(this->defaultPositions.at(idx - 1), "../ressources/animated_mesh/character/character_idle.b3d", player.playerTexture,
             player.playerKeys, std::to_string(idx), player.playerColor);
         idx++;
     }
     for (int i = 0; i < Indie::ServiceLocator::getInstance().get<InitGame>().nbAi && i < 2; i++) {
         int randomSkinIdx = std::rand() % this->skins.size();
 
-        entityBuilder.createAi(this->defaultPositions[idx - 1], "../ressources/animated_mesh/character/character_idle.b3d",
+        entityBuilder.createAi(this->defaultPositions.at(idx - 1), "../ressources/animated_mesh/character/character_idle.b3d",
             this->skins.at(randomSkinIdx).first, std::to_string(idx), this->skins.at(randomSkinIdx).second);
         idx++;
     }
