@@ -103,6 +103,11 @@ void Indie::Systems::PathFinderSystem::onUpdate(irr::f32, Indie::EntityManager &
     }
 }
 
+void Indie::Systems::PathFinderSystem::getZone(std::vector<std::vector<OBJECT>> &map,  EntityManager &entityManager) const
+{
+
+}
+
 void Indie::Systems::PathFinderSystem::getOposateDirection(AIComponent *ai, PathFinderComponent *pathFinder, irr::core::vector2di position) const
 {
     if (ai->getDirection() == DIRECTION::DOWN) {
@@ -149,8 +154,8 @@ void Indie::Systems::PathFinderSystem::setPathFinding(std::vector<std::vector<OB
     while (canContinue == true) {
         canContinue = false;
 
-        for (int j = 1; j < map[0].size(); j++) {
-            for (int i = 1; i < map.size(); i++) {
+        for (size_t j = 1; j < map[0].size(); j++) {
+            for (size_t i = 1; i < map.size(); i++) {
                 if (map[i][j] == static_cast<OBJECT>(value) && mapBomb[i][j] != static_cast<OBJECT>(5)) {
                     map[i - 1][j] = (map[i - 1][j] == static_cast<OBJECT>(0)) ? static_cast<OBJECT>(value + 1) : map[i - 1][j];
                     map[i + 1][j] = (map[i + 1][j] == static_cast<OBJECT>(0)) ? static_cast<OBJECT>(value + 1) : map[i + 1][j];
@@ -171,8 +176,8 @@ void Indie::Systems::PathFinderSystem::setPathFindingBombDodge(std::vector<std::
 
     while (canContinue == true) {
         canContinue = false;
-        for (int i = 1; i < map.size(); i++) {
-            for (int j = 1; j < map[0].size(); j++) {
+        for (size_t i = 1; i < map.size(); i++) {
+            for (size_t j = 1; j < map[0].size(); j++) {
                 if (map[i][j] == static_cast<OBJECT>(value) && mapBomb[i][j] == static_cast<OBJECT>(6) && mapBomb[i][j] != static_cast<OBJECT>(5)) {
                     map[i - 1][j] = (map[i - 1][j] == static_cast<OBJECT>(0)) ? static_cast<OBJECT>(value + 1) : map[i - 1][j];
                     map[i][j + 1] = (map[i][j + 1] == static_cast<OBJECT>(0)) ? static_cast<OBJECT>(value + 1) : map[i][j + 1];
@@ -190,27 +195,25 @@ void Indie::Systems::PathFinderSystem::findFirstPosition(std::vector<std::vector
 {
     std::array<int, 3> position;
     int maxValue = 0;
-    bool outOfRange = false;
 
-    for (int i = 1; i < 15; i++) {
-        outOfRange = false;
-        for (int j = 1; j < 13; j++) {
+    for (size_t i = 1; i < 15; i++) {
+        for (size_t j = 1; j < 13; j++) {
             if (map[j][i] >= static_cast<OBJECT>(6)) {
                 if (map[j][i - 1] > static_cast<OBJECT>(maxValue)) {
                     maxValue = (int)map[j][i - 1];
-                    position = {i - 1, j, 0};
+                    position = {(int)i - 1, (int)j, 0};
                 }
                 if (map[j][i + 1] > static_cast<OBJECT>(maxValue)) {
                     maxValue = (int)map[j][i + 1];
-                    position = {i + 1, j, 0};
+                    position = {(int)i + 1, (int)j, 0};
                 }
                 if (map[j - 1][i] > static_cast<OBJECT>(maxValue)) {
                     maxValue = (int)map[j - 1][i];
-                    position = {i, j - 1, 0};
+                    position = {(int)i, (int)j - 1, 0};
                 }
                 if (map[j + 1][i] > static_cast<OBJECT>(maxValue)) {
                     maxValue = (int)map[j + 1][i];
-                    position = {i, j + 1, 0};
+                    position = {(int)i, (int)j + 1, 0};
                 }
             }
         }
@@ -221,14 +224,12 @@ void Indie::Systems::PathFinderSystem::findFirstPosition(std::vector<std::vector
 void Indie::Systems::PathFinderSystem::findPowerUP(std::vector<std::vector<OBJECT>> &map, std::vector<std::vector<OBJECT>> &mapPowerUp, std::vector<std::vector<OBJECT>> &mapBomb, PathFinderComponent *pathFinder, irr::core::vector2di aiPosition) const
 {
     std::array<int, 4> position = {-99, -99, 99};
-    int maxValue = 0;
-    int nbPower = 0;
 
-    for (int i = 1; i < map[0].size(); i++) {
-        for (int j = 1; j < map.size(); j++) {
+    for (size_t i = 1; i < map[0].size(); i++) {
+        for (size_t j = 1; j < map.size(); j++) {
             if (mapPowerUp[j][i] == static_cast<OBJECT>(10)) {
                 if ((getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(i, j)) < position[2])) {
-                    position = {i, j, getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(i, j))};
+                    position = {(int)i, (int)j, getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(i, j))};
                 }
             }
         }
@@ -243,8 +244,8 @@ void Indie::Systems::PathFinderSystem::findPosition(std::vector<std::vector<OBJE
     int nbBox = 0;
     int random = 0;
 
-    for (int i = 1; i < map[0].size(); i++) {
-        for (int j = 1; j < map.size(); j++) {
+    for (size_t i = 1; i < map[0].size(); i++) {
+        for (size_t j = 1; j < map.size(); j++) {
             nbBox = 0;
             if (map[j][i] >= static_cast<OBJECT>(6)) {
                 nbBox += (map[j - 1][i] == OBJECT::BOX) ? 1 : 0;
@@ -255,10 +256,10 @@ void Indie::Systems::PathFinderSystem::findPosition(std::vector<std::vector<OBJE
                     if (position[0] != -99) {
                         random = 1 + std::rand()/((RAND_MAX + 1u) / 2);
                         if (random > 1)
-                            position = {i, j, nbBox, getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(i, j))};
+                            position = {(int)i, (int)j, nbBox, getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(i, j))};
                     }
                     else
-                        position = {i, j, nbBox, getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(i, j))};
+                        position = {(int)i, (int)j, nbBox, getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(i, j))};
                 }
             }
         }
@@ -270,7 +271,7 @@ void Indie::Systems::PathFinderSystem::getShortlessPath(std::vector<std::vector<
 {
     int value = (int)map[nextPos.Y][nextPos.X];
 
-    if (nextPos.X < 1 || nextPos.Y < 1 || nextPos.X > (map[0].size() - 1) || nextPos.Y > (map.size() - 1))
+    if (nextPos.X < 1 || nextPos.Y < 1 || nextPos.X > ((int)map[0].size() - 1) || nextPos.Y > ((int)map.size() - 1))
         return;
     while (map[acPos.Y][acPos.X] != static_cast<OBJECT>(-99)) {
         map[nextPos.Y][nextPos.X] = static_cast<OBJECT>(-99);
@@ -294,7 +295,7 @@ void Indie::Systems::PathFinderSystem::setMapBomb(std::vector<std::vector<OBJECT
         int x = (getCenter((int)position->getPosition().X)) / 20;
         int z = (getCenter((int)position->getPosition().Z)) / 20;
         unsigned int range = bomb->getRange();
-        int i = 0;
+        size_t i = 0;
 
         map[z][x] = static_cast<OBJECT>(6);
         for (i = 0; i <= range && z + i < map.size(); i++)
@@ -311,11 +312,9 @@ void Indie::Systems::PathFinderSystem::setMapBomb(std::vector<std::vector<OBJECT
 void Indie::Systems::PathFinderSystem::setMapPowerUp(std::vector<std::vector<OBJECT>> &map,  EntityManager &entityManager) const
 {
     for (auto entity : entityManager.each<PowerUpComponent, PositionComponent>()) {
-        auto powerUp = entity->getComponent<PowerUpComponent>();
         auto position = entity->getComponent<PositionComponent>();
         int x = (getCenter((int)position->getPosition().X)) / 20;
         int z = (getCenter((int)position->getPosition().Z)) / 20;
-        int i = 0;
 
         map[z][x] = static_cast<OBJECT>(10);
     }

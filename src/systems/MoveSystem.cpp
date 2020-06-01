@@ -23,7 +23,6 @@ void Indie::Systems::MoveSystem::onUpdate(irr::f32, Indie::EntityManager &entity
     }
 
     for (auto entity : entityManager.each<Indie::Components::MoveComponent, Indie::Components::AIComponent>()) {
-        auto aiComponent = entity->getComponent<Indie::Components::AIComponent>();
         auto moveComponent = entity->getComponent<Indie::Components::MoveComponent>();
 
         moveComponent->setUp(false);
