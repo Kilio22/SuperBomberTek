@@ -65,20 +65,20 @@ void Indie::Systems::BombExplosionSystem::explodeRight(EntityManager &entityMana
 {
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
 
-    if (map[mapX + 1][mapZ] == OBJECT::WALL_OUT || map[mapX + 1][mapZ] == OBJECT::WALL_IN)
+    if (map[mapZ][mapX + 1] == OBJECT::WALL_OUT || map[mapZ][mapX + 1] == OBJECT::WALL_IN)
         return;
     for (unsigned int i = 0; i <= range; ++i) {
-        if (i > 0 && map[mapX + i][mapZ] == OBJECT::BOMB)
+        if (i > 0 && map[mapZ][mapX + i] == OBJECT::BOMB)
             return this->recursiveExplosion(entityManager, map, mapX + i, mapZ);
-        if (map[mapX + i][mapZ] == OBJECT::WALL_OUT || map[mapX + i][mapZ] == OBJECT::WALL_IN)
+        if (map[mapZ][mapX + i] == OBJECT::WALL_OUT || map[mapZ][mapX + i] == OBJECT::WALL_IN)
             break;
-        if (map[mapX + i][mapZ] == OBJECT::BOX) {
-            map[mapX + i][mapZ] = OBJECT::LAVA;
+        if (map[mapZ][mapX + i] == OBJECT::BOX) {
+            map[mapZ][mapX + i] = OBJECT::LAVA;
             this->explodeBox(entityManager, mapX + i, mapZ);
             entityBuilder.createLava(irr::core::vector3df((irr::f32)((mapX + i) * 20), 20, (irr::f32)(mapZ * 20)), "../ressources/static_mesh/effects/lava.obj", "../ressources/static_mesh/effects/lava.png", 90.f);
             break;
         }
-        map[mapX + i][mapZ] = OBJECT::LAVA;
+        map[mapZ][mapX + i] = OBJECT::LAVA;
         entityBuilder.createLava(irr::core::vector3df((irr::f32)((mapX + i) * 20), 20, (irr::f32)(mapZ * 20)), "../ressources/static_mesh/effects/lava.obj", "../ressources/static_mesh/effects/lava.png", 90.f);
     }
 }
@@ -87,20 +87,20 @@ void Indie::Systems::BombExplosionSystem::explodeLeft(EntityManager &entityManag
 {
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
 
-    if (map[mapX - 1][mapZ] == OBJECT::WALL_OUT || map[mapX - 1][mapZ] == OBJECT::WALL_IN)
+    if (map[mapZ][mapX - 1] == OBJECT::WALL_OUT || map[mapZ][mapX - 1] == OBJECT::WALL_IN)
         return;
     for (unsigned int i = 0; i <= range; ++i) {
-        if (i > 0 && map[mapX - i][mapZ] == OBJECT::BOMB)
+        if (i > 0 && map[mapZ][mapX - i] == OBJECT::BOMB)
             return this->recursiveExplosion(entityManager, map, mapX - i, mapZ);
-        if (map[mapX - i][mapZ] == OBJECT::WALL_OUT || map[mapX - i][mapZ] == OBJECT::WALL_IN)
+        if (map[mapZ][mapX - i] == OBJECT::WALL_OUT || map[mapZ][mapX - i] == OBJECT::WALL_IN)
             break;
-        if (map[mapX - i][mapZ] == OBJECT::BOX) {
-            map[mapX - i][mapZ] = OBJECT::LAVA;
+        if (map[mapZ][mapX - i] == OBJECT::BOX) {
+            map[mapZ][mapX - i] = OBJECT::LAVA;
             this->explodeBox(entityManager, mapX - i, mapZ);
             entityBuilder.createLava(irr::core::vector3df((irr::f32)((mapX - i) * 20), 20, (irr::f32)(mapZ * 20)), "../ressources/static_mesh/effects/lava.obj", "../ressources/static_mesh/effects/lava.png", 270.f);
             break;
         }
-        map[mapX - i][mapZ] = OBJECT::LAVA;
+        map[mapZ][mapX - i] = OBJECT::LAVA;
         entityBuilder.createLava(irr::core::vector3df((irr::f32)((mapX - i) * 20), 20, (irr::f32)(mapZ * 20)), "../ressources/static_mesh/effects/lava.obj", "../ressources/static_mesh/effects/lava.png", 270.f);
     }
 }
@@ -109,20 +109,20 @@ void Indie::Systems::BombExplosionSystem::explodeUp(EntityManager &entityManager
 {
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
 
-    if (map[mapX][mapZ + 1] == OBJECT::WALL_OUT || map[mapX][mapZ + 1] == OBJECT::WALL_IN)
+    if (map[mapZ + 1][mapX] == OBJECT::WALL_OUT || map[mapZ + 1][mapX] == OBJECT::WALL_IN)
         return;
     for (unsigned int i = 0; i <= range; ++i) {
-        if (i > 0 && map[mapX][mapZ + i] == OBJECT::BOMB)
+        if (i > 0 && map[mapZ + i][mapX] == OBJECT::BOMB)
             return this->recursiveExplosion(entityManager, map, mapX, mapZ + i);
-        if (map[mapX][mapZ + i] == OBJECT::WALL_OUT || map[mapX][mapZ + i] == OBJECT::WALL_IN)
+        if (map[mapZ + i][mapX] == OBJECT::WALL_OUT || map[mapZ + i][mapX] == OBJECT::WALL_IN)
             break;
-        if (map[mapX][mapZ + i] == OBJECT::BOX) {
-            map[mapX][mapZ + i] = OBJECT::LAVA;
+        if (map[mapZ + i][mapX] == OBJECT::BOX) {
+            map[mapZ + i][mapX] = OBJECT::LAVA;
             this->explodeBox(entityManager, mapX, mapZ + i);
             entityBuilder.createLava(irr::core::vector3df((irr::f32)(mapX * 20), 20, (irr::f32)((mapZ + i) * 20)), "../ressources/static_mesh/effects/lava.obj", "../ressources/static_mesh/effects/lava.png", 180.f);
             break;
         }
-        map[mapX][mapZ + i] = OBJECT::LAVA;
+        map[mapZ + i][mapX] = OBJECT::LAVA;
         entityBuilder.createLava(irr::core::vector3df((irr::f32)(mapX * 20), 20, (irr::f32)((mapZ + i) * 20)), "../ressources/static_mesh/effects/lava.obj", "../ressources/static_mesh/effects/lava.png", 180.f);
     }
 }
@@ -131,20 +131,20 @@ void Indie::Systems::BombExplosionSystem::explodeDown(EntityManager &entityManag
 {
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
 
-    if (map[mapX][mapZ - 1] == OBJECT::WALL_OUT || map[mapX][mapZ - 1] == OBJECT::WALL_IN)
+    if (map[mapZ - 1][mapX] == OBJECT::WALL_OUT || map[mapZ - 1][mapX] == OBJECT::WALL_IN)
         return;
     for (unsigned int i = 0; i <= range; ++i) {
-        if (i > 0 && map[mapX][mapZ - i] == OBJECT::BOMB)
+        if (i > 0 && map[mapZ - i][mapX] == OBJECT::BOMB)
             return this->recursiveExplosion(entityManager, map, mapX, mapZ - i);
-        if (map[mapX][mapZ - i] == OBJECT::WALL_OUT || map[mapX][mapZ - i] == OBJECT::WALL_IN)
+        if (map[mapZ - i][mapX] == OBJECT::WALL_OUT || map[mapZ - i][mapX] == OBJECT::WALL_IN)
             break;
-        if (map[mapX][mapZ - i] == OBJECT::BOX) {
-            map[mapX][mapZ - i] = OBJECT::LAVA;
+        if (map[mapZ - i][mapX] == OBJECT::BOX) {
+            map[mapZ - i][mapX] = OBJECT::LAVA;
             this->explodeBox(entityManager, mapX, mapZ - i);
             entityBuilder.createLava(irr::core::vector3df((irr::f32)(mapX * 20), 20, (irr::f32)((mapZ - i) * 20)), "../ressources/static_mesh/effects/lava.obj", "../ressources/static_mesh/effects/lava.png", 180.f);
             break;
         }
-        map[mapX][mapZ - i] = OBJECT::LAVA;
+        map[mapZ - i][mapX] = OBJECT::LAVA;
         entityBuilder.createLava(irr::core::vector3df((irr::f32)(mapX * 20), 20, (irr::f32)((mapZ - i) * 20)), "../ressources/static_mesh/effects/lava.obj", "../ressources/static_mesh/effects/lava.png", 180.f);
     }
 }

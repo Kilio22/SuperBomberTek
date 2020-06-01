@@ -8,6 +8,18 @@
 #include "AIComponent.hpp"
 #include <iostream>
 
+bool Indie::Components::AIComponent::hasMoved(irr::core::vector3df position, irr::core::vector3df nextPosition, AIComponent *ai) const
+{
+    if (ai->getDirection() == DIRECTION::UP && position.Z < nextPosition.Z)
+        return false;
+    if (ai->getDirection() == DIRECTION::DOWN && position.Z > nextPosition.Z)
+        return false;
+    if (ai->getDirection() == DIRECTION::RIGHT && position.X < nextPosition.X)
+        return false;
+    if (ai->getDirection() == DIRECTION::LEFT && position.X > nextPosition.X)
+        return false;
+    return true;
+}
 
 void Indie::Components::AIComponent::setNextDirection(std::vector<std::vector<OBJECT>> &map, irr::core::vector2di acPos)
 {
@@ -15,9 +27,9 @@ void Indie::Components::AIComponent::setNextDirection(std::vector<std::vector<OB
     nextPosY = acPos.Y;
 
     map[acPos.Y][acPos.X] = static_cast<OBJECT>(0);
-    if (map[acPos.Y - 1][acPos.X] == static_cast<OBJECT>(-99)) {
+    if (map[acPos.Y + 1][acPos.X] == static_cast<OBJECT>(-99)) {
         setDirection(Indie::Components::DIRECTION::UP);
-        nextPosY -= 1;
+        nextPosY += 1;
         return;
     }
     if (map[acPos.Y][acPos.X + 1] == static_cast<OBJECT>(-99)) {
@@ -25,9 +37,9 @@ void Indie::Components::AIComponent::setNextDirection(std::vector<std::vector<OB
         nextPosX += 1;
         return;
     }
-    if (map[acPos.Y + 1][acPos.X] == static_cast<OBJECT>(-99)) {
+    if (map[acPos.Y - 1][acPos.X] == static_cast<OBJECT>(-99)) {
         setDirection(Indie::Components::DIRECTION::DOWN);
-        nextPosY += 1;
+        nextPosY -= 1;
         return;
     }
     if (map[acPos.Y][acPos.X - 1] == static_cast<OBJECT>(-99)) {
@@ -35,6 +47,12 @@ void Indie::Components::AIComponent::setNextDirection(std::vector<std::vector<OB
         nextPosX -= 1;
         return;
     }
+}
+
+void Indie::Components::AIComponent::forceNextDirection(irr::core::vector2di nextPos)
+{
+    this->nextPosX = nextPos.X;
+    this->nextPosY = nextPos.Y;
 }
 
 void Indie::Components::AIComponent::setDirection(Indie::Components::DIRECTION direction)

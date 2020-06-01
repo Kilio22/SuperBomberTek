@@ -6,147 +6,73 @@
 */
 
 #include "AISystem.hpp"
-#include "PathFinderComponent.hpp"
-#include "MoveComponent.hpp"
-#include "Components.h"
+
+using namespace Indie::Components;
 
 void Indie::Systems::AISystem::onUpdate(irr::f32, EntityManager &entityManager) const
 {
-    std::vector<std::vector<Indie::Components::OBJECT>> map;
-    std::vector<std::vector<Indie::Components::OBJECT>> mapBomb;
-    int aiX = 0;
-    int aiZ = 0;
+    std::vector<std::vector<OBJECT>> map;
+    std::vector<std::vector<OBJECT>> mapPathFinding;
 
-    for (auto entity : entityManager.each<Indie::Components::MapComponent>()) {
-        auto mapComponent = entity->getComponent<Indie::Components::MapComponent>();
+    for (auto entity : entityManager.each<MapComponent>()) {
+        auto mapComponent = entity->getComponent<MapComponent>();
 
+        // Get Actuel map
         map = mapComponent->getMap();
-        mapBomb = map;
-        determineBomb(mapBomb, entityManager);
     }
 
-    for (auto entity : entityManager.each<Indie::Components::MoveComponent, Indie::Components::AIComponent, Indie::Components::PositionComponent, Indie::Components::PathFinderComponent, Indie::Components::PlayerComponent>()) {
-        std::vector<std::vector<Indie::Components::OBJECT>> mapPath;
-        std::array<int, 3> position {0, 0, 0};
-        auto aiComponent = entity->getComponent<Indie::Components::AIComponent>();
-        auto pathFinderComponent = entity->getComponent<Indie::Components::PathFinderComponent>();
-        auto moveComponent = entity->getComponent<Indie::Components::MoveComponent>();
-        auto positionComponent = entity->getComponent<Indie::Components::PositionComponent>();
-        auto playerComponent = entity->getComponent<Indie::Components::PlayerComponent>();
+    for (auto entity : entityManager.each<MoveComponent, AIComponent, PositionComponent, PathFinderComponent, PlayerComponent>()) {
+        auto ai = entity->getComponent<AIComponent>();
+        auto pathFinder = entity->getComponent<PathFinderComponent>();
+        auto move = entity->getComponent<MoveComponent>();
+        auto position = entity->getComponent<PositionComponent>();
+        auto player = entity->getComponent<PlayerComponent>();
 
-        if (pathFinderComponent->getMap().empty())
-            pathFinderComponent->setMap(map);
-        mapPath = pathFinderComponent->getMap();
+        // SetMap si elle sont vide jamais init
+        if (pathFinder->getMap().empty())
+            pathFinder->setMap(map);
+        if (pathFinder->getMapBomb().empty())
+            pathFinder->setMapBomb(map);
+        //Get Map Pathfinding
+        mapPathFinding = pathFinder->getMap();
 
-        if (playerComponent->getCurrentBombNb() == 0 && aiComponent->getAction() == Indie::Components::ACTION::HAS_DODGE) {
+        // Attendre une frame de plus -> pas vraiment l'explosion
+        if (ai->getAction() == ACTION::WAIT_EXPLOSION)
             return;
+        // Bomb placé -> en attente d'instruction
+        if (ai->getAction() == ACTION::PLACE_BOMB) {
+            move->setDrop(false);
+            ai->setAction(ACTION::STANDBY);
         }
 
-        if (aiComponent->getAction() == Indie::Components::ACTION::HAS_DODGE && playerComponent->getCurrentBombNb() == 1)
-            aiComponent->setAction(Indie::Components::ACTION::CAN_MOVE);
-
-        if (aiComponent->getAction() == Indie::Components::ACTION::CAN_MOVE) {
-            pathFinderComponent->cleanMap();
-            aiComponent->setAction(Indie::Components::ACTION::STANDBY);
+        // S'il est sur une bombe et qu'il vient d'en poser une en gros
+        if (isOnBomb(pathFinder->getMapBomb(), position) && hasArrived(mapPathFinding, pathFinder) && ai->getAction() == ACTION::STANDBY &&
+        ai->hasMoved(irr::core::vector3df(position->getPosition().X, 20, position->getPosition().Z),irr::core::vector3df((pathFinder->getEndMapPos().X) * 20, 20, (pathFinder->getEndMapPos().Y) * 20), ai)) {
+            ai->setAction(ACTION::DODGE);
         }
-        if (aiComponent->getAction() == Indie::Components::ACTION::PLACE_BOMB) {
-            moveComponent->setDrop(false);
-            pathFinderComponent->setMap(map);
-            aiComponent->setAction(Indie::Components::ACTION::STANDBY);
+        // Faire le déplacement et check qu'il a bien bougé sur la case.
+        if (ai->getDirection() != DIRECTION::NONE &&
+        ai->hasMoved(irr::core::vector3df(position->getPosition().X, 20, position->getPosition().Z),irr::core::vector3df((ai->getNextPosition().X) * 20, 20, (ai->getNextPosition().Y) * 20), ai) == false) {
+            move->setUp(isMoving(DIRECTION::UP, ai));
+            move->setDown(isMoving(DIRECTION::DOWN, ai));
+            move->setRight(isMoving(DIRECTION::RIGHT, ai));
+            move->setLeft(isMoving(DIRECTION::LEFT, ai));
         }
-
-        aiX = getCenter((int)positionComponent->getPosition().X) / 20;
-        aiZ = (14 - getCenter((int)positionComponent->getPosition().Z) / 20);
-
-        if (aiComponent->getDirection() != Indie::Components::DIRECTION::NONE &&
-        hasMoved(irr::core::vector3df(positionComponent->getPosition().X, 20, positionComponent->getPosition().Z),irr::core::vector3df((aiComponent->getNextPosition().X) * 20, 20, (14 - aiComponent->getNextPosition().Y) * 20), aiComponent) == false) {
-            moveComponent->setUp(isMoving(Indie::Components::DIRECTION::UP, aiComponent));
-            moveComponent->setDown(isMoving(Indie::Components::DIRECTION::DOWN, aiComponent));
-            moveComponent->setRight(isMoving(Indie::Components::DIRECTION::RIGHT, aiComponent));
-            moveComponent->setLeft(isMoving(Indie::Components::DIRECTION::LEFT, aiComponent));
+        // S'il a rien a faire et qu'il a une bombe il va checher une box
+        else if (ai->getAction() == ACTION::STANDBY && player->getCurrentBombNb() > 0) {
+            ai->setAction(ACTION::FIND_BOX);
         }
-        else {
-            if (isOnBomb(mapBomb, positionComponent) && aiComponent->getAction() == Indie::Components::ACTION::STANDBY) {
-                pathFinderComponent->setPathFindingBombDodge(irr::core::vector2di(aiX, aiZ), 6, mapBomb);
-                pathFinderComponent->findFirstPosition(position);
-                pathFinderComponent->getShortlessPath(irr::core::vector2di(aiX, aiZ), irr::core::vector2di(position[0], position[1]));
-                mapPath = pathFinderComponent->getMap();
-                aiComponent->setAction(Indie::Components::ACTION::DODGE);
-            }
-            else if (hasArrived(mapPath, pathFinderComponent) == true && aiComponent->getAction() == Indie::Components::ACTION::DODGE) {
-                pathFinderComponent->setMap(map);
-                aiComponent->setAction(Indie::Components::ACTION::HAS_DODGE);
-            }
-            else if (hasArrived(mapPath, pathFinderComponent) == true && aiComponent->getAction() == Indie::Components::ACTION::STANDBY) {
-                pathFinderComponent->setMap(map);
-                pathFinderComponent->setPathFinding(irr::core::vector2di(aiX, aiZ), 6, mapBomb);
-                pathFinderComponent->findPosition(position);
-                pathFinderComponent->getShortlessPath(irr::core::vector2di(aiX, aiZ), irr::core::vector2di(position[0], position[1]));
-                mapPath = pathFinderComponent->getMap();
-                aiComponent->setAction(Indie::Components::ACTION::GO_BOX);
-
-            }
-            else if (hasArrived(mapPath, pathFinderComponent) == true && aiComponent->getAction() == Indie::Components::ACTION::GO_BOX) {
-                aiComponent->setAction(Indie::Components::ACTION::PLACE_BOMB);
-                moveComponent->setDrop(true);
-            }
-            else {
-                aiComponent->setNextDirection(mapPath, irr::core::vector2di(aiX, aiZ));
-                pathFinderComponent->setMap(mapPath);
-            }
+        // Il pose une bomb s'il est arrivé a coté d'une boite
+        else if (hasArrived(mapPathFinding, pathFinder) && ai->getAction() == ACTION::GO_BOX) {
+            ai->setAction(ACTION::PLACE_BOMB);
+            move->setDrop(true);
+            ai->setDirection(DIRECTION::NONE);
         }
-    }
-}
-
-bool Indie::Systems::AISystem::isOnBomb(std::vector<std::vector<Indie::Components::OBJECT>> &map, Indie::Components::PositionComponent *positionComponent) const
-{
-    int aiX = getCenter(positionComponent->getPosition().X) / 20;
-    int aiZ = (14 - getCenter(positionComponent->getPosition().Z) / 20);
-    return (map[aiZ][aiX] == static_cast<Indie::Components::OBJECT>(5));
-}
-
-bool Indie::Systems::AISystem::hasMoved(irr::core::vector3df position, irr::core::vector3df nextPosition, Indie::Components::AIComponent *aiComponent) const
-{
-    if (aiComponent->getDirection() == Indie::Components::DIRECTION::UP && position.Z < nextPosition.Z)
-        return false;
-    if (aiComponent->getDirection() == Indie::Components::DIRECTION::DOWN && position.Z > nextPosition.Z)
-        return false;
-    if (aiComponent->getDirection() == Indie::Components::DIRECTION::RIGHT && position.X < nextPosition.X)
-        return false;
-    if (aiComponent->getDirection() == Indie::Components::DIRECTION::LEFT && position.X > nextPosition.X)
-        return false;
-    return true;
-}
-
-bool Indie::Systems::AISystem::isMoving(Indie::Components::DIRECTION direction, Indie::Components::AIComponent *aiComponent) const
-{
-    return (aiComponent->getDirection() == direction);
-}
-
-bool Indie::Systems::AISystem::hasArrived(std::vector<std::vector<Indie::Components::OBJECT>> &map, Indie::Components::PathFinderComponent *pathFinderComponent) const
-{
-    return map[pathFinderComponent->getEndPosition().Y][pathFinderComponent->getEndPosition().X] != static_cast<Indie::Components::OBJECT>(-99) ? true : false;
-}
-
-void Indie::Systems::AISystem::determineBomb(std::vector<std::vector<Indie::Components::OBJECT>> &map,  EntityManager &entityManager) const
-{
-    for (auto entity : entityManager.each<Indie::Components::BombComponent, Indie::Components::PositionComponent>()) {
-        auto bomb = entity->getComponent<Indie::Components::BombComponent>();
-        auto position = entity->getComponent<Indie::Components::PositionComponent>();
-        int x = (int)(position->getPosition().X / 20);
-        int z = (int)(14 - position->getPosition().Z / 20);
-        unsigned int range = bomb->getRange();
-        int i = 0;
-
-        map[z][x] = static_cast<Indie::Components::OBJECT>(5);
-        for (i = 0; i <= range && z + i < 15; i++)
-            map[z + i][x] = (map[z + i][x] == static_cast<Indie::Components::OBJECT>(0)) ? static_cast<Indie::Components::OBJECT>(5) : map[z + i][x];
-        for (i = 0; i <= range && x + i < 15; i++)
-            map[z][x + i] = (map[z][x + i] == static_cast<Indie::Components::OBJECT>(0)) ? static_cast<Indie::Components::OBJECT>(5) : map[z][x + i];
-        for (i = 0; i <= range && z - i > 0; i++)
-            map[z - i][x] = (map[z - i][x] == static_cast<Indie::Components::OBJECT>(0)) ? static_cast<Indie::Components::OBJECT>(5) : map[z - i][x];
-        for (i = 0; i <= range && x - i > 0; i++)
-            map[z][x - i] = (map[z][x - i] == static_cast<Indie::Components::OBJECT>(0)) ? static_cast<Indie::Components::OBJECT>(5) : map[z][x - i];
+        // Mettre en attente s'il est en sécurité
+        else if (hasArrived(mapPathFinding, pathFinder) && ai->getAction() == ACTION::GO_SAFE) {
+            ai->setAction(ACTION::STANDBY);
+            ai->setDirection(DIRECTION::NONE);
+        }
     }
 }
 
@@ -159,69 +85,20 @@ int Indie::Systems::AISystem::getCenter(int value) const
     }
 }
 
+bool Indie::Systems::AISystem::isOnBomb(std::vector<std::vector<OBJECT>> map, PositionComponent *position) const
+{
+    int aiX = (getCenter((int)position->getPosition().X)) / 20;
+    int aiZ = (getCenter((int)position->getPosition().Z)) / 20;
 
+    return map[aiZ][aiX] == static_cast<OBJECT>(6);
+}
 
+bool Indie::Systems::AISystem::isMoving(DIRECTION direction, AIComponent *ai) const
+{
+    return ai->getDirection() == direction;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // for (int i = 15 - 1; i >= 0; i--) {
-    //     for (int j = 0; j < 15; j++) {
-    //         std::cout << map[i][j] << " ";
-    //     }
-    //     std::cout << std::endl;
-    // }
+bool Indie::Systems::AISystem::hasArrived(std::vector<std::vector<OBJECT>> &map, PathFinderComponent *pathFinder) const
+{
+    return map[pathFinder->getEndMapPos().Y][pathFinder->getEndMapPos().X] != static_cast<OBJECT>(-99);
+}

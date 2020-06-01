@@ -13,13 +13,7 @@
 std::vector<std::vector<Indie::Components::OBJECT>> Indie::Systems::BombDropSystem::updateMap(
     std::vector<std::vector<Components::OBJECT>> currentMap, irr::f32 midX, irr::f32 midZ) const
 {
-    currentMap[(int)(midX / 20)][(int)(midZ / 20)] = OBJECT::BOMB;
-    for (auto oui : currentMap) {
-        for (auto non : oui) {
-            std::cout << (int)non;
-        }
-        std::cout << std::endl;
-    }
+    currentMap[(int)(midZ / 20)][(int)(midX / 20)] = OBJECT::BOMB;
     return currentMap;
 }
 

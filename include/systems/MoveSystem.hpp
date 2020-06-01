@@ -18,7 +18,7 @@ namespace Indie::Systems
         public:
             MoveSystem() = default;
             ~MoveSystem() = default;
-
+            int getCenter(int value) const;
             void onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const final;
     };
 }

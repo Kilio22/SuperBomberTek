@@ -17,7 +17,11 @@
 #include "PathFinderComponent.hpp"
 #include "MoveComponent.hpp"
 #include "PositionComponent.hpp"
+#include "BombComponent.hpp"
+#include "PlayerComponent.hpp"
 
+
+#include <irrlicht.h>
 namespace Indie::Systems
 {
     class AISystem : public ISystem
@@ -28,13 +32,13 @@ namespace Indie::Systems
 
             void onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const final;
 
-            bool hasMoved(irr::core::vector3df position, irr::core::vector3df nextPosition, Indie::Components::AIComponent *aiComponent) const;
-            bool isMoving(Indie::Components::DIRECTION direction, Indie::Components::AIComponent *aiComponent) const;
-            bool hasArrived(std::vector<std::vector<Indie::Components::OBJECT>> &map, Indie::Components::PathFinderComponent *pathFinderComponent) const;
             int getCenter(int value) const;
-            void stopMove(Indie::Components::MoveComponent *moveComponent) const;
-            void determineBomb(std::vector<std::vector<Indie::Components::OBJECT>> &map, EntityManager &entityManager) const;
-            bool isOnBomb(std::vector<std::vector<Indie::Components::OBJECT>> &map, Indie::Components::PositionComponent *positionComponent) const;
+            bool hasEscape(std::vector<std::vector<Indie::Components::OBJECT>> map, Indie::Components::PositionComponent *position) const;
+            bool hasMoved(irr::core::vector3df position, irr::core::vector3df nextPosition, Indie::Components::AIComponent *ai) const;
+            bool isMoving(Indie::Components::DIRECTION direction, Indie::Components::AIComponent *ai) const;
+            bool hasArrived(std::vector<std::vector<Indie::Components::OBJECT>> &map, Indie::Components::PathFinderComponent *pathFinder) const;
+            void stopMove(Indie::Components::MoveComponent *move) const;
+            bool isOnBomb(std::vector<std::vector<Indie::Components::OBJECT>> map, Indie::Components::PositionComponent *position) const;
 
     };
 }

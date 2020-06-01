@@ -13,6 +13,7 @@
 #include <irrlicht.h>
 #include "MapComponent.hpp"
 #include "ServiceLocator.hpp"
+#include "AIComponent.hpp"
 
 namespace Indie::Components
 {
@@ -27,13 +28,15 @@ namespace Indie::Components
     enum class ACTION {
         GO_BOX,
         GO_PLAYER,
+        GO_SAFE,
+        GO_POWERUP,
+        FIND_BOX,
+        FIND_POWERUP,
         PLACE_BOMB,
         BOMB_PLACED,
+        WAIT_EXPLOSION,
         DODGE,
-        HAS_DODGE,
-        CAN_MOVE,
         STANDBY
-
     };
 
     class AIComponent
@@ -42,6 +45,9 @@ namespace Indie::Components
             AIComponent() = default;
             ~AIComponent() = default;
 
+            bool hasMoved(irr::core::vector3df position, irr::core::vector3df nextPosition, AIComponent *ai) const;
+
+            void forceNextDirection(irr::core::vector2di nextPos);
             void setNextDirection(std::vector<std::vector<OBJECT>> &map, irr::core::vector2di acPos);
             void setDirection(DIRECTION direction);
             void setAction(ACTION action);

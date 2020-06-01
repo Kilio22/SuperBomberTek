@@ -15,6 +15,7 @@
 #include "InputSystem.hpp"
 #include "MeshSystem.hpp"
 #include "MoveSystem.hpp"
+#include "PathFinderSystem.hpp"
 #include "RenderSystem.hpp"
 #include "RotationSystem.hpp"
 #include "TimerStopSystem.hpp"
