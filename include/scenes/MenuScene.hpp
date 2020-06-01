@@ -8,31 +8,33 @@
 #ifndef MENUSCENE_HPP_
 #define MENUSCENE_HPP_
 
+#include "ContextManager.hpp"
 #include "IScene.hpp"
 #include "Parallax.hpp"
-#include "ContextManager.hpp"
-#include <vector>
 #include <memory>
+#include <vector>
 
-namespace Indie {
-    class MenuScene : public IScene {
+namespace Indie
+{
+    class MenuScene : public IScene
+    {
         public:
-            MenuScene(ContextManager &context);
-            ~MenuScene();
+        MenuScene(ContextManager &context);
+        ~MenuScene();
 
-            void init();
-            void reset();
-            void update(irr::f32 deltaTime);
-            void renderPre3D();
-            void renderPost3D();
-            void setColor(irr::video::SColor color);
+        void init() final;
+        void reset() final;
+        void update(irr::f32 deltaTime) final;
+        void renderPre3D() final;
+        void renderPost3D() final;
+        void setColor(irr::video::SColor color);
 
         private:
-            static const irr::core::vector2df velocities[5];
-            static const std::string filepaths[5];
+        static const irr::core::vector2df velocities[5];
+        static const std::string filepaths[5];
 
-            ContextManager &context;
-            std::vector<std::unique_ptr<Parallax>> parallax;
+        ContextManager &context;
+        std::vector<std::unique_ptr<Parallax>> parallax;
     };
 }
 

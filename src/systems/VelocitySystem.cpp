@@ -8,16 +8,17 @@
 #include "VelocitySystem.hpp"
 #include "Components.h"
 
+using namespace Indie::Components;
+
 void Indie::Systems::VelocitySystem::onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const
 {
-    for (auto entity : entityManager.each<Indie::Components::PositionComponent, Indie::Components::MoveComponent,
-                       Indie::Components::VelocityComponent, Indie::Components::PlayerComponent>()) {
-        auto moveComponent = entity->getComponent<Indie::Components::MoveComponent>();
-        auto positionComponent = entity->getComponent<Indie::Components::PositionComponent>();
-        auto velocityComponent = entity->getComponent<Indie::Components::VelocityComponent>();
-        auto playerComponent = entity->getComponent<Indie::Components::PlayerComponent>();
+    for (auto entity : entityManager.each<PositionComponent, MoveComponent, VelocityComponent, PlayerComponent>()) {
+        auto moveComponent = entity->getComponent<MoveComponent>();
+        auto positionComponent = entity->getComponent<PositionComponent>();
+        auto velocityComponent = entity->getComponent<VelocityComponent>();
+        auto playerComponent = entity->getComponent<PlayerComponent>();
         irr::core::vector3df posVector = positionComponent->getPosition();
-        irr::f32 velocity = playerComponent->getVelocity();
+        irr::f32 velocity = 20.0f + playerComponent->getVelocityLevel() * 5;
 
         velocityComponent->setVelocity(0);
         if (entity->has<Components::TimerComponent>())

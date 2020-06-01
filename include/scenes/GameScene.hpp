@@ -9,30 +9,34 @@
 #define GAMESCENE_HPP_
 
 #include "ContextManager.hpp"
-#include "SystemManager.hpp"
 #include "IScene.hpp"
+#include "SystemManager.hpp"
 #include "Systems.h"
 
-namespace Indie {
+namespace Indie
+{
+    class GameScene : public IScene
+    {
+    public:
+        GameScene(ContextManager &context);
+        ~GameScene() = default;
 
-    class GameScene : public IScene {
-        public:
-            GameScene(ContextManager &context);
-            ~GameScene() = default;
+        void init() final;
+        void reset() final;
+        void update(irr::f32 deltaTime) final;
+        void renderPre3D() final;
+        void renderPost3D() final;
 
-            void init();
-            void reset();
-            void update(irr::f32 deltaTime);
-            void renderPre3D();
-            void renderPost3D();
+    private:
+        ContextManager &context;
 
-        private:
-            ContextManager &context;
-            irr::IrrlichtDevice *device;
-            irr::video::IVideoDriver *driver;
-            irr::scene::ISceneManager *sceneManager;
-            Indie::EntityManager &entityManager;
-            Indie::SystemManager &systemManager;
+        irr::IrrlichtDevice *device;
+        irr::video::IVideoDriver *driver;
+        irr::scene::ISceneManager *sceneManager;
+        irr::gui::IGUIFont *font;
+
+        Indie::EntityManager &entityManager;
+        Indie::SystemManager &systemManager;
     };
 }
 

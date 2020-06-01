@@ -10,6 +10,7 @@
 
 #include "SceneManager.hpp"
 #include "MusicManager.hpp"
+#include "ImageLoader.hpp"
 
 namespace Indie
 {

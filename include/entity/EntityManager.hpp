@@ -119,7 +119,6 @@ namespace Indie
 
             Entity *getById(int id) const
             {
-                // TODO: opti ça chacal
                 for (auto &entity : this->entities) {
                     if (entity->getId() == id)
                         return entity.get();
@@ -146,6 +145,12 @@ namespace Indie
 
                 if (nbDeleted > 0)
                     std::cout << "Cleaned " << nbDeleted << " entities." << std::endl;
+            }
+
+            void reset()
+            {
+                entities.clear();
+                idCount = 0;
             }
 
         private:

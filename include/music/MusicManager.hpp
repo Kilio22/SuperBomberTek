@@ -35,6 +35,7 @@ class MusicManager {
         void update();
         Music::Status getStatus();
         void setStatus(Music::Status);
+        bool isMusicMuted() const;
 
     private:
         std::vector<std::unique_ptr<Indie::Music>> musics;

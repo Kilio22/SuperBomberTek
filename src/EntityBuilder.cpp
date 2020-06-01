@@ -97,7 +97,7 @@ Indie::Entity *Indie::EntityBuilder::createLava(
     entity->addComponent<PositionComponent>(position.X, position.Y, position.Z);
     entity->addComponent<RenderComponent>(modelPath, texturePath, this->contextManager, position, true);
     entity->addComponent<RotationComponent>(angle);
-    entity->addComponent<TimerComponent>(0.5f);
+    entity->addComponent<TimerComponent>(.75f);
     entity->addComponent<KillComponent>();
     return entity;
 }

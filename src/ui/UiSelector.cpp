@@ -30,7 +30,6 @@ void Indie::UiSelector::update()
         posY = (posY < sizeY - 1) ? posY + 1: posY;
     if (EventHandler::getInstance().isKeyPressedAtOnce(right))
         posX = (posX < sizeX - 1) ? posX + 1: posX;
-    EventHandler::getInstance().resetKeysStatusOnce();
 }
 
 void Indie::UiSelector::setPos(int posX, int posY)

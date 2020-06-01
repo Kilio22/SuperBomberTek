@@ -6,6 +6,7 @@
 */
 
 #include "Button.hpp"
+#include "ServiceLocator.hpp"
 
 Indie::Button::Button(ContextManager &context) : context(context)
 {
@@ -16,30 +17,21 @@ Indie::Button::Button(ContextManager &context) : context(context)
 }
 
 Indie::Button::~Button()
-{
-    if (idle)
-        context.getDriver()->removeTexture(idle);
-    if (selected)
-        context.getDriver()->removeTexture(selected);
-    if (pressed)
-        context.getDriver()->removeTexture(pressed);
-}
+{}
 
-void Indie::Button::init(Indie::ContextManager &context, std::string &filepath, int posX, int posY, irr::core::position2d<irr::s32> pos)
+void Indie::Button::init(Indie::ContextManager &context, const std::string &filepath, int posX, int posY, irr::core::position2d<irr::s32> pos)
 {
     std::string extension = filepath.substr(filepath.find_last_of("."));
-    filepath.resize(filepath.size() - extension.size());
+    std::string fp = filepath;
+    fp.resize(fp.size() - extension.size());
 
     this->context = context;
     this->pos = pos;
     this->posX = posX;
     this->posY = posY;
-    idle = context.getDriver()->getTexture(std::string(filepath + "_idle" + extension).c_str());
-    selected = context.getDriver()->getTexture(std::string(filepath + "_selected" + extension).c_str());
-    pressed = context.getDriver()->getTexture(std::string(filepath + "_pressed" + extension).c_str());
-    if (idle == nullptr || selected == nullptr || pressed == nullptr) {
-        throw Exceptions::FileNotFoundException(ERROR_STR, "File \"" + filepath + "\" not found.");
-    }
+    idle = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage(std::string(fp + "_idle" + extension).c_str());
+    selected = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage(std::string(fp + "_selected" + extension).c_str());
+    pressed = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage(std::string(fp + "_pressed" + extension).c_str());
 }
 
 void Indie::Button::update(std::pair<int, int> pos)

@@ -42,8 +42,8 @@ bool Indie::Systems::BombDropSystem::checkBombPositionWallPass(EntityManager &en
         auto mapComponent = map->getComponent<MapComponent>();
         auto array = mapComponent->getMap();
 
-        for (size_t i = 0; i < mapComponent->getDimension().Y; i++) {
-            for (size_t j = 0; j < mapComponent->getDimension().X; j++) {
+        for (int i = 0; i < (int)mapComponent->getDimension().Y; i++) {
+            for (int j = 0; j < (int)mapComponent->getDimension().X; j++) {
                 if (array[i][j] == OBJECT::VOID && j * 20 == midX && i * 20 == midZ) {
                     return true;
                 }
@@ -57,16 +57,16 @@ void Indie::Systems::BombDropSystem::onUpdate(irr::f32, EntityManager &entityMan
 {
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
 
-    for (auto entity : entityManager.each<Components::MoveComponent, Components::PositionComponent, Components::PlayerComponent>()) {
-        auto moveComponent = entity->getComponent<Components::MoveComponent>();
-        auto positionComponent = entity->getComponent<Components::PositionComponent>();
-        auto playerComponent = entity->getComponent<Components::PlayerComponent>();
+    for (auto entity : entityManager.each<MoveComponent, PositionComponent, PlayerComponent>()) {
+        auto moveComponent = entity->getComponent<MoveComponent>();
+        auto positionComponent = entity->getComponent<PositionComponent>();
+        auto playerComponent = entity->getComponent<PlayerComponent>();
         irr::f32 midX = (irr::f32)this->getCenter((int)positionComponent->getPosition().X);
         irr::f32 midZ = (irr::f32)this->getCenter((int)positionComponent->getPosition().Z);
 
         if (moveComponent->getDrop() == true && playerComponent->getCurrentBombNb() > 0 && entity->has<TimerComponent>() == false
             && this->hasBombAtPosition(entityManager, irr::core::vector3df(midX, 20, midZ)) == false) {
-            if (playerComponent->getWallPass() == true && this->checkBombPositionWallPass(entityManager, midX, midZ) == false) {
+            if (playerComponent->getWallPass() == true && this->checkBombPositionWallPass(entityManager, (int)midX, (int)midZ) == false) {
                 continue;
             }
             for (auto map : entityManager.each<MapComponent>()) {
@@ -74,7 +74,7 @@ void Indie::Systems::BombDropSystem::onUpdate(irr::f32, EntityManager &entityMan
 
                 mapComponent->setMap(this->updateMap(mapComponent->getMap(), midX, midZ));
             }
-            entityBuilder.createBomb(irr::core::vector3df(irr::f32(midX), 20, irr::f32(midZ)), "../ressources/animated_mesh/bomb/bomb.b3d",
+            entityBuilder.createBomb(irr::core::vector3df(midX, 20, midZ), "../ressources/animated_mesh/bomb/bomb.b3d",
                 "../ressources/textures/bomb/bomb.png", entity->getId(), playerComponent->getBombsRange());
             playerComponent->setCurrentBombNb(playerComponent->getCurrentBombNb() - 1);
         }

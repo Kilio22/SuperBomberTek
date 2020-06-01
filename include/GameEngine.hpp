@@ -19,7 +19,7 @@ namespace Indie {
     class GameEngine {
         public:
             GameEngine();
-            ~GameEngine() = default;
+            ~GameEngine();
 
             void startGame();
 
@@ -28,6 +28,7 @@ namespace Indie {
             void setupSceneManager(Indie::ContextManager &context);
 
             ContextManager &context;
+            Image *loadImage;
     };
 }
 

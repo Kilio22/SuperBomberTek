@@ -7,21 +7,17 @@
 
 #include "Parallax.hpp"
 #include "Exceptions.h"
+#include "ServiceLocator.hpp"
 
 Indie::Parallax::Parallax(ContextManager &context) : context(context)
-{
-    image = NULL;
-}
+{}
 
 Indie::Parallax::~Parallax()
-{
-    if (image)
-        context.getDriver()->removeTexture(image);
-}
+{}
 
 void Indie::Parallax::init(ContextManager &context, const std::string &filepath, irr::core::position2d<irr::s32> size, irr::core::position2d<float> vel)
 {
-    image = context.getDriver()->getTexture(filepath.c_str());
+    image = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage(filepath.c_str());
     this->context = context;
     pos = irr::core::position2d<float>(0, 0);
     this->size = size;
