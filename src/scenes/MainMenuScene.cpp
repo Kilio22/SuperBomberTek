@@ -10,6 +10,7 @@
 #include "PauseScene.hpp"
 #include "OptionsScene.hpp"
 #include "ServiceLocator.hpp"
+#include "Scenes.hpp"
 
 // Passer ça en méthode de MainMenuScene ??
 // C'est fait!
@@ -72,6 +73,13 @@ void Indie::MainMenuScene::update(irr::f32)
     }
     if (quitter->getStatus() == Button::Status::Pressed) {
         context.getDevice()->closeDevice();
+    }
+    if (Indie::EventHandler::getInstance().isKeyPressed(irr::KEY_ESCAPE) == true) {
+        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::TitleScene>();
+        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(true);
+        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(true);
+        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneUpdateActive(true);
+        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneRenderActive(true);
     }
     EventHandler::getInstance().resetKeysStatusOnce();
     EventHandler::getInstance().resetKeysStatus();
