@@ -18,6 +18,11 @@ namespace Indie
     class GameScene : public IScene
     {
     public:
+        enum class MODE {
+            SOLO,
+            MULTI
+        };
+
         GameScene(ContextManager &context);
         ~GameScene() = default;
 
@@ -28,6 +33,9 @@ namespace Indie
         void renderPost3D() final;
 
     private:
+        static const std::vector<irr::core::vector3df> defaultPositions;
+        static const std::vector<std::pair<std::string, Components::PlayerComponent::PLAYER_COLOR>> skins;
+
         ContextManager &context;
 
         irr::IrrlichtDevice *device;

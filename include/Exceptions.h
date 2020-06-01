@@ -15,5 +15,6 @@
 #include "InvalidIndexException.hpp"
 #include "GameEngineException.hpp"
 #include "SceneNotFoundException.hpp"
+#include "FileCorruptedException.hpp"
 
 #endif /* !EXCEPTIONS_H_ */

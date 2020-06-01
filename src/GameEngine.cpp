@@ -9,6 +9,7 @@
 #include "Scenes.hpp"
 #include "SceneManager.hpp"
 #include "ServiceLocator.hpp"
+#include "GameInit.hpp"
 
 void Indie::GameEngine::setupMusicManager()
 {
@@ -59,6 +60,7 @@ void Indie::GameEngine::startGame()
     context.displayImage(loadImage);
     context.getDriver()->endScene();
     ServiceLocator::getInstance().get<ImageLoader>();
+    ServiceLocator::getInstance().get<InitGame>();
     this->setupMusicManager();
     this->setupSceneManager(context);
     /* ================================================================================ */

@@ -16,7 +16,16 @@ namespace Indie::Components
     class PlayerComponent
     {
         public:
-            PlayerComponent(const std::string &playerNb);
+            enum class PLAYER_COLOR {
+                RED,
+                BLUE,
+                YELLOW,
+                GENERIC,
+                GREEN,
+                PURPULE
+            };
+
+            PlayerComponent(const std::string &playerNb, PLAYER_COLOR playerColor);
             ~PlayerComponent() = default;
 
             unsigned int getBombsRange(void) const;
@@ -25,6 +34,7 @@ namespace Indie::Components
             unsigned int getVelocityLevel(void) const;
             bool getWallPass(void) const;
             const std::string &getName(void) const;
+            const PLAYER_COLOR &getPlayerColor(void) const;
 
             void setBombsRange(unsigned int value);
             void setMaxBombNb(unsigned int value);
@@ -39,6 +49,7 @@ namespace Indie::Components
             unsigned int velocityLevel;
             bool wallPass;
             std::string name;
+            PLAYER_COLOR playerColor;
     };
 } // namespace Indie::Components
 

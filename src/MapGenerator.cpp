@@ -6,8 +6,13 @@
 */
 
 #include "MapGenerator.hpp"
+#include "FileCorruptedException.hpp"
+#include "FileNotFoundException.hpp"
+#include <fstream>
+#include <sstream>
 
-Indie::MapGenerator::MapGenerator(Indie::EntityBuilder &entityBuilder, irr::core::vector2di vector, Indie::Components::MAP_TYPE type, Indie::Components::THEME theme)
+Indie::MapGenerator::MapGenerator(Indie::EntityBuilder &entityBuilder, irr::core::vector2di vector, Indie::Components::MAP_TYPE type,
+    Indie::Components::THEME theme, const std::string &mapPath)
 {
     entityBuilder.createMap(vector, type, theme);
 }
@@ -25,19 +30,26 @@ void Indie::MapGenerator::generate(Indie::EntityManager &entityManager, Indie::E
             createRandomMap(map, mapComponent->getDimension());
         else if (mapComponent->getType() == Indie::Components::MAP_TYPE::EMPTY)
             createEmptyMap(map, mapComponent->getDimension());
-        else
-            createDefaultMap(map, mapComponent->getDimension());
+        else {
+            if (mapComponent->getType() == Indie::Components::MAP_TYPE::SAVED)
+                this->createSavedMap(map, mapComponent->getMapPath(), mapComponent->getDimension());
+            else
+                createDefaultMap(map, mapComponent->getDimension());
+        }
         setSpawn(map, mapComponent->getDimension());
-        path += (mapComponent->getTheme() == Indie::Components::THEME::DIRT) ? "map_dirt/" : "map_stone/" ;
+        path += (mapComponent->getTheme() == Indie::Components::THEME::DIRT) ? "map_dirt/" : "map_stone/";
         for (int i = mapComponent->getDimension().Y - 1; i >= 0; i--) {
             for (int j = 0; j < mapComponent->getDimension().X; j++) {
                 entityBuilder.createGround(irr::core::vector3df((irr::f32)(20 * j), 0, (irr::f32)(20 * i)), path + "ground.obj", path + "ground.png");
                 if (map[i][j] == OBJECT::WALL_OUT)
-                    entityBuilder.createWall(irr::core::vector3df((irr::f32)(20 * j), 20, (irr::f32)(20 * i)), path + "wall_side.obj", path + "wall_side.png", false);
+                    entityBuilder.createWall(
+                        irr::core::vector3df((irr::f32)(20 * j), 20, (irr::f32)(20 * i)), path + "wall_side.obj", path + "wall_side.png", false);
                 else if (map[i][j] == OBJECT::BOX)
-                    entityBuilder.createWall(irr::core::vector3df((irr::f32)(20 * j), 20, (irr::f32)(20 * i)), path + "box.obj", path + "box.png", true);
+                    entityBuilder.createWall(
+                        irr::core::vector3df((irr::f32)(20 * j), 20, (irr::f32)(20 * i)), path + "box.obj", path + "box.png", true);
                 else if (map[i][j] == OBJECT::WALL_IN)
-                    entityBuilder.createWall(irr::core::vector3df((irr::f32)(20 * j), 20, (irr::f32)(20 * i)), path + "wall_middle.obj", path + "wall_middle.png", false);
+                    entityBuilder.createWall(
+                        irr::core::vector3df((irr::f32)(20 * j), 20, (irr::f32)(20 * i)), path + "wall_middle.obj", path + "wall_middle.png", false);
             }
         }
         mapComponent->setMap(map);
@@ -61,7 +73,7 @@ void Indie::MapGenerator::createDefaultMap(std::vector<std::vector<Indie::Compon
             if (dimension.X % 2 == 1 || dimension.Y % 2 == 1)
                 map[i][j] = (j % 2 == 0 && i % 2 == 0) ? OBJECT::WALL_IN : OBJECT::BOX;
             else
-                map[i][j] = (j % 2 == 0 && i % 2 == 0 && i < dimension.X - 2 && j < dimension.Y - 2) ? OBJECT::WALL_IN : OBJECT::BOX ;
+                map[i][j] = (j % 2 == 0 && i % 2 == 0 && i < dimension.X - 2 && j < dimension.Y - 2) ? OBJECT::WALL_IN : OBJECT::BOX;
         }
     }
 }
@@ -72,11 +84,11 @@ void Indie::MapGenerator::createRandomMap(std::vector<std::vector<Indie::Compone
 
     for (int i = 1; i < dimension.Y - 1; i++) {
         for (int j = 1; j < dimension.X - 1; j++) {
-            random = 1 + std::rand()/((RAND_MAX + 1u) / 100);
+            random = 1 + std::rand() / ((RAND_MAX + 1u) / 100);
             if (random <= 50)
                 map[i][j] = OBJECT::WALL_IN;
             else {
-                random = 1 + std::rand()/((RAND_MAX + 1u) / 100);
+                random = 1 + std::rand() / ((RAND_MAX + 1u) / 100);
                 map[i][j] = (random <= 40) ? OBJECT::BOX : OBJECT::VOID;
             }
         }
@@ -89,6 +101,32 @@ void Indie::MapGenerator::createEmptyMap(std::vector<std::vector<Indie::Componen
         for (int j = 1; j < dimension.X - 1; j++) {
             map[i][j] = OBJECT::VOID;
         }
+    }
+}
+
+void Indie::MapGenerator::createSavedMap(
+    std::vector<std::vector<Components::OBJECT>> &map, const std::string &mapPath, irr::core::vector2di dimension)
+{
+    std::ifstream ifs(mapPath);
+    std::string line;
+    std::vector<int> data;
+    std::vector<Components::OBJECT> transformedData;
+
+    if (ifs.is_open() == false) {
+        throw Indie::Exceptions::FileNotFoundException(ERROR_STR, "File " + mapPath + " not found.");
+    }
+    while (std::getline(ifs, line)) {
+        std::istringstream iss(line);
+        std::copy(std::istream_iterator<int>(iss), std::istream_iterator<int>(), std::back_inserter(data));
+        std::transform(data.begin(), data.end(), std::back_inserter(transformedData), [](int n) { return static_cast<Components::OBJECT>(n); });
+        map.push_back(transformedData);
+        if (transformedData.size() != dimension.X) {
+            throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File " + mapPath + " not found.");
+        }
+        data.clear();
+    }
+    if (map.size() != dimension.Y) {
+        throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File " + mapPath + " not found.");
     }
 }
 
@@ -106,7 +144,7 @@ void Indie::MapGenerator::setSpawn(std::vector<std::vector<Indie::Components::OB
     map[dimension.Y - 2][1] = OBJECT::VOID;
     map[dimension.Y - 2][2] = OBJECT::VOID;
     map[dimension.Y - 3][1] = OBJECT::VOID;
-    if (dimension.X >= 11  && dimension.Y >= 11) {
+    if (dimension.X >= 11 && dimension.Y >= 11) {
         map[1][3] = OBJECT::VOID;
         map[3][1] = OBJECT::VOID;
         map[3][dimension.X - 2] = OBJECT::VOID;

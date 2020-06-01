@@ -8,7 +8,6 @@
 #ifndef MAPGENERATOR_HPP_
 #define MAPGENERATOR_HPP_
 
-
 #include "EntityBuilder.hpp"
 #include <irrlicht.h>
 
@@ -17,17 +16,19 @@ namespace Indie
     class MapGenerator
     {
         public:
-            MapGenerator(Indie::EntityBuilder &entityBuilder, irr::core::vector2di vector, Indie::Components::MAP_TYPE type, Indie::Components::THEME theme);
-            ~MapGenerator() = default;
+        MapGenerator(Indie::EntityBuilder &entityBuilder, irr::core::vector2di vector, Indie::Components::MAP_TYPE type,
+            Indie::Components::THEME theme, const std::string &mapPath);
+        ~MapGenerator() = default;
 
-            void generate(Indie::EntityManager &entityManager, Indie::EntityBuilder &entityBuilder);
+        void generate(Indie::EntityManager &entityManager, Indie::EntityBuilder &entityBuilder);
 
         private:
-            void createWallMap(std::vector<std::vector<Components::OBJECT>> &map, irr::core::vector2di dimension);
-            void createDefaultMap(std::vector<std::vector<Components::OBJECT>> &map, irr::core::vector2di dimension);
-            void createRandomMap(std::vector<std::vector<Components::OBJECT>> &map, irr::core::vector2di dimension);
-            void createEmptyMap(std::vector<std::vector<Components::OBJECT>> &map, irr::core::vector2di dimension);
-            void setSpawn(std::vector<std::vector<Components::OBJECT>> &map, irr::core::vector2di dimension);
+        void createWallMap(std::vector<std::vector<Components::OBJECT>> &map, irr::core::vector2di dimension);
+        void createDefaultMap(std::vector<std::vector<Components::OBJECT>> &map, irr::core::vector2di dimension);
+        void createRandomMap(std::vector<std::vector<Components::OBJECT>> &map, irr::core::vector2di dimension);
+        void createEmptyMap(std::vector<std::vector<Components::OBJECT>> &map, irr::core::vector2di dimension);
+        void createSavedMap(std::vector<std::vector<Components::OBJECT>> &map, const std::string &mapPath, irr::core::vector2di dimension);
+        void setSpawn(std::vector<std::vector<Components::OBJECT>> &map, irr::core::vector2di dimension);
     };
 }
 

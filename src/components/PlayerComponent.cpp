@@ -7,8 +7,14 @@
 
 #include "PlayerComponent.hpp"
 
-Indie::Components::PlayerComponent::PlayerComponent(const std::string &playerNb)
-    : bombsRange(2), maxBombNb(1), currentBombNb(1), velocityLevel(1), wallPass(false), name("Player " + playerNb)
+Indie::Components::PlayerComponent::PlayerComponent(const std::string &playerNb, Components::PlayerComponent::PLAYER_COLOR playerColor)
+    : bombsRange(2)
+    , maxBombNb(1)
+    , currentBombNb(1)
+    , velocityLevel(1)
+    , wallPass(false)
+    , name("Player " + playerNb)
+    , playerColor(playerColor)
 {
 }
 
@@ -40,6 +46,11 @@ bool Indie::Components::PlayerComponent::getWallPass(void) const
 const std::string &Indie::Components::PlayerComponent::getName(void) const
 {
     return this->name;
+}
+
+const Indie::Components::PlayerComponent::PLAYER_COLOR &Indie::Components::PlayerComponent::getPlayerColor(void) const
+{
+    return this->playerColor;
 }
 
 void Indie::Components::PlayerComponent::setBombsRange(unsigned int value)

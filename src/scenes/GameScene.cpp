@@ -8,15 +8,32 @@
 #include "GameScene.hpp"
 #include "Components.h"
 #include "EntityBuilder.hpp"
+#include "GameInit.hpp"
 #include "MapGenerator.hpp"
 #include "Parallax.hpp"
 #include "PauseScene.hpp"
 #include "ServiceLocator.hpp"
+#include <sstream>
 
 using namespace Indie::Systems;
 
+const std::vector<irr::core::vector3df> Indie::GameScene::defaultPositions = { { 20, 20, 20 }, { 220, 20, 20 }, { 220, 20, 220 }, { 20, 20, 220 } };
+const std::vector<std::pair<std::string, Indie::Components::PlayerComponent::PLAYER_COLOR>> Indie::GameScene::skins
+    = { { "../ressources/textures/character/blue1.png", Indie::Components::PlayerComponent::PLAYER_COLOR::BLUE },
+          { "../ressources/textures/character/blue3.png", Indie::Components::PlayerComponent::PLAYER_COLOR::BLUE },
+          { "../ressources/textures/character/generic1.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GENERIC },
+          { "../ressources/textures/character/generic3.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GENERIC },
+          { "../ressources/textures/character/green1.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GREEN },
+          { "../ressources/textures/character/green3.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GREEN },
+          { "../ressources/textures/character/red1.png", Indie::Components::PlayerComponent::PLAYER_COLOR::RED },
+          { "../ressources/textures/character/red3.png", Indie::Components::PlayerComponent::PLAYER_COLOR::RED },
+          { "../ressources/textures/character/yellow1.png", Indie::Components::PlayerComponent::PLAYER_COLOR::YELLOW },
+          { "../ressources/textures/character/yellow3.png", Indie::Components::PlayerComponent::PLAYER_COLOR::YELLOW } };
+
 Indie::GameScene::GameScene(ContextManager &context)
-    : context(context), entityManager(ServiceLocator::getInstance().get<EntityManager>()), systemManager(SystemManager::getInstance())
+    : context(context)
+    , entityManager(ServiceLocator::getInstance().get<EntityManager>())
+    , systemManager(SystemManager::getInstance())
 {
     this->device = this->context.getDevice();
     this->driver = this->context.getDriver();
@@ -42,15 +59,12 @@ void Indie::GameScene::init()
     Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setMusic(1);
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
     irr::scene::ICameraSceneNode *camera = sceneManager->addCameraSceneNode();
-    Indie::MapGenerator mapGenerator(entityBuilder, irr::core::vector2di(15, 13), MAP_TYPE::DEFAULT, THEME::STONE);
+    Indie::MapGenerator mapGenerator(entityBuilder, irr::core::vector2di(15, 13), Indie::ServiceLocator::getInstance().get<InitGame>().mapType,
+        Indie::ServiceLocator::getInstance().get<InitGame>().mapTheme, Indie::ServiceLocator::getInstance().get<InitGame>().mapPath);
+    int idx = 1;
 
     camera->setPosition(irr::core::vector3df(138.577f, 280, 65));
-    //camera->setRotation(irr::core::vector3df(41.553f, 359.176f, -90.f));
     camera->setTarget(irr::core::vector3df(138.593f, -70.5216f, 130.061f));
-
-    //irr::core::matrix4 isoMatrix = camera->getProjectionMatrix();
-	//isoMatrix.buildProjectionMatrixPerspectiveFovLH(1280 / 720, 1.0f, 1.0f, 100);
-	//camera->setProjectionMatrix(isoMatrix, true);
     camera->setFOV(1000);
 
     driver->setFog(irr::video::SColor(10, 255, 255, 255), irr::video::EFT_FOG_LINEAR, 200.0f, 2000.0f, 0.005f, false, false);
@@ -62,20 +76,31 @@ void Indie::GameScene::init()
         driver->getTexture("../ressources/skybox/skybox_back.png"));
 
     this->font = this->context.getGuiEnv()->getFont("../ressources/font/Banschrift.xml");
+    for (auto player : Indie::ServiceLocator::getInstance().get<InitGame>().playersParams) {
+        entityBuilder.createPlayer(this->defaultPositions[idx - 1], "../ressources/animated_mesh/character/character_idle.b3d", player.playerTexture,
+            player.playerKeys, std::to_string(idx), player.playerColor);
+        idx++;
+    }
+    for (int i = 0; i < Indie::ServiceLocator::getInstance().get<InitGame>().nbAi && i < 2; i++) {
+        int randomSkinIdx = std::rand() % this->skins.size();
 
+        entityBuilder.createAi(this->defaultPositions[idx - 1], "../ressources/animated_mesh/character/character_idle.b3d",
+            this->skins.at(randomSkinIdx).first, std::to_string(idx), this->skins.at(randomSkinIdx).second);
+        idx++;
+    }
     mapGenerator.generate(entityManager, entityBuilder);
-    entityBuilder.createPlayer(irr::core::vector3df(20, 20, 20), "../ressources/animated_mesh/character/character_idle.b3d",
-        "../ressources/textures/character/blue1.png",
-        { { irr::KEY_UP, Indie::Components::KEY_TYPE::UP }, { irr::KEY_DOWN, Indie::Components::KEY_TYPE::DOWN },
-            { irr::KEY_RIGHT, Indie::Components::KEY_TYPE::RIGHT }, { irr::KEY_LEFT, Indie::Components::KEY_TYPE::LEFT },
-            { irr::KEY_SPACE, Indie::Components::KEY_TYPE::DROP } },
-        "1");
-    entityBuilder.createAi(irr::core::vector3df(260, 20, 220), "../ressources/animated_mesh/character/character_idle.b3d",
-	    "../ressources/textures/character/yellow1.png", "2");
-	entityBuilder.createAi(irr::core::vector3df(260, 20, 20), "../ressources/animated_mesh/character/character_idle.b3d",
-	    "../ressources/textures/character/green1.png", "3");
-	entityBuilder.createAi(irr::core::vector3df(20, 20, 220), "../ressources/animated_mesh/character/character_idle.b3d",
-	    "../ressources/textures/character/red1.png", "4");
+    // entityBuilder.createPlayer(irr::core::vector3df(20, 20, 20), "../ressources/animated_mesh/character/character_idle.b3d",
+    //     "../ressources/textures/character/blue1.png",
+    //     { { irr::KEY_UP, Indie::Components::KEY_TYPE::UP }, { irr::KEY_DOWN, Indie::Components::KEY_TYPE::DOWN },
+    //         { irr::KEY_RIGHT, Indie::Components::KEY_TYPE::RIGHT }, { irr::KEY_LEFT, Indie::Components::KEY_TYPE::LEFT },
+    //         { irr::KEY_SPACE, Indie::Components::KEY_TYPE::DROP } },
+    //     "1", Components::PlayerComponent::PLAYER_COLOR::BLUE);
+    // entityBuilder.createAi(irr::core::vector3df(260, 20, 260), "../ressources/animated_mesh/character/character_idle.b3d",
+    //    "../ressources/textures/character/yellow1.png", "2");
+    // entityBuilder.createAi(irr::core::vector3df(260, 20, 20), "../ressources/animated_mesh/character/character_idle.b3d",
+    //    "../ressources/textures/character/green1.png", "3");
+    // entityBuilder.createAi(irr::core::vector3df(20, 20, 260), "../ressources/animated_mesh/character/character_idle.b3d",
+    //    "../ressources/textures/character/red1.png", "4");
 
     device->getCursorControl()->setVisible(false);
 }
@@ -116,14 +141,13 @@ void Indie::GameScene::update(irr::f32 deltaTime)
 
 void Indie::GameScene::renderPre3D() {}
 
-#include <sstream>
-
 void Indie::GameScene::renderPost3D()
 {
     std::stringstream ss;
     int i = 20;
     int n = 0;
-    std::vector<irr::video::SColor> colors = {{200, 0, 0, 255}, {200, 255, 0, 0}, {200, 0, 255, 0}, {200, 255, 255, 0}}; ///< Codé en dur mdr mais il faudrait une couleur dans les personnages.
+    std::vector<irr::video::SColor> colors = { { 200, 0, 0, 255 }, { 200, 255, 0, 0 }, { 200, 0, 255, 0 },
+        { 200, 255, 255, 0 } }; ///< Codé en dur mdr mais il faudrait une couleur dans les personnages.
 
     for (auto entity : entityManager.each<PlayerComponent>()) {
         auto player = entity->getComponent<PlayerComponent>();
