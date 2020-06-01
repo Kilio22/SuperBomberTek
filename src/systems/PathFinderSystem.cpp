@@ -92,7 +92,7 @@ void Indie::Systems::PathFinderSystem::onUpdate(irr::f32, Indie::EntityManager &
         // }
         // Get Direction pour le movement
         else if ((ai->getAction() == ACTION::GO_BOX || ai->getAction() == ACTION::GO_SAFE) &&
-        ai->hasMoved(irr::core::vector3df(position->getPosition().X, 20, position->getPosition().Z),irr::core::vector3df((ai->getNextPosition().X) * 20, 20, (ai->getNextPosition().Y) * 20), ai)) {
+        ai->hasMoved(irr::core::vector3df(position->getPosition().X, 20, position->getPosition().Z),irr::core::vector3df((irr::f32)((ai->getNextPosition().X) * 20.f), 20.f, (irr::f32)((ai->getNextPosition().Y) * 20.f)), ai)) {
             ai->setNextDirection(mapPathFinding, irr::core::vector2di(aiX, aiZ));
             // Si il est pas coincé il va pas marcher dans la lave ici
             if ((int)mapBomb[ai->getNextPosition().Y][ai->getNextPosition().X] == 5) {
@@ -238,11 +238,11 @@ void Indie::Systems::PathFinderSystem::findPowerUP(std::vector<std::vector<OBJEC
 {
     std::array<int, 4> position = {-99, -99, 99};
 
-    for (size_t i = 1; i < map[0].size(); i++) {
-        for (size_t j = 1; j < map.size(); j++) {
+    for (int i = 1; i < map[0].size(); i++) {
+        for (int j = 1; j < map.size(); j++) {
             if (mapPowerUp[j][i] == static_cast<OBJECT>(10)) {
                 if ((getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(i, j)) < position[2])) {
-                    position = {(int)i, (int)j, getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(i, j))};
+                    position = {i, j, getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(i, j))};
                 }
             }
         }
@@ -257,8 +257,8 @@ void Indie::Systems::PathFinderSystem::findPosition(std::vector<std::vector<OBJE
     int nbBox = 0;
     int random = 0;
 
-    for (size_t i = 1; i < map[0].size(); i++) {
-        for (size_t j = 1; j < map.size(); j++) {
+    for (int i = 1; i < map[0].size(); i++) {
+        for (int j = 1; j < map.size(); j++) {
             nbBox = 0;
             if (map[j][i] >= static_cast<OBJECT>(6)) {
                 nbBox += (map[j - 1][i] == OBJECT::BOX) ? 1 : 0;
