@@ -182,7 +182,7 @@ void Indie::Systems::BombExplosionSystem::spawnPowerUp(const irr::core::vector3d
         return;
     int index = std::rand() % 4;
     if (index == 3) {
-        if (std::rand() % 10 != 0)
+        if (std::rand() % 5 != 0)
             return;
     }
     ServiceLocator::getInstance().get<EntityBuilder>().createPowerUp(
