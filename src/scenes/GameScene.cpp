@@ -8,7 +8,7 @@
 #include "GameScene.hpp"
 #include "Components.h"
 #include "EntityBuilder.hpp"
-#include "GameInit.hpp"
+#include "InitGame.hpp"
 #include "MapGenerator.hpp"
 #include "Parallax.hpp"
 #include "PauseScene.hpp"
@@ -36,6 +36,7 @@ Indie::GameScene::GameScene(ContextManager &context)
     : context(context)
     , entityManager(ServiceLocator::getInstance().get<EntityManager>())
     , systemManager(SystemManager::getInstance())
+    , initGame(std::make_unique<InitGame>())
 {
     this->device = this->context.getDevice();
     this->driver = this->context.getDriver();
@@ -61,8 +62,8 @@ void Indie::GameScene::init()
     Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setMusic(1);
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
     irr::scene::ICameraSceneNode *camera = sceneManager->addCameraSceneNode();
-    Indie::MapGenerator mapGenerator(entityBuilder, irr::core::vector2di(15, 13), Indie::ServiceLocator::getInstance().get<InitGame>().mapType,
-        Indie::ServiceLocator::getInstance().get<InitGame>().mapTheme, Indie::ServiceLocator::getInstance().get<InitGame>().mapPath);
+    Indie::MapGenerator mapGenerator(
+        entityBuilder, irr::core::vector2di(15, 13), this->initGame->mapType, this->initGame->mapTheme, this->initGame->mapPath);
     int idx = 1;
 
     camera->setPosition(irr::core::vector3df(138.577f, 280, 65));
@@ -78,12 +79,12 @@ void Indie::GameScene::init()
         driver->getTexture("../ressources/skybox/skybox_back.png"));
 
     this->font = this->context.getGuiEnv()->getFont("../ressources/font/Banschrift.xml");
-    for (auto player : Indie::ServiceLocator::getInstance().get<InitGame>().playersParams) {
+    for (auto player : this->initGame->playersParams) {
         entityBuilder.createPlayer(this->defaultPositions.at(idx - 1), "../ressources/animated_mesh/character/character_idle.b3d",
             player.playerTexture, player.playerKeys, std::to_string(idx), player.playerColor);
         idx++;
     }
-    for (int i = 0; i < Indie::ServiceLocator::getInstance().get<InitGame>().nbAi && i < 2; i++) {
+    for (int i = 0; i < this->initGame->nbAi && i < 2; i++) {
         int randomSkinIdx = std::rand() % this->skins.size();
 
         entityBuilder.createAi(this->defaultPositions.at(idx - 1), "../ressources/animated_mesh/character/character_idle.b3d",
@@ -164,4 +165,14 @@ void Indie::GameScene::renderPost3D()
         ss.str("");
         i += 150;
     }
+}
+
+Indie::InitGame *Indie::GameScene::getInitGame(void) const
+{
+    return this->initGame.get();
+}
+
+void Indie::GameScene::setInitGame(const Indie::InitGame &initGame)
+{
+    this->initGame = std::make_unique<Indie::InitGame>(initGame);
 }

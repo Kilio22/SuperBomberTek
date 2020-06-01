@@ -15,13 +15,12 @@
 
 namespace Indie
 {
+    struct InitGame;
+
     class GameScene : public IScene
     {
-    public:
-        enum class MODE {
-            SOLO,
-            MULTI
-        };
+        public:
+        enum class MODE { SOLO, MULTI };
 
         GameScene(ContextManager &context);
         ~GameScene() = default;
@@ -32,7 +31,10 @@ namespace Indie
         void renderPre3D() final;
         void renderPost3D() final;
 
-    private:
+        Indie::InitGame *getInitGame(void) const;
+        void setInitGame(const Indie::InitGame &initGame);
+
+        private:
         static const std::vector<irr::core::vector3df> defaultPositions;
         static const std::vector<std::pair<std::string, Components::PlayerComponent::PLAYER_COLOR>> skins;
 
@@ -45,6 +47,7 @@ namespace Indie
 
         Indie::EntityManager &entityManager;
         Indie::SystemManager &systemManager;
+        std::unique_ptr<Indie::InitGame> initGame;
     };
 }
 

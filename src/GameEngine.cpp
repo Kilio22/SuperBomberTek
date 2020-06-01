@@ -6,10 +6,10 @@
 */
 
 #include "GameEngine.hpp"
-#include "Scenes.hpp"
+#include "InitGame.hpp"
 #include "SceneManager.hpp"
+#include "Scenes.hpp"
 #include "ServiceLocator.hpp"
-#include "GameInit.hpp"
 
 void Indie::GameEngine::setupMusicManager()
 {
@@ -52,11 +52,10 @@ void Indie::GameEngine::startGame()
     /* ================================================================================ */
     /* LOADING SCREEN */
     /* ================================================================================ */
-    context.getDriver()->beginScene(true, true, irr::video::SColor(0,0,0,0));
+    context.getDriver()->beginScene(true, true, irr::video::SColor(0, 0, 0, 0));
     context.displayImage(loadImage);
     context.getDriver()->endScene();
     ServiceLocator::getInstance().get<ImageLoader>();
-    ServiceLocator::getInstance().get<InitGame>();
     this->setupMusicManager();
     this->setupSceneManager(context);
     /* ================================================================================ */
