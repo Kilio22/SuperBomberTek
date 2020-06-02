@@ -137,6 +137,7 @@ void Indie::GameScene::update(irr::f32 deltaTime)
     irr::core::array<irr::core::vector3df> pointList = {};
     this->entityManager.cleanup();
     this->systemManager.getSystem<TimerTickSystem>()->onUpdate(deltaTime, entityManager);
+    this->systemManager.getSystem<LavaSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<InputSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<MoveSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<AISystem>()->onUpdate(deltaTime, entityManager);
@@ -144,11 +145,10 @@ void Indie::GameScene::update(irr::f32 deltaTime)
     this->systemManager.getSystem<VelocitySystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<BombDropSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<BombExplosionSystem>()->onUpdate(deltaTime, entityManager);
-    this->systemManager.getSystem<LavaSystem>()->onUpdate(deltaTime, entityManager);
-    this->systemManager.getSystem<PlayerSystem>()->onUpdate(deltaTime, entityManager);
-    this->systemManager.getSystem<TimerStopSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<RotationSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<CollisionSystem>()->onUpdate(deltaTime, entityManager);
+    this->systemManager.getSystem<PlayerSystem>()->onUpdate(deltaTime, entityManager);
+    this->systemManager.getSystem<TimerStopSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<MeshSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<RenderSystem>()->onUpdate(deltaTime, entityManager);
     if (EventHandler::getInstance().isKeyPressed(irr::EKEY_CODE::KEY_ESCAPE) == true) {

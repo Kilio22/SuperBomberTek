@@ -16,8 +16,8 @@ void Indie::Systems::PlayerSystem::onUpdate(irr::f32 deltaTime, EntityManager &e
     for (auto entity : entityManager.each<PlayerComponent>()) {
         auto player = entity->getComponent<PlayerComponent>();
 
-        while (player->getXpCount() >= 50) {
-            player->setXpCount(player->getXpCount() - 50);
+        while (player->getXpCount() >= 75) {
+            player->setXpCount(player->getXpCount() - 75);
             player->setLevelCount(player->getLevelCount() + 1);
         }
         if (entity->has<TimerComponent>()) {
@@ -27,7 +27,6 @@ void Indie::Systems::PlayerSystem::onUpdate(irr::f32 deltaTime, EntityManager &e
                 auto newPlayer = *player;
 
                 entity->removeAllComponents();
-                newPlayer.setIsDead(true);
                 entity->addComponent<PlayerComponent>(newPlayer);
             }
         }

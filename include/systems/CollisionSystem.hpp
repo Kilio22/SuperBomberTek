@@ -32,7 +32,7 @@ namespace Indie::Systems
             irr::core::aabbox3df characterBoundingBox, const irr::core::vector3df &currentPosition, const irr::core::vector3df &wantedPosition) const;
         bool checkCollisionWithWalls(
             EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox, Components::PlayerComponent *playerComponent) const;
-        bool checkCollisionWithKillingEntities(
+        std::pair<bool, int> checkCollisionWithKillingEntities(
             EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox, Components::PlayerComponent *playerComponent) const;
     };
 } // namespace Indie::Systems

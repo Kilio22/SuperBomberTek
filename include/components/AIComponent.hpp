@@ -52,6 +52,9 @@ namespace Indie::Components
             void setDirection(DIRECTION direction);
             void setAction(ACTION action);
 
+            void setBehavior(unsigned int value);
+            unsigned int getBehavior() const;
+
             DIRECTION getDirection() const;
             ACTION getAction() const;
 
@@ -59,6 +62,7 @@ namespace Indie::Components
         private:
             int nextPosX = 0;
             int nextPosY = 0;
+            unsigned int behavior = 0;
             DIRECTION direction = DIRECTION::NONE;
             ACTION action = ACTION::STANDBY;
     };
