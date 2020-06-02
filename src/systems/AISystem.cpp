@@ -35,9 +35,6 @@ void Indie::Systems::AISystem::onUpdate(irr::f32, EntityManager &entityManager) 
         //Get Map Pathfinding
         mapPathFinding = pathFinder->getMap();
 
-        // Attendre une frame de plus -> pas vraiment l'explosion
-        if (ai->getAction() == ACTION::WAIT_EXPLOSION)
-            return;
         // Bomb placé -> en attente d'instruction
         if (ai->getAction() == ACTION::PLACE_BOMB) {
             move->setDrop(false);

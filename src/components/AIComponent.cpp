@@ -79,3 +79,13 @@ irr::core::vector2di Indie::Components::AIComponent::getNextPosition() const
 {
     return irr::core::vector2di(nextPosX, nextPosY);
 }
+
+void Indie::Components::AIComponent::setBehavior(unsigned int value)
+{
+    this->behavior = value;
+}
+
+unsigned int Indie::Components::AIComponent::getBehavior() const
+{
+    return this->behavior;
+}

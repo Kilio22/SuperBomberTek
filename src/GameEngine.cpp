@@ -74,8 +74,8 @@ void Indie::GameEngine::startGame()
         currentTime = this->context.getDevice()->getTimer()->getTime();
         deltaTime = (irr::f32)((currentTime - lastTime) / 1000.f);
         totalDeltaTime += deltaTime;
-        // std::cout << "Delta time: " << deltaTime << ", FPS: " << this->context.getDriver()->getFPS() << std::endl;
-        if (totalDeltaTime >= 0.016f) { // 60 FPS
+        //std::cout << "Delta time: " << deltaTime << ", FPS: " << this->context.getDriver()->getFPS() << std::endl;
+        if (totalDeltaTime >= 0.016f) {
             ServiceLocator::getInstance().get<MusicManager>().update();
             ServiceLocator::getInstance().get<SceneManager>().update(context, totalDeltaTime);
             totalDeltaTime = 0.f;
