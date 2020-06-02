@@ -32,7 +32,6 @@ namespace Indie
 
         ContextManager &context;
         irr::scene::ICameraSceneNode *camera;
-        irr::scene::ISceneNodeAnimator *animator;
         irr::core::vector3df currentRotationAngle;
         bool shouldResetTarget;
     };

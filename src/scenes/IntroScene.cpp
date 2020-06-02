@@ -14,7 +14,6 @@ Indie::IntroScene::IntroScene(ContextManager &context)
     , camera(nullptr)
     , currentRotationAngle(303.15, 48.9909, 0.f)
     , shouldResetTarget(true)
-    , animator(nullptr)
 {
 }
 
@@ -27,7 +26,6 @@ void Indie::IntroScene::init()
         throw Indie::Exceptions::CameraNotFoundException(ERROR_STR, "No camera is active.");
     this->currentRotationAngle = irr::core::vector3df(0.f, 0.f, 120.f);
     this->shouldResetTarget = true;
-    this->animator = nullptr;
     this->camera->setTarget(irr::core::vector3df(138.593f, 280.f, 121.f));
 }
 

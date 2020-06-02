@@ -39,6 +39,7 @@ const std::vector<std::pair<std::string, Indie::Components::PlayerComponent::PLA
 
 Indie::GameScene::GameScene(ContextManager &context)
     : context(context)
+    , animator(nullptr)
     , entityManager(ServiceLocator::getInstance().get<EntityManager>())
     , systemManager(SystemManager::getInstance())
     , initGame(std::make_unique<InitGame>())
@@ -74,10 +75,12 @@ void Indie::GameScene::init()
         entityBuilder, irr::core::vector2di(15, 13), this->initGame->mapType, this->initGame->mapTheme, this->initGame->mapPath);
     int idx = 1;
 
+    this->animator = nullptr;
     camera->bindTargetAndRotation(true);
     camera->setPosition(irr::core::vector3df(138.577f, 280.f, 65.f));
     camera->setTarget(irr::core::vector3df(138.593f, 280.f, 121.f));
     camera->setFOV(1000);
+    this->camera = camera;
 
     driver->setFog(irr::video::SColor(10, 255, 255, 255), irr::video::EFT_FOG_LINEAR, 200.0f, 2000.0f, 0.005f, false, false);
     sceneManager->addLightSceneNode(camera, irr::core::vector3df(0, 0, 0), irr::video::SColorf(0.1f, 0.1f, 0.1f, 0.0f), 700.0f);
@@ -131,6 +134,7 @@ void Indie::GameScene::reset()
 // beginScene -> events -> update -> renderPre3D -> render3D -> renderPost3D -> endScene
 void Indie::GameScene::update(irr::f32 deltaTime)
 {
+    irr::core::array<irr::core::vector3df> pointList = {};
     this->entityManager.cleanup();
     this->systemManager.getSystem<TimerTickSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<InputSystem>()->onUpdate(deltaTime, entityManager);
@@ -154,6 +158,23 @@ void Indie::GameScene::update(irr::f32 deltaTime)
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(false);
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(false);
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::PauseScene>();
+    }
+    if (this->animator != nullptr && this->animator->hasFinished() == true) {
+        this->camera->removeAnimators();
+        this->camera->setPosition(irr::core::vector3df(138.577f, 280.f, 65.f));
+    }
+    if (EventHandler::getInstance().isKeyPressed(irr::EKEY_CODE::KEY_KEY_P) == true && (this->animator == nullptr || this->animator->hasFinished() == true)) {
+        irr::core::vector3df oui = this->camera->getPosition();
+        irr::core::vector3df non = oui;
+
+        for (irr::f32 i = 1; i < 40; i++) {
+            non = oui;
+            non.Z += std::rand() % 20;
+            non.Y += std::rand() % 20;
+            pointList.push_back(non);
+        }
+        this->animator = this->context.getSceneManager()->createFollowSplineAnimator(this->context.getDevice()->getTimer()->getTime(), pointList, 500.f, 0.5, false);
+        this->camera->addAnimator(animator);
     }
 }
 

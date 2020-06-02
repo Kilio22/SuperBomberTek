@@ -44,6 +44,8 @@ namespace Indie
         irr::video::IVideoDriver *driver;
         irr::scene::ISceneManager *sceneManager;
         irr::gui::IGUIFont *font;
+        irr::scene::ICameraSceneNode *camera;
+        irr::scene::ISceneNodeAnimator *animator;
 
         Indie::EntityManager &entityManager;
         Indie::SystemManager &systemManager;
