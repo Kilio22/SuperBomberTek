@@ -6,10 +6,15 @@
 */
 
 #include "MapGenerator.hpp"
+#include "FileCorruptedException.hpp"
+#include "FileNotFoundException.hpp"
+#include <fstream>
+#include <sstream>
 
-Indie::MapGenerator::MapGenerator(Indie::EntityBuilder &entityBuilder, irr::core::vector2di vector, Indie::Components::MAP_TYPE type, Indie::Components::THEME theme)
+Indie::MapGenerator::MapGenerator(Indie::EntityBuilder &entityBuilder, irr::core::vector2di vector, Indie::Components::MAP_TYPE type,
+    Indie::Components::THEME theme, const std::string &mapPath)
 {
-    entityBuilder.createMap(vector, type, theme);
+    entityBuilder.createMap(vector, type, theme, mapPath);
 }
 
 void Indie::MapGenerator::generate(Indie::EntityManager &entityManager, Indie::EntityBuilder &entityBuilder)
@@ -25,10 +30,14 @@ void Indie::MapGenerator::generate(Indie::EntityManager &entityManager, Indie::E
             createRandomMap(map, mapComponent->getDimension());
         else if (mapComponent->getType() == Indie::Components::MAP_TYPE::EMPTY)
             createEmptyMap(map, mapComponent->getDimension());
-        else
-            createDefaultMap(map, mapComponent->getDimension());
+        else {
+            if (mapComponent->getType() == Indie::Components::MAP_TYPE::SAVED)
+                this->createSavedMap(map, mapComponent->getMapPath(), mapComponent->getDimension());
+            else
+                createDefaultMap(map, mapComponent->getDimension());
+        }
         setSpawn(map, mapComponent->getDimension());
-        path += (mapComponent->getTheme() == Indie::Components::THEME::DIRT) ? "map_dirt/" : "map_stone/" ;
+        path += (mapComponent->getTheme() == Indie::Components::THEME::DIRT) ? "map_dirt/" : "map_stone/";
         for (int i = mapComponent->getDimension().Y - 1; i >= 0; i--) {
             for (int j = 0; j < mapComponent->getDimension().X; j++) {
                 entityBuilder.createGround(irr::core::vector3df((irr::f32)(20 * j), 0, (irr::f32)(20 * i)), path + "ground.obj", path + "ground.png");
@@ -62,6 +71,7 @@ void Indie::MapGenerator::createDefaultMap(std::vector<std::vector<Indie::Compon
                 map.at(i).at(j) = (j % 2 == 0 && i % 2 == 0) ? OBJECT::WALL_IN : OBJECT::BOX;
             else
                 map.at(i).at(j) = (j % 2 == 0 && i % 2 == 0 && i < dimension.X - 2 && j < dimension.Y - 2) ? OBJECT::WALL_IN : OBJECT::BOX ;
+
         }
     }
 }
@@ -69,15 +79,12 @@ void Indie::MapGenerator::createDefaultMap(std::vector<std::vector<Indie::Compon
 void Indie::MapGenerator::createRandomMap(std::vector<std::vector<Indie::Components::OBJECT>> &map, irr::core::vector2di dimension)
 {
     int random = 0;
-
     for (int i = 1; i < dimension.Y - 1; i++) {
-        for (int j = 1; j < dimension.X - 1; j++) {
-            random = 1 + std::rand()/((RAND_MAX + 1u) / 100);
-            if (random <= 50)
                 map.at(i).at(j) = OBJECT::WALL_IN;
             else {
                 random = 1 + std::rand()/((RAND_MAX + 1u) / 100);
                 map.at(i).at(j) = (random <= 40) ? OBJECT::BOX : OBJECT::VOID;
+
             }
         }
     }
@@ -89,6 +96,34 @@ void Indie::MapGenerator::createEmptyMap(std::vector<std::vector<Indie::Componen
         for (int j = 1; j < dimension.X - 1; j++) {
             map.at(i).at(j) = OBJECT::VOID;
         }
+    }
+}
+
+void Indie::MapGenerator::createSavedMap(
+    std::vector<std::vector<Components::OBJECT>> &map, const std::string &mapPath, irr::core::vector2di dimension)
+{
+    std::ifstream ifs(mapPath);
+    std::string line;
+    std::vector<int> data;
+    std::vector<Components::OBJECT> transformedData;
+
+    if (ifs.is_open() == false) {
+        throw Indie::Exceptions::FileNotFoundException(ERROR_STR, "File " + mapPath + " not found.");
+    }
+    map.clear();
+    while (std::getline(ifs, line)) {
+        std::istringstream iss(line);
+        std::copy(std::istream_iterator<int>(iss), std::istream_iterator<int>(), std::back_inserter(data));
+        std::transform(data.begin(), data.end(), std::back_inserter(transformedData), [](int n) { return static_cast<Components::OBJECT>(n); });
+        map.push_back(transformedData);
+        if ((int)transformedData.size() != dimension.X) {
+            throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File " + mapPath + " currupted.");
+        }
+        data.clear();
+        transformedData.clear();
+    }
+    if ((int)map.size() != dimension.Y) {
+        throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File " + mapPath + " corrupted.");
     }
 }
 

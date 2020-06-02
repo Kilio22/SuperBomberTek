@@ -16,7 +16,11 @@ const std::unordered_map<Indie::SplashScene::SPLASH_ASSETS, std::string> Indie::
           { Indie::SplashScene::SPLASH_ASSETS::PROJECT, "../ressources/images/splash/Project.png" },
           { Indie::SplashScene::SPLASH_ASSETS::BOMBER, "../ressources/images/splash/bomberLogos.png" } };
 
-Indie::SplashScene::SplashScene(ContextManager &context) : context(context) {}
+Indie::SplashScene::SplashScene(ContextManager &context)
+    : context(context)
+    , bg(nullptr)
+{
+}
 
 Indie::SplashScene::~SplashScene()
 {
@@ -31,9 +35,11 @@ Indie::SplashScene::~SplashScene()
 void Indie::SplashScene::init()
 {
     Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setMusic(0);
-    this->bg = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage(this->splashPaths.at(Indie::SplashScene::SPLASH_ASSETS::BG).c_str());
+    this->bg = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage(
+        this->splashPaths.at(Indie::SplashScene::SPLASH_ASSETS::BG).c_str());
     for (int type = (int)Indie::SplashScene::SPLASH_ASSETS::LOGO; type < (int)Indie::SplashScene::SPLASH_ASSETS::END; type++) {
-        Image *newImage = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage(this->splashPaths.at((Indie::SplashScene::SPLASH_ASSETS)type).c_str());
+        Image *newImage = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage(
+            this->splashPaths.at((Indie::SplashScene::SPLASH_ASSETS)type).c_str());
 
         this->splashScreens.insert({ (Indie::SplashScene::SPLASH_ASSETS)type, newImage });
     }

@@ -13,7 +13,7 @@
 
 #define __ERROR_STR(f, l, fu) (#f " at line " #l "(" #fu ")")
 #define _ERROR_STR(f, l, fu) __ERROR_STR(f, l, fu)
-#define ERROR_STR _ERROR_STR(__FILE__, __LINE__, __func__)
+#define ERROR_STR _ERROR_STR(__FILE__, __LINE__, __FUNC__)
 
 namespace Indie::Exceptions
 {

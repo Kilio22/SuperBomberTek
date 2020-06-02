@@ -12,20 +12,15 @@
 // Passer ça en méthode de TitleScene ??
 // putain t'as commenté chaque fichier enfaite.
 // oui c'est fait
-void Indie::TitleScene::skipScene(bool update, bool render, bool subUpdate, bool subRender)
-{
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(update);
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(render);
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneUpdateActive(subUpdate);
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneRenderActive(subRender);
-}
 
 const double Indie::TitleScene::updateRate = (((2 * M_PI) / 96) / 32) * 3000;
 
-Indie::TitleScene::TitleScene(ContextManager &context) : context(context) {}
+Indie::TitleScene::TitleScene(ContextManager &context)
+    : context(context)
+{
+}
 
-Indie::TitleScene::~TitleScene()
-{}
+Indie::TitleScene::~TitleScene() {}
 
 void Indie::TitleScene::init()
 {
@@ -48,10 +43,22 @@ void Indie::TitleScene::reset()
     init();
 }
 
+void Indie::TitleScene::skipScene(bool update, bool render, bool subUpdate, bool subRender)
+{
+    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::MainMenuScene>();
+    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(update);
+    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(render);
+    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneUpdateActive(subUpdate);
+    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneRenderActive(subRender);
+}
+
 void Indie::TitleScene::update(irr::f32 ticks)
 {
+    if (EventHandler::getInstance().isKeyPressed(irr::KEY_ESCAPE)) {
+        this->context.getDevice()->closeDevice();
+        return;
+    }
     if (EventHandler::getInstance().isAnyKeyPressedAtOnce()) {
-        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::MainMenuScene>();
         skipScene(true, true, true, true);
     }
     this->offsetY = (this->offsetY < 2 * M_PI) ? this->offsetY + this->updateRate * ticks : 0;

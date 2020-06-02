@@ -74,7 +74,7 @@ void Indie::OptionsScene::update(irr::f32 ticks)
     soundVolume->update(selector.getPos());
     musicMute->update(selector.getPos());
     soundMute->update(selector.getPos());
-    if (back->getStatus() == Button::Status::Pressed) {
+    if (back->getStatus() == Button::Status::Pressed || Indie::EventHandler::getInstance().isKeyPressed(irr::KEY_ESCAPE) == true) {
         ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::MainMenuScene>();
         skipScene(true, true, true, true);
     }

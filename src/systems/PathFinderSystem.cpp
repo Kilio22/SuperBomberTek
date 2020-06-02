@@ -254,12 +254,12 @@ void Indie::Systems::PathFinderSystem::findFirstPosition(std::vector<std::vector
     pathFinder->setEndMapPos(irr::core::vector2di(position.at(0), position.at(1)));
 }
 
-
 void Indie::Systems::PathFinderSystem::findPosition(std::vector<std::vector<OBJECT>> &map, PathFinderComponent *pathFinder, irr::core::vector2di aiPosition) const
 {
     std::array<int, 4> position = {-99, -99, -99, 99};
     int nbBox = 0;
     int random = 0;
+
 
     for (size_t i = 1; i < map.at(0).size(); i++) {
         for (size_t j = 1; j < map.size(); j++) {

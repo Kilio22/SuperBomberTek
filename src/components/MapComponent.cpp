@@ -7,10 +7,17 @@
 
 #include "MapComponent.hpp"
 
-Indie::Components::MapComponent::MapComponent(const irr::core::vector2di &dimension, Indie::Components::MAP_TYPE type, Indie::Components::THEME theme)
-    : dimension(dimension), type(type), theme(theme), map(dimension.Y), mapState(MAP_STATE::DEFAULT)
+Indie::Components::MapComponent::MapComponent(
+    const irr::core::vector2di &dimension, Indie::Components::MAP_TYPE type, Indie::Components::THEME theme, const std::string &mapPath)
+    : dimension(dimension)
+    , type(type)
+    , theme(theme)
+    , map(dimension.Y)
+    , mapState(MAP_STATE::DEFAULT)
+    , mapPath(mapPath)
 {
-    for (int i = 0 ; i < dimension.Y; i++)
+    this->map.resize(dimension.Y);
+    for (int i = 0; i < dimension.Y; i++)
         this->map[i].resize(dimension.X);
 }
 
@@ -37,6 +44,11 @@ const std::vector<std::vector<Indie::Components::OBJECT>> &Indie::Components::Ma
 const Indie::Components::MAP_STATE &Indie::Components::MapComponent::getMapState() const
 {
     return this->mapState;
+}
+
+const std::string &Indie::Components::MapComponent::getMapPath(void) const
+{
+    return this->mapPath;
 }
 
 void Indie::Components::MapComponent::setMapState(Indie::Components::MAP_STATE newState)

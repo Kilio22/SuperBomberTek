@@ -46,12 +46,12 @@ void Indie::Systems::AISystem::onUpdate(irr::f32, EntityManager &entityManager) 
 
         // S'il est sur une bombe et qu'il vient d'en poser une en gros
         if (isOnBomb(pathFinder->getMapBomb(), position) && hasArrived(mapPathFinding, pathFinder) && ai->getAction() == ACTION::STANDBY &&
-        ai->hasMoved(irr::core::vector3df(position->getPosition().X, 20, position->getPosition().Z),irr::core::vector3df((pathFinder->getEndMapPos().X) * 20, 20, (pathFinder->getEndMapPos().Y) * 20), ai)) {
+        ai->hasMoved(irr::core::vector3df(position->getPosition().X, 20, position->getPosition().Z),irr::core::vector3df((irr::f32)((pathFinder->getEndMapPos().X) * 20.f), 20.f, (irr::f32)((pathFinder->getEndMapPos().Y) * 20.f)), ai)) {
             ai->setAction(ACTION::DODGE);
         }
         // Faire le déplacement et check qu'il a bien bougé sur la case.
         if (ai->getDirection() != DIRECTION::NONE &&
-        ai->hasMoved(irr::core::vector3df(position->getPosition().X, 20, position->getPosition().Z),irr::core::vector3df((ai->getNextPosition().X) * 20, 20, (ai->getNextPosition().Y) * 20), ai) == false) {
+        ai->hasMoved(irr::core::vector3df(position->getPosition().X, 20, position->getPosition().Z),irr::core::vector3df((irr::f32)((ai->getNextPosition().X) * 20.f), 20.f, (irr::f32)((ai->getNextPosition().Y) * 20.f)), ai) == false) {
             move->setUp(isMoving(DIRECTION::UP, ai));
             move->setDown(isMoving(DIRECTION::DOWN, ai));
             move->setRight(isMoving(DIRECTION::RIGHT, ai));
