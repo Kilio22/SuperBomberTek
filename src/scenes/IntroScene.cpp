@@ -25,10 +25,10 @@ void Indie::IntroScene::init()
     this->camera = this->context.getSceneManager()->getActiveCamera();
     if (this->camera == nullptr)
         throw Indie::Exceptions::CameraNotFoundException(ERROR_STR, "No camera is active.");
-    this->currentRotationAngle = irr::core::vector3df(0.f, 0.f, 120.f); // le truc que je voulais faire au début #1
+    this->currentRotationAngle = irr::core::vector3df(0.f, 0.f, 120.f);
     this->shouldResetTarget = true;
     this->animator = nullptr;
-    this->camera->setTarget(irr::core::vector3df(138.593f, 280.f, 121.f)); // le truc que je voulais faire au début #1
+    this->camera->setTarget(irr::core::vector3df(138.593f, 280.f, 121.f));
 }
 
 void Indie::IntroScene::reset()
@@ -67,6 +67,7 @@ void Indie::IntroScene::skipScene(void)
     Indie::ServiceLocator::getInstance().get<SceneManager>().setSceneUpdateActive(true);
     Indie::ServiceLocator::getInstance().get<SceneManager>().setSubSceneRenderActive(false);
     Indie::ServiceLocator::getInstance().get<SceneManager>().setSubSceneUpdateActive(false);
+    Indie::ServiceLocator::getInstance().get<MusicManager>().setStatus(Music::Status::Loop);
 }
 
 void Indie::IntroScene::worldTour(irr::f32 deltaTime)
