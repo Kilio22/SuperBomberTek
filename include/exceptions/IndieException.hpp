@@ -13,24 +13,23 @@
 
 #define __ERROR_STR(f, l, fu) (#f " at line " #l "(" #fu ")")
 #define _ERROR_STR(f, l, fu) __ERROR_STR(f, l, fu)
-#define ERROR_STR _ERROR_STR(__FILE__, __LINE__, __FUNC__)
+#define ERROR_STR _ERROR_STR(__FILE__, __LINE__, __func__)
 
 namespace Indie::Exceptions
 {
     class IndieException : public std::exception
     {
         public:
-            IndieException(const std::string &component, const std::string &message);
-            virtual ~IndieException() = default;
+        IndieException(const std::string &component, const std::string &message);
+        virtual ~IndieException() = default;
 
-            const char *what() const noexcept final;
-            const std::string &getComponent(void) const noexcept;
+        const char *what() const noexcept final;
+        const std::string &getComponent(void) const noexcept;
 
         private:
-            std::string _component;
-            std::string _message;
+        std::string _component;
+        std::string _message;
     };
 } // namespace Indie::Exceptions
-
 
 #endif /* !INDIEEXCEPTION_HPP_ */

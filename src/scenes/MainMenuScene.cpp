@@ -7,27 +7,18 @@
 
 #include "MainMenuScene.hpp"
 #include "GameScene.hpp"
-#include "PauseScene.hpp"
 #include "OptionsScene.hpp"
-#include "ServiceLocator.hpp"
+#include "PauseScene.hpp"
 #include "Scenes.hpp"
-
-// Passer ça en méthode de MainMenuScene ??
-// C'est fait!
-void Indie::MainMenuScene::skipScene(bool update, bool render, bool subUpdate, bool subRender)
-{
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(update);
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(render);
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneUpdateActive(subUpdate);
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneRenderActive(subRender);
-}
+#include "ServiceLocator.hpp"
 
 Indie::MainMenuScene::MainMenuScene(ContextManager &context)
-    : context(context), selector(1, 5, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
-{}
+    : context(context)
+    , selector(1, 5, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
+{
+}
 
-Indie::MainMenuScene::~MainMenuScene()
-{}
+Indie::MainMenuScene::~MainMenuScene() {}
 
 void Indie::MainMenuScene::init()
 {
@@ -64,8 +55,8 @@ void Indie::MainMenuScene::update(irr::f32)
 
     if (solo->getStatus() == Button::Status::Pressed) {
         ServiceLocator::getInstance().get<Indie::SceneManager>().setScene<Indie::GameScene>(context);
-        ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::PauseScene>();
-        skipScene(true, true, false, false);
+        ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::IntroScene>();
+        skipScene(false, true, true, true);
     }
     if (options->getStatus() == Button::Status::Pressed) {
         ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::OptionsScene>();
@@ -96,4 +87,12 @@ void Indie::MainMenuScene::renderPost3D()
     quitter->draw();
     context.displayImage(title);
     context.displayImage(bomb);
+}
+
+void Indie::MainMenuScene::skipScene(bool update, bool render, bool subUpdate, bool subRender)
+{
+    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(update);
+    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(render);
+    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneUpdateActive(subUpdate);
+    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneRenderActive(subRender);
 }

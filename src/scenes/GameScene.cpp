@@ -42,6 +42,8 @@ Indie::GameScene::GameScene(ContextManager &context)
     , entityManager(ServiceLocator::getInstance().get<EntityManager>())
     , systemManager(SystemManager::getInstance())
     , initGame(std::make_unique<InitGame>())
+// , target(138.0f, 224.0f, 379.f)
+// , rotation(10.f, 0, 0.f)
 {
     this->device = this->context.getDevice();
     this->driver = this->context.getDriver();
@@ -72,8 +74,9 @@ void Indie::GameScene::init()
         entityBuilder, irr::core::vector2di(15, 13), this->initGame->mapType, this->initGame->mapTheme, this->initGame->mapPath);
     int idx = 1;
 
-    camera->setPosition(irr::core::vector3df(138.577f, 280, 65));
-    camera->setTarget(irr::core::vector3df(138.593f, -70.5216f, 130.061f));
+    camera->bindTargetAndRotation(true);
+    camera->setPosition(irr::core::vector3df(138.577f, 280.f, 65.f));
+    camera->setTarget(irr::core::vector3df(138.593f, 280.f, 121.f));
     camera->setFOV(1000);
 
     driver->setFog(irr::video::SColor(10, 255, 255, 255), irr::video::EFT_FOG_LINEAR, 200.0f, 2000.0f, 0.005f, false, false);
@@ -168,7 +171,6 @@ void Indie::GameScene::renderPost3D()
         auto player = entity->getComponent<PlayerComponent>();
 
         ss << player->getName() << std::endl;
-        ss << "  Behavior: " << player->getBehavior() << std::endl;
         ss << "  Bombs: " << player->getCurrentBombNb() << " / " << player->getMaxBombNb() << std::endl;
         ss << "  Bomb range: " << player->getBombsRange() << std::endl;
         ss << "  Speed: " << std::string(player->getVelocityLevel(), '>') << std::endl;

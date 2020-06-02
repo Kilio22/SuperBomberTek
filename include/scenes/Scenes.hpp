@@ -14,6 +14,7 @@
 #include "MenuScene.hpp"
 #include "SplashScene.hpp"
 #include "TitleScene.hpp"
+#include "IntroScene.hpp"
 #include "PauseScene.hpp"
 
 #endif /* !SCENES_HPP_ */

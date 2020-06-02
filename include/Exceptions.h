@@ -16,5 +16,7 @@
 #include "GameEngineException.hpp"
 #include "SceneNotFoundException.hpp"
 #include "FileCorruptedException.hpp"
+#include "CameraNotFoundException.hpp"
+#include "AnimationException.hpp"
 
 #endif /* !EXCEPTIONS_H_ */
