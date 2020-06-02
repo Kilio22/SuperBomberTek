@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.11)
 
 # set the project name & version
-project(Bomberman VERSION 0.1)
+project(bomberman VERSION 0.1)
 
 # specify the C++ standard
 set(CMAKE_CXX_STANDARD 17)
@@ -42,7 +42,7 @@ file(GLOB SRCS_SCENES src/scenes/*.cpp)
 file(GLOB SRCS_MUSIC src/music/*.cpp)
 file(GLOB SRCS_SOUND src/sound/*.cpp)
 file(GLOB SRCS_UI src/ui/*.cpp)
-add_executable(Bomberman ${SRCS} ${SRCS_SYSTEM} ${SRCS_COMPONENTS} ${SRCS_EXCEPTIONS} ${SRCS_SCENES} ${SRCS_MUSIC} ${SRCS_SOUND} ${SRCS_UI})
+add_executable(bomberman ${SRCS} ${SRCS_SYSTEM} ${SRCS_COMPONENTS} ${SRCS_EXCEPTIONS} ${SRCS_SCENES} ${SRCS_MUSIC} ${SRCS_SOUND} ${SRCS_UI})
 
-target_link_libraries(Bomberman ${Irrlicht_LIBRARIES})
-target_link_libraries(Bomberman sfml-graphics sfml-audio)
+target_link_libraries(bomberman ${Irrlicht_LIBRARIES})
+target_link_libraries(bomberman sfml-graphics sfml-audio)
