@@ -31,8 +31,17 @@ void Indie::Systems::BombExplosionSystem::onUpdate(irr::f32, EntityManager &enti
     for (auto entity : entityManager.each<BombComponent, PositionComponent, TimerComponent>()) {
         auto timer = entity->getComponent<TimerComponent>();
 
-        if (timer->getTimePassed() >= timer->getTimeToEnd())
+        if (timer->getTimePassed() >= timer->getTimeToEnd()) {
             this->explodeBombs(map, entityManager, entity);
+            for (auto entity : entityManager.each<ShakeComponent>()) {
+                auto shakeComponent = entity->getComponent<ShakeComponent>();
+
+                if (shakeComponent->getIsShaking() == false) {
+                    shakeComponent->setIsShaking(true);
+                    shakeComponent->setStartingTime(ServiceLocator::getInstance().get<ContextManager>().getDevice()->getTimer()->getTime());
+                }
+            }
+        }
     }
     mapComponent->setMap(map);
 }
@@ -67,8 +76,8 @@ void Indie::Systems::BombExplosionSystem::explodeBombs(std::vector<std::vector<O
     player->setCurrentBombNb(player->getCurrentBombNb() + 1);
 }
 
-bool Indie::Systems::BombExplosionSystem::explodeBomb(
-    std::vector<std::vector<OBJECT>> &map, EntityManager &entityManager, Entity *playerEntity, int mapX, int mapZ, float angle, bool allowRecursiveExplosions) const
+bool Indie::Systems::BombExplosionSystem::explodeBomb(std::vector<std::vector<OBJECT>> &map, EntityManager &entityManager, Entity *playerEntity,
+    int mapX, int mapZ, float angle, bool allowRecursiveExplosions) const
 {
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
 

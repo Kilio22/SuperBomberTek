@@ -20,6 +20,7 @@
 #include "PlayerSystem.hpp"
 #include "RenderSystem.hpp"
 #include "RotationSystem.hpp"
+#include "ShakeSystem.hpp"
 #include "TimerStopSystem.hpp"
 #include "TimerTickSystem.hpp"
 #include "VelocitySystem.hpp"

@@ -64,6 +64,7 @@ Indie::GameScene::GameScene(ContextManager &context)
     this->systemManager.addSystem<TimerStopSystem>();
     this->systemManager.addSystem<TimerTickSystem>();
     this->systemManager.addSystem<VelocitySystem>();
+    this->systemManager.addSystem<ShakeSystem>();
 }
 
 void Indie::GameScene::init()
@@ -123,6 +124,8 @@ void Indie::GameScene::init()
     entityBuilder.createAi(this->defaultPositions[3].first, "../ressources/animated_mesh/character/character_idle.b3d",
         "../ressources/textures/character/red1.png", "4", Indie::Components::PlayerComponent::PLAYER_COLOR::RED, this->defaultPositions[3].second);
 
+    entityBuilder.createShake();
+
     device->getCursorControl()->setVisible(false);
 }
 
@@ -151,6 +154,7 @@ void Indie::GameScene::update(irr::f32 deltaTime)
     this->systemManager.getSystem<PlayerSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<TimerStopSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<MeshSystem>()->onUpdate(deltaTime, entityManager);
+    this->systemManager.getSystem<ShakeSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<RenderSystem>()->onUpdate(deltaTime, entityManager);
     if (EventHandler::getInstance().isKeyPressed(irr::EKEY_CODE::KEY_ESCAPE) == true) {
         for (auto entity : this->entityManager.each<RenderComponent>()) {
@@ -159,23 +163,6 @@ void Indie::GameScene::update(irr::f32 deltaTime)
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(false);
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(false);
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::PauseScene>();
-    }
-    if (this->animator != nullptr && this->animator->hasFinished() == true) {
-        this->camera->removeAnimators();
-        this->camera->setPosition(irr::core::vector3df(138.577f, 280.f, 65.f));
-    }
-    if (EventHandler::getInstance().isKeyPressed(irr::EKEY_CODE::KEY_KEY_P) == true && (this->animator == nullptr || this->animator->hasFinished() == true)) {
-        irr::core::vector3df camPos = this->camera->getPosition();
-        irr::core::vector3df targetPos = this->camera->getTarget();
-        int valX = std::rand() % 10 - 5;
-        int valZ = std::rand() % 10 - 5;
-
-        camPos.X += valX;
-        camPos.Z += valZ;
-        targetPos.X += valX;
-        targetPos.Z += valZ;
-        this->camera->setPosition(camPos);
-        this->camera->setTarget(targetPos);
     }
 }
 

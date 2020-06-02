@@ -115,3 +115,11 @@ Indie::Entity *Indie::EntityBuilder::createPowerUp(
     entity->addComponent<PowerUpComponent>(type);
     return entity;
 }
+
+Indie::Entity *Indie::EntityBuilder::createShake(void)
+{
+    Entity *entity = this->entityManager.createEntity();
+
+    entity->addComponent<ShakeComponent>();
+    return entity;
+}
