@@ -18,7 +18,7 @@ void Indie::Systems::VelocitySystem::onUpdate(irr::f32 deltaTime, EntityManager 
         auto velocityComponent = entity->getComponent<VelocityComponent>();
         auto playerComponent = entity->getComponent<PlayerComponent>();
         irr::core::vector3df posVector = positionComponent->getPosition();
-        irr::f32 velocity = 20.0f + playerComponent->getVelocityLevel() * 5;
+        irr::f32 velocity = 30.0f + playerComponent->getVelocityLevel() * 5;
 
         velocityComponent->setVelocity(0);
         if (entity->has<Components::TimerComponent>())
