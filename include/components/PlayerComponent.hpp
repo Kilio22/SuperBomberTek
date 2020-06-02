@@ -32,12 +32,16 @@ namespace Indie::Components
             void setVelocityLevel(unsigned int value);
             void setWallPass(bool value);
 
+            void setBehavior(unsigned int value);
+            unsigned int getBehavior() const;
+
         private:
             unsigned int bombsRange;
             unsigned int maxBombNb;
             unsigned int currentBombNb;
             unsigned int velocityLevel;
             bool wallPass;
+            unsigned int behavior;
             std::string name;
     };
 } // namespace Indie::Components

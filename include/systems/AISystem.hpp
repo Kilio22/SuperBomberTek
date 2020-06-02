@@ -20,7 +20,6 @@
 #include "BombComponent.hpp"
 #include "PlayerComponent.hpp"
 
-
 #include <irrlicht.h>
 namespace Indie::Systems
 {
@@ -32,6 +31,7 @@ namespace Indie::Systems
 
             void onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const final;
 
+            bool hasDropBomb(EntityManager &entityManager, int idAi) const;
             int getCenter(int value) const;
             bool hasEscape(std::vector<std::vector<Indie::Components::OBJECT>> map, Indie::Components::PositionComponent *position) const;
             bool hasMoved(irr::core::vector3df position, irr::core::vector3df nextPosition, Indie::Components::AIComponent *ai) const;

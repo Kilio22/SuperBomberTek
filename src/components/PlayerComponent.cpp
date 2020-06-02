@@ -8,7 +8,7 @@
 #include "PlayerComponent.hpp"
 
 Indie::Components::PlayerComponent::PlayerComponent(const std::string &playerNb)
-    : bombsRange(2), maxBombNb(1), currentBombNb(1), velocityLevel(1), wallPass(false), name("Player " + playerNb)
+    : bombsRange(2), maxBombNb(1), currentBombNb(1), velocityLevel(1), wallPass(false), name("Player " + playerNb), behavior(0)
 {
 }
 
@@ -65,4 +65,14 @@ void Indie::Components::PlayerComponent::setVelocityLevel(unsigned int value)
 void Indie::Components::PlayerComponent::setWallPass(bool value)
 {
     this->wallPass = value;
+}
+
+void Indie::Components::PlayerComponent::setBehavior(unsigned int value)
+{
+    this->behavior = value;
+}
+
+unsigned int Indie::Components::PlayerComponent::getBehavior(void) const
+{
+    return this->behavior;
 }
