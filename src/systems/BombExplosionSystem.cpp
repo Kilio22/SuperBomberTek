@@ -55,13 +55,13 @@ void Indie::Systems::BombExplosionSystem::explodeBombs(std::vector<std::vector<O
         return;
     bomb->setExploded(true);
     for (unsigned int i = 0; i <= range; ++i) {
-        if (right == true && map[mapZ][mapX + 1] != OBJECT::WALL_OUT && map[mapZ][mapX + 1] != OBJECT::WALL_IN)
+        if (right == true && map.at(mapZ).at(mapX + 1) != OBJECT::WALL_OUT && map.at(mapZ).at(mapX + 1) != OBJECT::WALL_IN)
             right = this->explodeBomb(map, entityManager, playerEntity, mapX + i, mapZ, 90.0f, i > 0);
-        if (left == true && map[mapZ][mapX - 1] != OBJECT::WALL_OUT && map[mapZ][mapX - 1] != OBJECT::WALL_IN)
+        if (left == true && map.at(mapZ).at(mapX - 1) != OBJECT::WALL_OUT && map.at(mapZ).at(mapX - 1) != OBJECT::WALL_IN)
             left = this->explodeBomb(map, entityManager, playerEntity, mapX - i, mapZ, 270.0f, i > 0);
-        if (up == true && map[mapZ + 1][mapX] != OBJECT::WALL_OUT && map[mapZ + 1][mapX] != OBJECT::WALL_IN)
+        if (up == true && map.at(mapZ + 1).at(mapX) != OBJECT::WALL_OUT && map.at(mapZ + 1).at(mapX) != OBJECT::WALL_IN)
             up = this->explodeBomb(map, entityManager, playerEntity, mapX, mapZ + i, 0.0f, i > 0);
-        if (down == true && map[mapZ - 1][mapX] != OBJECT::WALL_OUT && map[mapZ - 1][mapX] != OBJECT::WALL_IN)
+        if (down == true && map.at(mapZ - 1).at(mapX) != OBJECT::WALL_OUT && map.at(mapZ - 1).at(mapX) != OBJECT::WALL_IN)
             down = this->explodeBomb(map, entityManager, playerEntity, mapX, mapZ - i, 180.0f, i > 0);
     }
     player->setCurrentBombNb(player->getCurrentBombNb() + 1);
@@ -72,20 +72,20 @@ bool Indie::Systems::BombExplosionSystem::explodeBomb(
 {
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
 
-    if (allowRecursiveExplosions == true && map[mapZ][mapX] == OBJECT::BOMB) {
+    if (allowRecursiveExplosions == true && map.at(mapZ).at(mapX) == OBJECT::BOMB) {
         this->recursiveExplosion(map, entityManager, mapX, mapZ);
         return true;
     }
-    if (map[mapZ][mapX] == OBJECT::WALL_OUT || map[mapZ][mapX] == OBJECT::WALL_IN)
+    if (map.at(mapZ).at(mapX) == OBJECT::WALL_OUT || map.at(mapZ).at(mapX) == OBJECT::WALL_IN)
         return false;
-    if (map[mapZ][mapX] == OBJECT::BOX) {
-        map[mapZ][mapX] = OBJECT::LAVA;
+    if (map.at(mapZ).at(mapX) == OBJECT::BOX) {
+        map.at(mapZ).at(mapX) = OBJECT::LAVA;
         this->explodeBox(entityManager, playerEntity, mapX, mapZ);
         entityBuilder.createLava({ (irr::f32)(mapX * 20), 20, (irr::f32)(mapZ * 20) }, "../ressources/static_mesh/effects/lava.obj",
             "../ressources/static_mesh/effects/lava.png", angle, playerEntity->getId());
         return false;
     }
-    map[mapZ][mapX] = OBJECT::LAVA;
+    map.at(mapZ).at(mapX) = OBJECT::LAVA;
     entityBuilder.createLava({ (irr::f32)(mapX * 20), 20, (irr::f32)(mapZ * 20) }, "../ressources/static_mesh/effects/lava.obj",
         "../ressources/static_mesh/effects/lava.png", angle, playerEntity->getId());
     return true;
