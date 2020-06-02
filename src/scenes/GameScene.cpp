@@ -76,6 +76,7 @@ void Indie::GameScene::init()
     int idx = 1;
 
     this->animator = nullptr;
+    // camera->getTargetAndRotationBinding()
     camera->bindTargetAndRotation(true);
     camera->setPosition(irr::core::vector3df(138.577f, 280.f, 65.f));
     camera->setTarget(irr::core::vector3df(138.593f, 280.f, 121.f));
@@ -164,17 +165,17 @@ void Indie::GameScene::update(irr::f32 deltaTime)
         this->camera->setPosition(irr::core::vector3df(138.577f, 280.f, 65.f));
     }
     if (EventHandler::getInstance().isKeyPressed(irr::EKEY_CODE::KEY_KEY_P) == true && (this->animator == nullptr || this->animator->hasFinished() == true)) {
-        irr::core::vector3df oui = this->camera->getPosition();
-        irr::core::vector3df non = oui;
+        irr::core::vector3df camPos = this->camera->getPosition();
+        irr::core::vector3df targetPos = this->camera->getTarget();
+        int valX = std::rand() % 10 - 5;
+        int valZ = std::rand() % 10 - 5;
 
-        for (irr::f32 i = 1; i < 40; i++) {
-            non = oui;
-            non.Z += std::rand() % 20;
-            non.Y += std::rand() % 20;
-            pointList.push_back(non);
-        }
-        this->animator = this->context.getSceneManager()->createFollowSplineAnimator(this->context.getDevice()->getTimer()->getTime(), pointList, 500.f, 0.5, false);
-        this->camera->addAnimator(animator);
+        camPos.X += valX;
+        camPos.Z += valZ;
+        targetPos.X += valX;
+        targetPos.Z += valZ;
+        this->camera->setPosition(camPos);
+        this->camera->setTarget(targetPos);
     }
 }
 
