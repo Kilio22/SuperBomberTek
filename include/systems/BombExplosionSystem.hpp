@@ -8,15 +8,14 @@
 #ifndef BOMBEXPLOSIONSYSTEM_HPP_
 #define BOMBEXPLOSIONSYSTEM_HPP_
 
-#include "ISystem.hpp"
 #include "Components.h"
+#include "ISystem.hpp"
 #include <unordered_map>
 
 namespace Indie::Systems
 {
-
-class BombExplosionSystem : public ISystem
-{
+    class BombExplosionSystem : public ISystem
+    {
     public:
         BombExplosionSystem() = default;
         ~BombExplosionSystem() = default;
@@ -26,17 +25,14 @@ class BombExplosionSystem : public ISystem
     private:
         static const std::unordered_map<Components::POWERUP_TYPE, std::pair<std::string, std::string>> powerups;
 
-        void explodeBomb(std::vector<std::vector<Components::OBJECT>> &map, EntityManager &entityManager, Entity *entity) const;
-        void explodeRight(EntityManager &entityManager, std::vector<std::vector<Components::OBJECT>> &map, int ownerId, unsigned int range, int mapX, int mapZ) const;
-        void explodeLeft(EntityManager &entityManager, std::vector<std::vector<Components::OBJECT>> &map, int ownerId, unsigned int range, int mapX, int mapZ) const;
-        void explodeUp(EntityManager &entityManager, std::vector<std::vector<Components::OBJECT>> &map, int ownerId, unsigned int range, int mapX, int mapZ) const;
-        void explodeDown(EntityManager &entityManager, std::vector<std::vector<Components::OBJECT>> &map, int ownerId, unsigned int range, int mapX, int mapZ) const;
+        void explodeBombs(std::vector<std::vector<Components::OBJECT>> &map, EntityManager &entityManager, Entity *entity) const;
+        bool explodeBomb(std::vector<std::vector<Components::OBJECT>> &map, EntityManager &entityManager, Entity *entity, int mapX, int mapZ, float angle, bool allowRecursiveExplosions) const;
 
-        void explodeBox(EntityManager &entityManager, int mapX, int mapZ) const;
-        void recursiveExplosion(EntityManager &entityManager, std::vector<std::vector<Components::OBJECT>> &map, int mapX, int mapZ) const;
+        void explodeBox(EntityManager &entityManager, Entity *playerEntity, int mapX, int mapZ) const;
+        void recursiveExplosion(std::vector<std::vector<Components::OBJECT>> &map, EntityManager &entityManager, int mapX, int mapZ) const;
 
         void spawnPowerUp(const irr::core::vector3df &position) const;
-};
+    };
 
 }
 

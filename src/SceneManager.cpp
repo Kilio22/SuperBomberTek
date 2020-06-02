@@ -65,9 +65,7 @@ void Indie::SceneManager::initLoading(Indie::ContextManager *context)
 
 void Indie::SceneManager::restartScenes()
 {
-    std::for_each(this->scenes.begin(), this->scenes.end(), [](auto &ptr) {
-        ptr.second->reset();
-    });
+    std::for_each(this->scenes.begin(), this->scenes.end(), [](auto &ptr) { ptr.second->reset(); });
 }
 
 // void Indie::SceneManager::setScene(size_t id, ContextManager &context)
@@ -115,12 +113,7 @@ void Indie::SceneManager::setSubSceneRenderActive(bool status)
 
 void Indie::SceneManager::update(ContextManager &contextManager, irr::f32 deltaTime)
 {
-    contextManager.getDriver()->beginScene(true, true, irr::video::SColor(0,0,0,0));
-
-    // if (currentScene >= scenes.size() || currentScene < 0)
-    //     throw (Indie::Exceptions::InvalidIndexException(ERROR_STR, "Scene at index " + std::to_string(currentScene) + " doesn't exist."));
-    // if (currentSubScene >= scenes.size() || currentSubScene < 0)
-    //     throw (Indie::Exceptions::InvalidIndexException(ERROR_STR, "Scene at index " + std::to_string(currentSubScene) + " doesn't exist."));
+    contextManager.getDriver()->beginScene(true, true, irr::video::SColor(0, 0, 0, 0));
 
     if (updateScene)
         scenes[currentScene]->update(deltaTime);
