@@ -26,23 +26,23 @@ void Indie::Components::AIComponent::setNextDirection(std::vector<std::vector<OB
     nextPosX = acPos.X;
     nextPosY = acPos.Y;
 
-    map[acPos.Y][acPos.X] = static_cast<OBJECT>(0);
-    if (map[acPos.Y + 1][acPos.X] == static_cast<OBJECT>(-99)) {
+    map.at(acPos.Y).at(acPos.X) = static_cast<OBJECT>(0);
+    if (map.at(acPos.Y + 1).at(acPos.X) == static_cast<OBJECT>(-99)) {
         setDirection(Indie::Components::DIRECTION::UP);
         nextPosY += 1;
         return;
     }
-    if (map[acPos.Y][acPos.X + 1] == static_cast<OBJECT>(-99)) {
+    if (map.at(acPos.Y).at(acPos.X + 1) == static_cast<OBJECT>(-99)) {
         setDirection(Indie::Components::DIRECTION::RIGHT);
         nextPosX += 1;
         return;
     }
-    if (map[acPos.Y - 1][acPos.X] == static_cast<OBJECT>(-99)) {
+    if (map.at(acPos.Y - 1).at(acPos.X) == static_cast<OBJECT>(-99)) {
         setDirection(Indie::Components::DIRECTION::DOWN);
         nextPosY -= 1;
         return;
     }
-    if (map[acPos.Y][acPos.X - 1] == static_cast<OBJECT>(-99)) {
+    if (map.at(acPos.Y).at(acPos.X - 1) == static_cast<OBJECT>(-99)) {
         setDirection(Indie::Components::DIRECTION::LEFT);
         nextPosX -= 1;
         return;

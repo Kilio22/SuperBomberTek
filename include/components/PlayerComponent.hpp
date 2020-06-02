@@ -57,6 +57,9 @@ namespace Indie::Components
             void setWallPass(bool value);
             void setIsDead(bool value);
 
+            void setBehavior(unsigned int value);
+            unsigned int getBehavior() const;
+
         private:
             unsigned int bombsRange;
             unsigned int maxBombNb;
@@ -66,6 +69,7 @@ namespace Indie::Components
             unsigned int xp;
             bool wallPass;
             bool _isDead;
+            unsigned int behavior;
             std::string name;
             PLAYER_COLOR playerColor;
             PLAYER_START_POSITION startPosition;
