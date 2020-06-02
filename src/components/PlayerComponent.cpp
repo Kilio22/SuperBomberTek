@@ -19,7 +19,6 @@ Indie::Components::PlayerComponent::PlayerComponent(const std::string &playerNb,
     , name("Player " + playerNb)
     , playerColor(playerColor)
     , startPosition(startPosition)
-    , behavior(0)
 {
 }
 
@@ -116,13 +115,4 @@ void Indie::Components::PlayerComponent::setWallPass(bool value)
 void Indie::Components::PlayerComponent::setIsDead(bool value)
 {
     this->_isDead = value;
-}
-void Indie::Components::PlayerComponent::setBehavior(unsigned int value)
-{
-    this->behavior = value;
-}
-
-unsigned int Indie::Components::PlayerComponent::getBehavior(void) const
-{
-    return this->behavior;
 }

@@ -79,7 +79,10 @@ void Indie::MapGenerator::createDefaultMap(std::vector<std::vector<Indie::Compon
 void Indie::MapGenerator::createRandomMap(std::vector<std::vector<Indie::Components::OBJECT>> &map, irr::core::vector2di dimension)
 {
     int random = 0;
-    for (int i = 1; i < dimension.Y - 1; i++) {
+     for (int i = 1; i < dimension.Y - 1; i++) {
+        for (int j = 1; j < dimension.X - 1; j++) {
+            random = 1 + std::rand()/((RAND_MAX + 1u) / 100);
+            if (random <= 50)
                 map.at(i).at(j) = OBJECT::WALL_IN;
             else {
                 random = 1 + std::rand()/((RAND_MAX + 1u) / 100);

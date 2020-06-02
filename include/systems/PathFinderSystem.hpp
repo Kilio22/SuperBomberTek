@@ -39,7 +39,7 @@ namespace Indie::Systems
             int getCenter(int value) const;
             bool hasArrived(std::vector<std::vector<Indie::Components::OBJECT>> &map, Indie::Components::PathFinderComponent *pathFinder) const;
             int getDistance2D(irr::core::vector2di v1, irr::core::vector2di v2) const;
-
+            bool goOnBomb(std::vector<std::vector<Indie::Components::OBJECT>> mapBomb, irr::core::vector2di aiPosition, Indie::Components::DIRECTION direction) const;
             //set PathFinding
             void setPathFinding(std::vector<std::vector<Indie::Components::OBJECT>> &map, irr::core::vector2di aiPosition, int value,  std::vector<std::vector<Indie::Components::OBJECT>> mapBomb) const;
 

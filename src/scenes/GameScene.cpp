@@ -168,7 +168,6 @@ void Indie::GameScene::renderPost3D()
         auto player = entity->getComponent<PlayerComponent>();
 
         ss << player->getName() << std::endl;
-        ss << "  Behavior: " << player->getBehavior() << std::endl;
         ss << "  Bombs: " << player->getCurrentBombNb() << " / " << player->getMaxBombNb() << std::endl;
         ss << "  Bomb range: " << player->getBombsRange() << std::endl;
         ss << "  Speed: " << std::string(player->getVelocityLevel(), '>') << std::endl;
