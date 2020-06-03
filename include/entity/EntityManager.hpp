@@ -161,13 +161,19 @@ namespace Indie
             {
                 size_t nbDeleted = 0;
 
-                entities.erase(std::remove_if(entities.begin(), entities.end(), [&](const std::unique_ptr<Entity> &entity) {
+                for (auto uniqueEntitiesIt = this->uniqueEntities.begin(); uniqueEntitiesIt != this->uniqueEntities.end();) {
+                    if (uniqueEntitiesIt->second->isPendingDestroy())
+                        this->uniqueEntities.erase(uniqueEntitiesIt);
+                    else
+                        uniqueEntitiesIt++;
+                }
+                this->entities.erase(std::remove_if(this->entities.begin(), this->entities.end(), [&](const std::unique_ptr<Entity> &entity) {
                     if (entity->isPendingDestroy()) {
                         ++nbDeleted;
                         return true;
                     }
                     return false;
-                }), entities.end());
+                }), this->entities.end());
 
                 if (nbDeleted > 0)
                     std::cout << "Cleaned " << nbDeleted << " entities." << std::endl;
@@ -175,7 +181,8 @@ namespace Indie
 
             void reset()
             {
-                entities.clear();
+                this->entities.clear();
+                this->uniqueEntities.clear();
                 idCount = 0;
             }
 
