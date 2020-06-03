@@ -14,11 +14,16 @@
 
 using namespace Indie::Components;
 
-const std::unordered_map<POWERUP_TYPE, std::pair<std::string, std::string>> Indie::Systems::BombExplosionSystem::powerups
+const std::unordered_map<POWERUP_TYPE, std::pair<std::string, std::string>> Indie::Systems::BombExplosionSystem::powerUps
     = { { POWERUP_TYPE::BOMB_UP, { "../ressources/static_mesh/effects/bombup.obj", "../ressources/static_mesh/effects/bombup.png" } },
           { POWERUP_TYPE::FIRE_UP, { "../ressources/static_mesh/effects/fireup.obj", "../ressources/static_mesh/effects/fireup.png" } },
           { POWERUP_TYPE::SPEED_UP, { "../ressources/static_mesh/effects/speedup.obj", "../ressources/static_mesh/effects/speedup.png" } },
           { POWERUP_TYPE::WALL_PASS, { "../ressources/static_mesh/effects/wallpass.obj", "../ressources/static_mesh/effects/wallpass.png" } } };
+
+const std::unordered_map<POWERDOWN_TYPE, std::pair<std::string, std::string>> Indie::Systems::BombExplosionSystem::powerDowns
+    = { { POWERDOWN_TYPE::BOMB_DOWN, { "../ressources/static_mesh/effects/bombdown.obj", "../ressources/static_mesh/effects/bombdown.png" } },
+          { POWERDOWN_TYPE::FIRE_DOWN, { "../ressources/static_mesh/effects/firedown.obj", "../ressources/static_mesh/effects/firedown.png" } },
+          { POWERDOWN_TYPE::SPEED_DOWN, { "../ressources/static_mesh/effects/speeddown.obj", "../ressources/static_mesh/effects/speeddown.png" } } };
 
 void Indie::Systems::BombExplosionSystem::onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const
 {
@@ -115,23 +120,31 @@ void Indie::Systems::BombExplosionSystem::explodeBox(EntityManager &entityManage
             player->setXpCount(player->getXpCount() + 10);
             entity->needDestroy();
             if (ServiceLocator::getInstance().get<SceneManager>().getScene<Indie::GameScene>()->getInitGame()->powerUp == true)
-                this->spawnPowerUp(position->getPosition());
+                this->spawnEffects(position->getPosition());
             return;
         }
     }
 }
 
-void Indie::Systems::BombExplosionSystem::spawnPowerUp(const irr::core::vector3df &position) const
+void Indie::Systems::BombExplosionSystem::spawnEffects(const irr::core::vector3df &position) const
 {
+    int index = 0;
+
     if (std::rand() % 5 != 0)
         return;
-    int index = std::rand() % (int)POWERUP_TYPE::NONE;
-    if (index == (int)POWERUP_TYPE::WALL_PASS) {
-        if (std::rand() % 2 != 0)
-            return;
+    if (std::rand() % 5 >= 3) {
+        index = std::rand() % (int)POWERDOWN_TYPE::NONE;
+        ServiceLocator::getInstance().get<EntityBuilder>().createPowerDown(
+            position, this->powerDowns.at((POWERDOWN_TYPE)index).first, this->powerDowns.at((POWERDOWN_TYPE)index).second, (POWERDOWN_TYPE)index);
+    } else {
+        index = std::rand() % (int)POWERUP_TYPE::NONE;
+        if (index == (int)POWERUP_TYPE::WALL_PASS) {
+            if (std::rand() % 2 != 0)
+                return;
+        }
+        ServiceLocator::getInstance().get<EntityBuilder>().createPowerUp(
+            position, this->powerUps.at((POWERUP_TYPE)index).first, this->powerUps.at((POWERUP_TYPE)index).second, (POWERUP_TYPE)index);
     }
-    ServiceLocator::getInstance().get<EntityBuilder>().createPowerUp(
-        position, this->powerups.at((POWERUP_TYPE)index).first, this->powerups.at((POWERUP_TYPE)index).second, (POWERUP_TYPE)index);
 }
 
 void Indie::Systems::BombExplosionSystem::recursiveExplosion(

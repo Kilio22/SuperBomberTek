@@ -19,6 +19,7 @@
 #include "PathFinderComponent.hpp"
 #include "PlayerComponent.hpp"
 #include "PositionComponent.hpp"
+#include "PowerDownComponent.hpp"
 #include "PowerUpComponent.hpp"
 #include "RenderComponent.hpp"
 #include "RotationComponent.hpp"

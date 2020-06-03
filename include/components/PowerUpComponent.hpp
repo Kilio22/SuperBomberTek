@@ -10,27 +10,20 @@
 
 namespace Indie::Components
 {
-    enum class POWERUP_TYPE {
-        BOMB_UP,
-        FIRE_UP,
-        SPEED_UP,
-        WALL_PASS,
-        NONE
-    };
+    enum class POWERUP_TYPE { BOMB_UP, FIRE_UP, SPEED_UP, WALL_PASS, NONE };
 
     class PowerUpComponent
     {
         public:
-            PowerUpComponent(POWERUP_TYPE type);
-            ~PowerUpComponent() = default;
+        PowerUpComponent(POWERUP_TYPE type);
+        ~PowerUpComponent() = default;
 
-            POWERUP_TYPE getType(void) const;
-            void getType(POWERUP_TYPE type);
+        POWERUP_TYPE getType(void) const;
+        void setType(POWERUP_TYPE type);
 
         private:
-            POWERUP_TYPE type;
+        POWERUP_TYPE type;
     };
 } // namespace Indie::Components
-
 
 #endif /* !POWERUPCOMPONENT_HPP_ */

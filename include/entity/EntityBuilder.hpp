@@ -32,6 +32,7 @@ namespace Indie
         Entity *createMap(const irr::core::vector2di &dimension, const Indie::Components::MAP_TYPE &type, const Indie::Components::THEME &theme, const std::string &mapPath = "");
         Entity *createLava(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath, float angle, int ownerId);
         Entity *createPowerUp(irr::core::vector3df position, const std::string &modelPath, const std::string &texturePath, Components::POWERUP_TYPE type);
+        Entity *createPowerDown(irr::core::vector3df position, const std::string &modelPath, const std::string &texturePath, Components::POWERDOWN_TYPE type);
         Entity *createShake(void);
 
     private:

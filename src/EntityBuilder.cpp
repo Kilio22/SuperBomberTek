@@ -116,6 +116,19 @@ Indie::Entity *Indie::EntityBuilder::createPowerUp(
     return entity;
 }
 
+Indie::Entity *Indie::EntityBuilder::createPowerDown(
+    irr::core::vector3df position, const std::string &modelPath, const std::string &texturePath, Components::POWERDOWN_TYPE type)
+{
+    Entity *entity = this->entityManager.createEntity();
+
+    position.Z -= 10;
+    entity->addComponent<PositionComponent>(position.X, position.Y, position.Z);
+    entity->addComponent<RenderComponent>(modelPath, texturePath, this->contextManager, position, false);
+    entity->addComponent<RotationComponent>(0.f, 50.f);
+    entity->addComponent<PowerDownComponent>(type);
+    return entity;
+}
+
 Indie::Entity *Indie::EntityBuilder::createShake(void)
 {
     Entity *entity = this->entityManager.createEntity();

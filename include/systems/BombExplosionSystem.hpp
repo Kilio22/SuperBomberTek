@@ -23,7 +23,8 @@ namespace Indie::Systems
         void onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const final;
 
     private:
-        static const std::unordered_map<Components::POWERUP_TYPE, std::pair<std::string, std::string>> powerups;
+        static const std::unordered_map<Components::POWERUP_TYPE, std::pair<std::string, std::string>> powerUps;
+        static const std::unordered_map<Components::POWERDOWN_TYPE, std::pair<std::string, std::string>> powerDowns;
 
         void explodeBombs(std::vector<std::vector<Components::OBJECT>> &map, EntityManager &entityManager, Entity *entity) const;
         bool explodeBomb(std::vector<std::vector<Components::OBJECT>> &map, EntityManager &entityManager, Entity *entity, int mapX, int mapZ, float angle, bool allowRecursiveExplosions) const;
@@ -31,7 +32,7 @@ namespace Indie::Systems
         void explodeBox(EntityManager &entityManager, Entity *playerEntity, int mapX, int mapZ) const;
         void recursiveExplosion(std::vector<std::vector<Components::OBJECT>> &map, EntityManager &entityManager, int mapX, int mapZ) const;
 
-        void spawnPowerUp(const irr::core::vector3df &position) const;
+        void spawnEffects(const irr::core::vector3df &position) const;
     };
 
 }
