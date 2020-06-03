@@ -85,9 +85,6 @@ void Indie::GameScene::init()
         driver->getTexture("../ressources/skybox/skybox_right.png"), driver->getTexture("../ressources/skybox/skybox_front.png"),
         driver->getTexture("../ressources/skybox/skybox_back.png"));
 
-    // TODO : Faudrait pas que plusieurs jouers / IA puissent avoir le même skin.
-    // Dans le multi j'empecherais les joueurs de séléctionner le même.
-    // Mais faut pas que les IA puissent avoir le même que le jouer aussi.
     this->font = this->context.getGuiEnv()->getFont("../ressources/font/Banschrift.xml");
 
     int idx = 1;
