@@ -7,7 +7,7 @@
 
 #include "PlayerComponent.hpp"
 
-Indie::Components::PlayerComponent::PlayerComponent(const std::string &playerNb, Components::PlayerComponent::PLAYER_COLOR playerColor, PLAYER_START_POSITION startPosition)
+Indie::Components::PlayerComponent::PlayerComponent(const std::string &name, Components::PlayerComponent::PLAYER_COLOR playerColor, PLAYER_START_POSITION startPosition)
     : bombsRange(2)
     , maxBombNb(1)
     , currentBombNb(1)
@@ -16,7 +16,7 @@ Indie::Components::PlayerComponent::PlayerComponent(const std::string &playerNb,
     , xp(0)
     , wallPass(false)
     , _isDead(false)
-    , name("Player " + playerNb)
+    , name(name)
     , playerColor(playerColor)
     , startPosition(startPosition)
 {

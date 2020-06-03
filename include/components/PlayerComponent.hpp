@@ -33,7 +33,7 @@ namespace Indie::Components
             };
 
         public:
-            PlayerComponent(const std::string &playerNb, PLAYER_COLOR playerColor, PLAYER_START_POSITION startPosition);
+            PlayerComponent(const std::string &name, PLAYER_COLOR playerColor, PLAYER_START_POSITION startPosition);
             ~PlayerComponent() = default;
 
             unsigned int getBombsRange(void) const;
