@@ -246,12 +246,10 @@ void Indie::SoloScene::update(irr::f32 ticks)
         themeSelector.update();
         mapTheme = (themeSelector.getPos().first == 0) ? Components::THEME::DIRT : Components::THEME::STONE;
     }
-    EventHandler::getInstance().resetKeysStatusOnce();
-    EventHandler::getInstance().resetKeysStatus();
     /* ================================================================== */
     // CLICK BUTTONS
     /* ================================================================== */
-    if (play->getStatus() == Button::Status::Pressed) {
+    if (play->getStatus() == Button::Status::Pressed || EventHandler::getInstance().isKeyPressed(irr::EKEY_CODE::KEY_KEY_P) == true) {
         InitGame init;
         PlayerParams initPlayer;
 
@@ -276,12 +274,12 @@ void Indie::SoloScene::update(irr::f32 ticks)
         ServiceLocator::getInstance().get<SceneManager>().setSubScene<IntroScene>();
         skipScene(false, true, true, true);
     }
-    if (back->getStatus() == Button::Status::Pressed || EventHandler::getInstance().isKeyPressedAtOnce(irr::EKEY_CODE::KEY_ESCAPE)) {
+    if (back->getStatus() == Button::Status::Pressed || EventHandler::getInstance().isKeyPressed(irr::EKEY_CODE::KEY_ESCAPE) == true) {
         context.getSceneManager()->clear();
         skipScene(true, true, true, true);
         ServiceLocator::getInstance().get<SceneManager>().setSubScene<MainMenuScene>();
     }
-    //std::cout << "X : " << selector.getPos().first << ", Y : " << selector.getPos().second << std::endl;
+    EventHandler::getInstance().resetKeys();
 }
 
 void Indie::SoloScene::renderPre3D()
