@@ -28,10 +28,7 @@ Indie::OptionsScene::OptionsScene(Indie::ContextManager &context)
 }
 
 Indie::OptionsScene::~OptionsScene()
-{
-    if (font)
-        context.getGuiEnv()->removeFont(font);
-}
+{}
 
 void Indie::OptionsScene::init()
 {
