@@ -20,7 +20,7 @@ int main(void)
         std::cerr << "In component \"" << e.getComponent() << "\": " << e.what() << std::endl;
         return 84;
     } catch (const std::exception &e) {
-        std::cerr << e.what() << std::endl;
+        std::cerr << "Unexpected exception: '" << e.what() << "'" << std::endl;
         return 84;
     }
     return 0;

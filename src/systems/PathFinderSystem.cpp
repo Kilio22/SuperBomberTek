@@ -13,22 +13,14 @@ using namespace Indie::Components;
 
 void Indie::Systems::PathFinderSystem::onUpdate(irr::f32, Indie::EntityManager &entityManager) const
 {
+    std::vector<std::vector<OBJECT>> map = entityManager.getUniqueEntity<MapComponent>()->getComponent<MapComponent>()->getMap();
+    std::vector<std::vector<OBJECT>> mapBomb = map;
+    std::vector<std::vector<OBJECT>> mapPowerUp = map;
     std::vector<std::vector<OBJECT>> mapPathFinding;
-    std::vector<std::vector<OBJECT>> map;
-    std::vector<std::vector<OBJECT>> mapBomb;
-    std::vector<std::vector<OBJECT>> mapPowerUp;
 
-    for (auto entity : entityManager.each<MapComponent>()) {
-        auto mapComponent = entity->getComponent<MapComponent>();
-
-        map = mapComponent->getMap();
-        mapBomb = map;
-        mapPowerUp = map;
-        this->setMapBomb(mapBomb, entityManager);
-        this->setMapPowerUp(mapPowerUp, entityManager);
-        this->cleanMap(map);
-    }
-
+    this->setMapBomb(mapBomb, entityManager);
+    this->setMapPowerUp(mapPowerUp, entityManager);
+    this->cleanMap(map);
     for (auto entity : entityManager.each<PathFinderComponent, AIComponent, PositionComponent>()) {
         auto pathFinder = entity->getComponent<PathFinderComponent>();
         auto ai = entity->getComponent<AIComponent>();

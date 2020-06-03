@@ -38,15 +38,13 @@ int Indie::Systems::BombDropSystem::getCenter(int value) const
 
 bool Indie::Systems::BombDropSystem::checkBombPositionWallPass(EntityManager &entityManager, int midX, int midZ) const
 {
-    for (auto map : entityManager.each<MapComponent>()) {
-        auto mapComponent = map->getComponent<MapComponent>();
-        auto array = mapComponent->getMap();
+    auto mapComponent = entityManager.getUniqueEntity<MapComponent>()->getComponent<MapComponent>();
+    auto array = mapComponent->getMap();
 
-        for (int i = 0; i < (int)mapComponent->getDimension().Y; i++) {
-            for (int j = 0; j < (int)mapComponent->getDimension().X; j++) {
-                if (array[i][j] == OBJECT::VOID && j * 20 == midX && i * 20 == midZ) {
-                    return true;
-                }
+    for (int i = 0; i < (int)mapComponent->getDimension().Y; i++) {
+        for (int j = 0; j < (int)mapComponent->getDimension().X; j++) {
+            if (array[i][j] == OBJECT::VOID && j * 20 == midX && i * 20 == midZ) {
+                return true;
             }
         }
     }
@@ -69,11 +67,10 @@ void Indie::Systems::BombDropSystem::onUpdate(irr::f32, EntityManager &entityMan
             if (playerComponent->getWallPass() == true && this->checkBombPositionWallPass(entityManager, (int)midX, (int)midZ) == false) {
                 continue;
             }
-            for (auto map : entityManager.each<MapComponent>()) {
-                auto mapComponent = map->getComponent<MapComponent>();
 
-                mapComponent->setMap(this->updateMap(mapComponent->getMap(), midX, midZ));
-            }
+            auto mapComponent = entityManager.getUniqueEntity<MapComponent>()->getComponent<MapComponent>();
+            mapComponent->setMap(this->updateMap(mapComponent->getMap(), midX, midZ));
+
             entityBuilder.createBomb(irr::core::vector3df(midX, 20, midZ), "../ressources/animated_mesh/bomb/bomb.b3d",
                 "../ressources/textures/bomb/bomb.png", entity->getId(), playerComponent->getBombsRange());
             playerComponent->setCurrentBombNb(playerComponent->getCurrentBombNb() - 1);
