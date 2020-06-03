@@ -52,4 +52,3 @@ void Indie::CSVParser::writeToFile(const std::string &filepath, const std::vecto
     }
     ofs.close();
 }
-
