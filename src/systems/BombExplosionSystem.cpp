@@ -7,7 +7,9 @@
 
 #include "BombExplosionSystem.hpp"
 #include "EntityBuilder.hpp"
+#include "GameScene.hpp"
 #include "IndieException.hpp"
+#include "InitGame.hpp"
 #include "ServiceLocator.hpp"
 
 using namespace Indie::Components;
@@ -18,7 +20,7 @@ const std::unordered_map<POWERUP_TYPE, std::pair<std::string, std::string>> Indi
           { POWERUP_TYPE::SPEED_UP, { "../ressources/static_mesh/effects/speedup.obj", "../ressources/static_mesh/effects/speedup.png" } },
           { POWERUP_TYPE::WALL_PASS, { "../ressources/static_mesh/effects/wallpass.obj", "../ressources/static_mesh/effects/wallpass.png" } } };
 
-void Indie::Systems::BombExplosionSystem::onUpdate(irr::f32, EntityManager &entityManager) const
+void Indie::Systems::BombExplosionSystem::onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const
 {
     MapComponent *mapComponent = nullptr;
     std::vector<std::vector<OBJECT>> map;
@@ -38,7 +40,7 @@ void Indie::Systems::BombExplosionSystem::onUpdate(irr::f32, EntityManager &enti
 
                 if (shakeComponent->getIsShaking() == false) {
                     shakeComponent->setIsShaking(true);
-                    shakeComponent->setStartingTime(ServiceLocator::getInstance().get<ContextManager>().getDevice()->getTimer()->getTime());
+                    shakeComponent->setDeltaTime(deltaTime);
                 }
             }
         }
@@ -112,7 +114,8 @@ void Indie::Systems::BombExplosionSystem::explodeBox(EntityManager &entityManage
 
             player->setXpCount(player->getXpCount() + 10);
             entity->needDestroy();
-            this->spawnPowerUp(position->getPosition());
+            if (ServiceLocator::getInstance().get<SceneManager>().getScene<Indie::GameScene>()->getInitGame()->powerUp == true)
+                this->spawnPowerUp(position->getPosition());
             return;
         }
     }

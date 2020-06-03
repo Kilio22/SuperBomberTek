@@ -19,16 +19,16 @@ namespace Indie::Components
         ~ShakeComponent() = default;
 
         bool getIsShaking(void) const;
-        irr::u32 getStartingTime(void) const;
+        irr::f32 getDeltaTime(void) const;
         const irr::core::vector3df &getInitialPosition(void) const;
         const irr::core::vector3df &getInitialTarget(void) const;
         void setIsShaking(bool value);
-        void setStartingTime(irr::u32 value);
+        void setDeltaTime(irr::f32 value);
 
         private:
         irr::core::vector3df initialPositon;
         irr::core::vector3df initialTarget;
-        irr::u32 startingTime;
+        irr::f32 deltaTime;
         bool isShaking;
     };
 } // namespace Indie::Components

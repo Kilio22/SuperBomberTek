@@ -39,12 +39,9 @@ const std::vector<std::pair<std::string, Indie::Components::PlayerComponent::PLA
 
 Indie::GameScene::GameScene(ContextManager &context)
     : context(context)
-    , animator(nullptr)
     , entityManager(ServiceLocator::getInstance().get<EntityManager>())
     , systemManager(SystemManager::getInstance())
     , initGame(std::make_unique<InitGame>())
-// , target(138.0f, 224.0f, 379.f)
-// , rotation(10.f, 0, 0.f)
 {
     this->device = this->context.getDevice();
     this->driver = this->context.getDriver();
@@ -74,15 +71,11 @@ void Indie::GameScene::init()
     irr::scene::ICameraSceneNode *camera = sceneManager->addCameraSceneNode();
     Indie::MapGenerator mapGenerator(
         entityBuilder, irr::core::vector2di(15, 13), this->initGame->mapType, this->initGame->mapTheme, this->initGame->mapPath);
-    int idx = 1;
 
-    this->animator = nullptr;
-    // camera->getTargetAndRotationBinding()
     camera->bindTargetAndRotation(true);
     camera->setPosition(irr::core::vector3df(138.577f, 280.f, 65.f));
     camera->setTarget(irr::core::vector3df(138.593f, 280.f, 121.f));
     camera->setFOV(1000);
-    this->camera = camera;
 
     driver->setFog(irr::video::SColor(10, 255, 255, 255), irr::video::EFT_FOG_LINEAR, 200.0f, 2000.0f, 0.005f, false, false);
     sceneManager->addLightSceneNode(camera, irr::core::vector3df(0, 0, 0), irr::video::SColorf(0.1f, 0.1f, 0.1f, 0.0f), 700.0f);
@@ -96,36 +89,29 @@ void Indie::GameScene::init()
     // Dans le multi j'empecherais les joueurs de séléctionner le même.
     // Mais faut pas que les IA puissent avoir le même que le jouer aussi.
     this->font = this->context.getGuiEnv()->getFont("../ressources/font/Banschrift.xml");
+
+    int idx = 1;
+    std::vector<std::string> usedTextures;
     for (auto player : this->initGame->playersParams) {
         entityBuilder.createPlayer(this->defaultPositions.at(idx - 1).first, "../ressources/animated_mesh/character/character_idle.b3d",
             player.playerTexture, player.playerKeys, std::to_string(idx), player.playerColor, this->defaultPositions.at(idx - 1).second);
+        usedTextures.push_back(player.playerTexture);
         idx++;
     }
     for (int i = 0; i < this->initGame->nbAi; i++) {
         int randomSkinIdx = std::rand() % this->skins.size();
 
+        if (std::find(usedTextures.begin(), usedTextures.end(), this->skins.at(randomSkinIdx).first) != usedTextures.end()) {
+            i--;
+            continue;
+        }
         entityBuilder.createAi(this->defaultPositions.at(idx - 1).first, "../ressources/animated_mesh/character/character_idle.b3d",
             this->skins.at(randomSkinIdx).first, std::to_string(idx), this->skins.at(randomSkinIdx).second,
             this->defaultPositions.at(idx - 1).second);
+        usedTextures.push_back(this->skins.at(randomSkinIdx).first);
         idx++;
     }
     mapGenerator.generate(entityManager, entityBuilder);
-
-    // faudra virer toussa quand les menu seront fonctionnels
-    //entityBuilder.createPlayer(this->defaultPositions[0].first, "../ressources/animated_mesh/character/character_idle.b3d",
-    //    "../ressources/textures/character/blue1.png",
-    //    { { irr::KEY_UP, Indie::Components::KEY_TYPE::UP }, { irr::KEY_DOWN, Indie::Components::KEY_TYPE::DOWN },
-    //        { irr::KEY_RIGHT, Indie::Components::KEY_TYPE::RIGHT }, { irr::KEY_LEFT, Indie::Components::KEY_TYPE::LEFT },
-    //        { irr::KEY_SPACE, Indie::Components::KEY_TYPE::DROP } },
-    //    "1", Components::PlayerComponent::PLAYER_COLOR::BLUE, this->defaultPositions[0].second);
-    //entityBuilder.createAi(this->defaultPositions[1].first, "../ressources/animated_mesh/character/character_idle.b3d",
-    //    "../ressources/textures/character/yellow1.png", "2", Indie::Components::PlayerComponent::PLAYER_COLOR::YELLOW,
-    //    this->defaultPositions[1].second);
-    //entityBuilder.createAi(this->defaultPositions[2].first, "../ressources/animated_mesh/character/character_idle.b3d",
-    //    "../ressources/textures/character/green1.png", "3", Indie::Components::PlayerComponent::PLAYER_COLOR::GREEN,
-    //    this->defaultPositions[2].second);
-    //entityBuilder.createAi(this->defaultPositions[3].first, "../ressources/animated_mesh/character/character_idle.b3d",
-    //    "../ressources/textures/character/red1.png", "4", Indie::Components::PlayerComponent::PLAYER_COLOR::RED, this->defaultPositions[3].second);
 
     entityBuilder.createShake();
 

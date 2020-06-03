@@ -8,7 +8,7 @@
 #include "ShakeComponent.hpp"
 
 Indie::Components::ShakeComponent::ShakeComponent()
-    : initialPositon(138.577f, 280.f, 65.f), initialTarget(138.593f, -34.13, 121.f), startingTime(0), isShaking(false)
+    : initialPositon(138.577f, 280.f, 65.f), initialTarget(138.593f, -34.13, 121.f), deltaTime(0.f), isShaking(false)
 {
 }
 
@@ -17,9 +17,9 @@ bool Indie::Components::ShakeComponent::getIsShaking(void) const
     return this->isShaking;
 }
 
-irr::u32 Indie::Components::ShakeComponent::getStartingTime(void) const
+irr::f32 Indie::Components::ShakeComponent::getDeltaTime(void) const
 {
-    return this->startingTime;
+    return this->deltaTime;
 }
 
 const irr::core::vector3df &Indie::Components::ShakeComponent::getInitialPosition(void) const
@@ -37,7 +37,7 @@ void Indie::Components::ShakeComponent::setIsShaking(bool value)
     this->isShaking = value;
 }
 
-void Indie::Components::ShakeComponent::setStartingTime(irr::u32 value)
+void Indie::Components::ShakeComponent::setDeltaTime(irr::f32 value)
 {
-    this->startingTime = value;
+    this->deltaTime = value;
 }

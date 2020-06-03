@@ -16,19 +16,19 @@ void Indie::Systems::ShakeSystem::onUpdate(irr::f32 deltaTime, EntityManager &en
 
         if (shakeComponent->getIsShaking() == false)
             return;
-        irr::u32 currentTime = ServiceLocator::getInstance().get<ContextManager>().getDevice()->getTimer()->getTime();
-        irr::u32 startTime = shakeComponent->getStartingTime();
+        irr::f32 currentDeltaTime = shakeComponent->getDeltaTime() + deltaTime;
         irr::scene::ICameraSceneNode *camera = ServiceLocator::getInstance().get<ContextManager>().getSceneManager()->getActiveCamera();
 
         if (camera == nullptr) {
             throw Indie::Exceptions::CameraNotFoundException(ERROR_STR, "No camera is active.");
         }
-        if (currentTime - startTime >= 2) {
+        if (currentDeltaTime >= 0.1f) {
             shakeComponent->setIsShaking(false);
-            shakeComponent->setStartingTime(0);
             camera->setPosition(shakeComponent->getInitialPosition());
             camera->setTarget(shakeComponent->getInitialTarget());
             return;
+        } else {
+            shakeComponent->setDeltaTime(currentDeltaTime);
         }
         irr::core::vector3df camPos = camera->getPosition();
         irr::core::vector3df targetPos = camera->getTarget();
