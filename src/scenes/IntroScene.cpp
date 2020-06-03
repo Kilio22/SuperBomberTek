@@ -48,7 +48,7 @@ void Indie::IntroScene::update(irr::f32 deltaTime)
     } else {
         this->downTarget(deltaTime);
     }
-    if (EventHandler::getInstance().isKeyPressed(irr::KEY_ESCAPE) == true) {
+    if (EventHandler::getInstance().isAnyKeyPressed()) { // n'importe quelle touche permet de skip mtn
         this->skipScene();
     }
 }
