@@ -12,7 +12,7 @@
 Indie::IntroScene::IntroScene(ContextManager &context)
     : context(context)
     , camera(nullptr)
-    , currentRotationAngle(303.15, 48.9909, 0.f)
+    , currentRotationAngle(303.15f, 48.9909f, 0.f)
     , shouldResetTarget(true)
 {
 }
@@ -60,7 +60,7 @@ void Indie::IntroScene::renderPost3D() {}
 void Indie::IntroScene::skipScene(void)
 {
     this->camera->setRotation(irr::core::vector3df(0.f, 0.f, 0.f));
-    this->camera->setTarget(irr::core::vector3df(138.593f, -34.13, 121.f));
+    this->camera->setTarget(irr::core::vector3df(138.593f, -34.13f, 121.f));
     EventHandler::getInstance().resetKeys();
     Indie::ServiceLocator::getInstance().get<SceneManager>().setSceneUpdateActive(true);
     Indie::ServiceLocator::getInstance().get<SceneManager>().setSubSceneRenderActive(false);

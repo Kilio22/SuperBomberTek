@@ -8,7 +8,7 @@
 #include "ShakeComponent.hpp"
 
 Indie::Components::ShakeComponent::ShakeComponent()
-    : initialPositon(138.577f, 280.f, 65.f), initialTarget(138.593f, -34.13, 121.f), deltaTime(0.f), isShaking(false)
+    : initialPositon(138.577f, 280.f, 65.f), initialTarget(138.593f, -34.13f, 121.f), deltaTime(0.f), isShaking(false)
 {
 }
 
