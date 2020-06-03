@@ -87,18 +87,20 @@ void Indie::SoloScene::init()
     /* ================================================================== */
     // 3D INIT
     /* ================================================================== */
-    camera = context.getSceneManager()->addCameraSceneNode(0, irr::core::vector3df(-110, 40, -25), irr::core::vector3df(0, -50, 100), -1, true);
-    context.getSceneManager()->addLightSceneNode(camera, irr::core::vector3df(0, 0, 0), irr::video::SColorf(0.4f, 0.4f, 0.5f, 1.0f), 700.0f);
+    //camera = context.getSceneManager()->addCameraSceneNode(0, irr::core::vector3df(15, 62, 37), irr::core::vector3df(0, 0, 0), -1, true);
+    camera = context.getSceneManager()->addCameraSceneNode(0, irr::core::vector3df(0, 0, -75), irr::core::vector3df(0, 0, 0), -1, true);
+    camera->setTarget(irr::core::vector3df(-52, 0, 0));
+    context.getSceneManager()->addLightSceneNode(camera, irr::core::vector3df(0, 0, 0), irr::video::SColorf(0.2f, 0.2f, 0.3f, 0.0f), 400.0f);
     theme1 = context.getSceneManager()->addAnimatedMeshSceneNode(context.getSceneManager()->getMesh("../ressources/static_mesh/map1model.mc.ply"));
     theme1->setMaterialFlag(irr::video::EMF_LIGHTING, true);
     theme1->setMaterialFlag(irr::video::EMF_FOG_ENABLE, false);
     theme1->setVisible(false);
-    theme1->setScale({2, 2, 2});
+    theme1->setScale(irr::core::vector3df(1.4f, 1.4f, 1.4f));
     theme2 = context.getSceneManager()->addAnimatedMeshSceneNode(context.getSceneManager()->getMesh("../ressources/static_mesh/map2model.mc.ply"));
     theme2->setMaterialFlag(irr::video::EMF_LIGHTING, true);
     theme2->setMaterialFlag(irr::video::EMF_FOG_ENABLE, false);
     theme2->setVisible(false);
-    theme2->setScale({2, 2, 2});
+    theme2->setScale(irr::core::vector3df(1.4f, 1.4f, 1.4f));
     /* ================================================================== */
     // IMAGES GET
     /* ================================================================== */
@@ -149,7 +151,7 @@ void Indie::SoloScene::init()
     down->init("../ressources/images/solo/KB_Down.png", 1, 5, POS(183, 547));
     left->init("../ressources/images/solo/KB_Left.png", 0, 5, POS(108, 547));
     right->init("../ressources/images/solo/KB_Right.png", 2, 5, POS(261, 547));
-    bomb->init("../ressources/images/solo/KB_Bar.png", 3, 5, POS(451, 547));
+    bomb->init("../ressources/images/solo/KB_Bar.png", 3, 5, POS(456, 547));
     // Some inits :
     playerTexture = charaPaths[charaSelector.getPos().first].first;
     playerColor = charaPaths[charaSelector.getPos().first].second;
@@ -168,6 +170,7 @@ void Indie::SoloScene::reset()
 
 void Indie::SoloScene::update(irr::f32 ticks)
 {
+
     /* ================================================================== */
     // 3D UPDATE
     /* ================================================================== */
