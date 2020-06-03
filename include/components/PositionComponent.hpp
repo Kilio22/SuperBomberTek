@@ -12,17 +12,29 @@
 
 namespace Indie::Components
 {
+    /**
+     * @brief Position component
+     */
     class PositionComponent
     {
-        public:
-            PositionComponent(float posX, float posY, float posZ);
-            ~PositionComponent() = default;
+    public:
+        PositionComponent(float posX, float posY, float posZ);
+        ~PositionComponent() = default;
 
-            const irr::core::vector3df &getPosition(void) const;
-            void setPosition(irr::core::vector3df position);
+        /**
+         * @brief Gets the stored position
+         * @return const irr::core::vector3df& The position
+         */
+        const irr::core::vector3df &getPosition(void) const;
 
-        private:
-            irr::core::vector3df position;
+        /**
+         * @brief Sets the stored position
+         * @param position The new position
+         */
+        void setPosition(irr::core::vector3df position);
+
+    private:
+        irr::core::vector3df position;
     };
 }
 

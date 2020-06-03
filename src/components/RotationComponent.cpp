@@ -20,8 +20,3 @@ void Indie::Components::RotationComponent::setYAngle(float newAngle)
 {
     this->angle.Y = newAngle;
 }
-
-void Indie::Components::RotationComponent::setXAngle(float newAngle)
-{
-    this->angle.X = newAngle;
-}

@@ -10,12 +10,19 @@
 
 namespace Indie::Components
 {
+    /**
+     * @brief Kill component
+     */
     class KillComponent
     {
     public:
         KillComponent(int ownerId = -1);
         ~KillComponent() = default;
 
+        /**
+         * @brief Gets the Id of the player who droped the bomb
+         * @return int The player's Id
+         */
         int getOwnerId() const;
 
     private:

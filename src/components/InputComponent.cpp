@@ -29,11 +29,6 @@ bool Indie::Components::InputComponent::isKeyPressed(KEY_TYPE key) const
     return keyState->second;
 }
 
-const std::map<irr::EKEY_CODE, Indie::Components::KEY_TYPE> &Indie::Components::InputComponent::getKeys() const
-{
-    return this->keys;
-}
-
 const std::map<irr::EKEY_CODE, bool> &Indie::Components::InputComponent::getKeysState() const
 {
     return this->keysState;

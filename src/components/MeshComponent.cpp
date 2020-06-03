@@ -24,18 +24,18 @@ Indie::Components::MeshComponent::MeshComponent(const ContextManager &contextMan
         throw Indie::Exceptions::FileNotFoundException("HitboxComponent::HitboxComponent", "Cannot found file: " + texturePath);
     }
     this->texture = newTexture;
-    this->meshs.insert({POSITION::STAND, newMesh});
+    this->meshs.insert({MESH_STATE::STAND, newMesh});
     newMesh = contextManager.getSceneManager()->getMesh(RUN_MESH_PATH.c_str());
     if (newMesh == nullptr) {
         throw Indie::Exceptions::FileNotFoundException("HitboxComponent::HitboxComponent", "Cannot found file: ");
     }
-    this->meshs.insert({POSITION::RUN, newMesh});
+    this->meshs.insert({MESH_STATE::RUN, newMesh});
     newMesh = contextManager.getSceneManager()->getMesh(DIE_MESH_PATH.c_str());
     if (newMesh == nullptr) {
         throw Indie::Exceptions::FileNotFoundException("HitboxComponent::HitboxComponent", "Cannot found file: ");
     }
-    this->meshs.insert({POSITION::DIE, newMesh});
-    this->currentPosition = POSITION::STAND;
+    this->meshs.insert({MESH_STATE::DIE, newMesh});
+    this->currentMeshState = MESH_STATE::STAND;
 }
 
 irr::video::ITexture *Indie::Components::MeshComponent::getTexture() const
@@ -43,19 +43,19 @@ irr::video::ITexture *Indie::Components::MeshComponent::getTexture() const
     return this->texture;
 }
 
-const Indie::Components::MeshComponent::POSITION &Indie::Components::MeshComponent::getCurrentPosition() const
+const Indie::Components::MeshComponent::MESH_STATE &Indie::Components::MeshComponent::getCurrentMeshState() const
 {
-    return this->currentPosition;
+    return this->currentMeshState;
 }
 
-void Indie::Components::MeshComponent::setCurrentPosition(POSITION newPostition)
+void Indie::Components::MeshComponent::setCurrentMeshState(MESH_STATE newState)
 {
-    this->currentPosition = newPostition;
+    this->currentMeshState = newState;
 }
 
-irr::scene::IAnimatedMesh *Indie::Components::MeshComponent::getMeshByPosition(POSITION pos) const
+irr::scene::IAnimatedMesh *Indie::Components::MeshComponent::getMeshByState(MESH_STATE state) const
 {
-    auto found = this->meshs.find(pos);
+    auto found = this->meshs.find(state);
 
     if (found == this->meshs.end())
         return nullptr;

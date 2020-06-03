@@ -15,8 +15,3 @@ Indie::Components::POWERDOWN_TYPE Indie::Components::PowerDownComponent::getType
 {
     return this->type;
 }
-
-void Indie::Components::PowerDownComponent::setType(Indie::Components::POWERDOWN_TYPE type)
-{
-    this->type = type;
-}

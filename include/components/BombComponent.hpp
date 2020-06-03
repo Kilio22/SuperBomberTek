@@ -10,24 +10,53 @@
 
 #include <irrlicht.h>
 
-namespace Indie::Components {
+namespace Indie::Components
+{
 
-class BombComponent {
-public:
-    BombComponent(int idOwner, unsigned int range);
+    /**
+     * @brief Bomb component
+     */
+    class BombComponent
+    {
+    public:
+        BombComponent(int idOwner, unsigned int range);
 
-    unsigned int getRange() const;
-    int getIdOwner() const;
-    bool hasExploded() const;
+        /**
+         * @brief Gets the range of the bomb
+         * @return The bomb range
+         */
+        unsigned int getRange() const;
 
-    void setRange(unsigned int range);
-    void setExploded(bool exploded);
+        /**
+         * @brief Gets the Id of the player who droped the bomb
+         * @return The player's Id
+         */
+        int getIdOwner() const;
 
-private:
-    int idOwner;
-    unsigned int range;
-    bool exploded;
-};
+        /**
+         * @brief Checks if the bomb has exploded
+         * @return true Bomb has exploded
+         * @return false Bomb hasn't exploded yet
+         */
+        bool hasExploded() const;
+
+        /**
+         * @brief Sets the Range of the bomb
+         * @param range The range
+         */
+        void setRange(unsigned int range);
+
+        /**
+         * @brief Sets bomb status
+         * @param exploded True if the bomb has exploded, false otherwise
+         */
+        void setExploded(bool exploded);
+
+    private:
+        int idOwner;
+        unsigned int range;
+        bool exploded;
+    };
 
 } // namespace Indie::Components
 

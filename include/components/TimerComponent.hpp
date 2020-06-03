@@ -12,23 +12,43 @@
 
 namespace Indie::Components
 {
+    /**
+     * @brief Timer component
+     */
     class TimerComponent
     {
-        public:
-            TimerComponent(irr::f32 timeToEnd);
-            ~TimerComponent() = default;
+    public:
+        TimerComponent(irr::f32 timeToEnd);
+        ~TimerComponent() = default;
 
-            irr::f32 getTimePassed(void) const;
-            irr::f32 getTimeToEnd(void) const;
+        /**
+         * @brief Gets the passed time
+         * @return irr::f32 The passed time
+         */
+        irr::f32 getTimePassed(void) const;
 
-            void setTimePassed(irr::f32 timePassed);
-            void setTimeToEnd(irr::f32 timeToEnd);
+        /**
+         * @brief Gets the time when the timer should flag as being ended
+         * @return irr::f32
+         */
+        irr::f32 getTimeToEnd(void) const;
 
-        private:
-            irr::f32 timePassed;
-            irr::f32 timeToEnd;
+        /**
+         * @brief Sets the time passed
+         * @param timePassed The new value
+         */
+        void setTimePassed(irr::f32 timePassed);
+
+        /**
+         * @brief Sets the time to end
+         * @param timeToEnd The new value
+         */
+        void setTimeToEnd(irr::f32 timeToEnd);
+
+    private:
+        irr::f32 timePassed;
+        irr::f32 timeToEnd;
     };
 } // namespace Indie::Components
-
 
 #endif /* !TIMERCOMPONENT_HPP_ */
