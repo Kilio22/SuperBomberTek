@@ -76,10 +76,7 @@ Indie::SoloScene::SoloScene(Indie::ContextManager &context)
 }
 
 Indie::SoloScene::~SoloScene()
-{
-    if (font)
-        context.getGuiEnv()->removeFont(font);
-}
+{}
 
 void Indie::SoloScene::init()
 {
@@ -164,8 +161,6 @@ void Indie::SoloScene::reset()
 {
     context.getSceneManager()->clear();
     selector.setPos(0, 0);
-    if (font)
-        context.getGuiEnv()->removeFont(font);
     init();
 }
 
