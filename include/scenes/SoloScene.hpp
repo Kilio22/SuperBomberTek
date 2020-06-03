@@ -54,8 +54,10 @@ namespace Indie
         std::unique_ptr<Keybind> left;
         std::unique_ptr<Keybind> right;
         std::unique_ptr<Keybind> bomb;
+        irr::scene::ICameraSceneNode *camera;
         irr::scene::IAnimatedMeshSceneNode *theme1;
         irr::scene::IAnimatedMeshSceneNode *theme2;
+        float modelRotation;
         static const std::vector<std::pair<std::string, Components::PlayerComponent::PLAYER_COLOR>> charaPaths;
         static const std::vector<std::string> mapPaths;
         // PARAMS (psk inclusion circulaire à cause du include GameScene.hpp dans InitGame.hpp)

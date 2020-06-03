@@ -141,6 +141,6 @@ Indie::ImageLoader::~ImageLoader()
 
 Image *Indie::ImageLoader::getImage(std::string const &filepath)
 {
-    std::cout << "Trying to load : " << filepath << std::endl;
+    std::cout << "Accessing ressource : " << filepath << std::endl;
     return this->images.at(filepath);
 }
