@@ -98,10 +98,7 @@ Indie::Keybind::Keybind(Indie::ContextManager &context, irr::EKEY_CODE key) : co
 {}
 
 Indie::Keybind::~Keybind()
-{
-    if (font)
-        context.getGuiEnv()->removeFont(font);
-}
+{}
 
 void Indie::Keybind::init(std::string const &filepath, int posX, int posY, irr::core::position2d<irr::s32> pos)
 {
