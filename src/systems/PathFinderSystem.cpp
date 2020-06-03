@@ -65,7 +65,7 @@ void Indie::Systems::PathFinderSystem::onUpdate(irr::f32, Indie::EntityManager &
             ai->setAction(ACTION::GO_BOX);
         }
         else if ((ai->getAction() == ACTION::GO_BOX || ai->getAction() == ACTION::GO_SAFE || ai->getAction() == ACTION::GO_POWERUP) &&
-        ai->hasMoved(irr::core::vector3df(position->getPosition().X, 20, position->getPosition().Z),irr::core::vector3df((ai->getNextPosition().X) * 20, 20, (ai->getNextPosition().Y) * 20), ai)) {
+        ai->hasMoved(irr::core::vector3df(irr::f32(position->getPosition().X), 20, irr::f32(position->getPosition().Z)),irr::core::vector3df(irr::f32((ai->getNextPosition().X) * 20), 20, irr::s32((ai->getNextPosition().Y) * 20)), ai)) {
             ai->setNextDirection(mapPathFinding, irr::core::vector2di(aiX, aiZ));
             // Si il est pas coincé il va pas marcher dans la lave ici
             if ((int)mapBomb.at(ai->getNextPosition().Y).at(ai->getNextPosition().X) == 5) {
@@ -136,7 +136,7 @@ bool Indie::Systems::PathFinderSystem::hasArrived(std::vector<std::vector<OBJECT
 
 int Indie::Systems::PathFinderSystem::getDistance2D(irr::core::vector2di v1, irr::core::vector2di v2) const
 {
-    return sqrt((pow(v1.X - v2.X, 2) + pow(v1.Y - v2.Y, 2)));
+    return (int)sqrt((pow(v1.X - v2.X, 2) + pow(v1.Y - v2.Y, 2)));
 }
 
 bool Indie::Systems::PathFinderSystem::goOnBomb(std::vector<std::vector<OBJECT>> mapBomb, irr::core::vector2di aiPosition, DIRECTION direction) const
@@ -230,27 +230,27 @@ void Indie::Systems::PathFinderSystem::findFirstPosition(std::vector<std::vector
         for (size_t j = 1; j < map.size(); j++) {
             if (map.at(j).at(i) >= static_cast<OBJECT>(maxValue) && (mapBomb.at(j).at(i) != static_cast<OBJECT>(6)) ) {
                 if (map.at(j).at(i - 1) > static_cast<OBJECT>(maxValue)) {
-                    if (getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(i - 1, j)) <= position.at(2)) {
+                    if (getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(irr::s32(i - 1), irr::s32(j))) <= position.at(2)) {
                         maxValue = (int)map.at(j).at(i - 1);
-                        position = {(int)i - 1, (int)j, getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(i - 1, j))};
+                        position = {(int)i - 1, (int)j, getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(irr::s32(i - 1), irr::s32(j)))};
                     }
                 }
                 if (map.at(j).at(i + 1) > static_cast<OBJECT>(maxValue)) {
-                    if (getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(i + 1, j)) <= position.at(2)) {
+                    if (getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(irr::s32(i + 1), irr::s32(j))) <= position.at(2)) {
                         maxValue = (int)map.at(j).at(i + 1);
-                        position = {(int)i + 1, (int)j, getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(i + 1, j))};
+                        position = {(int)i + 1, (int)j, getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(irr::s32(i + 1), irr::s32(j)))};
                     }
                 }
                 if (map.at(j - 1).at(i) > static_cast<OBJECT>(maxValue)) {
-                    if (getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(i, j - 1)) <= position.at(2)) {
+                    if (getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(irr::s32(i), irr::s32(j - 1))) <= position.at(2)) {
                         maxValue = (int)map.at(j - 1).at(i);
-                        position = {(int)i, (int)j - 1, getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(i, j - 1))};
+                        position = {(int)i, (int)j - 1, getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(irr::s32(i), irr::s32(j - 1)))};
                     }
                 }
                 if (map.at(j + 1).at(i) > static_cast<OBJECT>(maxValue)) {
-                    if (getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(i, j + 1)) <= position.at(2)) {
+                    if (getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(irr::s32(i), irr::s32(j + 1))) <= position.at(2)) {
                         maxValue = (int)map.at(j + 1).at(i);
-                        position = {(int)i, (int)j + 1, getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(i, j + 1))};
+                        position = {(int)i, (int)j + 1, getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(irr::s32(i), irr::s32(j + 1)))};
                     }
                 }
             }
@@ -274,14 +274,14 @@ void Indie::Systems::PathFinderSystem::findPosition(std::vector<std::vector<OBJE
                 nbBox += (map.at(j).at(i + 1) == OBJECT::BOX) ? 1 : 0;
                 nbBox += (map.at(j + 1).at(i) == OBJECT::BOX) ? 1 : 0;
                 nbBox += (map.at(j).at(i - 1) == OBJECT::BOX) ? 1 : 0;
-                if (nbBox >= 1 && (getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(i, j)) <= position.at(3))) {
+                if (nbBox >= 1 && (getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(irr::s32(i), irr::s32(j))) <= position.at(3))) {
                     if (position.at(0) != aiPosition.X || position.at(1) != aiPosition.Y) {
                         random = std::rand()/((RAND_MAX + 1u) / 10);
                         if (random >= 5)
-                            position = {(int)i, (int)j, nbBox, getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(i, j))};
+                            position = {(int)i, (int)j, nbBox, getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(irr::s32(i), irr::s32(j)))};
                     }
                     else
-                        position = {(int)i, (int)j, nbBox, getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(i, j))};
+                        position = {(int)i, (int)j, nbBox, getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(irr::s32(i), irr::s32(j)))};
                 }
             }
         }
