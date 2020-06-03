@@ -13,6 +13,7 @@
 #include "InitGame.hpp"
 #include "PauseScene.hpp"
 #include "IntroScene.hpp"
+#include <filesystem>
 
 static std::string getFileName(std::string const &filepath)
 {
@@ -43,9 +44,6 @@ const std::vector<std::pair<std::string, Indie::Components::PlayerComponent::PLA
     {"../ressources/textures/character/yellow2.png", Indie::Components::PlayerComponent::PLAYER_COLOR::YELLOW}
 };
 
-const std::vector<std::string> Indie::SoloScene::mapPaths {
-    "../ressources/maps/default.txt"
-};
 
 void Indie::SoloScene::skipScene(bool update, bool render, bool subUpdate, bool subRender)
 {
@@ -64,13 +62,17 @@ Indie::SoloScene::SoloScene(Indie::ContextManager &context)
     , mapSelector(1, 1, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
 {
     charaSelector.setSize(int(charaPaths.size()), 1); // On set juste la size en plus petit pour pas qu'il ai accès à des perso mdr
-    mapSelector.setSize(int(mapPaths.size()), 1);
     playerKeys.push_back({irr::KEY_LEFT, Indie::Components::KEY_TYPE::LEFT});
     playerKeys.push_back({irr::KEY_RIGHT, Indie::Components::KEY_TYPE::RIGHT});
     playerKeys.push_back({irr::KEY_UP, Indie::Components::KEY_TYPE::UP});
     playerKeys.push_back({irr::KEY_DOWN, Indie::Components::KEY_TYPE::DOWN});
     playerKeys.push_back({irr::KEY_SPACE, Indie::Components::KEY_TYPE::DROP});
     modelRotation = 0;
+    mapPaths.push_back("Default");
+    mapPaths.push_back("Random");
+    for (const auto & entry : std::filesystem::directory_iterator("../ressources/maps/"))
+        mapPaths.push_back(entry.path().u8string());
+    mapSelector.setSize(int(mapPaths.size()), 1);
 }
 
 Indie::SoloScene::~SoloScene()
@@ -83,22 +85,23 @@ void Indie::SoloScene::init()
 {
     // TODO : XP BAR
     // TODO : SCORE
-    // TODO : create camera && mesh
     /* ================================================================== */
     // 3D INIT
     /* ================================================================== */
-    camera = context.getSceneManager()->addCameraSceneNode(0, irr::core::vector3df(-110, 40, -25), irr::core::vector3df(0, -50, 100), -1, true);
-    context.getSceneManager()->addLightSceneNode(camera, irr::core::vector3df(0, 0, 0), irr::video::SColorf(0.4f, 0.4f, 0.5f, 1.0f), 700.0f);
+    //camera = context.getSceneManager()->addCameraSceneNode(0, irr::core::vector3df(15, 62, 37), irr::core::vector3df(0, 0, 0), -1, true);
+    camera = context.getSceneManager()->addCameraSceneNode(0, irr::core::vector3df(0, 0, -75), irr::core::vector3df(0, 0, 0), -1, true);
+    camera->setTarget(irr::core::vector3df(-52, 0, 0));
+    context.getSceneManager()->addLightSceneNode(camera, irr::core::vector3df(0, 0, 0), irr::video::SColorf(0.2f, 0.2f, 0.3f, 0.0f), 400.0f);
     theme1 = context.getSceneManager()->addAnimatedMeshSceneNode(context.getSceneManager()->getMesh("../ressources/static_mesh/map1model.mc.ply"));
     theme1->setMaterialFlag(irr::video::EMF_LIGHTING, true);
     theme1->setMaterialFlag(irr::video::EMF_FOG_ENABLE, false);
     theme1->setVisible(false);
-    theme1->setScale({2, 2, 2});
+    theme1->setScale(irr::core::vector3df(1.4f, 1.4f, 1.4f));
     theme2 = context.getSceneManager()->addAnimatedMeshSceneNode(context.getSceneManager()->getMesh("../ressources/static_mesh/map2model.mc.ply"));
     theme2->setMaterialFlag(irr::video::EMF_LIGHTING, true);
     theme2->setMaterialFlag(irr::video::EMF_FOG_ENABLE, false);
     theme2->setVisible(false);
-    theme2->setScale({2, 2, 2});
+    theme2->setScale(irr::core::vector3df(1.4f, 1.4f, 1.4f));
     /* ================================================================== */
     // IMAGES GET
     /* ================================================================== */
@@ -149,7 +152,7 @@ void Indie::SoloScene::init()
     down->init("../ressources/images/solo/KB_Down.png", 1, 5, POS(183, 547));
     left->init("../ressources/images/solo/KB_Left.png", 0, 5, POS(108, 547));
     right->init("../ressources/images/solo/KB_Right.png", 2, 5, POS(261, 547));
-    bomb->init("../ressources/images/solo/KB_Bar.png", 3, 5, POS(451, 547));
+    bomb->init("../ressources/images/solo/KB_Bar.png", 3, 5, POS(456, 547));
     // Some inits :
     playerTexture = charaPaths[charaSelector.getPos().first].first;
     playerColor = charaPaths[charaSelector.getPos().first].second;
@@ -262,7 +265,7 @@ void Indie::SoloScene::update(irr::f32 ticks)
         init.mode = GameScene::MODE::SOLO;
         init.nbAi = 3;
         init.mapTheme = mapTheme;
-        init.mapType = Components::MAP_TYPE::SAVED;
+        init.mapType = (mapSelector.getPos().first == 0) ? Components::MAP_TYPE::DEFAULT : ((mapSelector.getPos().first == 1) ? Components::MAP_TYPE::RANDOM : Components::MAP_TYPE::SAVED);
         init.powerUp = pUps->getStatus();
         init.timeLimit = 180;
         initPlayer.playerTexture = charaPaths[charaSelector.getPos().first].first;
@@ -277,7 +280,6 @@ void Indie::SoloScene::update(irr::f32 ticks)
         ServiceLocator::getInstance().get<SceneManager>().setScene<GameScene>(context);
         ServiceLocator::getInstance().get<SceneManager>().setSubScene<IntroScene>();
         skipScene(false, true, true, true);
-        // TODO : Directory Iterator pour les maps.
     }
     if (back->getStatus() == Button::Status::Pressed || EventHandler::getInstance().isKeyPressedAtOnce(irr::EKEY_CODE::KEY_ESCAPE)) {
         context.getSceneManager()->clear();

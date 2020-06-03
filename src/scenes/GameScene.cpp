@@ -66,12 +66,14 @@ Indie::GameScene::GameScene(ContextManager &context)
 
 void Indie::GameScene::init()
 {
-    Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setMusic(1);
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
     irr::scene::ICameraSceneNode *camera = sceneManager->addCameraSceneNode();
-    Indie::MapGenerator mapGenerator(
-        entityBuilder, irr::core::vector2di(15, 13), this->initGame->mapType, this->initGame->mapTheme, this->initGame->mapPath);
+    MapGenerator mapGenerator(entityBuilder, { 15, 13 }, this->initGame->mapType, this->initGame->mapTheme, this->initGame->mapPath);
+    std::vector<std::string> usedTextures;
+    int idx = 0;
+    int n = 0;
 
+    ServiceLocator::getInstance().get<MusicManager>().setMusic(1);
     camera->bindTargetAndRotation(true);
     camera->setPosition(irr::core::vector3df(138.577f, 280.f, 65.f));
     camera->setTarget(irr::core::vector3df(138.593f, 280.f, 121.f));
@@ -87,14 +89,13 @@ void Indie::GameScene::init()
 
     this->font = this->context.getGuiEnv()->getFont("../ressources/font/Banschrift.xml");
 
-    int idx = 1;
-    std::vector<std::string> usedTextures;
     for (auto player : this->initGame->playersParams) {
-        entityBuilder.createPlayer(this->defaultPositions.at(idx - 1).first, "../ressources/animated_mesh/character/character_idle.b3d",
-            player.playerTexture, player.playerKeys, std::to_string(idx), player.playerColor, this->defaultPositions.at(idx - 1).second);
+        entityBuilder.createPlayer(this->defaultPositions.at(idx).first, "../ressources/animated_mesh/character/character_idle.b3d",
+            player.playerTexture, player.playerKeys, "Player " + std::to_string(++n), player.playerColor, this->defaultPositions.at(idx).second);
         usedTextures.push_back(player.playerTexture);
         idx++;
     }
+    n = 0;
     for (int i = 0; i < this->initGame->nbAi; i++) {
         int randomSkinIdx = std::rand() % this->skins.size();
 
@@ -102,9 +103,9 @@ void Indie::GameScene::init()
             i--;
             continue;
         }
-        entityBuilder.createAi(this->defaultPositions.at(idx - 1).first, "../ressources/animated_mesh/character/character_idle.b3d",
-            this->skins.at(randomSkinIdx).first, std::to_string(idx), this->skins.at(randomSkinIdx).second,
-            this->defaultPositions.at(idx - 1).second);
+        entityBuilder.createAi(this->defaultPositions.at(idx).first, "../ressources/animated_mesh/character/character_idle.b3d",
+            this->skins.at(randomSkinIdx).first, "IA " + std::to_string(++n), this->skins.at(randomSkinIdx).second,
+            this->defaultPositions.at(idx).second);
         usedTextures.push_back(this->skins.at(randomSkinIdx).first);
         idx++;
     }
@@ -154,18 +155,22 @@ void Indie::GameScene::update(irr::f32 deltaTime)
 
 void Indie::GameScene::renderPre3D() {}
 
+#include <iomanip>
+
 void Indie::GameScene::renderPost3D()
 {
     std::stringstream ss;
-    int i = 20;
     int n = 0;
-    std::vector<irr::video::SColor> colors = { { 200, 255, 0, 0 }, { 200, 0, 255, 0 }, { 200, 0, 0, 255 }, { 200, 255, 255, 0 }, { 200, 255, 0, 255 },
-        { 200, 192, 192, 192 } }; ///< Codé en dur mdr mais il faudrait une couleur dans les personnages.
+    std::vector<irr::video::SColor> colors
+        = { { 200, 255, 0, 0 }, { 200, 0, 255, 0 }, { 200, 0, 0, 255 }, { 200, 255, 255, 0 }, { 200, 255, 0, 255 }, { 200, 192, 192, 192 } };
+    std::vector<irr::core::vector2di> positions = { { 20, 20 }, { 1050, 20 }, { 20, 550 }, { 1050, 550 } };
 
     for (auto entity : entityManager.each<PlayerComponent>()) {
         auto player = entity->getComponent<PlayerComponent>();
 
         ss << player->getName() << std::endl;
+        if (player->getWallPass() == true)
+            ss << "  (WP)";
         ss << "  Bombs: " << player->getCurrentBombNb() << " / " << player->getMaxBombNb() << std::endl;
         ss << "  Bomb range: " << player->getBombsRange() << std::endl;
         ss << "  Speed: " << std::string(player->getVelocityLevel(), '>') << std::endl;
@@ -173,9 +178,9 @@ void Indie::GameScene::renderPost3D()
         n = (int)player->getPlayerColor();
         if (player->isDead() == true)
             n = (int)PlayerComponent::PLAYER_COLOR::GENERIC;
-        font->draw(irr::core::stringw(ss.str().c_str()), irr::core::rect<irr::s32>(20, i, 0, 0), colors[n]);
+        auto [x, y] = positions[(int)player->getStartPosition()];
+        font->draw(irr::core::stringw(ss.str().c_str()), irr::core::rect<irr::s32>(x, y, 0, 0), colors[n]);
         ss.str("");
-        i += 160;
     }
 }
 

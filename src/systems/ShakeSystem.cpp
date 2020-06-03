@@ -32,8 +32,8 @@ void Indie::Systems::ShakeSystem::onUpdate(irr::f32 deltaTime, EntityManager &en
         }
         irr::core::vector3df camPos = camera->getPosition();
         irr::core::vector3df targetPos = camera->getTarget();
-        int valX = std::rand() % 10 - 5;
-        int valZ = std::rand() % 10 - 5;
+        int valX = std::rand() % 6 - 3;
+        int valZ = std::rand() % 6 - 3;
 
         camPos.X += valX;
         camPos.Z += valZ;
