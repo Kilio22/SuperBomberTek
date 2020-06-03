@@ -11,15 +11,8 @@ using namespace Indie::Components;
 
 void Indie::Systems::AISystem::onUpdate(irr::f32, EntityManager &entityManager) const
 {
-    std::vector<std::vector<OBJECT>> map;
+    std::vector<std::vector<OBJECT>> map = entityManager.getUniqueEntity<MapComponent>()->getComponent<MapComponent>()->getMap();
     std::vector<std::vector<OBJECT>> mapPathFinding;
-
-    for (auto entity : entityManager.each<MapComponent>()) {
-        auto mapComponent = entity->getComponent<MapComponent>();
-
-        // Get Actuel map
-        map = mapComponent->getMap();
-    }
 
     for (auto entity : entityManager.each<MoveComponent, AIComponent, PositionComponent, PathFinderComponent>()) {
         auto ai = entity->getComponent<AIComponent>();

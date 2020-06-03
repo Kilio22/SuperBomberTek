@@ -84,10 +84,7 @@ Indie::Entity *Indie::EntityBuilder::createBomb(
 Indie::Entity *Indie::EntityBuilder::createMap(
     const irr::core::vector2di &dimension, const Indie::Components::MAP_TYPE &type, const Indie::Components::THEME &theme, const std::string &mapPath)
 {
-    Entity *entity = this->entityManager.createEntity();
-
-    entity->addComponent<MapComponent>(dimension, type, theme, mapPath);
-    return entity;
+    return this->entityManager.createUniqueEntity<MapComponent>(dimension, type, theme, mapPath);
 }
 
 Indie::Entity *Indie::EntityBuilder::createLava(
@@ -131,8 +128,5 @@ Indie::Entity *Indie::EntityBuilder::createPowerDown(
 
 Indie::Entity *Indie::EntityBuilder::createShake(void)
 {
-    Entity *entity = this->entityManager.createEntity();
-
-    entity->addComponent<ShakeComponent>();
-    return entity;
+    return this->entityManager.createUniqueEntity<ShakeComponent>();
 }

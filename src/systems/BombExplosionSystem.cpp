@@ -27,26 +27,18 @@ const std::unordered_map<POWERDOWN_TYPE, std::pair<std::string, std::string>> In
 
 void Indie::Systems::BombExplosionSystem::onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const
 {
-    MapComponent *mapComponent = nullptr;
-    std::vector<std::vector<OBJECT>> map;
+    auto shake = entityManager.getUniqueEntity<ShakeComponent>()->getComponent<ShakeComponent>();
+    MapComponent *mapComponent = entityManager.getUniqueEntity<MapComponent>()->getComponent<MapComponent>();
+    std::vector<std::vector<OBJECT>> map = mapComponent->getMap();
 
-    for (auto entity : entityManager.each<MapComponent>())
-        mapComponent = entity->getComponent<MapComponent>();
-    if (mapComponent == nullptr)
-        throw Exceptions::IndieException(ERROR_STR, "Map was not found.");
-    map = mapComponent->getMap();
     for (auto entity : entityManager.each<BombComponent, PositionComponent, TimerComponent>()) {
         auto timer = entity->getComponent<TimerComponent>();
 
         if (timer->getTimePassed() >= timer->getTimeToEnd()) {
             this->explodeBombs(map, entityManager, entity);
-            for (auto entity : entityManager.each<ShakeComponent>()) {
-                auto shakeComponent = entity->getComponent<ShakeComponent>();
-
-                if (shakeComponent->getIsShaking() == false) {
-                    shakeComponent->setIsShaking(true);
-                    shakeComponent->setDeltaTime(deltaTime);
-                }
+            if (shake->getIsShaking() == false) {
+                shake->setIsShaking(true);
+                shake->setDeltaTime(deltaTime);
             }
         }
     }

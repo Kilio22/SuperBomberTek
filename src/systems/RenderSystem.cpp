@@ -75,10 +75,11 @@ void Indie::Systems::RenderSystem::onUpdate(irr::f32, EntityManager &entityManag
     for (auto entity : entityManager.each<Components::RenderComponent, Components::PositionComponent>()) {
         auto renderComponent = entity->getComponent<Components::RenderComponent>();
         auto positionComponent = entity->getComponent<Components::PositionComponent>();
-        auto hitBoxComponent = entity->getComponent<Components::HitboxComponent>();
 
         renderComponent->getMesh()->setPosition(positionComponent->getPosition());
-        if (hitBoxComponent != nullptr) {
+        if (entity->has<Components::HitboxComponent>() == true) {
+            auto hitBoxComponent = entity->getComponent<Components::HitboxComponent>();
+
             hitBoxComponent->getMesh()->setPosition(positionComponent->getPosition());
         }
     }
