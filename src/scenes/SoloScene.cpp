@@ -70,6 +70,7 @@ Indie::SoloScene::SoloScene(Indie::ContextManager &context)
     playerKeys.push_back({irr::KEY_UP, Indie::Components::KEY_TYPE::UP});
     playerKeys.push_back({irr::KEY_DOWN, Indie::Components::KEY_TYPE::DOWN});
     playerKeys.push_back({irr::KEY_SPACE, Indie::Components::KEY_TYPE::DROP});
+    modelRotation = 0;
 }
 
 Indie::SoloScene::~SoloScene()
@@ -83,6 +84,21 @@ void Indie::SoloScene::init()
     // TODO : XP BAR
     // TODO : SCORE
     // TODO : create camera && mesh
+    /* ================================================================== */
+    // 3D INIT
+    /* ================================================================== */
+    camera = context.getSceneManager()->addCameraSceneNode(0, irr::core::vector3df(-110, 40, -25), irr::core::vector3df(0, -50, 100), -1, true);
+    context.getSceneManager()->addLightSceneNode(camera, irr::core::vector3df(0, 0, 0), irr::video::SColorf(0.4f, 0.4f, 0.5f, 1.0f), 700.0f);
+    theme1 = context.getSceneManager()->addAnimatedMeshSceneNode(context.getSceneManager()->getMesh("../ressources/static_mesh/map1model.mc.ply"));
+    theme1->setMaterialFlag(irr::video::EMF_LIGHTING, true);
+    theme1->setMaterialFlag(irr::video::EMF_FOG_ENABLE, false);
+    theme1->setVisible(false);
+    theme1->setScale({2, 2, 2});
+    theme2 = context.getSceneManager()->addAnimatedMeshSceneNode(context.getSceneManager()->getMesh("../ressources/static_mesh/map2model.mc.ply"));
+    theme2->setMaterialFlag(irr::video::EMF_LIGHTING, true);
+    theme2->setMaterialFlag(irr::video::EMF_FOG_ENABLE, false);
+    theme2->setVisible(false);
+    theme2->setScale({2, 2, 2});
     /* ================================================================== */
     // IMAGES GET
     /* ================================================================== */
@@ -117,6 +133,7 @@ void Indie::SoloScene::init()
     // CHECKBOXES INIT
     /* ================================================================== */
     pUps->init("../ressources/images/solo/Check.png", 1, 3, POS(0, 0));
+    pUps->setStatus(true);
     /* ================================================================== */
     // KEYBINDS CREATE
     /* ================================================================== */
@@ -142,26 +159,40 @@ void Indie::SoloScene::init()
 
 void Indie::SoloScene::reset()
 {
+    context.getSceneManager()->clear();
     selector.setPos(0, 0);
+    if (font)
+        context.getGuiEnv()->removeFont(font);
     init();
 }
 
 void Indie::SoloScene::update(irr::f32 ticks)
 {
+    /* ================================================================== */
+    // 3D UPDATE
+    /* ================================================================== */
+    theme1->setVisible(mapTheme == Components::THEME::DIRT);
+    theme2->setVisible(mapTheme == Components::THEME::STONE);
+    theme1->setRotation(irr::core::vector3df(0, modelRotation, 0));
+    theme2->setRotation(irr::core::vector3df(0, modelRotation, 0));
+    modelRotation += float(10 * ticks);
+    /* ================================================================== */
+    // KEYBINDS SET USED
+    /* ================================================================== */
     playerKeyCodes.clear();
     playerKeyCodes.push_back(up->getKey());
     playerKeyCodes.push_back(down->getKey());
     playerKeyCodes.push_back(left->getKey());
     playerKeyCodes.push_back(right->getKey());
     playerKeyCodes.push_back(bomb->getKey());
-    /* ================================================================== */
-    // UPDATE KEYBINDS
-    /* ================================================================== */
     up->setUsedKeys(playerKeyCodes);
     down->setUsedKeys(playerKeyCodes);
     left->setUsedKeys(playerKeyCodes);
     right->setUsedKeys(playerKeyCodes);
     bomb->setUsedKeys(playerKeyCodes);
+    /* ================================================================== */
+    // UPDATE KEYBINDS
+    /* ================================================================== */
     up->update(selector.getPos());
     down->update(selector.getPos());
     left->update(selector.getPos());
@@ -226,6 +257,7 @@ void Indie::SoloScene::update(irr::f32 ticks)
         InitGame init;
         PlayerParams initPlayer;
 
+        context.getSceneManager()->clear();
         init.mapPath = mapPath;
         init.mode = GameScene::MODE::SOLO;
         init.nbAi = 3;
@@ -247,7 +279,8 @@ void Indie::SoloScene::update(irr::f32 ticks)
         skipScene(false, true, true, true);
         // TODO : Directory Iterator pour les maps.
     }
-    if (back->getStatus() == Button::Status::Pressed) {
+    if (back->getStatus() == Button::Status::Pressed || EventHandler::getInstance().isKeyPressedAtOnce(irr::EKEY_CODE::KEY_ESCAPE)) {
+        context.getSceneManager()->clear();
         skipScene(true, true, true, true);
         ServiceLocator::getInstance().get<SceneManager>().setSubScene<MainMenuScene>();
     }
@@ -255,9 +288,6 @@ void Indie::SoloScene::update(irr::f32 ticks)
 }
 
 void Indie::SoloScene::renderPre3D()
-{}
-
-void Indie::SoloScene::renderPost3D()
 {
     /* ================================================================== */
     // DISPLAY IMAGES
@@ -265,6 +295,10 @@ void Indie::SoloScene::renderPost3D()
     context.displayImage(title);
     context.displayImage(layout);
     context.displayImage(kbLayout);
+}
+
+void Indie::SoloScene::renderPost3D()
+{
     /* ================================================================== */
     // DISPLAY BUTONS
     /* ================================================================== */
