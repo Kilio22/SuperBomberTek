@@ -37,3 +37,13 @@ void Indie::UiSelector::setPos(int posX, int posY)
     this->posX = posX;
     this->posY = posY;
 }
+
+void Indie::UiSelector::setSize(int sizeX, int sizeY)
+{
+    this->sizeX = sizeX;
+    this->sizeY = sizeY;
+    if (posX >= sizeX)
+        posX = sizeX - 1;
+    if (posY >= sizeY)
+        posY = sizeY - 1;
+}

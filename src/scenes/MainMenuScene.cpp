@@ -54,9 +54,11 @@ void Indie::MainMenuScene::update(irr::f32)
     quitter->update(selector.getPos());
 
     if (solo->getStatus() == Button::Status::Pressed) {
-        ServiceLocator::getInstance().get<Indie::SceneManager>().setScene<Indie::GameScene>(context);
-        ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::IntroScene>();
-        skipScene(false, true, true, true);
+        //ServiceLocator::getInstance().get<Indie::SceneManager>().setScene<Indie::GameScene>(context);
+        //ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::PauseScene>();
+        //skipScene(true, true, false, false);
+        ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::SoloScene>();
+        skipScene(true, true, true, true);
     }
     if (options->getStatus() == Button::Status::Pressed) {
         ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::OptionsScene>();

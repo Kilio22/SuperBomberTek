@@ -16,6 +16,7 @@ void Indie::GameEngine::setupMusicManager()
     ServiceLocator::getInstance().get<MusicManager>().addMusic("../ressources/musics/main_menu.wav"); // id 0
     ServiceLocator::getInstance().get<MusicManager>().addMusic("../ressources/musics/level_select.wav"); // id 1
     ServiceLocator::getInstance().get<MusicManager>().setMusic(0);
+    ServiceLocator::getInstance().get<MusicManager>().mute(); // J'en ai marre d'entendre cette merde à chaque fois que je lance
     ServiceLocator::getInstance().get<MusicManager>().setVolume(25);
     ServiceLocator::getInstance().get<MusicManager>().playMusic();
 }
@@ -31,6 +32,7 @@ void Indie::GameEngine::setupSceneManager(ContextManager &context)
     ServiceLocator::getInstance().get<SceneManager>().addScene<PauseScene>(context);
     ServiceLocator::getInstance().get<SceneManager>().addScene<OptionsScene>(context);
     ServiceLocator::getInstance().get<SceneManager>().addScene<IntroScene>(context);
+    ServiceLocator::getInstance().get<SceneManager>().addScene<SoloScene>(context);
     ServiceLocator::getInstance().get<SceneManager>().setScene<SplashScene>(context);
     ServiceLocator::getInstance().get<SceneManager>().setSceneUpdateActive(true);
     ServiceLocator::getInstance().get<SceneManager>().setSceneRenderActive(true);

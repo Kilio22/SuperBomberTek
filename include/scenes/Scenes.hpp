@@ -16,5 +16,6 @@
 #include "TitleScene.hpp"
 #include "IntroScene.hpp"
 #include "PauseScene.hpp"
+#include "SoloScene.hpp"
 
 #endif /* !SCENES_HPP_ */

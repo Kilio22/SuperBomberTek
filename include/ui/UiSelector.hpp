@@ -20,6 +20,7 @@ namespace Indie {
 
             std::pair<int, int> getPos() const;
             void setPos(int posX, int posY);
+            void setSize(int sizeX, int sizeY);
             void update();
 
         protected:

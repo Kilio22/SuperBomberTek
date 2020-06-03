@@ -73,7 +73,52 @@ const std::vector<std::string> Indie::ImageLoader::paths = {
     "../ressources/images/splash/bg.png",
     "../ressources/images/splash/bomberLogos.png",
     "../ressources/images/splash/Logo.png",
-    "../ressources/images/splash/Project.png"
+    "../ressources/images/splash/Project.png",
+    "../ressources/images/solo/Check_selected.png",
+    "../ressources/images/solo/Check_pressed.png",
+    "../ressources/images/solo/Check_tick.png",
+    "../ressources/images/solo/Niveau_idle.png",
+    "../ressources/images/solo/Niveau_selected.png",
+    "../ressources/images/solo/Niveau_pressed.png",
+    "../ressources/images/solo/Theme_idle.png",
+    "../ressources/images/solo/Theme_selected.png",
+    "../ressources/images/solo/Theme_pressed.png",
+    "../ressources/images/solo/Perso_idle.png",
+    "../ressources/images/solo/Perso_selected.png",
+    "../ressources/images/solo/Perso_pressed.png",
+    "../ressources/images/solo/KB_Bar_tick.png",
+    "../ressources/images/solo/KB_Right_tick.png",
+    "../ressources/images/solo/KB_Left_tick.png",
+    "../ressources/images/solo/KB_Down_tick.png",
+    "../ressources/images/solo/KB_Up_tick.png",
+    "../ressources/images/solo/Bar_Empty_BG.png",
+    "../ressources/images/solo/Bar_Full_BG.png",
+    "../ressources/images/solo/Bar_Layout.png",
+    "../ressources/images/solo/KB_Bar_idle.png",
+    "../ressources/images/solo/KB_Bar_selected.png",
+    "../ressources/images/solo/KB_Down_idle.png",
+    "../ressources/images/solo/KB_Down_selected.png",
+    "../ressources/images/solo/KB_Layout.png",
+    "../ressources/images/solo/KB_Left_idle.png",
+    "../ressources/images/solo/KB_Left_selected.png",
+    "../ressources/images/solo/KB_Right_idle.png",
+    "../ressources/images/solo/KB_Right_selected.png",
+    "../ressources/images/solo/KB_Up_idle.png",
+    "../ressources/images/solo/KB_Up_selected.png",
+    "../ressources/images/solo/Layout.png",
+    "../ressources/images/solo/Play_idle.png",
+    "../ressources/images/solo/Play_selected.png",
+    "../ressources/images/solo/Play_pressed.png",
+    "../ressources/images/solo/Retour_idle.png",
+    "../ressources/images/solo/Retour_pressed.png",
+    "../ressources/images/solo/Retour_selected.png",
+    "../ressources/images/solo/title.png",
+    "../ressources/images/solo/KB_Right_pressed.png",
+    "../ressources/images/solo/KB_Up_pressed.png",
+    "../ressources/images/solo/KB_Bar_pressed.png",
+    "../ressources/images/solo/KB_Down_pressed.png",
+    "../ressources/images/solo/KB_Left_pressed.png",
+    "../ressources/images/solo/Check_idle.png"
 };
 
 Indie::ImageLoader::ImageLoader()
@@ -96,5 +141,6 @@ Indie::ImageLoader::~ImageLoader()
 
 Image *Indie::ImageLoader::getImage(std::string const &filepath)
 {
+    std::cout << "Trying to load : " << filepath << std::endl;
     return this->images.at(filepath);
 }
