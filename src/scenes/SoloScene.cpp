@@ -13,6 +13,7 @@
 #include "InitGame.hpp"
 #include "PauseScene.hpp"
 #include "IntroScene.hpp"
+#include <filesystem>
 
 static std::string getFileName(std::string const &filepath)
 {
@@ -43,9 +44,6 @@ const std::vector<std::pair<std::string, Indie::Components::PlayerComponent::PLA
     {"../ressources/textures/character/yellow2.png", Indie::Components::PlayerComponent::PLAYER_COLOR::YELLOW}
 };
 
-const std::vector<std::string> Indie::SoloScene::mapPaths {
-    "../ressources/maps/default.txt"
-};
 
 void Indie::SoloScene::skipScene(bool update, bool render, bool subUpdate, bool subRender)
 {
@@ -64,13 +62,17 @@ Indie::SoloScene::SoloScene(Indie::ContextManager &context)
     , mapSelector(1, 1, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
 {
     charaSelector.setSize(int(charaPaths.size()), 1); // On set juste la size en plus petit pour pas qu'il ai accès à des perso mdr
-    mapSelector.setSize(int(mapPaths.size()), 1);
     playerKeys.push_back({irr::KEY_LEFT, Indie::Components::KEY_TYPE::LEFT});
     playerKeys.push_back({irr::KEY_RIGHT, Indie::Components::KEY_TYPE::RIGHT});
     playerKeys.push_back({irr::KEY_UP, Indie::Components::KEY_TYPE::UP});
     playerKeys.push_back({irr::KEY_DOWN, Indie::Components::KEY_TYPE::DOWN});
     playerKeys.push_back({irr::KEY_SPACE, Indie::Components::KEY_TYPE::DROP});
     modelRotation = 0;
+    mapPaths.push_back("Default");
+    mapPaths.push_back("Random");
+    for (const auto & entry : std::filesystem::directory_iterator("../ressources/maps/"))
+        mapPaths.push_back(entry.path().u8string());
+    mapSelector.setSize(int(mapPaths.size()), 1);
 }
 
 Indie::SoloScene::~SoloScene()
@@ -83,7 +85,6 @@ void Indie::SoloScene::init()
 {
     // TODO : XP BAR
     // TODO : SCORE
-    // TODO : create camera && mesh
     /* ================================================================== */
     // 3D INIT
     /* ================================================================== */
@@ -170,7 +171,6 @@ void Indie::SoloScene::reset()
 
 void Indie::SoloScene::update(irr::f32 ticks)
 {
-
     /* ================================================================== */
     // 3D UPDATE
     /* ================================================================== */
@@ -265,7 +265,7 @@ void Indie::SoloScene::update(irr::f32 ticks)
         init.mode = GameScene::MODE::SOLO;
         init.nbAi = 3;
         init.mapTheme = mapTheme;
-        init.mapType = Components::MAP_TYPE::SAVED;
+        init.mapType = (mapSelector.getPos().first == 0) ? Components::MAP_TYPE::DEFAULT : ((mapSelector.getPos().first == 1) ? Components::MAP_TYPE::RANDOM : Components::MAP_TYPE::SAVED);
         init.powerUp = pUps->getStatus();
         init.timeLimit = 180;
         initPlayer.playerTexture = charaPaths[charaSelector.getPos().first].first;
@@ -280,7 +280,6 @@ void Indie::SoloScene::update(irr::f32 ticks)
         ServiceLocator::getInstance().get<SceneManager>().setScene<GameScene>(context);
         ServiceLocator::getInstance().get<SceneManager>().setSubScene<IntroScene>();
         skipScene(false, true, true, true);
-        // TODO : Directory Iterator pour les maps.
     }
     if (back->getStatus() == Button::Status::Pressed || EventHandler::getInstance().isKeyPressedAtOnce(irr::EKEY_CODE::KEY_ESCAPE)) {
         context.getSceneManager()->clear();

@@ -59,7 +59,7 @@ namespace Indie
         irr::scene::IAnimatedMeshSceneNode *theme2;
         float modelRotation;
         static const std::vector<std::pair<std::string, Components::PlayerComponent::PLAYER_COLOR>> charaPaths;
-        static const std::vector<std::string> mapPaths;
+        std::vector<std::string> mapPaths;
         // PARAMS (psk inclusion circulaire à cause du include GameScene.hpp dans InitGame.hpp)
         char mode;
         char nbAi;
