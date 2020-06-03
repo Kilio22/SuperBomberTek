@@ -65,7 +65,7 @@ void Indie::Systems::PathFinderSystem::onUpdate(irr::f32, Indie::EntityManager &
             ai->setAction(ACTION::GO_BOX);
         }
         else if ((ai->getAction() == ACTION::GO_BOX || ai->getAction() == ACTION::GO_SAFE || ai->getAction() == ACTION::GO_POWERUP) &&
-        ai->hasMoved(irr::core::vector3df(irr::f32(position->getPosition().X), 20, irr::f32(position->getPosition().Z)),irr::core::vector3df(irr::f32((ai->getNextPosition().X) * 20), 20, irr::s32((ai->getNextPosition().Y) * 20)), ai)) {
+        ai->hasMoved(irr::core::vector3df(irr::f32(position->getPosition().X), 20, irr::f32(position->getPosition().Z)),irr::core::vector3df(irr::f32((ai->getNextPosition().X) * 20), 20, irr::f32((ai->getNextPosition().Y) * 20)), ai)) {
             ai->setNextDirection(mapPathFinding, irr::core::vector2di(aiX, aiZ));
             // Si il est pas coincé il va pas marcher dans la lave ici
             if ((int)mapBomb.at(ai->getNextPosition().Y).at(ai->getNextPosition().X) == 5) {
