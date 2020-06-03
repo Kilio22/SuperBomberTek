@@ -83,10 +83,10 @@ void Indie::PauseScene::update(irr::f32)
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::GameScene>()->reset();
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(false);
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(true);
-        // Au restart ça fait un peu bcp là.
-        //Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::IntroScene>();
-        //Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneUpdateActive(true);
-        //Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneRenderActive(true);
+        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::IntroScene>();
+        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneUpdateActive(true);
+        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneRenderActive(true);
+        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<IntroScene>()->skipScene();
         EventHandler::getInstance().resetKeys();
     }
     EventHandler::getInstance().resetKeysStatusOnce();

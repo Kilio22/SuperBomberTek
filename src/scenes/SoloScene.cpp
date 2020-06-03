@@ -175,6 +175,9 @@ void Indie::SoloScene::update(irr::f32 ticks)
     // les boutons qui sont plus loin (psk la taille est pas pareille partout)
     /* ================================================================== */
     selector.update(); // We update the main selector
+    if (selector.getPos().second == 3 && selector.getPos().first == 2) {
+        selector.setPos(4, 4); // PowerUps -> = Play
+    }
     if (selector.getPos().second < 4) {
         selector.setPos(1, selector.getPos().second); // Can't move right or left in the first 3 selectors
     }
@@ -184,7 +187,7 @@ void Indie::SoloScene::update(irr::f32 ticks)
         if (selector.getPos().first == 2)
             selector.setPos(1, 4); // Up -> == Up
         if (selector.getPos().first == 3)
-            selector.setPos(1, 4); // Play <- == Up
+            selector.setPos(1, 3); // Play <- == PowerUps
     }
     /* ================================================================== */
     // UPDATE BUTTONS
@@ -279,7 +282,7 @@ void Indie::SoloScene::renderPost3D()
     /* ================================================================== */
     std::string mPath = getFileName(mapPath);
     std::string pName = getFileName(playerTexture);
-    std::string tName = (mapTheme == Components::THEME::DIRT) ? "Dirt" : "Stone";
+    std::string tName = (mapTheme == Components::THEME::DIRT) ? "Garden" : "Cobblestone";
     font->draw(mPath.c_str(), RECT(410 - (5 * int(mPath.size())), 139, 0, 0), {255, 255, 255, 255});
     font->draw(pName.c_str(), RECT(410 - (5 * int(pName.size())), 218, 0, 0), {255, 255, 255, 255});
     font->draw(tName.c_str(), RECT(410 - (5 * int(tName.size())), 300, 0, 0), {255, 255, 255, 255});

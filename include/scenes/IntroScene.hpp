@@ -23,9 +23,9 @@ namespace Indie
         void update(irr::f32 deltaTime) final;
         void renderPre3D() final;
         void renderPost3D() final;
+        void skipScene(void);
 
         private:
-        void skipScene(void);
         void worldTour(irr::f32 deltaTime);
         void resetTarget(void);
         void downTarget(irr::f32 deltaTime);
