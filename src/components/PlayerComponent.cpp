@@ -14,6 +14,7 @@ Indie::Components::PlayerComponent::PlayerComponent(const std::string &name, Com
     , velocityLevel(1)
     , level(0)
     , xp(0)
+    , score(0)
     , wallPass(false)
     , _isDead(false)
     , name(name)
@@ -50,6 +51,16 @@ unsigned int Indie::Components::PlayerComponent::getLevelCount(void) const
 unsigned int Indie::Components::PlayerComponent::getXpCount(void) const
 {
     return this->xp;
+}
+
+unsigned int Indie::Components::PlayerComponent::getXpToLevelUp(void) const
+{
+    return 75U;
+}
+
+int Indie::Components::PlayerComponent::getScore(void) const
+{
+    return this->score;
 }
 
 bool Indie::Components::PlayerComponent::getWallPass(void) const
@@ -105,6 +116,11 @@ void Indie::Components::PlayerComponent::setLevelCount(unsigned int value)
 void Indie::Components::PlayerComponent::setXpCount(unsigned int value)
 {
     this->xp = value;
+}
+
+void Indie::Components::PlayerComponent::setScore(int score)
+{
+    this->score = score;
 }
 
 void Indie::Components::PlayerComponent::setWallPass(bool value)

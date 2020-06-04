@@ -155,26 +155,25 @@ void Indie::GameScene::update(irr::f32 deltaTime)
 
 void Indie::GameScene::renderPre3D() {}
 
-#include <iomanip>
-
 void Indie::GameScene::renderPost3D()
 {
     std::stringstream ss;
     int n = 0;
-    std::vector<irr::video::SColor> colors
+    const std::vector<irr::video::SColor> colors
         = { { 200, 255, 0, 0 }, { 200, 0, 255, 0 }, { 200, 0, 0, 255 }, { 200, 255, 255, 0 }, { 200, 255, 0, 255 }, { 200, 192, 192, 192 } };
-    std::vector<irr::core::vector2di> positions = { { 20, 20 }, { 1050, 20 }, { 20, 550 }, { 1050, 550 } };
+    const std::vector<irr::core::vector2di> positions = { { 20, 20 }, { 1050, 20 }, { 20, 550 }, { 1050, 550 } };
 
     for (auto entity : entityManager.each<PlayerComponent>()) {
         auto player = entity->getComponent<PlayerComponent>();
 
-        ss << player->getName() << std::endl;
+        ss << player->getName();
         if (player->getWallPass() == true)
             ss << "  (WP)";
+        ss << std::endl;
         ss << "  Bombs: " << player->getCurrentBombNb() << " / " << player->getMaxBombNb() << std::endl;
         ss << "  Bomb range: " << player->getBombsRange() << std::endl;
         ss << "  Speed: " << std::string(player->getVelocityLevel(), '>') << std::endl;
-        ss << "  Xp: " << player->getXpCount() << " (lvl " << player->getLevelCount() << ")" << std::endl;
+        ss << "  Score: " << player->getScore() << std::endl;
         n = (int)player->getPlayerColor();
         if (player->isDead() == true)
             n = (int)PlayerComponent::PLAYER_COLOR::GENERIC;
