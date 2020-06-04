@@ -45,6 +45,7 @@ namespace Indie
         std::unique_ptr<Button> play;
         std::unique_ptr<Button> back;
         std::unique_ptr<Checkbox> pUps;
+        bool pUpsEnabled;
         Image *title;
         Image *layout;
         Image *kbLayout;
@@ -61,7 +62,6 @@ namespace Indie
         static const std::vector<std::pair<std::string, Components::PlayerComponent::PLAYER_COLOR>> charaPaths;
         std::vector<std::string> mapPaths;
         // PARAMS (psk inclusion circulaire à cause du include GameScene.hpp dans InitGame.hpp)
-        char mode;
         char nbAi;
         Components::THEME mapTheme;
         Components::MAP_TYPE mapType;

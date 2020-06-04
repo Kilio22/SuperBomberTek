@@ -40,7 +40,7 @@ namespace Indie::Systems
             bool hasArrived(std::vector<std::vector<Indie::Components::OBJECT>> &map, Indie::Components::PathFinderComponent *pathFinder) const;
             int getDistance2D(irr::core::vector2di v1, irr::core::vector2di v2) const;
             //set PathFinding
-            void setPathFinding(std::vector<std::vector<Indie::Components::OBJECT>> &map, irr::core::vector2di aiPosition, std::vector<std::vector<Indie::Components::OBJECT>> mapBomb, std::vector<std::vector<Indie::Components::OBJECT>> mapPower, unsigned int behavior) const;
+            void setPathFinding(std::vector<std::vector<Indie::Components::OBJECT>> &map, irr::core::vector2di aiPosition, std::vector<std::vector<Indie::Components::OBJECT>> mapBomb, std::vector<std::vector<Indie::Components::OBJECT>> mapPower) const;
 
             //Get
             void setShortlessPath(std::vector<std::vector<Indie::Components::OBJECT>> &map, irr::core::vector2di acPos, irr::core::vector2di nextPos) const;

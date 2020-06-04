@@ -31,19 +31,18 @@ static std::string getFileName(std::string const &filepath)
 const std::vector<std::pair<std::string, Indie::Components::PlayerComponent::PLAYER_COLOR>> Indie::SoloScene::charaPaths
 {
     {"../ressources/textures/character/blue1.png", Indie::Components::PlayerComponent::PLAYER_COLOR::BLUE},
-    {"../ressources/textures/character/blue2.png", Indie::Components::PlayerComponent::PLAYER_COLOR::BLUE},
     {"../ressources/textures/character/red1.png", Indie::Components::PlayerComponent::PLAYER_COLOR::RED},
-    {"../ressources/textures/character/red2.png", Indie::Components::PlayerComponent::PLAYER_COLOR::RED},
     {"../ressources/textures/character/generic1.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GENERIC},
-    {"../ressources/textures/character/generic2.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GENERIC},
     {"../ressources/textures/character/green1.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GREEN},
-    {"../ressources/textures/character/green2.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GREEN},
     {"../ressources/textures/character/purple1.png", Indie::Components::PlayerComponent::PLAYER_COLOR::PURPLE},
-    {"../ressources/textures/character/purple2.png", Indie::Components::PlayerComponent::PLAYER_COLOR::PURPLE},
     {"../ressources/textures/character/yellow1.png", Indie::Components::PlayerComponent::PLAYER_COLOR::YELLOW},
+    {"../ressources/textures/character/blue2.png", Indie::Components::PlayerComponent::PLAYER_COLOR::BLUE},
+    {"../ressources/textures/character/red2.png", Indie::Components::PlayerComponent::PLAYER_COLOR::RED},
+    {"../ressources/textures/character/generic2.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GENERIC},
+    {"../ressources/textures/character/green2.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GREEN},
+    {"../ressources/textures/character/purple2.png", Indie::Components::PlayerComponent::PLAYER_COLOR::PURPLE},
     {"../ressources/textures/character/yellow2.png", Indie::Components::PlayerComponent::PLAYER_COLOR::YELLOW}
 };
-
 
 void Indie::SoloScene::skipScene(bool update, bool render, bool subUpdate, bool subRender)
 {
@@ -61,6 +60,12 @@ Indie::SoloScene::SoloScene(Indie::ContextManager &context)
     , themeSelector(2, 1, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
     , mapSelector(1, 1, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
 {
+    pUpsEnabled = true;
+    playerKeyCodes.push_back(irr::EKEY_CODE::KEY_UP);
+    playerKeyCodes.push_back(irr::EKEY_CODE::KEY_DOWN);
+    playerKeyCodes.push_back(irr::EKEY_CODE::KEY_LEFT);
+    playerKeyCodes.push_back(irr::EKEY_CODE::KEY_RIGHT);
+    playerKeyCodes.push_back(irr::EKEY_CODE::KEY_SPACE);
     charaSelector.setSize(int(charaPaths.size()), 1); // On set juste la size en plus petit pour pas qu'il ai accès à des perso mdr
     playerKeys.push_back({irr::KEY_LEFT, Indie::Components::KEY_TYPE::LEFT});
     playerKeys.push_back({irr::KEY_RIGHT, Indie::Components::KEY_TYPE::RIGHT});
@@ -129,19 +134,20 @@ void Indie::SoloScene::init()
     // CHECKBOXES CREATE
     /* ================================================================== */
     pUps.reset(new Checkbox(context));
+    pUps->setStatus(pUpsEnabled);
     /* ================================================================== */
     // CHECKBOXES INIT
     /* ================================================================== */
     pUps->init("../ressources/images/solo/Check.png", 1, 3, POS(0, 0));
-    pUps->setStatus(true);
+    pUps->setStatus(pUpsEnabled);
     /* ================================================================== */
     // KEYBINDS CREATE
     /* ================================================================== */
-    up.reset(new Keybind(context, irr::EKEY_CODE::KEY_UP));
-    down.reset(new Keybind(context, irr::EKEY_CODE::KEY_DOWN));
-    left.reset(new Keybind(context, irr::EKEY_CODE::KEY_LEFT));
-    right.reset(new Keybind(context, irr::EKEY_CODE::KEY_RIGHT));
-    bomb.reset(new Keybind(context, irr::EKEY_CODE::KEY_SPACE));
+    up.reset(new Keybind(context, playerKeyCodes[0]));
+    down.reset(new Keybind(context, playerKeyCodes[1]));
+    left.reset(new Keybind(context, playerKeyCodes[2]));
+    right.reset(new Keybind(context, playerKeyCodes[3]));
+    bomb.reset(new Keybind(context, playerKeyCodes[4]));
     /* ================================================================== */
     // KEYBINDS INIT
     /* ================================================================== */
@@ -230,6 +236,7 @@ void Indie::SoloScene::update(irr::f32 ticks)
     // UPDATE CHECKBOXES
     /* ================================================================== */
     pUps->update(selector.getPos());
+    pUpsEnabled = pUps->getStatus();
     /* ================================================================== */
     // UPDATE SELECTORS
     /* ================================================================== */
@@ -259,7 +266,7 @@ void Indie::SoloScene::update(irr::f32 ticks)
         init.nbAi = 3;
         init.mapTheme = mapTheme;
         init.mapType = (mapSelector.getPos().first == 0) ? Components::MAP_TYPE::DEFAULT : ((mapSelector.getPos().first == 1) ? Components::MAP_TYPE::RANDOM : Components::MAP_TYPE::SAVED);
-        init.powerUp = pUps->getStatus();
+        init.powerUp = pUpsEnabled;
         init.timeLimit = 180;
         initPlayer.playerTexture = charaPaths[charaSelector.getPos().first].first;
         initPlayer.playerColor = charaPaths[charaSelector.getPos().first].second;
@@ -272,7 +279,7 @@ void Indie::SoloScene::update(irr::f32 ticks)
         ServiceLocator::getInstance().get<SceneManager>().getScene<GameScene>()->setInitGame(init);
         ServiceLocator::getInstance().get<SceneManager>().setScene<GameScene>(context);
         ServiceLocator::getInstance().get<SceneManager>().setSubScene<IntroScene>();
-        skipScene(false, true, true, true);
+        skipScene(false, false, true, true);
     }
     if (back->getStatus() == Button::Status::Pressed || EventHandler::getInstance().isKeyPressed(irr::EKEY_CODE::KEY_ESCAPE) == true) {
         context.getSceneManager()->clear();

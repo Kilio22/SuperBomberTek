@@ -34,6 +34,7 @@ void Indie::MapGenerator::generate(Indie::EntityManager &entityManager, Indie::E
         else
             createDefaultMap(map, mapComponent->getDimension());
     }
+    if (mapComponent->getType() != Indie::Components::MAP_TYPE::SAVED)
     setSpawn(map, mapComponent->getDimension());
     path += (mapComponent->getTheme() == Indie::Components::THEME::DIRT) ? "map_dirt/" : "map_stone/";
     for (int i = mapComponent->getDimension().Y - 1; i >= 0; i--) {
