@@ -22,6 +22,11 @@ Indie::OptionsScene::OptionsScene(Indie::ContextManager &context)
     , selector(1, 5, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
     , musicVolumeSelector(21, 1, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
     , soundVolumeSelector(21, 1, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
+    , back(std::make_unique<Button>(context))
+    , musicVolume(std::make_unique<Button>(context))
+    , soundVolume(std::make_unique<Button>(context))
+    , musicMute(std::make_unique<Checkbox>(context))
+    , soundMute(std::make_unique<Checkbox>(context))
 {
     musicVolumeSelector.setPos(20, 0);
     soundVolumeSelector.setPos(20, 0);
@@ -31,29 +36,17 @@ Indie::OptionsScene::~OptionsScene() {}
 
 void Indie::OptionsScene::init()
 {
-    std::string path1 = std::string("../ressources/images/options/Vol2.png");
-    std::string path2 = std::string("../ressources/images/options/Check2.png");
-    std::string path3 = std::string("../ressources/images/options/Vol1.png");
-    std::string path4 = std::string("../ressources/images/options/Check1.png");
-    std::string path5 = std::string("../ressources/images/options/Retour.png");
-
     title = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/options/title.png");
     wrench = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/options/drawing.png");
     layout = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/options/Layout.png");
 
     font = context.getGuiEnv()->getFont("../ressources/font/Banschrift.xml");
 
-    back.reset(new Button(context));
-    musicVolume.reset(new Button(context));
-    soundVolume.reset(new Button(context));
-    musicMute.reset(new Checkbox(context));
-    soundMute.reset(new Checkbox(context));
-
-    musicVolume->init(context, path1, 0, 0, POS(0, 0));
-    musicMute->init(path2, 0, 1, POS(0, 0));
-    soundVolume->init(context, path3, 0, 2, POS(0, 0));
-    soundMute->init(path4, 0, 3, POS(0, 0));
-    back->init(context, path5, 0, 4, POS(0, 0));
+    musicVolume->init(context, "../ressources/images/options/Vol2.png", 0, 0, POS(0, 0));
+    musicMute->init("../ressources/images/options/Check2.png", 0, 1, POS(0, 0));
+    soundVolume->init(context, "../ressources/images/options/Vol1.png", 0, 2, POS(0, 0));
+    soundMute->init("../ressources/images/options/Check1.png", 0, 3, POS(0, 0));
+    back->init(context, "../ressources/images/options/Retour.png", 0, 4, POS(0, 0));
 
     musicMute->setStatus(Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().isMusicMuted());
     musicVolumeSelector.setPos((int)Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().getMusicVolume(), 0);

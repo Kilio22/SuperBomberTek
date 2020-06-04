@@ -26,6 +26,7 @@ void Indie::MainMenuScene::init()
 
     title = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/menu/title.png");
     bomb = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/menu/bomb.png");
+    // Pk on refait un ptr ?? Autant garder le même, faudra refacto
     solo.reset(new Button(context));
     multi.reset(new Button(context));
     options.reset(new Button(context));

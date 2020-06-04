@@ -23,6 +23,10 @@ const std::unordered_map<Indie::PauseScene::PAUSE_ASSETS, std::string> Indie::Pa
 Indie::PauseScene::PauseScene(ContextManager &context)
     : context(context)
     , selector(1, 4, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
+    , play(std::make_unique<Button>(context))
+    , menu(std::make_unique<Button>(context))
+    , quit(std::make_unique<Button>(context))
+    , restart(std::make_unique<Button>(context))
 {
 }
 
@@ -30,10 +34,6 @@ Indie::PauseScene::~PauseScene() {}
 
 void Indie::PauseScene::init()
 {
-    this->play.reset(new Button(context));
-    this->menu.reset(new Button(context));
-    this->quit.reset(new Button(context));
-    this->restart.reset(new Button(context));
     this->play->init(context, this->assets_paths.at(Indie::PauseScene::PAUSE_ASSETS::CONTINUE), 0, 0, POS(0, 0));
     this->restart->init(context, this->assets_paths.at(Indie::PauseScene::PAUSE_ASSETS::RESTART), 0, 1, POS(0, 0));
     this->menu->init(context, this->assets_paths.at(Indie::PauseScene::PAUSE_ASSETS::MENU), 0, 2, POS(0, 0));

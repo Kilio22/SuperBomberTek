@@ -62,11 +62,6 @@ Indie::SoloScene::SoloScene(Indie::ContextManager &context)
     , mapSelector(1, 1, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
 {
     pUpsEnabled = true;
-    playerKeys.push_back({ irr::EKEY_CODE::KEY_UP, Indie::Components::KEY_TYPE::UP });
-    playerKeys.push_back({ irr::EKEY_CODE::KEY_DOWN, Indie::Components::KEY_TYPE::DOWN });
-    playerKeys.push_back({ irr::EKEY_CODE::KEY_LEFT, Indie::Components::KEY_TYPE::LEFT });
-    playerKeys.push_back({ irr::EKEY_CODE::KEY_RIGHT, Indie::Components::KEY_TYPE::RIGHT });
-    playerKeys.push_back({ irr::EKEY_CODE::KEY_SPACE, Indie::Components::KEY_TYPE::DROP });
     charaSelector.setSize(int(charaPaths.size()), 1); // On set juste la size en plus petit pour pas qu'il ai accès à des perso mdr
     modelRotation = 0;
     mapPaths.push_back("Default");
@@ -74,6 +69,11 @@ Indie::SoloScene::SoloScene(Indie::ContextManager &context)
     for (const auto &entry : std::filesystem::directory_iterator("../ressources/maps/"))
         mapPaths.push_back(entry.path().u8string());
     mapSelector.setSize(int(mapPaths.size()), 1);
+    playerKeys = {};
+    this->getSavedKeybinds();
+    for (size_t buttonType = (size_t)BUTTON_TYPE::SKIN; buttonType < (size_t)BUTTON_TYPE::NONE; buttonType++) {
+        this->buttons.insert({ (BUTTON_TYPE)buttonType, std::make_unique<Button>(context) });
+    }
 }
 
 Indie::SoloScene::~SoloScene()
@@ -121,15 +121,6 @@ void Indie::SoloScene::init()
     /* ================================================================== */
     font = context.getGuiEnv()->getFont("../ressources/font/Banschrift.xml");
     /* ================================================================== */
-    // BUTTONS CREATE
-    /* ================================================================== */
-    this->buttons.clear();
-    this->buttons.insert({ BUTTON_TYPE::PLAY, std::make_unique<Button>(context) });
-    this->buttons.insert({ BUTTON_TYPE::BACK, std::make_unique<Button>(context) });
-    this->buttons.insert({ BUTTON_TYPE::SKIN, std::make_unique<Button>(context) });
-    this->buttons.insert({ BUTTON_TYPE::THEME, std::make_unique<Button>(context) });
-    this->buttons.insert({ BUTTON_TYPE::MAP, std::make_unique<Button>(context) });
-    /* ================================================================== */
     // BUTTONS INIT
     /* ================================================================== */
     this->buttons.at(BUTTON_TYPE::PLAY)->init(context, "../ressources/images/solo/Play.png", 4, 4, POS(0, 0));
@@ -148,9 +139,29 @@ void Indie::SoloScene::init()
     pUps->init("../ressources/images/solo/Check.png", 1, 3, POS(0, 0));
     pUps->setStatus(pUpsEnabled);
     /* ================================================================== */
-    // KEYBINDS CREATE
+    // KEYBINDS INIT
     /* ================================================================== */
-    this->keybinds.clear();
+    this->keybinds.at(KEY_TYPE::UP)->init("../ressources/images/solo/KB_Up.png", 1, 4, POS(183, 468));
+    this->keybinds.at(KEY_TYPE::DOWN)->init("../ressources/images/solo/KB_Down.png", 1, 5, POS(183, 547));
+    this->keybinds.at(KEY_TYPE::LEFT)->init("../ressources/images/solo/KB_Left.png", 0, 5, POS(108, 547));
+    this->keybinds.at(KEY_TYPE::RIGHT)->init("../ressources/images/solo/KB_Right.png", 2, 5, POS(261, 547));
+    this->keybinds.at(KEY_TYPE::DROP)->init("../ressources/images/solo/KB_Bar.png", 3, 5, POS(456, 547));
+    // Some inits :
+    playerTexture = charaPaths[charaSelector.getPos().first].first;
+    playerColor = charaPaths[charaSelector.getPos().first].second;
+    mapPath = mapPaths[mapSelector.getPos().first];
+    mapTheme = (themeSelector.getPos().first == 0) ? Components::THEME::DIRT : Components::THEME::STONE;
+}
+
+void Indie::SoloScene::reset()
+{
+    context.getSceneManager()->clear();
+    selector.setPos(0, 0);
+    init();
+}
+
+void Indie::SoloScene::getSavedKeybinds(void)
+{
     try {
         std::vector<std::vector<std::string>> parsedData = ServiceLocator::getInstance().get<CSVParser>().parse("../ressources/.saves/keybinds.txt");
 
@@ -173,27 +184,6 @@ void Indie::SoloScene::init()
         this->resetKeybinds();
         std::cout << e.what() << std::endl;
     }
-
-    /* ================================================================== */
-    // KEYBINDS INIT
-    /* ================================================================== */
-    this->keybinds.at(KEY_TYPE::UP)->init("../ressources/images/solo/KB_Up.png", 1, 4, POS(183, 468));
-    this->keybinds.at(KEY_TYPE::DOWN)->init("../ressources/images/solo/KB_Down.png", 1, 5, POS(183, 547));
-    this->keybinds.at(KEY_TYPE::LEFT)->init("../ressources/images/solo/KB_Left.png", 0, 5, POS(108, 547));
-    this->keybinds.at(KEY_TYPE::RIGHT)->init("../ressources/images/solo/KB_Right.png", 2, 5, POS(261, 547));
-    this->keybinds.at(KEY_TYPE::DROP)->init("../ressources/images/solo/KB_Bar.png", 3, 5, POS(456, 547));
-    // Some inits :
-    playerTexture = charaPaths[charaSelector.getPos().first].first;
-    playerColor = charaPaths[charaSelector.getPos().first].second;
-    mapPath = mapPaths[mapSelector.getPos().first];
-    mapTheme = (themeSelector.getPos().first == 0) ? Components::THEME::DIRT : Components::THEME::STONE;
-}
-
-void Indie::SoloScene::reset()
-{
-    context.getSceneManager()->clear();
-    selector.setPos(0, 0);
-    init();
 }
 
 void Indie::SoloScene::update(irr::f32 ticks)

@@ -38,6 +38,7 @@ namespace Indie
 
     private:
         void resetKeybinds(void);
+        void getSavedKeybinds(void);
 
         enum class BUTTON_TYPE
         {
@@ -45,7 +46,8 @@ namespace Indie
             THEME,
             MAP,
             PLAY,
-            BACK
+            BACK,
+            NONE
         };
 
         ContextManager &context;
