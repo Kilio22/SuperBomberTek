@@ -7,13 +7,15 @@
 */
 
 #include "SoloScene.hpp"
-#include "ServiceLocator.hpp"
-#include "MainMenuScene.hpp"
+#include "CSVParser.hpp"
 #include "GameScene.hpp"
 #include "InitGame.hpp"
-#include "PauseScene.hpp"
 #include "IntroScene.hpp"
+#include "MainMenuScene.hpp"
+#include "PauseScene.hpp"
+#include "ServiceLocator.hpp"
 #include <filesystem>
+#include <fstream>
 
 static std::string getFileName(std::string const &filepath)
 {
@@ -28,20 +30,19 @@ static std::string getFileName(std::string const &filepath)
     return (filename);
 }
 
-const std::vector<std::pair<std::string, Indie::Components::PlayerComponent::PLAYER_COLOR>> Indie::SoloScene::charaPaths
-{
-    {"../ressources/textures/character/blue1.png", Indie::Components::PlayerComponent::PLAYER_COLOR::BLUE},
-    {"../ressources/textures/character/red1.png", Indie::Components::PlayerComponent::PLAYER_COLOR::RED},
-    {"../ressources/textures/character/generic1.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GENERIC},
-    {"../ressources/textures/character/green1.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GREEN},
-    {"../ressources/textures/character/purple1.png", Indie::Components::PlayerComponent::PLAYER_COLOR::PURPLE},
-    {"../ressources/textures/character/yellow1.png", Indie::Components::PlayerComponent::PLAYER_COLOR::YELLOW},
-    {"../ressources/textures/character/blue2.png", Indie::Components::PlayerComponent::PLAYER_COLOR::BLUE},
-    {"../ressources/textures/character/red2.png", Indie::Components::PlayerComponent::PLAYER_COLOR::RED},
-    {"../ressources/textures/character/generic2.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GENERIC},
-    {"../ressources/textures/character/green2.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GREEN},
-    {"../ressources/textures/character/purple2.png", Indie::Components::PlayerComponent::PLAYER_COLOR::PURPLE},
-    {"../ressources/textures/character/yellow2.png", Indie::Components::PlayerComponent::PLAYER_COLOR::YELLOW}
+const std::vector<std::pair<std::string, Indie::Components::PlayerComponent::PLAYER_COLOR>> Indie::SoloScene::charaPaths {
+    { "../ressources/textures/character/blue1.png", Indie::Components::PlayerComponent::PLAYER_COLOR::BLUE },
+    { "../ressources/textures/character/red1.png", Indie::Components::PlayerComponent::PLAYER_COLOR::RED },
+    { "../ressources/textures/character/generic1.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GENERIC },
+    { "../ressources/textures/character/green1.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GREEN },
+    { "../ressources/textures/character/purple1.png", Indie::Components::PlayerComponent::PLAYER_COLOR::PURPLE },
+    { "../ressources/textures/character/yellow1.png", Indie::Components::PlayerComponent::PLAYER_COLOR::YELLOW },
+    { "../ressources/textures/character/blue2.png", Indie::Components::PlayerComponent::PLAYER_COLOR::BLUE },
+    { "../ressources/textures/character/red2.png", Indie::Components::PlayerComponent::PLAYER_COLOR::RED },
+    { "../ressources/textures/character/generic2.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GENERIC },
+    { "../ressources/textures/character/green2.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GREEN },
+    { "../ressources/textures/character/purple2.png", Indie::Components::PlayerComponent::PLAYER_COLOR::PURPLE },
+    { "../ressources/textures/character/yellow2.png", Indie::Components::PlayerComponent::PLAYER_COLOR::YELLOW }
 };
 
 void Indie::SoloScene::skipScene(bool update, bool render, bool subUpdate, bool subRender)
@@ -61,22 +62,29 @@ Indie::SoloScene::SoloScene(Indie::ContextManager &context)
     , mapSelector(1, 1, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
 {
     pUpsEnabled = true;
-    playerKeys.push_back({irr::EKEY_CODE::KEY_UP, Indie::Components::KEY_TYPE::UP});
-    playerKeys.push_back({irr::EKEY_CODE::KEY_DOWN, Indie::Components::KEY_TYPE::DOWN});
-    playerKeys.push_back({irr::EKEY_CODE::KEY_LEFT, Indie::Components::KEY_TYPE::LEFT});
-    playerKeys.push_back({irr::EKEY_CODE::KEY_RIGHT, Indie::Components::KEY_TYPE::RIGHT});
-    playerKeys.push_back({irr::EKEY_CODE::KEY_SPACE, Indie::Components::KEY_TYPE::DROP});
+    playerKeys.push_back({ irr::EKEY_CODE::KEY_UP, Indie::Components::KEY_TYPE::UP });
+    playerKeys.push_back({ irr::EKEY_CODE::KEY_DOWN, Indie::Components::KEY_TYPE::DOWN });
+    playerKeys.push_back({ irr::EKEY_CODE::KEY_LEFT, Indie::Components::KEY_TYPE::LEFT });
+    playerKeys.push_back({ irr::EKEY_CODE::KEY_RIGHT, Indie::Components::KEY_TYPE::RIGHT });
+    playerKeys.push_back({ irr::EKEY_CODE::KEY_SPACE, Indie::Components::KEY_TYPE::DROP });
     charaSelector.setSize(int(charaPaths.size()), 1); // On set juste la size en plus petit pour pas qu'il ai accès à des perso mdr
     modelRotation = 0;
     mapPaths.push_back("Default");
     mapPaths.push_back("Random");
-    for (const auto & entry : std::filesystem::directory_iterator("../ressources/maps/"))
+    for (const auto &entry : std::filesystem::directory_iterator("../ressources/maps/"))
         mapPaths.push_back(entry.path().u8string());
     mapSelector.setSize(int(mapPaths.size()), 1);
 }
 
 Indie::SoloScene::~SoloScene()
-{}
+{
+    std::vector<std::vector<std::string>> dataToWrite;
+
+    for (auto key : this->playerKeys) {
+        dataToWrite.push_back({ std::to_string((int)key.second), std::to_string((int)key.first) });
+    }
+    ServiceLocator::getInstance().get<CSVParser>().writeToFile("../ressources/.saves/keybinds.txt", dataToWrite);
+}
 
 void Indie::SoloScene::init()
 {
@@ -85,7 +93,6 @@ void Indie::SoloScene::init()
     /* ================================================================== */
     // 3D INIT
     /* ================================================================== */
-    //camera = context.getSceneManager()->addCameraSceneNode(0, irr::core::vector3df(15, 62, 37), irr::core::vector3df(0, 0, 0), -1, true);
     camera = context.getSceneManager()->addCameraSceneNode(0, irr::core::vector3df(0, 0, -75), irr::core::vector3df(0, 0, 0), -1, true);
     camera->setTarget(irr::core::vector3df(-52, 0, 0));
     context.getSceneManager()->addLightSceneNode(camera, irr::core::vector3df(0, 0, 0), irr::video::SColorf(0.2f, 0.2f, 0.3f, 0.0f), 400.0f);
@@ -112,19 +119,20 @@ void Indie::SoloScene::init()
     /* ================================================================== */
     // BUTTONS CREATE
     /* ================================================================== */
-    play.reset(new Button(context));
-    back.reset(new Button(context));
-    charaButton.reset(new Button(context));
-    themeButton.reset(new Button(context));
-    mapButton.reset(new Button(context));
+    this->buttons.clear();
+    this->buttons.insert({ BUTTON_TYPE::PLAY, std::make_unique<Button>(context) });
+    this->buttons.insert({ BUTTON_TYPE::BACK, std::make_unique<Button>(context) });
+    this->buttons.insert({ BUTTON_TYPE::SKIN, std::make_unique<Button>(context) });
+    this->buttons.insert({ BUTTON_TYPE::THEME, std::make_unique<Button>(context) });
+    this->buttons.insert({ BUTTON_TYPE::MAP, std::make_unique<Button>(context) });
     /* ================================================================== */
     // BUTTONS INIT
     /* ================================================================== */
-    play->init(context, "../ressources/images/solo/Play.png", 4, 4, POS(0,0));
-    back->init(context, "../ressources/images/solo/Retour.png", 4, 5, POS(0,0));
-    mapButton->init(context, "../ressources/images/solo/Niveau.png", 1, 0, POS(0,0));
-    themeButton->init(context, "../ressources/images/solo/Theme.png", 1, 2, POS(0,0));
-    charaButton->init(context, "../ressources/images/solo/Perso.png", 1, 1, POS(0,0));
+    this->buttons.at(BUTTON_TYPE::PLAY)->init(context, "../ressources/images/solo/Play.png", 4, 4, POS(0, 0));
+    this->buttons.at(BUTTON_TYPE::BACK)->init(context, "../ressources/images/solo/Retour.png", 4, 5, POS(0, 0));
+    this->buttons.at(BUTTON_TYPE::SKIN)->init(context, "../ressources/images/solo/Perso.png", 1, 1, POS(0, 0));
+    this->buttons.at(BUTTON_TYPE::THEME)->init(context, "../ressources/images/solo/Theme.png", 1, 2, POS(0, 0));
+    this->buttons.at(BUTTON_TYPE::MAP)->init(context, "../ressources/images/solo/Niveau.png", 1, 0, POS(0, 0));
     /* ================================================================== */
     // CHECKBOXES CREATE
     /* ================================================================== */
@@ -138,24 +146,35 @@ void Indie::SoloScene::init()
     /* ================================================================== */
     // KEYBINDS CREATE
     /* ================================================================== */
-    up.reset(new Keybind(context, std::find_if(playerKeys.begin(), playerKeys.end(), [](const auto &var){return (var.second == Indie::Components::KEY_TYPE::UP);})->first));
-    down.reset(new Keybind(context, std::find_if(playerKeys.begin(), playerKeys.end(), [](const auto &var){return (var.second == Indie::Components::KEY_TYPE::DOWN);})->first));
-    left.reset(new Keybind(context, std::find_if(playerKeys.begin(), playerKeys.end(), [](const auto &var){return (var.second == Indie::Components::KEY_TYPE::LEFT);})->first));
-    right.reset(new Keybind(context, std::find_if(playerKeys.begin(), playerKeys.end(), [](const auto &var){return (var.second == Indie::Components::KEY_TYPE::RIGHT);})->first));
-    bomb.reset(new Keybind(context, std::find_if(playerKeys.begin(), playerKeys.end(), [](const auto &var){return (var.second == Indie::Components::KEY_TYPE::DROP);})->first));
-    //up.reset(new Keybind(context, playerKeys[0].first));
-    //down.reset(new Keybind(context, playerKeys[1].first));
-    //left.reset(new Keybind(context, playerKeys[2].first));
-    //right.reset(new Keybind(context, playerKeys[3].first));
-    //bomb.reset(new Keybind(context, playerKeys[4].first));
+    this->keybinds.clear();
+    try {
+        std::vector<std::vector<std::string>> parsedData = ServiceLocator::getInstance().get<CSVParser>().parse("../ressources/.saves/keybinds.txt");
+
+        for (auto datas : parsedData) {
+            if (datas.size() != 2)
+                throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"../ressources/.saves/keybinds.txt\" corrupted.");
+            int keyType = std::stoi(datas.at(0));
+            int keyNb = std::stoi(datas.at(1));
+
+            if (keyType >= (int)KEY_TYPE::NONE || keyType < (int)KEY_TYPE::LEFT)
+                throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"../ressources/.saves/keybinds.txt\" corrupted.");
+            if (std::find_if(Keybind::keyCodes.begin(), Keybind::keyCodes.end(), [keyNb](const auto &var) { return ((int)var.first == keyNb); })
+                == Keybind::keyCodes.end())
+                throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"../ressources/.saves/keybinds.txt\" corrupted.");
+            this->keybinds.insert({ (Indie::Components::KEY_TYPE)keyType, std::make_unique<Keybind>(context, (irr::EKEY_CODE)keyNb) });
+        }
+    } catch (const std::exception &e) {
+        this->resetKeybinds();
+    }
+
     /* ================================================================== */
     // KEYBINDS INIT
     /* ================================================================== */
-    up->init("../ressources/images/solo/KB_Up.png", 1, 4, POS(183, 468));
-    down->init("../ressources/images/solo/KB_Down.png", 1, 5, POS(183, 547));
-    left->init("../ressources/images/solo/KB_Left.png", 0, 5, POS(108, 547));
-    right->init("../ressources/images/solo/KB_Right.png", 2, 5, POS(261, 547));
-    bomb->init("../ressources/images/solo/KB_Bar.png", 3, 5, POS(456, 547));
+    this->keybinds.at(KEY_TYPE::UP)->init("../ressources/images/solo/KB_Up.png", 1, 4, POS(183, 468));
+    this->keybinds.at(KEY_TYPE::DOWN)->init("../ressources/images/solo/KB_Down.png", 1, 5, POS(183, 547));
+    this->keybinds.at(KEY_TYPE::LEFT)->init("../ressources/images/solo/KB_Left.png", 0, 5, POS(108, 547));
+    this->keybinds.at(KEY_TYPE::RIGHT)->init("../ressources/images/solo/KB_Right.png", 2, 5, POS(261, 547));
+    this->keybinds.at(KEY_TYPE::DROP)->init("../ressources/images/solo/KB_Bar.png", 3, 5, POS(456, 547));
     // Some inits :
     playerTexture = charaPaths[charaSelector.getPos().first].first;
     playerColor = charaPaths[charaSelector.getPos().first].second;
@@ -184,25 +203,23 @@ void Indie::SoloScene::update(irr::f32 ticks)
     // KEYBINDS SET USED
     /* ================================================================== */
     playerKeys.clear();
-    playerKeys.push_back({up->getKey(), Indie::Components::KEY_TYPE::UP});
-    playerKeys.push_back({down->getKey(), Indie::Components::KEY_TYPE::DOWN});
-    playerKeys.push_back({left->getKey(), Indie::Components::KEY_TYPE::LEFT});
-    playerKeys.push_back({right->getKey(), Indie::Components::KEY_TYPE::RIGHT});
-    playerKeys.push_back({bomb->getKey(), Indie::Components::KEY_TYPE::DROP});
-    up->setUsedKeys(playerKeys);
-    down->setUsedKeys(playerKeys);
-    left->setUsedKeys(playerKeys);
-    right->setUsedKeys(playerKeys);
-    bomb->setUsedKeys(playerKeys);
+    playerKeys.push_back({ this->keybinds.at(KEY_TYPE::UP)->getKey(), Indie::Components::KEY_TYPE::UP });
+    playerKeys.push_back({ this->keybinds.at(KEY_TYPE::DOWN)->getKey(), Indie::Components::KEY_TYPE::DOWN });
+    playerKeys.push_back({ this->keybinds.at(KEY_TYPE::LEFT)->getKey(), Indie::Components::KEY_TYPE::LEFT });
+    playerKeys.push_back({ this->keybinds.at(KEY_TYPE::RIGHT)->getKey(), Indie::Components::KEY_TYPE::RIGHT });
+    playerKeys.push_back({ this->keybinds.at(KEY_TYPE::DROP)->getKey(), Indie::Components::KEY_TYPE::DROP });
+    for (auto &keybind : this->keybinds) {
+        keybind.second->setUsedKeys(this->playerKeys);
+    }
     /* ================================================================== */
     // UPDATE KEYBINDS
     /* ================================================================== */
-    up->update(selector.getPos());
-    down->update(selector.getPos());
-    left->update(selector.getPos());
-    right->update(selector.getPos());
-    bomb->update(selector.getPos());
-    if (up->getStatus() || down->getStatus() || left->getStatus() || right->getStatus() || bomb->getStatus())
+    for (auto &keybind : this->keybinds) {
+        keybind.second->update(selector.getPos());
+    }
+    if (this->keybinds.at(KEY_TYPE::UP)->getStatus() || this->keybinds.at(KEY_TYPE::DOWN)->getStatus()
+        || this->keybinds.at(KEY_TYPE::LEFT)->getStatus() || this->keybinds.at(KEY_TYPE::RIGHT)->getStatus()
+        || this->keybinds.at(KEY_TYPE::DROP)->getStatus())
         return; // We don't check anything else while the player is setting a key
     /* ================================================================== */
     // LAYOUTS SKIP (psk le layout est chelou on doit le faire en dur)
@@ -227,11 +244,11 @@ void Indie::SoloScene::update(irr::f32 ticks)
     /* ================================================================== */
     // UPDATE BUTTONS
     /* ================================================================== */
-    charaButton->update(selector.getPos());
-    themeButton->update(selector.getPos());
-    mapButton->update(selector.getPos());
-    play->update(selector.getPos());
-    back->update(selector.getPos());
+    this->buttons.at(BUTTON_TYPE::PLAY)->update(this->selector.getPos());
+    this->buttons.at(BUTTON_TYPE::BACK)->update(this->selector.getPos());
+    this->buttons.at(BUTTON_TYPE::SKIN)->update(this->selector.getPos());
+    this->buttons.at(BUTTON_TYPE::THEME)->update(this->selector.getPos());
+    this->buttons.at(BUTTON_TYPE::MAP)->update(this->selector.getPos());
     /* ================================================================== */
     // UPDATE CHECKBOXES
     /* ================================================================== */
@@ -256,7 +273,8 @@ void Indie::SoloScene::update(irr::f32 ticks)
     /* ================================================================== */
     // CLICK BUTTONS
     /* ================================================================== */
-    if (play->getStatus() == Button::Status::Pressed || EventHandler::getInstance().isKeyPressed(irr::EKEY_CODE::KEY_KEY_P) == true) {
+    if (this->buttons.at(BUTTON_TYPE::PLAY)->getStatus() == Button::Status::Pressed
+        || EventHandler::getInstance().isKeyPressed(irr::EKEY_CODE::KEY_KEY_P) == true) {
         InitGame init;
         PlayerParams initPlayer;
 
@@ -265,7 +283,9 @@ void Indie::SoloScene::update(irr::f32 ticks)
         init.mode = GameScene::MODE::SOLO;
         init.nbAi = 3;
         init.mapTheme = mapTheme;
-        init.mapType = (mapSelector.getPos().first == 0) ? Components::MAP_TYPE::DEFAULT : ((mapSelector.getPos().first == 1) ? Components::MAP_TYPE::RANDOM : Components::MAP_TYPE::SAVED);
+        init.mapType = (mapSelector.getPos().first == 0)
+            ? Components::MAP_TYPE::DEFAULT
+            : ((mapSelector.getPos().first == 1) ? Components::MAP_TYPE::RANDOM : Components::MAP_TYPE::SAVED);
         init.powerUp = pUpsEnabled;
         init.timeLimit = 180;
         initPlayer.playerTexture = charaPaths[charaSelector.getPos().first].first;
@@ -273,13 +293,14 @@ void Indie::SoloScene::update(irr::f32 ticks)
         for (auto &it : playerKeys) {
             initPlayer.playerKeys.insert(it);
         }
-        init.playersParams = {initPlayer};
+        init.playersParams = { initPlayer };
         ServiceLocator::getInstance().get<SceneManager>().getScene<GameScene>()->setInitGame(init);
         ServiceLocator::getInstance().get<SceneManager>().setScene<GameScene>(context);
         ServiceLocator::getInstance().get<SceneManager>().setSubScene<IntroScene>();
         skipScene(false, false, true, true);
     }
-    if (back->getStatus() == Button::Status::Pressed || EventHandler::getInstance().isKeyPressed(irr::EKEY_CODE::KEY_ESCAPE) == true) {
+    if (this->buttons.at(BUTTON_TYPE::BACK)->getStatus() == Button::Status::Pressed
+        || EventHandler::getInstance().isKeyPressed(irr::EKEY_CODE::KEY_ESCAPE) == true) {
         context.getSceneManager()->clear();
         skipScene(true, true, true, true);
         ServiceLocator::getInstance().get<SceneManager>().setSubScene<MainMenuScene>();
@@ -302,11 +323,9 @@ void Indie::SoloScene::renderPost3D()
     /* ================================================================== */
     // DISPLAY BUTONS
     /* ================================================================== */
-    charaButton->draw();
-    themeButton->draw();
-    mapButton->draw();
-    play->draw();
-    back->draw();
+    for (auto const &button : this->buttons) {
+        button.second->draw();
+    }
     /* ================================================================== */
     // DISPLAY CHECKBOXES
     /* ================================================================== */
@@ -317,17 +336,42 @@ void Indie::SoloScene::renderPost3D()
     std::string mPath = getFileName(mapPath);
     std::string pName = getFileName(playerTexture);
     std::string tName = (mapTheme == Components::THEME::DIRT) ? "Garden" : "Cobblestone";
-    font->draw(mPath.c_str(), RECT(410 - (5 * int(mPath.size())), 139, 0, 0), {255, 255, 255, 255});
-    font->draw(pName.c_str(), RECT(410 - (5 * int(pName.size())), 218, 0, 0), {255, 255, 255, 255});
-    font->draw(tName.c_str(), RECT(410 - (5 * int(tName.size())), 300, 0, 0), {255, 255, 255, 255});
+    font->draw(mPath.c_str(), RECT(410 - (5 * int(mPath.size())), 139, 0, 0), { 255, 255, 255, 255 });
+    font->draw(pName.c_str(), RECT(410 - (5 * int(pName.size())), 218, 0, 0), { 255, 255, 255, 255 });
+    font->draw(tName.c_str(), RECT(410 - (5 * int(tName.size())), 300, 0, 0), { 255, 255, 255, 255 });
     /* ================================================================== */
     // DISPLAY KEYBINDS
     /* ================================================================== */
-    up->draw();
-    down->draw();
-    left->draw();
-    right->draw();
-    bomb->draw();
-    if (up->getStatus() || down->getStatus() || left->getStatus() || right->getStatus() || bomb->getStatus())
-        context.displayImage(up->tick);
+    for (auto const &keybind : this->keybinds) {
+        keybind.second->draw();
+    }
+    if (this->keybinds.at(KEY_TYPE::UP)->getStatus() || this->keybinds.at(KEY_TYPE::DOWN)->getStatus()
+        || this->keybinds.at(KEY_TYPE::LEFT)->getStatus() || this->keybinds.at(KEY_TYPE::RIGHT)->getStatus()
+        || this->keybinds.at(KEY_TYPE::DROP)->getStatus())
+        context.displayImage(this->keybinds.at(KEY_TYPE::UP)->tick);
+}
+
+void Indie::SoloScene::resetKeybinds(void)
+{
+    this->keybinds.clear();
+    this->keybinds.insert(
+        { Indie::Components::KEY_TYPE::UP, std::make_unique<Keybind>(context, std::find_if(playerKeys.begin(), playerKeys.end(), [](const auto &var) {
+             return (var.second == Indie::Components::KEY_TYPE::UP);
+         })->first) });
+    this->keybinds.insert({ Indie::Components::KEY_TYPE::DOWN,
+        std::make_unique<Keybind>(context, std::find_if(playerKeys.begin(), playerKeys.end(), [](const auto &var) {
+            return (var.second == Indie::Components::KEY_TYPE::DOWN);
+        })->first) });
+    this->keybinds.insert({ Indie::Components::KEY_TYPE::LEFT,
+        std::make_unique<Keybind>(context, std::find_if(playerKeys.begin(), playerKeys.end(), [](const auto &var) {
+            return (var.second == Indie::Components::KEY_TYPE::LEFT);
+        })->first) });
+    this->keybinds.insert({ Indie::Components::KEY_TYPE::RIGHT,
+        std::make_unique<Keybind>(context, std::find_if(playerKeys.begin(), playerKeys.end(), [](const auto &var) {
+            return (var.second == Indie::Components::KEY_TYPE::RIGHT);
+        })->first) });
+    this->keybinds.insert({ Indie::Components::KEY_TYPE::DROP,
+        std::make_unique<Keybind>(context, std::find_if(playerKeys.begin(), playerKeys.end(), [](const auto &var) {
+            return (var.second == Indie::Components::KEY_TYPE::DROP);
+        })->first) });
 }

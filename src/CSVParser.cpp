@@ -28,7 +28,8 @@ std::vector<std::vector<std::string>> Indie::CSVParser::parse(const std::string 
             if (value.size() != 0)
                 values.push_back(value);
         }
-        data.push_back(values);
+        if (values.size() != 0)
+            data.push_back(values);
     }
     return data;
 }

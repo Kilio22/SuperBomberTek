@@ -9,14 +9,14 @@
 #define SOLOSCENE_HPP_
 
 #include "Checkbox.hpp"
+#include "Components.h"
 #include "ContextManager.hpp"
 #include "IScene.hpp"
-#include "UiSelector.hpp"
 #include "Keybind.hpp"
-#include "Components.h"
+#include "UiSelector.hpp"
 #include <memory>
-#include <vector>
 #include <utility>
+#include <vector>
 
 namespace Indie
 {
@@ -37,27 +37,30 @@ namespace Indie
         static const std::vector<std::pair<std::string, Components::PlayerComponent::PLAYER_COLOR>> charaPaths;
 
     private:
+        void resetKeybinds(void);
+
+        enum class BUTTON_TYPE
+        {
+            SKIN,
+            THEME,
+            MAP,
+            PLAY,
+            BACK
+        };
+
         ContextManager &context;
         UiSelector selector;
         UiSelector charaSelector;
         UiSelector themeSelector;
         UiSelector mapSelector;
-        std::unique_ptr<Button> charaButton;
-        std::unique_ptr<Button> themeButton;
-        std::unique_ptr<Button> mapButton;
-        std::unique_ptr<Button> play;
-        std::unique_ptr<Button> back;
+        std::map<SoloScene::BUTTON_TYPE, std::unique_ptr<Button>> buttons;
         std::unique_ptr<Checkbox> pUps;
         bool pUpsEnabled;
         Image *title;
         Image *layout;
         Image *kbLayout;
         irr::gui::IGUIFont *font;
-        std::unique_ptr<Keybind> up;
-        std::unique_ptr<Keybind> down;
-        std::unique_ptr<Keybind> left;
-        std::unique_ptr<Keybind> right;
-        std::unique_ptr<Keybind> bomb;
+        std::map<Indie::Components::KEY_TYPE, std::unique_ptr<Keybind>> keybinds;
         irr::scene::ICameraSceneNode *camera;
         irr::scene::IAnimatedMeshSceneNode *theme1;
         irr::scene::IAnimatedMeshSceneNode *theme2;
