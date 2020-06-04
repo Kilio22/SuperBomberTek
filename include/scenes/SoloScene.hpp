@@ -33,6 +33,9 @@ namespace Indie
         void renderPost3D() final;
         void skipScene(bool update, bool render, bool subUpdate, bool subRender);
 
+    public:
+        static const std::vector<std::pair<std::string, Components::PlayerComponent::PLAYER_COLOR>> charaPaths;
+
     private:
         ContextManager &context;
         UiSelector selector;
@@ -59,7 +62,6 @@ namespace Indie
         irr::scene::IAnimatedMeshSceneNode *theme1;
         irr::scene::IAnimatedMeshSceneNode *theme2;
         float modelRotation;
-        static const std::vector<std::pair<std::string, Components::PlayerComponent::PLAYER_COLOR>> charaPaths;
         std::vector<std::string> mapPaths;
         // PARAMS (psk inclusion circulaire à cause du include GameScene.hpp dans InitGame.hpp)
         char nbAi;
@@ -70,7 +72,6 @@ namespace Indie
         time_t timeLimit;
         std::string playerTexture;
         std::vector<std::pair<irr::EKEY_CODE, Indie::Components::KEY_TYPE>> playerKeys;
-        std::vector<irr::EKEY_CODE> playerKeyCodes;
         Components::PlayerComponent::PLAYER_COLOR playerColor;
         // TODO : XP BAR
         // TODO : SCORE

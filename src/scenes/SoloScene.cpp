@@ -61,17 +61,12 @@ Indie::SoloScene::SoloScene(Indie::ContextManager &context)
     , mapSelector(1, 1, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
 {
     pUpsEnabled = true;
-    playerKeyCodes.push_back(irr::EKEY_CODE::KEY_UP);
-    playerKeyCodes.push_back(irr::EKEY_CODE::KEY_DOWN);
-    playerKeyCodes.push_back(irr::EKEY_CODE::KEY_LEFT);
-    playerKeyCodes.push_back(irr::EKEY_CODE::KEY_RIGHT);
-    playerKeyCodes.push_back(irr::EKEY_CODE::KEY_SPACE);
+    playerKeys.push_back({irr::EKEY_CODE::KEY_UP, Indie::Components::KEY_TYPE::UP});
+    playerKeys.push_back({irr::EKEY_CODE::KEY_DOWN, Indie::Components::KEY_TYPE::DOWN});
+    playerKeys.push_back({irr::EKEY_CODE::KEY_LEFT, Indie::Components::KEY_TYPE::LEFT});
+    playerKeys.push_back({irr::EKEY_CODE::KEY_RIGHT, Indie::Components::KEY_TYPE::RIGHT});
+    playerKeys.push_back({irr::EKEY_CODE::KEY_SPACE, Indie::Components::KEY_TYPE::DROP});
     charaSelector.setSize(int(charaPaths.size()), 1); // On set juste la size en plus petit pour pas qu'il ai accès à des perso mdr
-    playerKeys.push_back({irr::KEY_LEFT, Indie::Components::KEY_TYPE::LEFT});
-    playerKeys.push_back({irr::KEY_RIGHT, Indie::Components::KEY_TYPE::RIGHT});
-    playerKeys.push_back({irr::KEY_UP, Indie::Components::KEY_TYPE::UP});
-    playerKeys.push_back({irr::KEY_DOWN, Indie::Components::KEY_TYPE::DOWN});
-    playerKeys.push_back({irr::KEY_SPACE, Indie::Components::KEY_TYPE::DROP});
     modelRotation = 0;
     mapPaths.push_back("Default");
     mapPaths.push_back("Random");
@@ -143,11 +138,16 @@ void Indie::SoloScene::init()
     /* ================================================================== */
     // KEYBINDS CREATE
     /* ================================================================== */
-    up.reset(new Keybind(context, playerKeyCodes[0]));
-    down.reset(new Keybind(context, playerKeyCodes[1]));
-    left.reset(new Keybind(context, playerKeyCodes[2]));
-    right.reset(new Keybind(context, playerKeyCodes[3]));
-    bomb.reset(new Keybind(context, playerKeyCodes[4]));
+    up.reset(new Keybind(context, std::find_if(playerKeys.begin(), playerKeys.end(), [](const auto &var){return (var.second == Indie::Components::KEY_TYPE::UP);})->first));
+    down.reset(new Keybind(context, std::find_if(playerKeys.begin(), playerKeys.end(), [](const auto &var){return (var.second == Indie::Components::KEY_TYPE::DOWN);})->first));
+    left.reset(new Keybind(context, std::find_if(playerKeys.begin(), playerKeys.end(), [](const auto &var){return (var.second == Indie::Components::KEY_TYPE::LEFT);})->first));
+    right.reset(new Keybind(context, std::find_if(playerKeys.begin(), playerKeys.end(), [](const auto &var){return (var.second == Indie::Components::KEY_TYPE::RIGHT);})->first));
+    bomb.reset(new Keybind(context, std::find_if(playerKeys.begin(), playerKeys.end(), [](const auto &var){return (var.second == Indie::Components::KEY_TYPE::DROP);})->first));
+    //up.reset(new Keybind(context, playerKeys[0].first));
+    //down.reset(new Keybind(context, playerKeys[1].first));
+    //left.reset(new Keybind(context, playerKeys[2].first));
+    //right.reset(new Keybind(context, playerKeys[3].first));
+    //bomb.reset(new Keybind(context, playerKeys[4].first));
     /* ================================================================== */
     // KEYBINDS INIT
     /* ================================================================== */
@@ -183,17 +183,17 @@ void Indie::SoloScene::update(irr::f32 ticks)
     /* ================================================================== */
     // KEYBINDS SET USED
     /* ================================================================== */
-    playerKeyCodes.clear();
-    playerKeyCodes.push_back(up->getKey());
-    playerKeyCodes.push_back(down->getKey());
-    playerKeyCodes.push_back(left->getKey());
-    playerKeyCodes.push_back(right->getKey());
-    playerKeyCodes.push_back(bomb->getKey());
-    up->setUsedKeys(playerKeyCodes);
-    down->setUsedKeys(playerKeyCodes);
-    left->setUsedKeys(playerKeyCodes);
-    right->setUsedKeys(playerKeyCodes);
-    bomb->setUsedKeys(playerKeyCodes);
+    playerKeys.clear();
+    playerKeys.push_back({up->getKey(), Indie::Components::KEY_TYPE::UP});
+    playerKeys.push_back({down->getKey(), Indie::Components::KEY_TYPE::DOWN});
+    playerKeys.push_back({left->getKey(), Indie::Components::KEY_TYPE::LEFT});
+    playerKeys.push_back({right->getKey(), Indie::Components::KEY_TYPE::RIGHT});
+    playerKeys.push_back({bomb->getKey(), Indie::Components::KEY_TYPE::DROP});
+    up->setUsedKeys(playerKeys);
+    down->setUsedKeys(playerKeys);
+    left->setUsedKeys(playerKeys);
+    right->setUsedKeys(playerKeys);
+    bomb->setUsedKeys(playerKeys);
     /* ================================================================== */
     // UPDATE KEYBINDS
     /* ================================================================== */
@@ -270,11 +270,9 @@ void Indie::SoloScene::update(irr::f32 ticks)
         init.timeLimit = 180;
         initPlayer.playerTexture = charaPaths[charaSelector.getPos().first].first;
         initPlayer.playerColor = charaPaths[charaSelector.getPos().first].second;
-        initPlayer.playerKeys.insert({up->getKey(), Indie::Components::KEY_TYPE::UP});
-        initPlayer.playerKeys.insert({down->getKey(), Indie::Components::KEY_TYPE::DOWN});
-        initPlayer.playerKeys.insert({left->getKey(), Indie::Components::KEY_TYPE::LEFT});
-        initPlayer.playerKeys.insert({right->getKey(), Indie::Components::KEY_TYPE::RIGHT});
-        initPlayer.playerKeys.insert({bomb->getKey(), Indie::Components::KEY_TYPE::DROP});
+        for (auto &it : playerKeys) {
+            initPlayer.playerKeys.insert(it);
+        }
         init.playersParams = {initPlayer};
         ServiceLocator::getInstance().get<SceneManager>().getScene<GameScene>()->setInitGame(init);
         ServiceLocator::getInstance().get<SceneManager>().setScene<GameScene>(context);

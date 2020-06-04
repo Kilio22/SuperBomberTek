@@ -16,6 +16,7 @@
 #include <string>
 #include <vector>
 #include <irrlicht.h>
+#include "Components.h"
 
 namespace Indie {
     class Keybind {
@@ -29,7 +30,8 @@ namespace Indie {
             bool getStatus() const;
             irr::EKEY_CODE getKey() const;
             void setStatus(bool status);
-            void setUsedKeys(std::vector<irr::EKEY_CODE> &list);
+            void setUsedKeys(std::vector<std::pair<irr::EKEY_CODE, Indie::Components::KEY_TYPE>> &list);
+            static const std::vector<std::pair<irr::EKEY_CODE, irr::core::stringw>> keyCodes;
             Image *tick;
 
         protected:
@@ -40,7 +42,6 @@ namespace Indie {
             irr::core::position2d<irr::s32> pos;
             irr::EKEY_CODE key;
             irr::gui::IGUIFont *font;
-            static const std::vector<std::pair<irr::EKEY_CODE, irr::core::stringw>> keyCodes;
             std::vector<irr::EKEY_CODE> usedKeys;
     };
 }

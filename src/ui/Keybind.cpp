@@ -127,6 +127,12 @@ void Indie::Keybind::update(std::pair<int, int> pos)
     if (status) {
         for (auto it : keyCodes) {
             if (EventHandler::getInstance().isKeyPressedAtOnce(it.first)) {
+                if (it.first == key) {
+                    status = false;
+                    EventHandler::getInstance().resetKeysStatus();
+                    EventHandler::getInstance().resetKeysStatusOnce();
+                    break;
+                }
                 if (std::find(usedKeys.begin(), usedKeys.end(), it.first) != usedKeys.end())
                     continue;
                 key = it.first;
@@ -169,9 +175,9 @@ void Indie::Keybind::setStatus(bool status)
     this->status = status;
 }
 
-void Indie::Keybind::setUsedKeys(std::vector<irr::EKEY_CODE> &list)
+void Indie::Keybind::setUsedKeys(std::vector<std::pair<irr::EKEY_CODE, Indie::Components::KEY_TYPE>> &list)
 {
     usedKeys.clear();
     for (auto it : list)
-        usedKeys.push_back(it);
+        usedKeys.push_back(it.first);
 }
