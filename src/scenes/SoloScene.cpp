@@ -171,6 +171,7 @@ void Indie::SoloScene::init()
         }
     } catch (const std::exception &e) {
         this->resetKeybinds();
+        std::cout << e.what() << std::endl;
     }
 
     /* ================================================================== */
