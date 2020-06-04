@@ -29,7 +29,7 @@ void Indie::Systems::AISystem::onUpdate(irr::f32, EntityManager &entityManager) 
         mapPathFinding = pathFinder->getMap();
 
         // Bomb placé -> en attente d'instruction
-        if (ai->getAction() == ACTION::PLACE_BOMB) {
+        if (ai->getAction() == ACTION::PLACE_BOMB && hasDropBomb(entityManager, entity->getId())) {
             move->setDrop(false);
             ai->setAction(ACTION::STANDBY);
         }

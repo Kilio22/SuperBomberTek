@@ -137,7 +137,7 @@ void Indie::Systems::PathFinderSystem::setPathFinding(std::vector<std::vector<OB
         canContinue = false;
         for (size_t j = 1; j < map.at(0).size(); j++) {
             for (size_t i = 1; i < map.size(); i++) {
-                if (map.at(i).at(j) == static_cast<OBJECT>(value) && ((behavior == 0) || mapBomb.at(i).at(j) != static_cast<OBJECT>(5)) && ((behavior == 0) || mapPower.at(i).at(j) != static_cast<OBJECT>(9))) {
+                if (map.at(i).at(j) == static_cast<OBJECT>(value) && (mapBomb.at(i).at(j) != static_cast<OBJECT>(5)) && (mapPower.at(i).at(j) != static_cast<OBJECT>(9))) {
                     map.at(i - 1).at(j) = (map.at(i - 1).at(j) == static_cast<OBJECT>(0)) ? static_cast<OBJECT>(value + 1) : map.at(i - 1).at(j);
                     map.at(i + 1).at(j) = (map.at(i + 1).at(j) == static_cast<OBJECT>(0)) ? static_cast<OBJECT>(value + 1) : map.at(i + 1).at(j);
                     map.at(i).at(j + 1) = (map.at(i).at(j + 1) == static_cast<OBJECT>(0)) ? static_cast<OBJECT>(value + 1) : map.at(i).at(j + 1);
