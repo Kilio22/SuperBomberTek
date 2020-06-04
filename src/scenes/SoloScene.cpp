@@ -83,7 +83,11 @@ Indie::SoloScene::~SoloScene()
     for (auto key : this->playerKeys) {
         dataToWrite.push_back({ std::to_string((int)key.second), std::to_string((int)key.first) });
     }
-    ServiceLocator::getInstance().get<CSVParser>().writeToFile("../ressources/.saves/keybinds.txt", dataToWrite);
+    try {
+        ServiceLocator::getInstance().get<CSVParser>().writeToFile("../ressources/.saves/keybinds.txt", dataToWrite);
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << '\n';
+    }
 }
 
 void Indie::SoloScene::init()
@@ -150,6 +154,8 @@ void Indie::SoloScene::init()
     try {
         std::vector<std::vector<std::string>> parsedData = ServiceLocator::getInstance().get<CSVParser>().parse("../ressources/.saves/keybinds.txt");
 
+        if (parsedData.size() != 5)
+            throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"../ressources/.saves/keybinds.txt\" corrupted.");
         for (auto datas : parsedData) {
             if (datas.size() != 2)
                 throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"../ressources/.saves/keybinds.txt\" corrupted.");

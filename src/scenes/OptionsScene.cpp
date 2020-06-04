@@ -6,8 +6,8 @@
 */
 
 #include "OptionsScene.hpp"
-#include "ServiceLocator.hpp"
 #include "MainMenuScene.hpp"
+#include "ServiceLocator.hpp"
 
 void Indie::OptionsScene::skipScene(bool update, bool render, bool subUpdate, bool subRender)
 {
@@ -27,8 +27,7 @@ Indie::OptionsScene::OptionsScene(Indie::ContextManager &context)
     soundVolumeSelector.setPos(20, 0);
 }
 
-Indie::OptionsScene::~OptionsScene()
-{}
+Indie::OptionsScene::~OptionsScene() {}
 
 void Indie::OptionsScene::init()
 {
@@ -57,6 +56,7 @@ void Indie::OptionsScene::init()
     back->init(context, path5, 0, 4, POS(0, 0));
 
     musicMute->setStatus(Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().isMusicMuted());
+    musicVolumeSelector.setPos((int)Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().getMusicVolume(), 0);
     // TODO : Set the sound checkbox status to the isMuted value of the sound when it's done
 }
 
@@ -97,16 +97,13 @@ void Indie::OptionsScene::update(irr::f32 ticks)
         // Volume =  soundVolumeSelector.getPos().first * 5
     }
 
-
-
-    //Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setVolume(float(musicVolumeSelector.getPos().first * 5));
+    // Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setVolume(float(musicVolumeSelector.getPos().first * 5));
     Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setVolume(float(musicVolumeSelector.getPos().first));
     EventHandler::getInstance().resetKeysStatusOnce();
     EventHandler::getInstance().resetKeysStatus();
 }
 
-void Indie::OptionsScene::renderPre3D()
-{}
+void Indie::OptionsScene::renderPre3D() {}
 
 void Indie::OptionsScene::renderPost3D()
 {

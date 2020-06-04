@@ -26,6 +26,7 @@ class MusicManager {
         void addMusic(const std::string filepath);
         void setMusic(size_t id);
         void setVolume(float _vol);
+        float getMusicVolume(void) const;
         void mute();
         void unMute();
         void playMusic();

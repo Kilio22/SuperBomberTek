@@ -9,26 +9,29 @@
 #define GAMEENGINE_HPP_
 
 #include "ContextManager.hpp"
-#include "MusicManager.hpp"
+#include "Exceptions.h"
 #include "MusicManager.hpp"
 #include "SceneManager.hpp"
-#include "Exceptions.h"
 #include "ServiceLocator.hpp"
 
-namespace Indie {
-    class GameEngine {
-        public:
-            GameEngine();
-            ~GameEngine();
+namespace Indie
+{
+    class GameEngine
+    {
+    public:
+        GameEngine();
+        ~GameEngine();
 
-            void startGame();
+        void startGame();
 
-        private:
-            void setupMusicManager();
-            void setupSceneManager(Indie::ContextManager &context);
+    private:
+        void readOptions();
+        std::string findValueByName(std::vector<std::vector<std::string>> parsedData, const std::string &value) const;
+        void setupMusicManager();
+        void setupSceneManager(Indie::ContextManager &context);
 
-            ContextManager &context;
-            Image *loadImage;
+        ContextManager &context;
+        Image *loadImage;
     };
 }
 

@@ -45,6 +45,11 @@ void Indie::MusicManager::setVolume(float _vol)
     volume = _vol;
 }
 
+float Indie::MusicManager::getMusicVolume(void) const
+{
+    return this->volume;
+}
+
 void Indie::MusicManager::mute()
 {
     setVolume(0);

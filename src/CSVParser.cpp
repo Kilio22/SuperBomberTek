@@ -31,6 +31,7 @@ std::vector<std::vector<std::string>> Indie::CSVParser::parse(const std::string 
         if (values.size() != 0)
             data.push_back(values);
     }
+    ifs.close();
     return data;
 }
 
@@ -39,7 +40,7 @@ void Indie::CSVParser::writeToFile(const std::string &filepath, const std::vecto
     std::ofstream ofs(filepath);
 
     if (ofs.is_open() == false) {
-        throw Indie::Exceptions::FileNotFoundException(ERROR_STR, "File \"" + filepath + "\" not found.");
+        throw Indie::Exceptions::FileNotFoundException(ERROR_STR, "Cannot open file: \"" + filepath + "\".");
     }
     for (auto values : data) {
         std::ostringstream oss;
