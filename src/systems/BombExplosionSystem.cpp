@@ -72,7 +72,8 @@ void Indie::Systems::BombExplosionSystem::explodeBombs(std::vector<std::vector<O
         if (down == true && map.at(mapZ - 1).at(mapX) != OBJECT::WALL_OUT && map.at(mapZ - 1).at(mapX) != OBJECT::WALL_IN)
             down = this->explodeBomb(map, entityManager, playerEntity, mapX, mapZ - i, 180.0f, i > 0);
     }
-    player->setCurrentBombNb(player->getCurrentBombNb() + 1);
+    if (player->getCurrentBombNb() < player->getMaxBombNb())
+        player->setCurrentBombNb(player->getCurrentBombNb() + 1);
 }
 
 bool Indie::Systems::BombExplosionSystem::explodeBomb(std::vector<std::vector<OBJECT>> &map, EntityManager &entityManager, Entity *playerEntity,
@@ -109,7 +110,8 @@ void Indie::Systems::BombExplosionSystem::explodeBox(EntityManager &entityManage
         if ((irr::f32)(mapX * 20) == position->getPosition().X && (irr::f32)(mapZ * 20) == position->getPosition().Z) {
             auto player = playerEntity->getComponent<PlayerComponent>();
 
-            player->setXpCount(player->getXpCount() + 10);
+            player->setXpCount(player->getXpCount() + 5);
+            player->setScore(player->getScore() + 5);
             entity->needDestroy();
             if (ServiceLocator::getInstance().get<SceneManager>().getScene<Indie::GameScene>()->getInitGame()->powerUp == true)
                 this->spawnEffects(position->getPosition());

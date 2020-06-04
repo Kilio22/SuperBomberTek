@@ -15,7 +15,7 @@ void Indie::Systems::CollisionSystem::checkCollisionWithPowerDowns(
 
     if (powerDownComponent == nullptr)
         return;
-    playerComponent->setXpCount(playerComponent->getXpCount() + 15);
+    playerComponent->setScore(playerComponent->getScore() - 10);
     if (powerDownComponent->getType() == Components::POWERDOWN_TYPE::BOMB_DOWN && playerComponent->getMaxBombNb() > 1) {
         playerComponent->setMaxBombNb(playerComponent->getMaxBombNb() - 1);
         if (playerComponent->getCurrentBombNb() > playerComponent->getMaxBombNb())
@@ -40,7 +40,7 @@ void Indie::Systems::CollisionSystem::checkCollisionWithPowerUps(
 
     if (powerUpComponent == nullptr)
         return;
-    playerComponent->setXpCount(playerComponent->getXpCount() + 15);
+    playerComponent->setScore(playerComponent->getScore() + 15);
     if (powerUpComponent->getType() == Components::POWERUP_TYPE::BOMB_UP) {
         playerComponent->setMaxBombNb(playerComponent->getMaxBombNb() + 1);
         playerComponent->setCurrentBombNb(playerComponent->getCurrentBombNb() + 1);
@@ -170,8 +170,10 @@ void Indie::Systems::CollisionSystem::onUpdate(irr::f32, EntityManager &entityMa
                 auto colliderPlayerComponent
                     = colliderPlayerEntity == nullptr ? nullptr : colliderPlayerEntity->getComponent<Components::PlayerComponent>();
 
-                if (colliderPlayerComponent != nullptr && colliderPlayerEntity != entity)
+                if (colliderPlayerComponent != nullptr && colliderPlayerEntity != entity) {
                     colliderPlayerComponent->setXpCount(colliderPlayerComponent->getXpCount() + 100);
+                    colliderPlayerComponent->setScore(colliderPlayerComponent->getScore() + 100);
+                }
                 entity->addComponent<Components::TimerComponent>(1.75f);
                 entityPlayerComponent->setIsDead(true);
                 entityVelocityComponent->setVelocity(0);
@@ -200,8 +202,10 @@ void Indie::Systems::CollisionSystem::onUpdate(irr::f32, EntityManager &entityMa
             auto colliderPlayerComponent
                 = colliderPlayerEntity == nullptr ? nullptr : colliderPlayerEntity->getComponent<Components::PlayerComponent>();
 
-            if (colliderPlayerComponent != nullptr && colliderPlayerEntity != entity)
+            if (colliderPlayerComponent != nullptr && colliderPlayerEntity != entity) {
                 colliderPlayerComponent->setXpCount(colliderPlayerComponent->getXpCount() + 100);
+                colliderPlayerComponent->setScore(colliderPlayerComponent->getScore() + 100);
+            }
             entity->addComponent<Components::TimerComponent>(1.75f);
             entityPlayerComponent->setIsDead(true);
         }

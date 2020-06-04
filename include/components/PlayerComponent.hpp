@@ -78,6 +78,18 @@ namespace Indie::Components
         unsigned int getXpCount(void) const;
 
         /**
+         * @brief Get the Xp To Level Up object
+         * @return unsigned int The required xp to level up.
+         */
+        unsigned int getXpToLevelUp(void) const;
+
+        /**
+         * @brief Gets the score value
+         * @return int The score value
+         */
+        int getScore(void) const;
+
+        /**
          * @brief Gets wall pass boolean value in order to check if the player took this power up
          * @return true The player took the power up
          * @return false The player didn't took the power up
@@ -146,6 +158,12 @@ namespace Indie::Components
         void setXpCount(unsigned int value);
 
         /**
+         * @brief Sets the score value
+         * @param score The score value
+         */
+        void setScore(int score);
+
+        /**
          * @brief Sets wall pass boolean value
          * @param value The new value
          */
@@ -164,6 +182,7 @@ namespace Indie::Components
         unsigned int velocityLevel;
         unsigned int level;
         unsigned int xp;
+        int score;
         bool wallPass;
         bool _isDead;
         std::string name;
