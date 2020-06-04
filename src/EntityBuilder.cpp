@@ -110,6 +110,7 @@ Indie::Entity *Indie::EntityBuilder::createPowerUp(
     entity->addComponent<RenderComponent>(modelPath, texturePath, this->contextManager, position, false);
     entity->addComponent<RotationComponent>(0.f, 50.f);
     entity->addComponent<PowerUpComponent>(type);
+    entity->addComponent<TimerComponent>(20.f);
     return entity;
 }
 
@@ -123,6 +124,7 @@ Indie::Entity *Indie::EntityBuilder::createPowerDown(
     entity->addComponent<RenderComponent>(modelPath, texturePath, this->contextManager, position, false);
     entity->addComponent<RotationComponent>(0.f, 50.f);
     entity->addComponent<PowerDownComponent>(type);
+    entity->addComponent<TimerComponent>(20.f);
     return entity;
 }
 
