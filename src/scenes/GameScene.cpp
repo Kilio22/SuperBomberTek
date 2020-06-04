@@ -50,6 +50,7 @@ Indie::GameScene::GameScene(ContextManager &context)
     this->systemManager.addSystem<BombDropSystem>();
     this->systemManager.addSystem<BombExplosionSystem>();
     this->systemManager.addSystem<CollisionSystem>();
+    this->systemManager.addSystem<GameSystem>();
     this->systemManager.addSystem<InputSystem>();
     this->systemManager.addSystem<LavaSystem>();
     this->systemManager.addSystem<MeshSystem>();
@@ -143,25 +144,18 @@ void Indie::GameScene::update(irr::f32 deltaTime)
     this->systemManager.getSystem<MeshSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<ShakeSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<RenderSystem>()->onUpdate(deltaTime, entityManager);
-    if (EventHandler::getInstance().isKeyPressed(irr::EKEY_CODE::KEY_ESCAPE) == true) {
-        for (auto entity : this->entityManager.each<RenderComponent>()) {
-            entity->getComponent<RenderComponent>()->getMesh()->setAnimationSpeed(0.f);
-        }
-        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(false);
-        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(false);
-        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::PauseScene>();
-    }
+    this->systemManager.getSystem<GameSystem>()->onUpdate(deltaTime, entityManager);
 }
 
 void Indie::GameScene::renderPre3D() {}
 
 void Indie::GameScene::renderPost3D()
 {
-    std::stringstream ss;
-    int n = 0;
     const std::vector<irr::video::SColor> colors
         = { { 200, 255, 0, 0 }, { 200, 0, 255, 0 }, { 200, 0, 0, 255 }, { 200, 255, 255, 0 }, { 200, 255, 0, 255 }, { 200, 192, 192, 192 } };
     const std::vector<irr::core::vector2di> positions = { { 20, 20 }, { 1050, 20 }, { 20, 550 }, { 1050, 550 } };
+    std::stringstream ss;
+    int n = 0;
 
     for (auto entity : entityManager.each<PlayerComponent>()) {
         auto player = entity->getComponent<PlayerComponent>();
