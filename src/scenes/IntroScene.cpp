@@ -63,6 +63,7 @@ void Indie::IntroScene::skipScene(void)
     this->camera->setTarget(irr::core::vector3df(138.593f, -34.13f, 121.f));
     EventHandler::getInstance().resetKeys();
     Indie::ServiceLocator::getInstance().get<SceneManager>().setSceneUpdateActive(true);
+    Indie::ServiceLocator::getInstance().get<SceneManager>().setSceneRenderActive(true);
     Indie::ServiceLocator::getInstance().get<SceneManager>().setSubSceneRenderActive(false);
     Indie::ServiceLocator::getInstance().get<SceneManager>().setSubSceneUpdateActive(false);
     Indie::ServiceLocator::getInstance().get<MusicManager>().setStatus(Music::Status::Loop);
