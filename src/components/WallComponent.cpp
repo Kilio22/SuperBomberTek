@@ -7,17 +7,12 @@
 
 #include "WallComponent.hpp"
 
-Indie::Components::WallComponent::WallComponent(bool canDestroy)
-    : canBeDestroyed(canDestroy)
+Indie::Components::WallComponent::WallComponent(bool canBeDestroyed)
+    : canBeDestroyed(canBeDestroyed)
 {
 }
 
 bool Indie::Components::WallComponent::getCanBeDestroyed() const
 {
     return this->canBeDestroyed;
-}
-
-void Indie::Components::WallComponent::setCanBeDestroyed(bool value)
-{
-    this->canBeDestroyed = value;
 }

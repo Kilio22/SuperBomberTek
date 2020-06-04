@@ -8,11 +8,12 @@
 #ifndef ENTITYMANAGER_HPP_
 #define ENTITYMANAGER_HPP_
 
-#include <vector>
-#include <memory>
-#include <iostream>
-#include <algorithm>
 #include "Entity.hpp"
+#include <algorithm>
+#include <iostream>
+#include <memory>
+#include <unordered_map>
+#include <vector>
 
 namespace Indie
 {
@@ -23,7 +24,11 @@ namespace Indie
     {
         public:
             EntityIterator(const EntityManager *entityManager, size_t index, bool isEnd)
-                : entityManager(entityManager), index(index), _isEnd(isEnd) {}
+                : entityManager(entityManager)
+                , index(index)
+                , _isEnd(isEnd)
+            {
+            }
 
             bool isEnd() const;
 
@@ -65,7 +70,8 @@ namespace Indie
     {
         public:
             EntityView(EntityIterator<Types...> begin, EntityIterator<Types...> end)
-                : _begin(begin), _end(end)
+                : _begin(begin)
+                , _end(end)
             {
                 if (this->_begin.get() == nullptr
                     || this->_begin.get()->isPendingDestroy()
@@ -91,7 +97,11 @@ namespace Indie
     class EntityManager
     {
         public:
-            EntityManager() : idCount(0) {}
+            EntityManager()
+                : idCount(0)
+            {
+            }
+
             ~EntityManager() = default;
 
             Entity *createEntity()
@@ -102,6 +112,22 @@ namespace Indie
 
                 this->entities.push_back(std::move(entity));
                 return ptr;
+            }
+
+            template <typename T, typename... Args>
+            Entity *createUniqueEntity(Args &&... args)
+            {
+                auto entity = this->createEntity();
+
+                entity->addComponent<T>(std::forward<Args>(args)...);
+                this->uniqueEntities.insert({ getTypeIndex<T>(), entity });
+                return entity;
+            }
+
+            template <typename T>
+            Entity *getUniqueEntity()
+            {
+                return this->uniqueEntities.at(getTypeIndex<T>());
             }
 
             template <typename... Types>
@@ -135,13 +161,19 @@ namespace Indie
             {
                 size_t nbDeleted = 0;
 
-                entities.erase(std::remove_if(entities.begin(), entities.end(), [&, this](const std::unique_ptr<Entity> &entity) {
+                for (auto uniqueEntitiesIt = this->uniqueEntities.begin(); uniqueEntitiesIt != this->uniqueEntities.end();) {
+                    if (uniqueEntitiesIt->second->isPendingDestroy())
+                        this->uniqueEntities.erase(uniqueEntitiesIt);
+                    else
+                        uniqueEntitiesIt++;
+                }
+                this->entities.erase(std::remove_if(this->entities.begin(), this->entities.end(), [&](const std::unique_ptr<Entity> &entity) {
                     if (entity->isPendingDestroy()) {
                         ++nbDeleted;
                         return true;
                     }
                     return false;
-                }), entities.end());
+                }), this->entities.end());
 
                 if (nbDeleted > 0)
                     std::cout << "Cleaned " << nbDeleted << " entities." << std::endl;
@@ -149,12 +181,14 @@ namespace Indie
 
             void reset()
             {
-                entities.clear();
+                this->entities.clear();
+                this->uniqueEntities.clear();
                 idCount = 0;
             }
 
         private:
             std::vector<std::unique_ptr<Entity>> entities;
+            std::unordered_map<TypeIndex, Entity *> uniqueEntities;
             int idCount;
     };
 

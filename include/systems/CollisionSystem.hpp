@@ -15,14 +15,15 @@ namespace Indie::Systems
 {
     class CollisionSystem : public ISystem
     {
-        public:
+    public:
         CollisionSystem() = default;
         ~CollisionSystem() = default;
 
         void onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const final;
 
-        private:
-        template <class T> T *checkCollisionWithEffect(EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox) const
+    private:
+        template <class T>
+        T *checkCollisionWithEffect(EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox) const
         {
             for (Entity *entity : entityManager.each<Components::RenderComponent, T>()) {
                 T *TComponent = entity->getComponent<T>();

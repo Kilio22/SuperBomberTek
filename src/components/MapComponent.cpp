@@ -56,21 +56,6 @@ void Indie::Components::MapComponent::setMapState(Indie::Components::MAP_STATE n
     this->mapState = newState;
 }
 
-void Indie::Components::MapComponent::setType(Indie::Components::MAP_TYPE type)
-{
-    this->type = type;
-}
-
-void Indie::Components::MapComponent::setTheme(Indie::Components::THEME theme)
-{
-    this->theme = theme;
-}
-
-void Indie::Components::MapComponent::setDimension(const irr::core::vector2di &dimension)
-{
-    this->dimension = dimension;
-}
-
 void Indie::Components::MapComponent::setMap(const std::vector<std::vector<Indie::Components::OBJECT>> &map)
 {
     this->map = map;

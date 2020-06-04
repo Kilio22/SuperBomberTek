@@ -10,17 +10,24 @@
 
 namespace Indie::Components
 {
+    /**
+     * @brief Wall component
+     */
     class WallComponent
     {
-        public:
-            WallComponent(bool canDestroy);
-            ~WallComponent() = default;
+    public:
+        WallComponent(bool canBeDestroyed);
+        ~WallComponent() = default;
 
-            bool getCanBeDestroyed() const;
-            void setCanBeDestroyed(bool value);
+        /**
+         * @brief Gets the canBeDestroyed value which is necessary for bomb explosion & wall pass power up
+         * @return true The wall can be destroyed
+         * @return false The wall is solid
+         */
+        bool getCanBeDestroyed() const;
 
-        private:
-            bool canBeDestroyed;
+    private:
+        bool canBeDestroyed;
     };
 } // namespace Indie::Components
 

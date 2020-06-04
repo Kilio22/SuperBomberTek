@@ -8,23 +8,29 @@
 #ifndef HITBOXCOMPONENT_HPP_
 #define HITBOXCOMPONENT_HPP_
 
-#include <irrlicht.h>
 #include "ContextManager.hpp"
+#include <irrlicht.h>
 
 namespace Indie::Components
 {
+    /**
+     * @brief Hitbox component
+     */
     class HitboxComponent
     {
-        public:
-            HitboxComponent(irr::core::vector3df, const ContextManager &);
-            ~HitboxComponent() = default;
+    public:
+        HitboxComponent(irr::core::vector3df, const ContextManager &);
+        ~HitboxComponent() = default;
 
-            irr::scene::IAnimatedMeshSceneNode *getMesh(void) const;
+        /**
+         * @brief Gets the stored Mesh
+         * @return irr::scene::IAnimatedMeshSceneNode* The mesh
+         */
+        irr::scene::IAnimatedMeshSceneNode *getMesh(void) const;
 
-        private:
-            irr::scene::IAnimatedMeshSceneNode *mesh;
+    private:
+        irr::scene::IAnimatedMeshSceneNode *mesh;
     };
 } // namespace Indie::Components
-
 
 #endif /* !HITBOXCOMPONENT_HPP_ */

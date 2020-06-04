@@ -10,19 +10,30 @@
 
 namespace Indie::Components
 {
-    enum class POWERDOWN_TYPE { BOMB_DOWN, FIRE_DOWN, SPEED_DOWN, NONE };
+    enum class POWERDOWN_TYPE
+    {
+        BOMB_DOWN,
+        FIRE_DOWN,
+        SPEED_DOWN,
+        NONE
+    };
 
+    /**
+     * @brief Power down component
+     */
     class PowerDownComponent
     {
-
-        public:
+    public:
         PowerDownComponent(POWERDOWN_TYPE type);
         ~PowerDownComponent() = default;
 
+        /**
+         * @brief Gets the type of the power down
+         * @return POWERDOWN_TYPE The type
+         */
         POWERDOWN_TYPE getType(void) const;
-        void setType(POWERDOWN_TYPE type);
 
-        private:
+    private:
         POWERDOWN_TYPE type;
     };
 } // namespace Indie::Components

@@ -10,17 +10,29 @@
 
 namespace Indie::Components
 {
+    /**
+     * @brief Velocity component
+     */
     class VelocityComponent
     {
-        public:
-            VelocityComponent();
-            ~VelocityComponent() = default;
+    public:
+        VelocityComponent();
+        ~VelocityComponent() = default;
 
-            float getVelocity(void) const;
-            void setVelocity(float newVel);
+        /**
+         * @brief Gets the velocity
+         * @return float The velocity
+         */
+        float getVelocity(void) const;
 
-        private:
-            float velocity;
+        /**
+         * @brief Sets the velocity
+         * @param newVel The new velocity
+         */
+        void setVelocity(float newVel);
+
+    private:
+        float velocity;
     };
 }
 

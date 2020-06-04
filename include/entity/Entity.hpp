@@ -23,7 +23,7 @@ class Entity {
         template<class T>
         bool has() const
         {
-            return components.find(getTypeIndex<T>()) != components.end();
+            return components.count(getTypeIndex<T>()) > 0;
         }
 
         template <typename T, typename TNext, typename... TList>
@@ -35,12 +35,9 @@ class Entity {
         template <typename T>
         T *getComponent() const
         {
-            auto found = components.find(getTypeIndex<T>());
+            auto &ptr = components.at(getTypeIndex<T>());
 
-            if (found != components.end()) {
-                return &reinterpret_cast<ObjectContainer<T> *>(found->second.get())->data;
-            }
-            return nullptr;
+            return &reinterpret_cast<ObjectContainer<T> *>(ptr.get())->data;
         }
 
         template <typename T, typename... Args>

@@ -16,8 +16,3 @@ Indie::Components::POWERUP_TYPE Indie::Components::PowerUpComponent::getType(voi
 {
     return this->type;
 }
-
-void Indie::Components::PowerUpComponent::setType(Components::POWERUP_TYPE type)
-{
-    this->type = type;
-}

@@ -15,15 +15,14 @@ namespace Indie
 {
     class CSVParser
     {
-        public:
+    public:
         CSVParser() = default;
         ~CSVParser() = default;
 
         std::vector<std::vector<std::string>> parse(const std::string &filepath);
-        void writeToFile(
-            const std::string &filepath, const std::vector<std::vector<std::string>> &data);
+        void writeToFile(const std::string &filepath, const std::vector<std::vector<std::string>> &data);
 
-        private:
+    private:
     };
 } // namespace Indie
 

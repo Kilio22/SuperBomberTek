@@ -8,12 +8,13 @@
 #ifndef INPUTCOMPONENT_HPP_
 #define INPUTCOMPONENT_HPP_
 
-#include <map>
 #include <irrlicht.h>
+#include <map>
 
 namespace Indie::Components
 {
-    enum class KEY_TYPE {
+    enum class KEY_TYPE
+    {
         LEFT,
         RIGHT,
         UP,
@@ -21,26 +22,52 @@ namespace Indie::Components
         DROP,
         NONE
     };
+
+    /**
+     * @brief Hitbox component
+     */
     class InputComponent
     {
-        public:
+    public:
+        InputComponent(std::map<irr::EKEY_CODE, KEY_TYPE> keys);
+        ~InputComponent() = default;
 
-            InputComponent(std::map<irr::EKEY_CODE, KEY_TYPE> keys);
-            ~InputComponent() = default;
+        /**
+         * @brief Checks if given key is pressed or not
+         * @param key The KEY_TYPE (see enum)
+         * @return true The key is pressed
+         * @return false The key is not pressed
+         */
+        bool isKeyPressed(KEY_TYPE key) const;
 
-            bool isKeyPressed(KEY_TYPE key) const;
+        /**
+         * @brief Gets watched keys state
+         * @return const std::map<irr::EKEY_CODE, bool>& List with the state of each watched key
+         */
+        const std::map<irr::EKEY_CODE, bool> &getKeysState(void) const;
 
-            const std::map<irr::EKEY_CODE, KEY_TYPE> &getKeys(void) const;
-            const std::map<irr::EKEY_CODE, bool> &getKeysState(void) const;
+        /**
+         * @brief Sets keys to watch
+         * @param newKeys Keys to watch
+         */
+        void setKeys(std::map<irr::EKEY_CODE, KEY_TYPE> newKeys);
 
-            void setKeys(std::map<irr::EKEY_CODE, KEY_TYPE> newKeys);
-            void setKeysState(std::map<irr::EKEY_CODE, bool> newKeysState);
+        /**
+         * @brief Sets watched keys state
+         * @param newKeysState Watched keys state
+         */
+        void setKeysState(std::map<irr::EKEY_CODE, bool> newKeysState);
 
-            KEY_TYPE getKeyType(irr::EKEY_CODE key) const;
+        /**
+         * @brief Gets KEY_TYPE which corresponds to its irr::EKEY_CODE
+         * @param key The key code
+         * @return KEY_TYPE The key type
+         */
+        KEY_TYPE getKeyType(irr::EKEY_CODE key) const;
 
-        private:
-            std::map<irr::EKEY_CODE, KEY_TYPE> keys;
-            std::map<irr::EKEY_CODE, bool> keysState;
+    private:
+        std::map<irr::EKEY_CODE, KEY_TYPE> keys;
+        std::map<irr::EKEY_CODE, bool> keysState;
     };
 }
 

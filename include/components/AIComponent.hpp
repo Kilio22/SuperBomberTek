@@ -8,24 +8,26 @@
 #ifndef AICOMPONENT_HPP_
 #define AICOMPONENT_HPP_
 
-#include <array>
-#include <vector>
-#include <irrlicht.h>
+#include "AIComponent.hpp"
 #include "MapComponent.hpp"
 #include "ServiceLocator.hpp"
-#include "AIComponent.hpp"
+#include <array>
+#include <irrlicht.h>
+#include <vector>
 
 namespace Indie::Components
 {
-    enum class DIRECTION {
+    enum class DIRECTION
+    {
         LEFT,
         RIGHT,
         UP,
         DOWN,
-        NONE,
+        NONE
     };
 
-    enum class ACTION {
+    enum class ACTION
+    {
         GO_BOX,
         GO_PLAYER,
         GO_SAFE,
@@ -39,32 +41,36 @@ namespace Indie::Components
         STANDBY
     };
 
+    /**
+     * @brief AI Component
+     */
     class AIComponent
     {
-        public:
-            AIComponent() = default;
-            ~AIComponent() = default;
+    public:
+        AIComponent() = default;
+        ~AIComponent() = default;
 
-            bool hasMoved(irr::core::vector3df position, irr::core::vector3df nextPosition, AIComponent *ai) const;
+        bool hasMoved(irr::core::vector3df position, irr::core::vector3df nextPosition, AIComponent *ai) const;
 
-            void forceNextDirection(irr::core::vector2di nextPos);
-            void setNextDirection(std::vector<std::vector<OBJECT>> &map, irr::core::vector2di acPos);
-            void setDirection(DIRECTION direction);
-            void setAction(ACTION action);
+        void forceNextDirection(irr::core::vector2di nextPos);
+        void setNextDirection(std::vector<std::vector<OBJECT>> &map, irr::core::vector2di acPos);
+        void setDirection(DIRECTION direction);
+        void setAction(ACTION action);
 
-            void setBehavior(unsigned int value);
-            unsigned int getBehavior() const;
+        void setBehavior(unsigned int value);
+        unsigned int getBehavior() const;
 
-            DIRECTION getDirection() const;
-            ACTION getAction() const;
+        DIRECTION getDirection() const;
+        ACTION getAction() const;
 
-            irr::core::vector2di getNextPosition() const;
-        private:
-            int nextPosX = 0;
-            int nextPosY = 0;
-            unsigned int behavior = 0;
-            DIRECTION direction = DIRECTION::NONE;
-            ACTION action = ACTION::STANDBY;
+        irr::core::vector2di getNextPosition() const;
+
+    private:
+        int nextPosX = 0;
+        int nextPosY = 0;
+        unsigned int behavior = 0;
+        DIRECTION direction = DIRECTION::NONE;
+        ACTION action = ACTION::STANDBY;
     };
 }
 
