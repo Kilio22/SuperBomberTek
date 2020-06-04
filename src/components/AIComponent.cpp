@@ -49,12 +49,6 @@ void Indie::Components::AIComponent::setNextDirection(std::vector<std::vector<OB
     }
 }
 
-void Indie::Components::AIComponent::forceNextDirection(irr::core::vector2di nextPos)
-{
-    this->nextPosX = nextPos.X;
-    this->nextPosY = nextPos.Y;
-}
-
 void Indie::Components::AIComponent::setDirection(Indie::Components::DIRECTION direction)
 {
     this->direction = direction;

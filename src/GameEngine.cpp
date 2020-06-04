@@ -15,6 +15,7 @@ void Indie::GameEngine::setupMusicManager()
 {
     ServiceLocator::getInstance().get<MusicManager>().addMusic("../ressources/musics/main_menu.wav"); // id 0
     ServiceLocator::getInstance().get<MusicManager>().addMusic("../ressources/musics/level_select.wav"); // id 1
+    ServiceLocator::getInstance().get<MusicManager>().mute();
     ServiceLocator::getInstance().get<MusicManager>().setMusic(0);
     ServiceLocator::getInstance().get<MusicManager>().mute(); // J'en ai marre d'entendre cette merde à chaque fois que je lance
     ServiceLocator::getInstance().get<MusicManager>().setVolume(25);

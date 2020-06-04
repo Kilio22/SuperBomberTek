@@ -14,13 +14,17 @@ using namespace Indie::Components;
 void Indie::Systems::PathFinderSystem::onUpdate(irr::f32, Indie::EntityManager &entityManager) const
 {
     std::vector<std::vector<OBJECT>> map = entityManager.getUniqueEntity<MapComponent>()->getComponent<MapComponent>()->getMap();
-    std::vector<std::vector<OBJECT>> mapBomb = map;
-    std::vector<std::vector<OBJECT>> mapPowerUp = map;
     std::vector<std::vector<OBJECT>> mapPathFinding;
+    std::vector<std::vector<OBJECT>> mapBomb;
+    std::vector<std::vector<OBJECT>> mapPower;
 
+    mapPathFinding = map;
+    mapBomb = map;
+    mapPower = map;
     this->setMapBomb(mapBomb, entityManager);
-    this->setMapPowerUp(mapPowerUp, entityManager);
+    this->setMapPower(mapPower, entityManager);
     this->cleanMap(map);
+
     for (auto entity : entityManager.each<PathFinderComponent, AIComponent, PositionComponent>()) {
         auto pathFinder = entity->getComponent<PathFinderComponent>();
         auto ai = entity->getComponent<AIComponent>();
@@ -36,17 +40,15 @@ void Indie::Systems::PathFinderSystem::onUpdate(irr::f32, Indie::EntityManager &
 
         // S'il fait rien return
         if (ai->getAction() == ACTION::STANDBY)
-            return;
-        ai->setBehavior((unsigned int)getNbPlayerInZone(map, entityManager, irr::core::vector2di(aiX, aiZ)));
-        setPathFinding(mapPathFinding, irr::core::vector2di(aiX, aiZ), 6, mapBomb);
+            continue;
+        ai->setBehavior((unsigned int)getNbPlayerInZone(map, entityManager, {aiX, aiZ}));
+        setPathFinding(mapPathFinding, {aiX, aiZ}, mapBomb, mapPower, ai->getBehavior());
 
         // Get PathFinding quand il doit dodge une bombe qu'il a posé
         if (ai->getAction() == ACTION::DODGE) {
             findFirstPosition(mapPathFinding, mapBomb, pathFinder, irr::core::vector2di(aiX, aiZ));
-            if (pathFinder->getEndMapPos().X == aiX && pathFinder->getEndMapPos().Y == aiZ) {
+            if (pathFinder->getEndMapPos().X == aiX && pathFinder->getEndMapPos().Y == aiZ)
                 ai->setAction(ACTION::DODGE);
-                return;
-            }
             setShortlessPath(mapPathFinding, irr::core::vector2di(aiX, aiZ), irr::core::vector2di(pathFinder->getEndMapPos().X, pathFinder->getEndMapPos().Y));
             ai->setAction(ACTION::GO_SAFE);
         }
@@ -56,30 +58,23 @@ void Indie::Systems::PathFinderSystem::onUpdate(irr::f32, Indie::EntityManager &
             setShortlessPath(mapPathFinding, irr::core::vector2di(aiX, aiZ), irr::core::vector2di(pathFinder->getEndMapPos().X, pathFinder->getEndMapPos().Y));
             ai->setAction(ACTION::GO_BOX);
         }
-        else if ((ai->getAction() == ACTION::GO_BOX || ai->getAction() == ACTION::GO_SAFE || ai->getAction() == ACTION::GO_POWERUP) &&
+        else if ((ai->getAction() == ACTION::GO_BOX || ai->getAction() == ACTION::GO_SAFE) &&
         ai->hasMoved(irr::core::vector3df(irr::f32(position->getPosition().X), 20, irr::f32(position->getPosition().Z)),irr::core::vector3df(irr::f32((ai->getNextPosition().X) * 20), 20, irr::f32((ai->getNextPosition().Y) * 20)), ai)) {
             ai->setNextDirection(mapPathFinding, irr::core::vector2di(aiX, aiZ));
-            // Si il est pas coincé il va pas marcher dans la lave ici
             if ((int)mapBomb.at(ai->getNextPosition().Y).at(ai->getNextPosition().X) == 5) {
                 ai->setAction(ACTION::STANDBY);
                 ai->setDirection(DIRECTION::NONE);
             }
         }
-        // Si il vont sur une bombe
-        if ((ai->getAction() == ACTION::GO_BOX || ai->getAction() == ACTION::GO_POWERUP) && goOnBomb(mapBomb, irr::core::vector2di(aiX, aiZ), ai->getDirection())) {
-            ai->setAction(ACTION::STANDBY);
-            ai->setDirection(DIRECTION::NONE);
-        }
         pathFinder->setMap(mapPathFinding);
     }
 }
-
 
 int Indie::Systems::PathFinderSystem::getNbPlayerInZone(std::vector<std::vector<OBJECT>> map,  EntityManager &entityManager, irr::core::vector2di aiPosition) const
 {
     int nbPlayer = 0;
 
-    setPathFinding(map, irr::core::vector2di(aiPosition.X, aiPosition.Y), 6, map);
+    setPathFinding(map, irr::core::vector2di(aiPosition.X, aiPosition.Y), map, map, 0);
     for (auto entity : entityManager.each<PlayerComponent, PositionComponent>()) {
         auto position = entity->getComponent<PositionComponent>();
 
@@ -131,36 +126,10 @@ int Indie::Systems::PathFinderSystem::getDistance2D(irr::core::vector2di v1, irr
     return (int)sqrt((pow(v1.X - v2.X, 2) + pow(v1.Y - v2.Y, 2)));
 }
 
-bool Indie::Systems::PathFinderSystem::goOnBomb(std::vector<std::vector<OBJECT>> mapBomb, irr::core::vector2di aiPosition, DIRECTION direction) const
-{
-    bool goOnBomb = false;
-
-    if (mapBomb.at(aiPosition.Y).at(aiPosition.X - 1) == static_cast<OBJECT>(5) && direction == DIRECTION::LEFT)
-        goOnBomb = true;
-    if (mapBomb.at(aiPosition.Y).at(aiPosition.X + 1) == static_cast<OBJECT>(5) && direction == DIRECTION::RIGHT)
-        goOnBomb = true;
-    if (mapBomb.at(aiPosition.Y - 1).at(aiPosition.X) == static_cast<OBJECT>(5) && direction == DIRECTION::UP)
-        goOnBomb = true;
-    if (mapBomb.at(aiPosition.Y + 1).at(aiPosition.X) == static_cast<OBJECT>(5) && direction == DIRECTION::DOWN)
-        goOnBomb = true;
-    return goOnBomb;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-void Indie::Systems::PathFinderSystem::setPathFinding(std::vector<std::vector<OBJECT>> &map, irr::core::vector2di aiPosition, int value, std::vector<std::vector<OBJECT>> mapBomb) const
+void Indie::Systems::PathFinderSystem::setPathFinding(std::vector<std::vector<OBJECT>> &map, irr::core::vector2di aiPosition, std::vector<std::vector<OBJECT>> mapBomb, std::vector<std::vector<OBJECT>> mapPower, unsigned int behavior) const
 {
     bool canContinue = true;
+    int value = 6;
 
     cleanMap(map);
     map.at(aiPosition.Y).at(aiPosition.X) = static_cast<OBJECT>(6);
@@ -168,7 +137,7 @@ void Indie::Systems::PathFinderSystem::setPathFinding(std::vector<std::vector<OB
         canContinue = false;
         for (size_t j = 1; j < map.at(0).size(); j++) {
             for (size_t i = 1; i < map.size(); i++) {
-                if (map.at(i).at(j) == static_cast<OBJECT>(value) && mapBomb.at(i).at(j) != static_cast<OBJECT>(5)) {
+                if (map.at(i).at(j) == static_cast<OBJECT>(value) && ((behavior == 0) || mapBomb.at(i).at(j) != static_cast<OBJECT>(5)) && ((behavior == 0) || mapPower.at(i).at(j) != static_cast<OBJECT>(9))) {
                     map.at(i - 1).at(j) = (map.at(i - 1).at(j) == static_cast<OBJECT>(0)) ? static_cast<OBJECT>(value + 1) : map.at(i - 1).at(j);
                     map.at(i + 1).at(j) = (map.at(i + 1).at(j) == static_cast<OBJECT>(0)) ? static_cast<OBJECT>(value + 1) : map.at(i + 1).at(j);
                     map.at(i).at(j + 1) = (map.at(i).at(j + 1) == static_cast<OBJECT>(0)) ? static_cast<OBJECT>(value + 1) : map.at(i).at(j + 1);
@@ -215,40 +184,20 @@ void Indie::Systems::PathFinderSystem::setShortlessPath(std::vector<std::vector<
 
 void Indie::Systems::PathFinderSystem::findFirstPosition(std::vector<std::vector<OBJECT>> &map, std::vector<std::vector<OBJECT>> &mapBomb, PathFinderComponent *pathFinder, irr::core::vector2di aiPosition) const
 {
-    std::array<int, 3> position = {aiPosition.X, aiPosition.Y, 99};
-    int maxValue = 6;
+    int distance = 99;
+    int newDistance = 0;
+    int value = 6;
 
+    pathFinder->setEndMapPos(irr::core::vector2di(aiPosition.X, aiPosition.Y));
     for (size_t i = 1; i < map.at(0).size(); i++) {
         for (size_t j = 1; j < map.size(); j++) {
-            if (map.at(j).at(i) >= static_cast<OBJECT>(maxValue) && (mapBomb.at(j).at(i) != static_cast<OBJECT>(6)) ) {
-                if (map.at(j).at(i - 1) > static_cast<OBJECT>(maxValue)) {
-                    if (getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(irr::s32(i - 1), irr::s32(j))) <= position.at(2)) {
-                        maxValue = (int)map.at(j).at(i - 1);
-                        position = {(int)i - 1, (int)j, getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(irr::s32(i - 1), irr::s32(j)))};
-                    }
-                }
-                if (map.at(j).at(i + 1) > static_cast<OBJECT>(maxValue)) {
-                    if (getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(irr::s32(i + 1), irr::s32(j))) <= position.at(2)) {
-                        maxValue = (int)map.at(j).at(i + 1);
-                        position = {(int)i + 1, (int)j, getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(irr::s32(i + 1), irr::s32(j)))};
-                    }
-                }
-                if (map.at(j - 1).at(i) > static_cast<OBJECT>(maxValue)) {
-                    if (getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(irr::s32(i), irr::s32(j - 1))) <= position.at(2)) {
-                        maxValue = (int)map.at(j - 1).at(i);
-                        position = {(int)i, (int)j - 1, getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(irr::s32(i), irr::s32(j - 1)))};
-                    }
-                }
-                if (map.at(j + 1).at(i) > static_cast<OBJECT>(maxValue)) {
-                    if (getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(irr::s32(i), irr::s32(j + 1))) <= position.at(2)) {
-                        maxValue = (int)map.at(j + 1).at(i);
-                        position = {(int)i, (int)j + 1, getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(irr::s32(i), irr::s32(j + 1)))};
-                    }
-                }
+            newDistance = getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(irr::s32(i), irr::s32(j)));
+            if (mapBomb.at(j).at(i) != static_cast<OBJECT>(6) && map.at(j).at(i) > static_cast<OBJECT>(value) && newDistance < distance) {
+                distance = newDistance;
+                pathFinder->setEndMapPos(irr::core::vector2di(irr::s32(i), irr::s32(j)));
             }
         }
     }
-    pathFinder->setEndMapPos(irr::core::vector2di(position.at(0), position.at(1)));
 }
 
 void Indie::Systems::PathFinderSystem::findPosition(std::vector<std::vector<OBJECT>> &map, PathFinderComponent *pathFinder, irr::core::vector2di aiPosition) const
@@ -256,7 +205,6 @@ void Indie::Systems::PathFinderSystem::findPosition(std::vector<std::vector<OBJE
     std::array<int, 4> position = {aiPosition.X, aiPosition.Y, -99, 99};
     int nbBox = 0;
     int random = 0;
-
 
     for (size_t i = 1; i < map.at(0).size(); i++) {
         for (size_t j = 1; j < map.size(); j++) {
@@ -281,12 +229,6 @@ void Indie::Systems::PathFinderSystem::findPosition(std::vector<std::vector<OBJE
     pathFinder->setEndMapPos(irr::core::vector2di(position.at(0), position.at(1)));
 }
 
-
-
-
-
-
-
 void Indie::Systems::PathFinderSystem::setMapBomb(std::vector<std::vector<OBJECT>> &map,  EntityManager &entityManager) const
 {
     for (auto entity : entityManager.each<BombComponent, PositionComponent>()) {
@@ -309,7 +251,7 @@ void Indie::Systems::PathFinderSystem::setMapBomb(std::vector<std::vector<OBJECT
     }
 }
 
-void Indie::Systems::PathFinderSystem::setMapPowerUp(std::vector<std::vector<OBJECT>> &map,  EntityManager &entityManager) const
+void Indie::Systems::PathFinderSystem::setMapPower(std::vector<std::vector<OBJECT>> &map,  EntityManager &entityManager) const
 {
     for (auto entity : entityManager.each<PowerUpComponent, PositionComponent>()) {
         auto position = entity->getComponent<PositionComponent>();
@@ -317,6 +259,13 @@ void Indie::Systems::PathFinderSystem::setMapPowerUp(std::vector<std::vector<OBJ
         int z = (getCenter((int)position->getPosition().Z)) / 20;
 
         map.at(z).at(x) = static_cast<OBJECT>(10);
+    }
+    for (auto entity : entityManager.each<PowerDownComponent, PositionComponent>()) {
+        auto position = entity->getComponent<PositionComponent>();
+        int x = (getCenter((int)position->getPosition().X)) / 20;
+        int z = (getCenter((int)position->getPosition().Z)) / 20;
+
+        map.at(z).at(x) = static_cast<OBJECT>(9);
     }
 }
 
