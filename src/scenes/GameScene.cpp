@@ -19,8 +19,8 @@ using namespace Indie::Systems;
 
 const std::vector<std::pair<irr::core::vector3df, Indie::Components::PlayerComponent::PLAYER_START_POSITION>> Indie::GameScene::defaultPositions
     = { { { 20, 20, 20 }, Indie::Components::PlayerComponent::PLAYER_START_POSITION::DOWN_LEFT },
-          { { 220, 20, 20 }, Indie::Components::PlayerComponent::PLAYER_START_POSITION::DOWN_RIGHT },
-          { { 220, 20, 220 }, Indie::Components::PlayerComponent::PLAYER_START_POSITION::TOP_RIGHT },
+          { { 260, 20, 20 }, Indie::Components::PlayerComponent::PLAYER_START_POSITION::DOWN_RIGHT },
+          { { 260, 20, 220 }, Indie::Components::PlayerComponent::PLAYER_START_POSITION::TOP_RIGHT },
           { { 20, 20, 220 }, Indie::Components::PlayerComponent::PLAYER_START_POSITION::TOP_LEFT } };
 
 const std::vector<std::pair<std::string, Indie::Components::PlayerComponent::PLAYER_COLOR>> Indie::GameScene::skins

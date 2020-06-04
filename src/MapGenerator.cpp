@@ -74,17 +74,52 @@ void Indie::MapGenerator::createDefaultMap(std::vector<std::vector<Indie::Compon
 
 void Indie::MapGenerator::createRandomMap(std::vector<std::vector<Indie::Components::OBJECT>> &map, irr::core::vector2di dimension)
 {
-    int random = 0;
-    for (int i = 1; i < dimension.Y - 1; i++) {
+    int placedBlocks = 0;
+
+    for (int i = 2; i < dimension.Y - 1; i++) {
         for (int j = 1; j < dimension.X - 1; j++) {
-            random = 1 + std::rand() / ((RAND_MAX + 1u) / 100);
-            if (random <= 50)
+            if (j % 2 == 0 && i % 2 == 0)
                 map.at(i).at(j) = OBJECT::WALL_IN;
-            else {
-                random = 1 + std::rand() / ((RAND_MAX + 1u) / 100);
-                map.at(i).at(j) = (random <= 40) ? OBJECT::BOX : OBJECT::VOID;
-            }
         }
+    }
+    for (int j = 2, maxBlockNbUp = 5, maxBlockNbDown = 5; j < dimension.X - 3; j++) {
+        if (std::rand() % 40 > 10 && maxBlockNbUp > 0) {
+            maxBlockNbUp--;
+            map.at(dimension.Y - 2).at(j) = OBJECT::BOX;
+            placedBlocks++;
+        }
+        if (std::rand() % 40 > 10 && maxBlockNbDown > 0) {
+            maxBlockNbDown--;
+            placedBlocks++;
+            map.at(1).at(j) = OBJECT::BOX;
+        }
+    }
+    for (int i = 2, maxBlockNbLeft = 5, maxBlockNbRight = 5; i < dimension.Y - 2; i++) {
+        if (std::rand() % 40 > 10 && maxBlockNbLeft > 0) {
+            maxBlockNbLeft--;
+            placedBlocks++;
+            map.at(i).at(1) = OBJECT::BOX;
+        }
+        if (std::rand() % 40 > 10 && maxBlockNbRight > 0) {
+            maxBlockNbRight--;
+            placedBlocks++;
+            map.at(i).at(dimension.X - 2) = OBJECT::BOX;
+        }
+    }
+    double fillPercentage = (double)(std::rand() % 25 + 25);
+    int maxBlockNb = (dimension.Y - 2) * (dimension.X - 2) - placedBlocks;
+    double currentPercentage = 0;
+
+    placedBlocks = 0;
+    while (currentPercentage < fillPercentage) {
+        int i = rand() % (dimension.Y - 3) + 1;
+        int j = rand() % (dimension.X - 3) + 1;
+
+        if (map.at(i).at(j) != OBJECT::WALL_IN) {
+            map.at(i).at(j) = OBJECT::BOX;
+            placedBlocks++;
+        }
+        currentPercentage = (((double)placedBlocks / (double)maxBlockNb) * 100.0);
     }
 }
 
@@ -141,13 +176,13 @@ void Indie::MapGenerator::setSpawn(std::vector<std::vector<Indie::Components::OB
     map.at(dimension.Y - 2).at(2) = OBJECT::VOID;
     map.at(dimension.Y - 3).at(1) = OBJECT::VOID;
     if (dimension.X >= 11 && dimension.Y >= 11) {
-        map.at(1).at(3) = OBJECT::VOID;
-        map.at(3).at(1) = OBJECT::VOID;
-        map.at(3).at(dimension.X - 2) = OBJECT::VOID;
-        map.at(1).at(dimension.X - 4) = OBJECT::VOID;
-        map.at(dimension.Y - 2).at(dimension.X - 4) = OBJECT::VOID;
-        map.at(dimension.Y - 4).at(dimension.X - 2) = OBJECT::VOID;
-        map.at(dimension.Y - 2).at(3) = OBJECT::VOID;
-        map.at(dimension.Y - 4).at(1) = OBJECT::VOID;
+        map.at(1).at(3) = OBJECT::BOX;
+        map.at(3).at(1) = OBJECT::BOX;
+        map.at(3).at(dimension.X - 2) = OBJECT::BOX;
+        map.at(1).at(dimension.X - 4) = OBJECT::BOX;
+        map.at(dimension.Y - 2).at(dimension.X - 4) = OBJECT::BOX;
+        map.at(dimension.Y - 4).at(dimension.X - 2) = OBJECT::BOX;
+        map.at(dimension.Y - 4).at(1) = OBJECT::BOX;
+        map.at(dimension.Y - 2).at(3) = OBJECT::BOX;
     }
 }
