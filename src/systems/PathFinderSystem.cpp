@@ -32,19 +32,14 @@ void Indie::Systems::PathFinderSystem::onUpdate(irr::f32, Indie::EntityManager &
         int aiX = (getCenter((int)position->getPosition().X)) / 20;
         int aiZ = (getCenter((int)position->getPosition().Z)) / 20;
 
-        // Init des maps dans le pathfinder
         pathFinder->setMapBomb(mapBomb);
         if (pathFinder->getMap().empty() || ai->getAction() == ACTION::STANDBY)
             pathFinder->setMap(map);
         mapPathFinding = pathFinder->getMap();
-
-        // S'il fait rien return
         if (ai->getAction() == ACTION::STANDBY)
             continue;
         ai->setBehavior((unsigned int)getNbPlayerInZone(map, entityManager, {aiX, aiZ}));
-        setPathFinding(mapPathFinding, {aiX, aiZ}, mapBomb, mapPower, ai->getBehavior());
-
-        // Get PathFinding quand il doit dodge une bombe qu'il a posé
+        setPathFinding(mapPathFinding, {aiX, aiZ}, mapBomb, mapPower);
         if (ai->getAction() == ACTION::DODGE) {
             findFirstPosition(mapPathFinding, mapBomb, pathFinder, irr::core::vector2di(aiX, aiZ));
             if (pathFinder->getEndMapPos().X == aiX && pathFinder->getEndMapPos().Y == aiZ)
@@ -52,7 +47,6 @@ void Indie::Systems::PathFinderSystem::onUpdate(irr::f32, Indie::EntityManager &
             setShortlessPath(mapPathFinding, irr::core::vector2di(aiX, aiZ), irr::core::vector2di(pathFinder->getEndMapPos().X, pathFinder->getEndMapPos().Y));
             ai->setAction(ACTION::GO_SAFE);
         }
-        // Get pathfinding quand cherche une box
         else if (ai->getAction() == ACTION::FIND_BOX) {
             findPosition(mapPathFinding, pathFinder, irr::core::vector2di(aiX, aiZ));
             setShortlessPath(mapPathFinding, irr::core::vector2di(aiX, aiZ), irr::core::vector2di(pathFinder->getEndMapPos().X, pathFinder->getEndMapPos().Y));
@@ -74,7 +68,7 @@ int Indie::Systems::PathFinderSystem::getNbPlayerInZone(std::vector<std::vector<
 {
     int nbPlayer = 0;
 
-    setPathFinding(map, irr::core::vector2di(aiPosition.X, aiPosition.Y), map, map, 0);
+    setPathFinding(map, irr::core::vector2di(aiPosition.X, aiPosition.Y), map, map);
     for (auto entity : entityManager.each<PlayerComponent, PositionComponent>()) {
         auto position = entity->getComponent<PositionComponent>();
 
@@ -86,26 +80,6 @@ int Indie::Systems::PathFinderSystem::getNbPlayerInZone(std::vector<std::vector<
     }
     return nbPlayer;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 int Indie::Systems::PathFinderSystem::getCenter(int value) const
 {
@@ -126,7 +100,7 @@ int Indie::Systems::PathFinderSystem::getDistance2D(irr::core::vector2di v1, irr
     return (int)sqrt((pow(v1.X - v2.X, 2) + pow(v1.Y - v2.Y, 2)));
 }
 
-void Indie::Systems::PathFinderSystem::setPathFinding(std::vector<std::vector<OBJECT>> &map, irr::core::vector2di aiPosition, std::vector<std::vector<OBJECT>> mapBomb, std::vector<std::vector<OBJECT>> mapPower, unsigned int behavior) const
+void Indie::Systems::PathFinderSystem::setPathFinding(std::vector<std::vector<OBJECT>> &map, irr::core::vector2di aiPosition, std::vector<std::vector<OBJECT>> mapBomb, std::vector<std::vector<OBJECT>> mapPower) const
 {
     bool canContinue = true;
     int value = 6;
@@ -150,14 +124,6 @@ void Indie::Systems::PathFinderSystem::setPathFinding(std::vector<std::vector<OB
     }
 }
 
-
-
-
-
-
-
-
-
 void Indie::Systems::PathFinderSystem::setShortlessPath(std::vector<std::vector<OBJECT>> &map, irr::core::vector2di acPos, irr::core::vector2di nextPos) const
 {
     int value = (int)map.at(nextPos.Y).at(nextPos.X);
@@ -177,10 +143,6 @@ void Indie::Systems::PathFinderSystem::setShortlessPath(std::vector<std::vector<
         return;
     }
 }
-
-
-
-
 
 void Indie::Systems::PathFinderSystem::findFirstPosition(std::vector<std::vector<OBJECT>> &map, std::vector<std::vector<OBJECT>> &mapBomb, PathFinderComponent *pathFinder, irr::core::vector2di aiPosition) const
 {
