@@ -30,8 +30,9 @@ namespace Indie {
             bool getStatus() const;
             irr::EKEY_CODE getKey() const;
             void setStatus(bool status);
-            void setUsedKeys(std::vector<std::pair<irr::EKEY_CODE, Indie::Components::KEY_TYPE>> &list);
             static const std::vector<std::pair<irr::EKEY_CODE, irr::core::stringw>> keyCodes;
+            void setUsedKeys(std::vector<std::pair<Indie::Components::KEY_TYPE, std::shared_ptr<Keybind>>> &list);
+            void setUsedKeys(std::vector<std::pair<Indie::Components::KEY_TYPE, std::unique_ptr<Keybind>>> &list);
             Image *tick;
 
         protected:

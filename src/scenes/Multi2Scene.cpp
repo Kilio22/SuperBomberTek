@@ -42,7 +42,6 @@ Indie::Multi2Scene::Multi2Scene(Indie::ContextManager &context)
 {
     p1CharaSelector.setSize(int(ServiceLocator::getInstance().get<SceneManager>().getScene<SoloScene>()->charaPaths.size()), 1); // On set juste la size en plus petit pour pas qu'il ai accès à des perso mdr
     p2CharaSelector.setSize(int(ServiceLocator::getInstance().get<SceneManager>().getScene<SoloScene>()->charaPaths.size()), 1); // On set juste la size en plus petit pour pas qu'il ai accès à des perso mdr
-    playerKeys = {};
     title = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/multi2/title.png");
     layout = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/multi2/Layout.png");
     font = context.getGuiEnv()->getFont("../ressources/font/Banschrift.xml");
@@ -124,11 +123,8 @@ void Indie::Multi2Scene::update(irr::f32 ticks)
     // KEYBINDS UPDATE
     /* ================================================================== */
     bool wasKeyUpdated = false;
-    playerKeys.clear();
-    for (auto &it : pKeybinds)
-        playerKeys.push_back({it.second->getKey(), it.first});
     for (auto &it : pKeybinds) {
-        it.second->setUsedKeys(playerKeys);
+        it.second->setUsedKeys(pKeybinds);
         it.second->update(selector.getPos());
         wasKeyUpdated = (it.second->getStatus()) ? true : wasKeyUpdated;
     }

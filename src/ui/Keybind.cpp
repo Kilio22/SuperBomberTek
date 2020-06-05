@@ -175,9 +175,23 @@ void Indie::Keybind::setStatus(bool status)
     this->status = status;
 }
 
-void Indie::Keybind::setUsedKeys(std::vector<std::pair<irr::EKEY_CODE, Indie::Components::KEY_TYPE>> &list)
+// void Indie::Keybind::setUsedKeys(std::vector<std::pair<irr::EKEY_CODE, Indie::Components::KEY_TYPE>> &list)
+// {
+//     usedKeys.clear();
+//     for (auto it : list)
+//         usedKeys.push_back(it.first);
+// }
+
+void Indie::Keybind::setUsedKeys(std::vector<std::pair<Indie::Components::KEY_TYPE, std::shared_ptr<Keybind>>> &list)
 {
     usedKeys.clear();
     for (auto it : list)
-        usedKeys.push_back(it.first);
+        usedKeys.push_back(it.second->getKey());
+}
+
+void Indie::Keybind::setUsedKeys(std::vector<std::pair<Indie::Components::KEY_TYPE, std::unique_ptr<Keybind>>> &list)
+{
+    usedKeys.clear();
+    for (auto &it : list)
+        usedKeys.push_back(it.second->getKey());
 }

@@ -70,7 +70,6 @@ Indie::SoloScene::SoloScene(Indie::ContextManager &context)
     for (const auto &entry : std::filesystem::directory_iterator("../ressources/maps/"))
         mapPaths.push_back(entry.path().u8string());
     mapSelector.setSize(int(mapPaths.size()), 1);
-    playerKeys = {};
     this->getSavedKeybinds();
     for (size_t buttonType = (size_t)BUTTON_TYPE::SKIN; buttonType < (size_t)BUTTON_TYPE::NONE; buttonType++) {
         this->buttons.insert({ (BUTTON_TYPE)buttonType, std::make_unique<Button>(context) });
@@ -144,11 +143,11 @@ void Indie::SoloScene::init()
     /* ================================================================== */
     // KEYBINDS INIT
     /* ================================================================== */
-    this->keybinds.at(KEY_TYPE::UP)->init("../ressources/images/solo/KB_Up.png", 1, 4, POS(183, 468));
-    this->keybinds.at(KEY_TYPE::DOWN)->init("../ressources/images/solo/KB_Down.png", 1, 5, POS(183, 547));
-    this->keybinds.at(KEY_TYPE::LEFT)->init("../ressources/images/solo/KB_Left.png", 0, 5, POS(108, 547));
-    this->keybinds.at(KEY_TYPE::RIGHT)->init("../ressources/images/solo/KB_Right.png", 2, 5, POS(261, 547));
-    this->keybinds.at(KEY_TYPE::DROP)->init("../ressources/images/solo/KB_Bar.png", 3, 5, POS(456, 547));
+    std::find_if(keybinds.begin(), keybinds.end(), [](const auto &var){return (var.first == Indie::Components::KEY_TYPE::UP);})->second->init("../ressources/images/solo/KB_Up.png", 1, 4, POS(183, 468));
+    std::find_if(keybinds.begin(), keybinds.end(), [](const auto &var){return (var.first == Indie::Components::KEY_TYPE::DOWN);})->second->init("../ressources/images/solo/KB_Down.png", 1, 5, POS(183, 547));
+    std::find_if(keybinds.begin(), keybinds.end(), [](const auto &var){return (var.first == Indie::Components::KEY_TYPE::LEFT);})->second->init("../ressources/images/solo/KB_Left.png", 0, 5, POS(108, 547));
+    std::find_if(keybinds.begin(), keybinds.end(), [](const auto &var){return (var.first == Indie::Components::KEY_TYPE::RIGHT);})->second->init("../ressources/images/solo/KB_Right.png", 2, 5, POS(261, 547));
+    std::find_if(keybinds.begin(), keybinds.end(), [](const auto &var){return (var.first == Indie::Components::KEY_TYPE::DROP);})->second->init("../ressources/images/solo/KB_Bar.png", 3, 5, POS(456, 547));
     // Some inits :
     playerTexture = charaPaths[charaSelector.getPos().first].first;
     playerColor = charaPaths[charaSelector.getPos().first].second;
@@ -189,7 +188,7 @@ void Indie::SoloScene::getSavedKeybinds(void)
                     })
                 != this->keybinds.end())
                 throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"../ressources/.saves/keybinds.txt\" corrupted.");
-            this->keybinds.insert({ (Indie::Components::KEY_TYPE)keyType, std::make_unique<Keybind>(context, (irr::EKEY_CODE)keyNb) });
+            this->keybinds.push_back({(Indie::Components::KEY_TYPE)keyType, std::make_unique<Keybind>(context, (irr::EKEY_CODE)keyNb)});
         }
     } catch (const std::exception &e) {
         this->resetKeybinds();
@@ -210,14 +209,8 @@ void Indie::SoloScene::update(irr::f32 ticks)
     /* ================================================================== */
     // KEYBINDS SET USED
     /* ================================================================== */
-    playerKeys.clear();
-    playerKeys.push_back({ this->keybinds.at(KEY_TYPE::UP)->getKey(), Indie::Components::KEY_TYPE::UP });
-    playerKeys.push_back({ this->keybinds.at(KEY_TYPE::DOWN)->getKey(), Indie::Components::KEY_TYPE::DOWN });
-    playerKeys.push_back({ this->keybinds.at(KEY_TYPE::LEFT)->getKey(), Indie::Components::KEY_TYPE::LEFT });
-    playerKeys.push_back({ this->keybinds.at(KEY_TYPE::RIGHT)->getKey(), Indie::Components::KEY_TYPE::RIGHT });
-    playerKeys.push_back({ this->keybinds.at(KEY_TYPE::DROP)->getKey(), Indie::Components::KEY_TYPE::DROP });
     for (auto &keybind : this->keybinds) {
-        keybind.second->setUsedKeys(this->playerKeys);
+        keybind.second->setUsedKeys(this->keybinds);
     }
     /* ================================================================== */
     // UPDATE KEYBINDS
@@ -225,9 +218,9 @@ void Indie::SoloScene::update(irr::f32 ticks)
     for (auto &keybind : this->keybinds) {
         keybind.second->update(selector.getPos());
     }
-    if (this->keybinds.at(KEY_TYPE::UP)->getStatus() || this->keybinds.at(KEY_TYPE::DOWN)->getStatus()
-        || this->keybinds.at(KEY_TYPE::LEFT)->getStatus() || this->keybinds.at(KEY_TYPE::RIGHT)->getStatus()
-        || this->keybinds.at(KEY_TYPE::DROP)->getStatus())
+    if (this->keybinds[0].second->getStatus() || this->keybinds[1].second->getStatus()
+        || this->keybinds[2].second->getStatus() || this->keybinds[3].second->getStatus()
+        || this->keybinds[4].second->getStatus())
         return; // We don't check anything else while the player is setting a key
     /* ================================================================== */
     // LAYOUTS SKIP (psk le layout est chelou on doit le faire en dur)
@@ -298,8 +291,8 @@ void Indie::SoloScene::update(irr::f32 ticks)
         init.timeLimit = 180;
         initPlayer.playerTexture = charaPaths[charaSelector.getPos().first].first;
         initPlayer.playerColor = charaPaths[charaSelector.getPos().first].second;
-        for (auto &it : playerKeys) {
-            initPlayer.playerKeys.insert(it);
+        for (auto &it : keybinds) {
+            initPlayer.playerKeys.insert({it.second->getKey(), it.first});
         }
         init.playersParams = { initPlayer };
         ServiceLocator::getInstance().get<SceneManager>().getScene<GameScene>()->setInitGame(init);
@@ -365,18 +358,18 @@ void Indie::SoloScene::renderPost3D()
     for (auto const &keybind : this->keybinds) {
         keybind.second->draw();
     }
-    if (this->keybinds.at(KEY_TYPE::UP)->getStatus() || this->keybinds.at(KEY_TYPE::DOWN)->getStatus()
-        || this->keybinds.at(KEY_TYPE::LEFT)->getStatus() || this->keybinds.at(KEY_TYPE::RIGHT)->getStatus()
-        || this->keybinds.at(KEY_TYPE::DROP)->getStatus())
-        context.displayImage(this->keybinds.at(KEY_TYPE::UP)->tick);
+    if (this->keybinds[0].second->getStatus() || this->keybinds[1].second->getStatus()
+        || this->keybinds[2].second->getStatus() || this->keybinds[3].second->getStatus()
+        || this->keybinds[4].second->getStatus())
+        context.displayImage(this->keybinds[0].second->tick);
 }
 
 void Indie::SoloScene::resetKeybinds(void)
 {
     this->keybinds.clear();
-    this->keybinds.insert({ Indie::Components::KEY_TYPE::UP, std::make_unique<Keybind>(context, irr::EKEY_CODE::KEY_UP) });
-    this->keybinds.insert({ Indie::Components::KEY_TYPE::DOWN, std::make_unique<Keybind>(context, irr::EKEY_CODE::KEY_DOWN) });
-    this->keybinds.insert({ Indie::Components::KEY_TYPE::LEFT, std::make_unique<Keybind>(context, irr::EKEY_CODE::KEY_LEFT) });
-    this->keybinds.insert({ Indie::Components::KEY_TYPE::RIGHT, std::make_unique<Keybind>(context, irr::EKEY_CODE::KEY_RIGHT) });
-    this->keybinds.insert({ Indie::Components::KEY_TYPE::DROP, std::make_unique<Keybind>(context, irr::EKEY_CODE::KEY_SPACE) });
+    this->keybinds.push_back({ Indie::Components::KEY_TYPE::UP, std::make_unique<Keybind>(context, irr::EKEY_CODE::KEY_UP) });
+    this->keybinds.push_back({ Indie::Components::KEY_TYPE::DOWN, std::make_unique<Keybind>(context, irr::EKEY_CODE::KEY_DOWN) });
+    this->keybinds.push_back({ Indie::Components::KEY_TYPE::LEFT, std::make_unique<Keybind>(context, irr::EKEY_CODE::KEY_LEFT) });
+    this->keybinds.push_back({ Indie::Components::KEY_TYPE::RIGHT, std::make_unique<Keybind>(context, irr::EKEY_CODE::KEY_RIGHT) });
+    this->keybinds.push_back({ Indie::Components::KEY_TYPE::DROP, std::make_unique<Keybind>(context, irr::EKEY_CODE::KEY_SPACE) });
 }

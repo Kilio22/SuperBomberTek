@@ -47,7 +47,6 @@ namespace Indie
         Image *title;
         Image *layout;
         irr::gui::IGUIFont *font;
-        std::vector<std::pair<irr::EKEY_CODE, Indie::Components::KEY_TYPE>> playerKeys;
         std::vector<std::pair<Indie::Components::KEY_TYPE, std::shared_ptr<Keybind>>> pKeybinds;
         /* ========== P1 ========== */
         std::unique_ptr<Button> p1CharaButton;

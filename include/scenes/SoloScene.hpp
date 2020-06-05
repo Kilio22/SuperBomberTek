@@ -62,7 +62,7 @@ namespace Indie
         Image *layout;
         Image *kbLayout;
         irr::gui::IGUIFont *font;
-        std::map<Indie::Components::KEY_TYPE, std::unique_ptr<Keybind>> keybinds;
+        std::vector<std::pair<Indie::Components::KEY_TYPE, std::unique_ptr<Keybind>>> keybinds;
         irr::scene::ICameraSceneNode *camera;
         irr::scene::IAnimatedMeshSceneNode *theme1;
         irr::scene::IAnimatedMeshSceneNode *theme2;
