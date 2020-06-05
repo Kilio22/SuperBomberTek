@@ -12,12 +12,12 @@
 #include "EndScene.hpp"
 #include "Scenes.hpp"
 #include "ServiceLocator.hpp"
+#include "Multi1Scene.hpp"
 
 Indie::MainMenuScene::MainMenuScene(ContextManager &context)
     : context(context)
     , selector(1, 5, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
-{
-}
+{}
 
 Indie::MainMenuScene::~MainMenuScene() {}
 
@@ -42,7 +42,7 @@ void Indie::MainMenuScene::init()
 
 void Indie::MainMenuScene::reset()
 {
-    selector.setPos(0, 0);
+    //selector.setPos(0, 0);
     init();
 }
 
@@ -60,6 +60,10 @@ void Indie::MainMenuScene::update(irr::f32)
         //ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::PauseScene>();
         //skipScene(true, true, false, false);
         ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::SoloScene>();
+        skipScene(true, true, true, true);
+    }
+    if (multi->getStatus() == Button::Status::Pressed) {
+        ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::Multi1Scene>();
         skipScene(true, true, true, true);
     }
     if (options->getStatus() == Button::Status::Pressed) {
