@@ -10,21 +10,9 @@
 #include "SceneManager.hpp"
 #include "driverChoice.h"
 
-//#define DEBUG_MODE
-// C'est dégueulasse avec les autre drivertype. OpenGL ftw!
-
 Indie::ContextManager::ContextManager(irr::core::dimension2d<irr::u32> size)
 {
-    #ifdef DEBUG_MODE
-        irr::video::E_DRIVER_TYPE driverType = irr::video::EDT_COUNT;
-        while (driverType == irr::video::EDT_COUNT)
-            driverType = irr::driverChoiceConsole(true);
-        device = irr::createDevice(driverType, size, 32);
-    
-    #endif // DEBUG_MODE
-    #ifndef DEBUG_MODE
-        device = irr::createDevice(irr::video::EDT_OPENGL, size, 32);
-    #endif // !DEBUG_MODE
+    device = irr::createDevice(irr::video::EDT_OPENGL, size, 32);
     this->size = size;
     driver = device->getVideoDriver();
     sceneManager = device->getSceneManager();
