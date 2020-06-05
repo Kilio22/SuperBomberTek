@@ -8,6 +8,7 @@
 #ifndef SCENES_HPP_
 #define SCENES_HPP_
 
+#include "EndScene.hpp"
 #include "GameScene.hpp"
 #include "OptionsScene.hpp"
 #include "MainMenuScene.hpp"
