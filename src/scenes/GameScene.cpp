@@ -46,6 +46,7 @@ Indie::GameScene::GameScene(ContextManager &context)
     this->device = this->context.getDevice();
     this->driver = this->context.getDriver();
     this->sceneManager = this->context.getSceneManager();
+    this->font = this->context.getGuiEnv()->getFont("../ressources/font/Banschrift.xml");
     this->systemManager.addSystem<AISystem>();
     this->systemManager.addSystem<BombDropSystem>();
     this->systemManager.addSystem<BombExplosionSystem>();
@@ -87,8 +88,6 @@ void Indie::GameScene::init()
         driver->getTexture("../ressources/skybox/skybox_bottom.png"), driver->getTexture("../ressources/skybox/skybox_left.png"),
         driver->getTexture("../ressources/skybox/skybox_right.png"), driver->getTexture("../ressources/skybox/skybox_front.png"),
         driver->getTexture("../ressources/skybox/skybox_back.png"));
-
-    this->font = this->context.getGuiEnv()->getFont("../ressources/font/Banschrift.xml");
 
     for (auto player : this->initGame->playersParams) {
         entityBuilder.createPlayer(this->defaultPositions.at(idx).first, "../ressources/animated_mesh/character/character_idle.b3d",
