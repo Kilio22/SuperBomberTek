@@ -38,8 +38,15 @@ namespace Indie::Components
         };
 
     public:
-        PlayerComponent(const std::string &name, PLAYER_COLOR playerColor, PLAYER_START_POSITION startPosition);
+        PlayerComponent(const std::string &name, PLAYER_COLOR playerColor, PLAYER_START_POSITION startPosition, bool isHuman);
         ~PlayerComponent() = default;
+
+        /**
+         * @brief Used to check if entity is linked to a human player
+         * @return true Player is a human player
+         * @return false Player is not a human player
+         */
+        bool isHuman(void) const;
 
         /**
          * @brief Gets bombs range
@@ -66,22 +73,10 @@ namespace Indie::Components
         unsigned int getVelocityLevel(void) const;
 
         /**
-         * @brief Gets the level count
-         * @return unsigned int The level count
-         */
-        unsigned int getLevelCount(void) const;
-
-        /**
          * @brief Gets the XP count
          * @return unsigned int The XP count
          */
-        unsigned int getXpCount(void) const;
-
-        /**
-         * @brief Get the Xp To Level Up object
-         * @return unsigned int The required xp to level up.
-         */
-        unsigned int getXpToLevelUp(void) const;
+        unsigned int getXp(void) const;
 
         /**
          * @brief Gets the score value
@@ -146,12 +141,6 @@ namespace Indie::Components
         void setVelocityLevel(unsigned int value);
 
         /**
-         * @brief Sets the level count
-         * @param value The new level count
-         */
-        void setLevelCount(unsigned int value);
-
-        /**
          * @brief Sets the XP count
          * @param value The new XP count
          */
@@ -176,11 +165,11 @@ namespace Indie::Components
         void setIsDead(bool value);
 
     private:
+        bool _isHuman;
         unsigned int bombsRange;
         unsigned int maxBombNb;
         unsigned int currentBombNb;
         unsigned int velocityLevel;
-        unsigned int level;
         unsigned int xp;
         int score;
         bool wallPass;

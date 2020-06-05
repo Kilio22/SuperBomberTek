@@ -110,7 +110,7 @@ void Indie::Systems::BombExplosionSystem::explodeBox(EntityManager &entityManage
         if ((irr::f32)(mapX * 20) == position->getPosition().X && (irr::f32)(mapZ * 20) == position->getPosition().Z) {
             auto player = playerEntity->getComponent<PlayerComponent>();
 
-            player->setXpCount(player->getXpCount() + 5);
+            player->setXpCount(player->getXp() + 5);
             player->setScore(player->getScore() + 5);
             entity->needDestroy();
             if (ServiceLocator::getInstance().get<SceneManager>().getScene<Indie::GameScene>()->getInitGame()->powerUp == true)

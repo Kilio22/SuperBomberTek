@@ -15,7 +15,6 @@
 Indie::EndScene::EndScene(ContextManager &context)
     : context(context)
     , selector(1, 2, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
-    , endGame(std::make_unique<Indie::EndGame>())
 {}
 
 void Indie::EndScene::init()
@@ -85,9 +84,8 @@ void Indie::EndScene::renderPost3D()
     // else if (this->endGame->matchPlay == MATCH_PLAY::BOTH_LOSE)
     //     font->draw("Bande de naze", RECT(800, 100, 0, 0), {255, 255, 255, 255});
 
-    for (size_t i = 0; i < this->endGame->scores.size(); i++)
-        font->draw(this->endGame->scores.at(i).first.c_str(), RECT(400, 300 + ((int)i * 50), 0, 0), {255, 255, 255, 255});
-
+    for (size_t i = 0; i < this->endGame.scores.size(); i++)
+        font->draw(this->endGame.scores.at(i).first.c_str(), RECT(400, 300 + ((int)i * 50), 0, 0), {255, 255, 255, 255});
     font->draw(std::to_string(lvl).c_str(), RECT(400, 500, 0, 0), {255, 255, 255, 255});
     font->draw(std::to_string(xp).c_str(), RECT(400, 600, 0, 0), {255, 255, 255, 255});
 }
@@ -100,12 +98,12 @@ void Indie::EndScene::skipScene(bool update, bool render, bool subUpdate, bool s
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneRenderActive(subRender);
 }
 
-Indie::EndGame *Indie::EndScene::getEndGame(void) const
+const Indie::EndGame &Indie::EndScene::getEndGame(void) const
 {
-    return this->endGame.get();
+    return this->endGame;
 }
 
 void Indie::EndScene::setEndGame(const Indie::EndGame &endGame)
 {
-    this->endGame = std::make_unique<Indie::EndGame>(endGame);
+    this->endGame = endGame;
 }

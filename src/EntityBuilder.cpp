@@ -36,7 +36,7 @@ Indie::Entity *Indie::EntityBuilder::createPlayer(const irr::core::vector3df &po
     entity->addComponent<VelocityComponent>();
     entity->addComponent<MeshComponent>(this->contextManager, texturePath);
     entity->addComponent<RotationComponent>();
-    entity->addComponent<PlayerComponent>(playerName, playerColor, startPosition);
+    entity->addComponent<PlayerComponent>(playerName, playerColor, startPosition, true);
     return entity;
 }
 
@@ -53,7 +53,7 @@ Indie::Entity *Indie::EntityBuilder::createAi(const irr::core::vector3df &positi
     entity->addComponent<VelocityComponent>();
     entity->addComponent<MeshComponent>(contextManager, texturePath);
     entity->addComponent<RotationComponent>();
-    entity->addComponent<PlayerComponent>(playerName, playerColor, startPosition);
+    entity->addComponent<PlayerComponent>(playerName, playerColor, startPosition, false);
     entity->addComponent<PathFinderComponent>();
     return entity;
 }

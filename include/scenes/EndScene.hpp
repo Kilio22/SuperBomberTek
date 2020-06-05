@@ -32,7 +32,7 @@ namespace Indie
 
             void skipScene(bool update, bool render, bool subUpdate, bool subRender);
 
-            Indie::EndGame *getEndGame(void) const;
+            const Indie::EndGame &getEndGame(void) const;
             void setEndGame(const Indie::EndGame &endGame);
 
         private:
@@ -42,7 +42,7 @@ namespace Indie
             std::unique_ptr<Button> restart;
             Image *title;
             irr::gui::IGUIFont *font;
-            std::unique_ptr<Indie::EndGame> endGame;
+            EndGame endGame;
     };
 }
 

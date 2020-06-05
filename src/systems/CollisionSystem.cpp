@@ -171,7 +171,7 @@ void Indie::Systems::CollisionSystem::onUpdate(irr::f32, EntityManager &entityMa
                     = colliderPlayerEntity == nullptr ? nullptr : colliderPlayerEntity->getComponent<Components::PlayerComponent>();
 
                 if (colliderPlayerComponent != nullptr && colliderPlayerEntity != entity) {
-                    colliderPlayerComponent->setXpCount(colliderPlayerComponent->getXpCount() + 100);
+                    colliderPlayerComponent->setXpCount(colliderPlayerComponent->getXp() + 100);
                     colliderPlayerComponent->setScore(colliderPlayerComponent->getScore() + 100);
                 }
                 entity->addComponent<Components::TimerComponent>(1.75f);
@@ -203,7 +203,7 @@ void Indie::Systems::CollisionSystem::onUpdate(irr::f32, EntityManager &entityMa
                 = colliderPlayerEntity == nullptr ? nullptr : colliderPlayerEntity->getComponent<Components::PlayerComponent>();
 
             if (colliderPlayerComponent != nullptr && colliderPlayerEntity != entity) {
-                colliderPlayerComponent->setXpCount(colliderPlayerComponent->getXpCount() + 100);
+                colliderPlayerComponent->setXpCount(colliderPlayerComponent->getXp() + 100);
                 colliderPlayerComponent->setScore(colliderPlayerComponent->getScore() + 100);
             }
             entity->addComponent<Components::TimerComponent>(1.75f);

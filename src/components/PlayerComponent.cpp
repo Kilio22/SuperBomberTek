@@ -7,12 +7,13 @@
 
 #include "PlayerComponent.hpp"
 
-Indie::Components::PlayerComponent::PlayerComponent(const std::string &name, Components::PlayerComponent::PLAYER_COLOR playerColor, PLAYER_START_POSITION startPosition)
-    : bombsRange(2)
+Indie::Components::PlayerComponent::PlayerComponent(
+    const std::string &name, Components::PlayerComponent::PLAYER_COLOR playerColor, PLAYER_START_POSITION startPosition, bool isHuman)
+    : _isHuman(isHuman)
+    , bombsRange(2)
     , maxBombNb(1)
     , currentBombNb(1)
     , velocityLevel(1)
-    , level(0)
     , xp(0)
     , score(0)
     , wallPass(false)
@@ -21,6 +22,11 @@ Indie::Components::PlayerComponent::PlayerComponent(const std::string &name, Com
     , playerColor(playerColor)
     , startPosition(startPosition)
 {
+}
+
+bool Indie::Components::PlayerComponent::isHuman(void) const
+{
+    return this->_isHuman;
 }
 
 unsigned int Indie::Components::PlayerComponent::getBombsRange(void) const
@@ -43,19 +49,9 @@ unsigned int Indie::Components::PlayerComponent::getVelocityLevel(void) const
     return this->velocityLevel;
 }
 
-unsigned int Indie::Components::PlayerComponent::getLevelCount(void) const
-{
-    return this->level;
-}
-
-unsigned int Indie::Components::PlayerComponent::getXpCount(void) const
+unsigned int Indie::Components::PlayerComponent::getXp(void) const
 {
     return this->xp;
-}
-
-unsigned int Indie::Components::PlayerComponent::getXpToLevelUp(void) const
-{
-    return 75U;
 }
 
 int Indie::Components::PlayerComponent::getScore(void) const
@@ -106,11 +102,6 @@ void Indie::Components::PlayerComponent::setCurrentBombNb(unsigned int value)
 void Indie::Components::PlayerComponent::setVelocityLevel(unsigned int value)
 {
     this->velocityLevel = value;
-}
-
-void Indie::Components::PlayerComponent::setLevelCount(unsigned int value)
-{
-    this->level = value;
 }
 
 void Indie::Components::PlayerComponent::setXpCount(unsigned int value)

@@ -8,22 +8,25 @@
 #ifndef ENDGAME_HPP_
 #define ENDGAME_HPP_
 
-#include <vector>
+#include <string>
 #include <utility>
+#include <vector>
 
 namespace Indie
 {
     enum class MATCH_PLAY {
-        WIN,
-        LOSE,
-        DRAW,
-        P1_WON,
-        P2_WON,
-        BOTH_LOSE
+        NOT_ENDED = 0,
+        WIN = 1,
+        LOSE = 2,
+        DRAW = 3,
+        // P1_WON,
+        // P2_WON,
+        // BOTH_LOSE
     };
 
     struct EndGame {
-        std::vector<std::pair<std::string, int>> scores = {};
+        std::vector<std::pair<std::string, int>> scores;
+        unsigned int xp;
         MATCH_PLAY matchPlay;
     };
 }

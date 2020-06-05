@@ -16,10 +16,6 @@ void Indie::Systems::PlayerSystem::onUpdate(irr::f32 deltaTime, EntityManager &e
     for (auto entity : entityManager.each<PlayerComponent>()) {
         auto player = entity->getComponent<PlayerComponent>();
 
-        // while (player->getXpCount() >= player->getXpToLevelUp()) {
-        //     player->setXpCount(player->getXpCount() - player->getXpToLevelUp());
-        //     player->setLevelCount(player->getLevelCount() + 1);
-        // }
         if (entity->has<TimerComponent>()) {
             auto timer = entity->getComponent<TimerComponent>();
 
