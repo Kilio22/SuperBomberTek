@@ -22,6 +22,9 @@ namespace Indie
         GameEngine();
         ~GameEngine();
 
+        /**
+         * @brief Starts the game
+         */
         void startGame();
 
     private:

@@ -20,6 +20,11 @@ namespace Indie
             Indie::Components::THEME theme, const std::string &mapPath);
         ~MapGenerator() = default;
 
+        /**
+         * @brief Generates a map which take in account parameters given in ctor
+         * @param entityManager The entity manager
+         * @param entityBuilder The entity builder
+         */
         void generate(Indie::EntityManager &entityManager, Indie::EntityBuilder &entityBuilder);
 
         private:

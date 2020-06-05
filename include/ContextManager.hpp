@@ -8,31 +8,83 @@
 #ifndef CONTEXTMANAGER_HPP_
 #define CONTEXTMANAGER_HPP_
 
-#include <irrlicht.h>
 #include <iostream>
+#include <irrlicht.h>
 
-#define POS(x, y) (irr::core::position2d<irr::s32>((irr::s32)x,(irr::s32)y))
+#define POS(x, y) (irr::core::position2d<irr::s32>((irr::s32)x, (irr::s32)y))
 #define RECT(x, y, w, h) (irr::core::rect<irr::s32>((irr::s32)x, (irr::s32)y, (irr::s32)w, (irr::s32)h))
 #define DIM(x, y) (irr::core::dimension2d<irr::u32>((irr::s32)x, (irr::s32)y))
 
 using Image = irr::video::ITexture;
 
-namespace Indie {
+namespace Indie
+{
 
-class ContextManager {
+    /**
+     * @brief ContextManager class
+     */
+    class ContextManager
+    {
     public:
         ContextManager(irr::core::dimension2d<irr::u32> size = DIM(1280, 720));
         ~ContextManager();
 
         /* Getters */
-        irr::IrrlichtDevice *getDevice() const { return device; }
-        irr::video::IVideoDriver *getDriver() const { return driver; }
-        irr::scene::ISceneManager *getSceneManager() const { return sceneManager; }
-        irr::gui::IGUIEnvironment *getGuiEnv() const { return guiEnv; }
+        /**
+         * @brief Gets the device
+         * @return irr::IrrlichtDevice* The device
+         */
+        irr::IrrlichtDevice *getDevice() const
+        {
+            return device;
+        }
+
+        /**
+         * @brief Gets the driver
+         * @return irr::video::IVideoDriver* The driver
+         */
+        irr::video::IVideoDriver *getDriver() const
+        {
+            return driver;
+        }
+
+        /**
+         * @brief Gets the Scene Manager
+         * @return irr::scene::ISceneManager* The scene manager
+         */
+        irr::scene::ISceneManager *getSceneManager() const
+        {
+            return sceneManager;
+        }
+
+        /**
+         * @brief Gets the GUI Environment
+         * @return irr::gui::IGUIEnvironment* The GUI Environment
+         */
+        irr::gui::IGUIEnvironment *getGuiEnv() const
+        {
+            return guiEnv;
+        }
 
         /* Methods */
-        void displayImage(Image *image, irr::core::position2d<irr::s32> pos = irr::core::position2d<irr::s32>(0,0), irr::video::SColor color = irr::video::SColor(255,255,255,255));
-        void displayImage(Image *image, irr::core::rect<irr::s32> rect, irr::core::position2d<irr::s32> pos = irr::core::position2d<irr::s32>(0,0), irr::video::SColor color = irr::video::SColor(255,255,255,255));
+        /**
+         * @brief Displays an image on the screen
+         * @param image The image to display
+         * @param pos The position of the image
+         * @param color The color of the image
+         */
+        void displayImage(Image *image, irr::core::position2d<irr::s32> pos = irr::core::position2d<irr::s32>(0, 0),
+            irr::video::SColor color = irr::video::SColor(255, 255, 255, 255));
+
+        /**
+         * @brief Displays an image on the screen
+         * @param image The image to display
+         * @param rect Part of the image to display
+         * @param pos The position of the image
+         * @param color The color of the image
+         */
+        void displayImage(Image *image, irr::core::rect<irr::s32> rect, irr::core::position2d<irr::s32> pos = irr::core::position2d<irr::s32>(0, 0),
+            irr::video::SColor color = irr::video::SColor(255, 255, 255, 255));
 
     private:
         irr::core::dimension2d<irr::u32> size;
@@ -40,7 +92,7 @@ class ContextManager {
         irr::video::IVideoDriver *driver;
         irr::scene::ISceneManager *sceneManager;
         irr::gui::IGUIEnvironment *guiEnv;
-};
+    };
 
 }
 
