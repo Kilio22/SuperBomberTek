@@ -12,8 +12,10 @@
 #include "IScene.hpp"
 #include "Parallax.hpp"
 #include "MasterInfo.hpp"
+#include "CSVParser.hpp"
 #include <memory>
 #include <vector>
+#include <utility>
 
 namespace Indie
 {
@@ -34,6 +36,7 @@ namespace Indie
         void setMasterInfo(const Indie::MasterInfo &masterInfo);
 
         private:
+        void loadMasterInfo(void);
         static const irr::core::vector2df velocities[5];
         static const std::string filepaths[5];
 
