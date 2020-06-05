@@ -32,6 +32,8 @@ namespace Indie
         void renderPost3D() final;
         void setColor(irr::video::SColor color);
 
+        void saveHighScoreMap(std::string mapPath, int score);
+
         Indie::MasterInfo *getMasterInfo(void) const;
         void setMasterInfo(const Indie::MasterInfo &masterInfo);
 

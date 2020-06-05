@@ -237,12 +237,12 @@ void Indie::Multi1Scene::renderPost3D()
     std::string tName = (mapTheme == Components::THEME::DIRT) ? "Garden" : "Cobblestone";
     std::string aiAmmount = std::to_string(nbAi);
     std::string timeAmmount = std::to_string((timeLimit) / 60) + ":";
+    std::map<std::string, int> scores_map = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo()->scores_map;
+    int mapScore = 0;
     if (timeLimit % 60 < 10)
         timeAmmount += "0";
     timeAmmount += std::to_string((timeLimit) % 60);
 
-    std::map<std::string, int> scores_map = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo()->scores_map;
-    int mapScore = 0;
     for (auto score : scores_map) {
         if (score.first == mapPath) {
             mapScore = score.second;

@@ -7,6 +7,7 @@
 
 #include "MenuScene.hpp"
 #include "ServiceLocator.hpp"
+#include <filesystem>
 
 const std::string Indie::MenuScene::filepaths[5] = {
     "../ressources/images/bg_boxes.png",
@@ -33,6 +34,26 @@ Indie::MenuScene::MenuScene(ContextManager &context)
 
 Indie::MenuScene::~MenuScene()
 {
+    std::vector<std::vector<std::string>> dataToWrite;
+    MasterInfo *info = this->getMasterInfo();
+
+    dataToWrite.push_back({ "LVL", std::to_string((int)info->lvl)});
+    dataToWrite.push_back({ "XP", std::to_string((int)info->xp)});
+    try {
+        ServiceLocator::getInstance().get<CSVParser>().writeToFile("../ressources/.saves/xp.txt", dataToWrite);
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << '\n';
+    }
+
+    dataToWrite.clear();
+    for (auto highScoreMap : info->scores_map)
+        dataToWrite.push_back({ highScoreMap.first, std::to_string((int)highScoreMap.second)});
+    try {
+        ServiceLocator::getInstance().get<CSVParser>().writeToFile("../ressources/.saves/highscoremap.txt", dataToWrite);
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << '\n';
+    }
+
     parallax.clear();
 }
 
@@ -84,6 +105,39 @@ void Indie::MenuScene::setMasterInfo(const Indie::MasterInfo &masterInfo)
     this->masterInfo = std::make_unique<Indie::MasterInfo>(masterInfo);
 }
 
+static std::string getFileName(std::string const &filepath)
+{
+    std::string filename(filepath.c_str());
+    const size_t last_slash_id = filename.find_last_of("\\/");
+
+    if (std::string::npos != last_slash_id)
+        filename.erase(0, last_slash_id + 1);
+    const size_t period_id = filename.rfind('.');
+    if (std::string::npos != period_id)
+        filename.erase(period_id);
+    return (filename);
+}
+
+void Indie::MenuScene::saveHighScoreMap(std::string mapPath, int score)
+{
+    MasterInfo *info = this->getMasterInfo();
+    bool isExist = false;
+
+    for (auto &HighScoredMap : info->scores_map) {
+        if (getFileName(mapPath) == HighScoredMap.first) {
+            if (score > HighScoredMap.second) {
+                isExist = true;
+                HighScoredMap.second = score;
+                break;
+            }
+        }
+    }
+    if (isExist == false)
+        info->scores_map.insert(std::pair<std::string, int>(getFileName(mapPath), score));
+}
+
+
+// Un bon samedi refacto la dedans ça serait pas mal nan ?
 void Indie::MenuScene::loadMasterInfo(void)
 {
     MasterInfo info;

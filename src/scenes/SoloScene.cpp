@@ -337,12 +337,11 @@ void Indie::SoloScene::renderPost3D()
     std::string mPath = getFileName(mapPath);
     std::string pName = getFileName(playerTexture);
     std::string tName = (mapTheme == Components::THEME::DIRT) ? "Garden" : "Cobblestone";
-
     std::map<std::string, int> scores_map
         = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo()->scores_map;
     int mapScore = 0;
     for (auto score : scores_map) {
-        if (score.first == mapPath) {
+        if (score.first == getFileName(mapPath)) {
             mapScore = score.second;
             break;
         }
