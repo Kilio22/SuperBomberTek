@@ -124,7 +124,7 @@ void Indie::Multi2Scene::update(irr::f32 ticks)
     /* ================================================================== */
     bool wasKeyUpdated = false;
     for (auto &it : pKeybinds) {
-        it.second->setUsedKeys<std::shared_ptr>(pKeybinds);
+        it.second->setUsedKeys(pKeybinds);
         it.second->update(selector.getPos());
         wasKeyUpdated = (it.second->getStatus()) ? true : wasKeyUpdated;
     }

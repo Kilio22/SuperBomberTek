@@ -32,14 +32,9 @@ namespace Indie
         bool getStatus() const;
         irr::EKEY_CODE getKey() const;
         void setStatus(bool status);
+        void setUsedKeys(std::vector<std::pair<Indie::Components::KEY_TYPE, std::unique_ptr<Keybind>>>& list);
+        void setUsedKeys(std::vector<std::pair<Indie::Components::KEY_TYPE, std::shared_ptr<Keybind>>>& list);
 
-        template <template <class, class...> class T, class... Ts>
-        void setUsedKeys(std::vector<std::pair<Indie::Components::KEY_TYPE, T<Keybind, Ts...>>> &list)
-        {
-            usedKeys.clear();
-            for (const std::pair<Indie::Components::KEY_TYPE, T<Keybind, Ts...>> &it : list)
-                usedKeys.push_back(it.second->getKey());
-        }
         static const std::vector<std::pair<irr::EKEY_CODE, irr::core::stringw>> keyCodes;
         Image *tick;
 

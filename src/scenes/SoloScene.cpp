@@ -210,7 +210,7 @@ void Indie::SoloScene::update(irr::f32 ticks)
     // KEYBINDS SET USED
     /* ================================================================== */
     for (auto &keybind : this->keybinds) {
-        keybind.second->setUsedKeys<std::unique_ptr>(this->keybinds);
+        keybind.second->setUsedKeys(this->keybinds);
     }
     /* ================================================================== */
     // UPDATE KEYBINDS
