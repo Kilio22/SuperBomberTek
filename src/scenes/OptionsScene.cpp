@@ -49,8 +49,9 @@ void Indie::OptionsScene::init()
     back->init(context, "../ressources/images/options/Retour.png", 0, 4, POS(0, 0));
 
     musicMute->setStatus(Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().isMusicMuted());
+    soundMute->setStatus(Indie::ServiceLocator::getInstance().get<Indie::SoundManager>().isMuted());
     musicVolumeSelector.setPos((int)Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().getMusicVolume(), 0);
-    // TODO : Set the sound checkbox status to the isMuted value of the sound when it's done
+    soundVolumeSelector.setPos((int)Indie::ServiceLocator::getInstance().get<Indie::SoundManager>().getVolume(), 0);
 }
 
 void Indie::OptionsScene::reset()
@@ -76,21 +77,16 @@ void Indie::OptionsScene::update(irr::f32 ticks)
     } else {
         Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().unMute();
     }
-    if (soundMute->getStatus()) {
-        // TODO : Mute sounds
-    } else {
-        // TODO : Unmute sounds
-    }
+    Indie::ServiceLocator::getInstance().get<Indie::SoundManager>().setMute(soundMute->getStatus());
     if (musicVolume->getStatus() == Button::Status::Selected) {
         musicVolumeSelector.update();
     }
     if (soundVolume->getStatus() == Button::Status::Selected) {
         soundVolumeSelector.update();
-        // TODO : set sound volume
-        // Volume =  soundVolumeSelector.getPos().first * 5
     }
 
     // Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setVolume(float(musicVolumeSelector.getPos().first * 5));
+    Indie::ServiceLocator::getInstance().get<Indie::SoundManager>().setVolume(soundVolumeSelector.getPos().first);
     Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setVolume(float(musicVolumeSelector.getPos().first));
     EventHandler::getInstance().resetKeysStatusOnce();
     EventHandler::getInstance().resetKeysStatus();

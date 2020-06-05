@@ -8,7 +8,7 @@
 #include "MusicManager.hpp"
 
 Indie::MusicManager::MusicManager()
-    : musics(), currentMusic(0), volume(50), isMuted(false), isPlaying(false)
+    : musics(), currentMusic(0), volume(20), isMuted(false), isPlaying(false)
 {
 }
 

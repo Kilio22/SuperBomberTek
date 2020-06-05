@@ -52,11 +52,13 @@ void Indie::GameEngine::readOptions()
         }
         float volume = std::stof(volumeData);
 
-        if (volume > 25 || volume < 0)
+        // C'est 20 enfaite le max, pas 25. Pour faire des *5 tout beaux.
+        // Sinon on se retrouve avec 4, 8, 12, 16 etc c'est moche.
+        if (volume > 20 || volume < 0)
             throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"../ressources/.saves/options.txt\" corrupted.");
         musicManager.setVolume(volume);
     } catch (const std::exception &e) {
-        musicManager.setVolume(25.f);
+        musicManager.setVolume(20.f);
         musicManager.mute();
         std::cerr << e.what() << '\n';
     }
@@ -69,6 +71,24 @@ void Indie::GameEngine::setupMusicManager()
     ServiceLocator::getInstance().get<MusicManager>().setMusic(0);
     ServiceLocator::getInstance().get<MusicManager>().playMusic();
     this->readOptions();
+}
+
+void Indie::GameEngine::setupSoundManager()
+{
+    ServiceLocator::getInstance().get<SoundManager>().addSound("../ressources/sounds/bad.wav");
+    ServiceLocator::getInstance().get<SoundManager>().addSound("../ressources/sounds/bomb_drop.wav");
+    ServiceLocator::getInstance().get<SoundManager>().addSound("../ressources/sounds/bomb_explode.wav");
+    ServiceLocator::getInstance().get<SoundManager>().addSound("../ressources/sounds/die.wav");
+    ServiceLocator::getInstance().get<SoundManager>().addSound("../ressources/sounds/level_up.wav");
+    ServiceLocator::getInstance().get<SoundManager>().addSound("../ressources/sounds/menu_back.wav");
+    ServiceLocator::getInstance().get<SoundManager>().addSound("../ressources/sounds/menu_lock.wav");
+    ServiceLocator::getInstance().get<SoundManager>().addSound("../ressources/sounds/menu_move.wav");
+    ServiceLocator::getInstance().get<SoundManager>().addSound("../ressources/sounds/menu_select.wav");
+    ServiceLocator::getInstance().get<SoundManager>().addSound("../ressources/sounds/power_down.wav");
+    ServiceLocator::getInstance().get<SoundManager>().addSound("../ressources/sounds/power_up.wav");
+    ServiceLocator::getInstance().get<SoundManager>().addSound("../ressources/sounds/title_select.wav");
+    ServiceLocator::getInstance().get<SoundManager>().addSound("../ressources/sounds/xp_up.wav");
+    //ServiceLocator::getInstance().get<SoundManager>().setMute(true);
 }
 
 void Indie::GameEngine::setupSceneManager(ContextManager &context)
@@ -103,6 +123,7 @@ Indie::GameEngine::~GameEngine()
     std::vector<std::vector<std::string>> dataToWrite;
 
     // TODO: ajouter le volume/mute des sons quand ca sera mis en place
+    // Bah c'est mis en place mtn du coup. Tu peux le faire si tu veux.
     dataToWrite.push_back({ "VOLUME", std::to_string(musicManager.getMusicVolume()) });
     if (musicManager.isMusicMuted() == true) {
         dataToWrite.push_back({ "MUTE", "true" });
@@ -127,6 +148,7 @@ void Indie::GameEngine::startGame()
     context.displayImage(loadImage);
     context.getDriver()->endScene();
     ServiceLocator::getInstance().get<ImageLoader>();
+    this->setupSoundManager();
     this->setupMusicManager();
     this->setupSceneManager(context);
     /* ================================================================================ */
@@ -147,6 +169,7 @@ void Indie::GameEngine::startGame()
         // std::cout << "Delta time: " << deltaTime << ", FPS: " << this->context.getDriver()->getFPS() << std::endl;
         if (totalDeltaTime >= 0.016f) {
             ServiceLocator::getInstance().get<MusicManager>().update();
+            ServiceLocator::getInstance().get<SoundManager>().update();
             ServiceLocator::getInstance().get<SceneManager>().update(context, totalDeltaTime);
             totalDeltaTime = 0.f;
         }

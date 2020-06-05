@@ -40,6 +40,8 @@ void Indie::Button::update(std::pair<int, int> pos)
         status = Status::Selected;
     else
         status = Status::Idle;
+    if (EventHandler::getInstance().isKeyPressedAtOnce(SELECTBUTTON))
+        ServiceLocator::getInstance().get<SoundManager>().playSound("menu_select");
     if (status == Status::Selected && keyPressed && !EventHandler::getInstance().isKeyPressed(SELECTBUTTON))
         status = Status::Pressed;
     keyPressed = EventHandler::getInstance().isKeyPressed(SELECTBUTTON);

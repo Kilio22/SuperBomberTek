@@ -31,6 +31,7 @@ namespace Indie
         void readOptions();
         std::string findValueByName(std::vector<std::vector<std::string>> parsedData, const std::string &value) const;
         void setupMusicManager();
+        void setupSoundManager();
         void setupSceneManager(Indie::ContextManager &context);
 
         ContextManager &context;

@@ -18,5 +18,6 @@
 #include "FileCorruptedException.hpp"
 #include "CameraNotFoundException.hpp"
 #include "AnimationException.hpp"
+#include "SoundNotFoundException.hpp"
 
 #endif /* !EXCEPTIONS_H_ */
