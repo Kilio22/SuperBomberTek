@@ -351,24 +351,9 @@ void Indie::SoloScene::renderPost3D()
 void Indie::SoloScene::resetKeybinds(void)
 {
     this->keybinds.clear();
-    this->keybinds.insert(
-        { Indie::Components::KEY_TYPE::UP, std::make_unique<Keybind>(context, std::find_if(playerKeys.begin(), playerKeys.end(), [](const auto &var) {
-             return (var.second == Indie::Components::KEY_TYPE::UP);
-         })->first) });
-    this->keybinds.insert({ Indie::Components::KEY_TYPE::DOWN,
-        std::make_unique<Keybind>(context, std::find_if(playerKeys.begin(), playerKeys.end(), [](const auto &var) {
-            return (var.second == Indie::Components::KEY_TYPE::DOWN);
-        })->first) });
-    this->keybinds.insert({ Indie::Components::KEY_TYPE::LEFT,
-        std::make_unique<Keybind>(context, std::find_if(playerKeys.begin(), playerKeys.end(), [](const auto &var) {
-            return (var.second == Indie::Components::KEY_TYPE::LEFT);
-        })->first) });
-    this->keybinds.insert({ Indie::Components::KEY_TYPE::RIGHT,
-        std::make_unique<Keybind>(context, std::find_if(playerKeys.begin(), playerKeys.end(), [](const auto &var) {
-            return (var.second == Indie::Components::KEY_TYPE::RIGHT);
-        })->first) });
-    this->keybinds.insert({ Indie::Components::KEY_TYPE::DROP,
-        std::make_unique<Keybind>(context, std::find_if(playerKeys.begin(), playerKeys.end(), [](const auto &var) {
-            return (var.second == Indie::Components::KEY_TYPE::DROP);
-        })->first) });
+    this->keybinds.insert({ Indie::Components::KEY_TYPE::UP, std::make_unique<Keybind>(context, irr::EKEY_CODE::KEY_UP) });
+    this->keybinds.insert({ Indie::Components::KEY_TYPE::DOWN, std::make_unique<Keybind>(context, irr::EKEY_CODE::KEY_DOWN) });
+    this->keybinds.insert({ Indie::Components::KEY_TYPE::LEFT, std::make_unique<Keybind>(context, irr::EKEY_CODE::KEY_LEFT) });
+    this->keybinds.insert({ Indie::Components::KEY_TYPE::RIGHT, std::make_unique<Keybind>(context, irr::EKEY_CODE::KEY_RIGHT) });
+    this->keybinds.insert({ Indie::Components::KEY_TYPE::DROP, std::make_unique<Keybind>(context, irr::EKEY_CODE::KEY_SPACE) });
 }
