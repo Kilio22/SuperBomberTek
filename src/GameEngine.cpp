@@ -31,35 +31,45 @@ std::string Indie::GameEngine::findValueByName(std::vector<std::vector<std::stri
 void Indie::GameEngine::readOptions()
 {
     MusicManager &musicManager = ServiceLocator::getInstance().get<MusicManager>();
+    SoundManager &soundManager = ServiceLocator::getInstance().get<SoundManager>();
 
-    // TODO: ajouter le volume/mute des sons quand ca sera mis en place
     try {
         std::vector<std::vector<std::string>> parsedData
             = Indie::ServiceLocator::getInstance().get<CSVParser>().parse("../ressources/.saves/options.txt");
 
-        if (parsedData.size() != 2)
+        if (parsedData.size() != 4)
             throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"../ressources/.saves/options.txt\" corrupted.");
-        const std::string &volumeData = this->findValueByName(parsedData, "VOLUME");
-        const std::string &muteData = this->findValueByName(parsedData, "MUTE");
-        if (volumeData == "" || muteData == "")
+        const std::string &musicVolume = this->findValueByName(parsedData, "MUSIC_VOLUME");
+        const std::string &muteMusic = this->findValueByName(parsedData, "MUSIC_MUTE");
+        const std::string &soundVolume = this->findValueByName(parsedData, "SOUND_VOLUME");
+        const std::string &muteSound = this->findValueByName(parsedData, "SOUND_MUTE");
+
+        if (musicVolume == "" || muteMusic == "" || soundVolume == "" || muteSound == "")
             throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"../ressources/.saves/options.txt\" corrupted.");
-        if (muteData != "true" && muteData != "false")
+        if ((muteMusic != "true" && muteMusic != "false") || (muteSound != "true" && muteSound != "false"))
             throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"../ressources/.saves/options.txt\" corrupted.");
-        if (muteData == "true") {
+        if (muteMusic == "true") {
             musicManager.mute();
         } else {
             musicManager.unMute();
         }
-        float volume = std::stof(volumeData);
+        if (muteSound == "true") {
+            soundManager.setMute(true);
+        } else {
+            soundManager.setMute(false);
+        }
+        float musicVolumeValue = std::stof(musicVolume);
+        float soundVolumeValue = std::stof(soundVolume);
 
-        // C'est 20 enfaite le max, pas 25. Pour faire des *5 tout beaux.
-        // Sinon on se retrouve avec 4, 8, 12, 16 etc c'est moche.
-        if (volume > 20 || volume < 0)
+        if (musicVolumeValue > 20 || musicVolumeValue < 0 || soundVolumeValue > 20 || soundVolumeValue < 0)
             throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"../ressources/.saves/options.txt\" corrupted.");
-        musicManager.setVolume(volume);
+        musicManager.setVolume(musicVolumeValue);
+        soundManager.setVolume(soundVolumeValue);
     } catch (const std::exception &e) {
-        musicManager.setVolume(20.f);
-        musicManager.mute();
+        musicManager.setVolume(10.f);
+        musicManager.unMute();
+        soundManager.setVolume(10.f);
+        soundManager.setMute(false);
         std::cerr << e.what() << '\n';
     }
 }
@@ -88,7 +98,6 @@ void Indie::GameEngine::setupSoundManager()
     ServiceLocator::getInstance().get<SoundManager>().addSound("../ressources/sounds/power_up.wav");
     ServiceLocator::getInstance().get<SoundManager>().addSound("../ressources/sounds/title_select.wav");
     ServiceLocator::getInstance().get<SoundManager>().addSound("../ressources/sounds/xp_up.wav");
-    //ServiceLocator::getInstance().get<SoundManager>().setMute(true);
 }
 
 void Indie::GameEngine::setupSceneManager(ContextManager &context)
@@ -120,15 +129,20 @@ Indie::GameEngine::GameEngine()
 Indie::GameEngine::~GameEngine()
 {
     auto &musicManager = ServiceLocator::getInstance().get<MusicManager>();
+    auto &soundManager = ServiceLocator::getInstance().get<SoundManager>();
     std::vector<std::vector<std::string>> dataToWrite;
 
-    // TODO: ajouter le volume/mute des sons quand ca sera mis en place
-    // Bah c'est mis en place mtn du coup. Tu peux le faire si tu veux.
-    dataToWrite.push_back({ "VOLUME", std::to_string(musicManager.getMusicVolume()) });
+    dataToWrite.push_back({ "MUSIC_VOLUME", std::to_string(musicManager.getMusicVolume()) });
     if (musicManager.isMusicMuted() == true) {
-        dataToWrite.push_back({ "MUTE", "true" });
+        dataToWrite.push_back({ "MUSIC_MUTE", "true" });
     } else {
-        dataToWrite.push_back({ "MUTE", "false" });
+        dataToWrite.push_back({ "MUSIC_MUTE", "false" });
+    }
+    dataToWrite.push_back({ "SOUND_VOLUME", std::to_string(soundManager.getVolume()) });
+    if (soundManager.isMuted() == true) {
+        dataToWrite.push_back({ "SOUND_MUTE", "true" });
+    } else {
+        dataToWrite.push_back({ "SOUND_MUTE", "false" });
     }
     try {
         ServiceLocator::getInstance().get<CSVParser>().writeToFile("../ressources/.saves/options.txt", dataToWrite);
