@@ -182,7 +182,7 @@ void Indie::SoloScene::getSavedKeybinds(void)
                 == Keybind::keyCodes.end())
                 throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"../ressources/.saves/keybinds.txt\" corrupted.");
             if (std::find_if(this->keybinds.begin(), this->keybinds.end(),
-                    [keyType, keyNb](const std::pair<KEY_TYPE, std::unique_ptr<Keybind>> &value) {
+                    [keyType, keyNb](const auto &value) {
                         if (value.first == (KEY_TYPE)keyType || value.second->getKey() == (irr::EKEY_CODE)keyNb)
                             return true;
                         return false;
