@@ -15,9 +15,8 @@
 Indie::EndScene::EndScene(ContextManager &context)
     : context(context)
     , selector(1, 2, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
-{
-    this->endGame = std::make_unique<Indie::EndGame>();
-}
+    , endGame(std::make_unique<Indie::EndGame>())
+{}
 
 void Indie::EndScene::init()
 {

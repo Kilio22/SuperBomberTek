@@ -14,6 +14,7 @@
 #include "PauseScene.hpp"
 #include "IntroScene.hpp"
 #include "Multi2Scene.hpp"
+#include "MenuScene.hpp"
 #include <filesystem>
 
 static std::string getFileName(std::string const &filepath)
@@ -187,7 +188,7 @@ void Indie::Multi1Scene::update(irr::f32 ticks)
     // CLICK BUTTONS
     /* ================================================================== */
     if (play->getStatus() == Button::Status::Pressed || EventHandler::getInstance().isKeyPressed(irr::EKEY_CODE::KEY_KEY_P) == true) {
-        // Do stuff then go to Multi2 
+        // Do stuff then go to Multi2
         context.getSceneManager()->clear();
         mapType = (mapSelector.getPos().first == 0)
             ? Components::MAP_TYPE::DEFAULT
@@ -239,6 +240,16 @@ void Indie::Multi1Scene::renderPost3D()
     if (timeLimit % 60 < 10)
         timeAmmount += "0";
     timeAmmount += std::to_string((timeLimit) % 60);
+
+    std::map<std::string, int> scores_map = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo()->scores_map;
+    int mapScore = 0;
+    for (auto score : scores_map) {
+        if (score.first == mapPath) {
+            mapScore = score.second;
+            break;
+        }
+    }
+    font->draw(std::to_string(mapScore).c_str(), RECT(1000, 400, 0, 0), { 255, 255, 255, 255 });
     font->draw(mPath.c_str(), RECT(410 - (5 * int(mPath.size())), 139, 0, 0), {255, 255, 255, 255});
     font->draw(tName.c_str(), RECT(410 - (5 * int(tName.size())), 218, 0, 0), {255, 255, 255, 255});
     font->draw(timeAmmount.c_str(), RECT(410 - (5 * int(timeAmmount.size())), 300, 0, 0), {255, 255, 255, 255});

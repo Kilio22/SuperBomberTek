@@ -26,9 +26,8 @@ const irr::core::vector2df Indie::MenuScene::velocities[5] = {
 
 Indie::MenuScene::MenuScene(ContextManager &context)
     : context(context)
-{
-    this->masterInfo = std::make_unique<Indie::MasterInfo>();
-}
+    , masterInfo(std::make_unique<Indie::MasterInfo>())
+{}
 
 Indie::MenuScene::~MenuScene()
 {
