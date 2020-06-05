@@ -24,7 +24,6 @@ namespace Indie
         private:
             ContextManager &context;
             std::unordered_map<std::string, Image *> images;
-            static const std::vector<std::string> paths;
     };
 }
 
