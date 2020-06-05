@@ -80,8 +80,8 @@ Indie::SoloScene::~SoloScene()
 {
     std::vector<std::vector<std::string>> dataToWrite;
 
-    for (auto key : this->playerKeys) {
-        dataToWrite.push_back({ std::to_string((int)key.second), std::to_string((int)key.first) });
+    for (auto &keybind : this->keybinds) {
+        dataToWrite.push_back({ std::to_string((int)keybind.first), std::to_string((int)keybind.second->getKey()) });
     }
     try {
         ServiceLocator::getInstance().get<CSVParser>().writeToFile("../ressources/.saves/keybinds.txt", dataToWrite);
@@ -210,7 +210,7 @@ void Indie::SoloScene::update(irr::f32 ticks)
     // KEYBINDS SET USED
     /* ================================================================== */
     for (auto &keybind : this->keybinds) {
-        keybind.second->setUsedKeys(this->keybinds);
+        keybind.second->setUsedKeys<std::unique_ptr>(this->keybinds);
     }
     /* ================================================================== */
     // UPDATE KEYBINDS

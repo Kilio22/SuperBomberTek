@@ -76,7 +76,6 @@ namespace Indie
         std::string mapPath;
         time_t timeLimit;
         std::string playerTexture;
-        std::vector<std::pair<irr::EKEY_CODE, Indie::Components::KEY_TYPE>> playerKeys;
         Components::PlayerComponent::PLAYER_COLOR playerColor;
         // TODO : XP BAR
         // TODO : SCORE
