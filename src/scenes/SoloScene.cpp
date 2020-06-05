@@ -8,13 +8,11 @@
 
 #include "SoloScene.hpp"
 #include "CSVParser.hpp"
-#include "ServiceLocator.hpp"
-#include "MainMenuScene.hpp"
-#include "MenuScene.hpp"
 #include "GameScene.hpp"
 #include "InitGame.hpp"
 #include "IntroScene.hpp"
 #include "MainMenuScene.hpp"
+#include "MenuScene.hpp"
 #include "PauseScene.hpp"
 #include "ServiceLocator.hpp"
 #include <filesystem>
@@ -183,6 +181,14 @@ void Indie::SoloScene::getSavedKeybinds(void)
             if (std::find_if(Keybind::keyCodes.begin(), Keybind::keyCodes.end(), [keyNb](const auto &var) { return ((int)var.first == keyNb); })
                 == Keybind::keyCodes.end())
                 throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"../ressources/.saves/keybinds.txt\" corrupted.");
+            if (std::find_if(this->keybinds.begin(), this->keybinds.end(),
+                    [keyType, keyNb](const std::pair<KEY_TYPE, std::unique_ptr<Keybind>> &value) {
+                        if (value.first == (KEY_TYPE)keyType || value.second->getKey() == (irr::EKEY_CODE)keyNb)
+                            return true;
+                        return false;
+                    })
+                != this->keybinds.end())
+                throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"../ressources/.saves/keybinds.txt\" corrupted.");
             this->keybinds.insert({ (Indie::Components::KEY_TYPE)keyType, std::make_unique<Keybind>(context, (irr::EKEY_CODE)keyNb) });
         }
     } catch (const std::exception &e) {
@@ -339,7 +345,8 @@ void Indie::SoloScene::renderPost3D()
     std::string pName = getFileName(playerTexture);
     std::string tName = (mapTheme == Components::THEME::DIRT) ? "Garden" : "Cobblestone";
 
-    std::map<std::string, int>scores_map = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo()->scores_map;
+    std::map<std::string, int> scores_map
+        = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo()->scores_map;
     int mapScore = 0;
     for (auto score : scores_map) {
         if (score.first == mapPath) {
@@ -347,10 +354,10 @@ void Indie::SoloScene::renderPost3D()
             break;
         }
     }
-    font->draw(mPath.c_str(), RECT(410 - (5 * int(mPath.size())), 139, 0, 0), {255, 255, 255, 255});
-    font->draw(pName.c_str(), RECT(410 - (5 * int(pName.size())), 218, 0, 0), {255, 255, 255, 255});
-    font->draw(tName.c_str(), RECT(410 - (5 * int(tName.size())), 300, 0, 0), {255, 255, 255, 255});
-    font->draw(std::to_string(mapScore).c_str(), RECT(1000, 400, 0, 0), {255, 255, 255, 255});
+    font->draw(mPath.c_str(), RECT(410 - (5 * int(mPath.size())), 139, 0, 0), { 255, 255, 255, 255 });
+    font->draw(pName.c_str(), RECT(410 - (5 * int(pName.size())), 218, 0, 0), { 255, 255, 255, 255 });
+    font->draw(tName.c_str(), RECT(410 - (5 * int(tName.size())), 300, 0, 0), { 255, 255, 255, 255 });
+    font->draw(std::to_string(mapScore).c_str(), RECT(1000, 400, 0, 0), { 255, 255, 255, 255 });
 
     /* ================================================================== */
     // DISPLAY KEYBINDS
