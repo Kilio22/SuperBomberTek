@@ -7,13 +7,10 @@
 */
 
 #include "SoloScene.hpp"
-<<<<<<< Updated upstream
 #include "CSVParser.hpp"
-=======
 #include "ServiceLocator.hpp"
 #include "MainMenuScene.hpp"
 #include "MenuScene.hpp"
->>>>>>> Stashed changes
 #include "GameScene.hpp"
 #include "InitGame.hpp"
 #include "IntroScene.hpp"
