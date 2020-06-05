@@ -94,8 +94,8 @@ void Indie::SoloScene::init()
 {
     // TODO : XP BAR
     // TODO : SCORE
-    unsigned short int xp = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo()->xp;
-    unsigned short int lvl = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo()->lvl;
+    // unsigned short int xp = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo()->xp;
+    // unsigned short int lvl = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo()->lvl;
     /* ================================================================== */
     // 3D INIT
     /* ================================================================== */
