@@ -9,6 +9,7 @@
 #define ENDGAME_HPP_
 
 #include <vector>
+#include <utility>
 
 namespace Indie
 {
@@ -22,7 +23,7 @@ namespace Indie
     };
 
     struct EndGame {
-        std::vector<int> score = {};
+        std::vector<std::pair<std::string, int>> scores = {};
         MATCH_PLAY matchPlay;
     };
 }

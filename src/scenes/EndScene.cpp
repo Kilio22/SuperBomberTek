@@ -85,8 +85,8 @@ void Indie::EndScene::renderPost3D()
     // else if (this->endGame->matchPlay == MATCH_PLAY::BOTH_LOSE)
     //     font->draw("Bande de naze", RECT(800, 100, 0, 0), {255, 255, 255, 255});
 
-    for (size_t i = 0; i < this->endGame->score.size(); i++)
-        font->draw(std::to_string(i).c_str(), RECT(400, 300 + ((int)i * 50), 0, 0), {255, 255, 255, 255});
+    for (size_t i = 0; i < this->endGame->scores.size(); i++)
+        font->draw(this->endGame->scores.at(i).first.c_str(), RECT(400, 300 + ((int)i * 50), 0, 0), {255, 255, 255, 255});
 
     font->draw(std::to_string(lvl).c_str(), RECT(400, 500, 0, 0), {255, 255, 255, 255});
     font->draw(std::to_string(xp).c_str(), RECT(400, 600, 0, 0), {255, 255, 255, 255});
