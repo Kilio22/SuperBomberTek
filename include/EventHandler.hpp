@@ -13,35 +13,93 @@
 
 namespace Indie
 {
+    /**
+     * @brief EventHandler singleton class
+     */
     class EventHandler : public irr::IEventReceiver
     {
-        public:
-            ~EventHandler() = default;
+    public:
+        ~EventHandler() = default;
 
-            static EventHandler &getInstance();
+        /**
+         * @brief Gets the instance of the class
+         * @return EventHandler& The instance
+         */
+        static EventHandler &getInstance();
 
-            bool OnEvent(const irr::SEvent &event) final;
+        /**
+         * @brief Called automatically by irrlicht when an event happens. It stores key informations
+         * @param event The generated irrlicht event
+         */
+        bool OnEvent(const irr::SEvent &event) final;
 
-            bool isKeyPressed(irr::EKEY_CODE key) const;
-            bool isKeyPressedAtOnce(irr::EKEY_CODE key) const;
-            bool isKeyReleased(irr::EKEY_CODE key) const;
-            bool isAnyKeyPressed() const;
-            bool isAnyKeyPressedAtOnce() const;
+        /**
+         * @brief Checks if given key is pressed or not
+         * @param key The key to check
+         * @return true The key is pressed
+         * @return false The key is not pressed
+         */
+        bool isKeyPressed(irr::EKEY_CODE key) const;
 
-            void resetKeys(void);
-            void resetKeysStatus(void);
-            void resetKeysStatusOnce(void);
-            void resetKeysReleased(void);
+        /**
+         * @brief Checks if the given key is pressed at once
+         * @param key The key to check
+         * @return true The key is pressed
+         * @return false The key is not pressed
+         */
+        bool isKeyPressedAtOnce(irr::EKEY_CODE key) const;
 
-            void operator=(EventHandler const &) = delete;
-            EventHandler(EventHandler const &) = delete;
+        /**
+         * @brief Checks if given key has been released
+         * @param key The key to check
+         * @return true The key has been released
+         * @return false The key hasn't been released
+         */
+        bool isKeyReleased(irr::EKEY_CODE key) const;
 
-        private:
-            EventHandler();
+        /**
+         * @brief Checks if any key is pressed
+         * @return true A key has been pressed
+         * @return false No key has been pressed
+         */
+        bool isAnyKeyPressed() const;
 
-            std::vector<bool> keysStatus;
-            std::vector<bool> keysStatusOnce;
-            std::vector<bool> keysStatusReleased;
+        /**
+         * @brief Checks if any key is pressed at once
+         * @return true A key has been pressed
+         * @return false No key has been pressed
+         */
+        bool isAnyKeyPressedAtOnce() const;
+
+        /**
+         * @brief Resets all the key sets
+         */
+        void resetKeys(void);
+
+        /**
+         * @brief Resets the keys status
+         */
+        void resetKeysStatus(void);
+
+        /**
+         * @brief Resets the keys status pressed once
+         */
+        void resetKeysStatusOnce(void);
+
+        /**
+         * @brief Resets the keys status released
+         */
+        void resetKeysReleased(void);
+
+        void operator=(EventHandler const &) = delete;
+        EventHandler(EventHandler const &) = delete;
+
+    private:
+        EventHandler();
+
+        std::vector<bool> keysStatus;
+        std::vector<bool> keysStatusOnce;
+        std::vector<bool> keysStatusReleased;
     };
 }
 
