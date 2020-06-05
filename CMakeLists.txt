@@ -45,4 +45,4 @@ file(GLOB SRCS_UI src/ui/*.cpp)
 add_executable(bomberman ${SRCS} ${SRCS_SYSTEM} ${SRCS_COMPONENTS} ${SRCS_EXCEPTIONS} ${SRCS_SCENES} ${SRCS_MUSIC} ${SRCS_SOUND} ${SRCS_UI})
 
 target_link_libraries(bomberman ${Irrlicht_LIBRARIES})
-target_link_libraries(bomberman sfml-graphics sfml-audio)
+target_link_libraries(bomberman sfml-audio)
