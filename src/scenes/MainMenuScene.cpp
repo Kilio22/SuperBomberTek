@@ -9,6 +9,7 @@
 #include "GameScene.hpp"
 #include "OptionsScene.hpp"
 #include "PauseScene.hpp"
+#include "EndScene.hpp"
 #include "Scenes.hpp"
 #include "ServiceLocator.hpp"
 

@@ -83,6 +83,7 @@ void Indie::GameEngine::setupSceneManager(ContextManager &context)
     ServiceLocator::getInstance().get<SceneManager>().addScene<OptionsScene>(context);
     ServiceLocator::getInstance().get<SceneManager>().addScene<IntroScene>(context);
     ServiceLocator::getInstance().get<SceneManager>().addScene<SoloScene>(context);
+    ServiceLocator::getInstance().get<SceneManager>().addScene<EndScene>(context);
     ServiceLocator::getInstance().get<SceneManager>().setScene<SplashScene>(context);
     ServiceLocator::getInstance().get<SceneManager>().setSceneUpdateActive(true);
     ServiceLocator::getInstance().get<SceneManager>().setSceneRenderActive(true);

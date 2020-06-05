@@ -26,7 +26,9 @@ const irr::core::vector2df Indie::MenuScene::velocities[5] = {
 
 Indie::MenuScene::MenuScene(ContextManager &context)
     : context(context)
-{}
+{
+    this->masterInfo = std::make_unique<Indie::MasterInfo>();
+}
 
 Indie::MenuScene::~MenuScene()
 {
@@ -69,3 +71,13 @@ void Indie::MenuScene::renderPre3D()
 }
 
 void Indie::MenuScene::renderPost3D() {}
+
+Indie::MasterInfo *Indie::MenuScene::getMasterInfo(void) const
+{
+    return this->masterInfo.get();
+}
+
+void Indie::MenuScene::setMasterInfo(const Indie::MasterInfo &masterInfo)
+{
+    this->masterInfo = std::make_unique<Indie::MasterInfo>(masterInfo);
+}

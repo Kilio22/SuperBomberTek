@@ -11,6 +11,7 @@
 #include "ContextManager.hpp"
 #include "IScene.hpp"
 #include "Parallax.hpp"
+#include "MasterInfo.hpp"
 #include <memory>
 #include <vector>
 
@@ -29,12 +30,16 @@ namespace Indie
         void renderPost3D() final;
         void setColor(irr::video::SColor color);
 
+        Indie::MasterInfo *getMasterInfo(void) const;
+        void setMasterInfo(const Indie::MasterInfo &masterInfo);
+
         private:
         static const irr::core::vector2df velocities[5];
         static const std::string filepaths[5];
 
         ContextManager &context;
         std::vector<std::unique_ptr<Parallax>> parallax;
+        std::unique_ptr<Indie::MasterInfo> masterInfo;
     };
 }
 

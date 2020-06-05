@@ -8,6 +8,9 @@
 
 #include "SoloScene.hpp"
 #include "CSVParser.hpp"
+#include "ServiceLocator.hpp"
+#include "MainMenuScene.hpp"
+#include "MenuScene.hpp"
 #include "GameScene.hpp"
 #include "InitGame.hpp"
 #include "IntroScene.hpp"
@@ -94,6 +97,8 @@ void Indie::SoloScene::init()
 {
     // TODO : XP BAR
     // TODO : SCORE
+    unsigned short int xp = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo()->xp;
+    unsigned short int lvl = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo()->lvl;
     /* ================================================================== */
     // 3D INIT
     /* ================================================================== */
@@ -333,9 +338,20 @@ void Indie::SoloScene::renderPost3D()
     std::string mPath = getFileName(mapPath);
     std::string pName = getFileName(playerTexture);
     std::string tName = (mapTheme == Components::THEME::DIRT) ? "Garden" : "Cobblestone";
-    font->draw(mPath.c_str(), RECT(410 - (5 * int(mPath.size())), 139, 0, 0), { 255, 255, 255, 255 });
-    font->draw(pName.c_str(), RECT(410 - (5 * int(pName.size())), 218, 0, 0), { 255, 255, 255, 255 });
-    font->draw(tName.c_str(), RECT(410 - (5 * int(tName.size())), 300, 0, 0), { 255, 255, 255, 255 });
+
+    std::map<std::string, int>scores_map = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo()->scores_map;
+    int mapScore = 0;
+    for (auto score : scores_map) {
+        if (score.first == mapPath) {
+            mapScore = score.second;
+            break;
+        }
+    }
+    font->draw(mPath.c_str(), RECT(410 - (5 * int(mPath.size())), 139, 0, 0), {255, 255, 255, 255});
+    font->draw(pName.c_str(), RECT(410 - (5 * int(pName.size())), 218, 0, 0), {255, 255, 255, 255});
+    font->draw(tName.c_str(), RECT(410 - (5 * int(tName.size())), 300, 0, 0), {255, 255, 255, 255});
+    font->draw(std::to_string(mapScore).c_str(), RECT(1000, 400, 0, 0), {255, 255, 255, 255});
+
     /* ================================================================== */
     // DISPLAY KEYBINDS
     /* ================================================================== */
