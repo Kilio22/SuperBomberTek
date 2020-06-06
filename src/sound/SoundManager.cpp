@@ -5,7 +5,6 @@
 ** SoundManager
 */
 
-#include <iostream>
 #include "SoundManager.hpp"
 
 Indie::SoundManager::SoundManager()
@@ -73,13 +72,13 @@ void Indie::SoundManager::playSound(const std::string &key)
         return;
 
     auto &buffer = getBuffer(key);
-    std::shared_ptr<sf::Sound> sound = std::make_shared<sf::Sound>();
+    std::unique_ptr<sf::Sound> sound = std::make_unique<sf::Sound>();
 
     sound->setBuffer(buffer);
     sound->setVolume((float)volume);
     sound->setRelativeToListener(false);
     sound->setPosition(sf::Listener::getPosition().x, sf::Listener::getPosition().y - 40.f, sf::Listener::getPosition().z);
-    toPlay.push_back(sound);
+    toPlay.push_back(std::move(sound));
 }
 
 void Indie::SoundManager::playSound(const std::string &key, float x, float y, float z)
@@ -88,13 +87,13 @@ void Indie::SoundManager::playSound(const std::string &key, float x, float y, fl
         return;
 
     auto &buffer = getBuffer(key);
-    std::shared_ptr<sf::Sound> sound = std::make_shared<sf::Sound>();
+    std::unique_ptr<sf::Sound> sound = std::make_unique<sf::Sound>();
 
     sound->setBuffer(buffer);
     sound->setVolume((float)(volume * 4));
     sound->setRelativeToListener(true);
     sound->setPosition(x - sf::Listener::getPosition().x, y - sf::Listener::getPosition().y, z - sf::Listener::getPosition().z);
-    toPlay.push_back(sound);
+    toPlay.push_back(std::move(sound));
 }
 
 void Indie::SoundManager::playPitchedSound(const std::string &key)
@@ -103,14 +102,14 @@ void Indie::SoundManager::playPitchedSound(const std::string &key)
         return;
 
     auto &buffer = getBuffer(key);
-    std::shared_ptr<sf::Sound> sound = std::make_shared<sf::Sound>();
+    std::unique_ptr<sf::Sound> sound = std::make_unique<sf::Sound>();
 
     sound->setBuffer(buffer);
     sound->setVolume((float)volume);
     sound->setPitch((std::rand() % 200 + 100) / 100.f);
     sound->setRelativeToListener(false);
     sound->setPosition(sf::Listener::getPosition().x, sf::Listener::getPosition().y - 40.f, sf::Listener::getPosition().z);
-    toPlay.push_back(sound);
+    toPlay.push_back(std::move(sound));
 }
 
 void Indie::SoundManager::playPitchedSound(const std::string &key, float x, float y, float z)
@@ -119,7 +118,7 @@ void Indie::SoundManager::playPitchedSound(const std::string &key, float x, floa
         return;
 
     auto &buffer = getBuffer(key);
-    std::shared_ptr<sf::Sound> sound = std::make_shared<sf::Sound>();
+    std::unique_ptr<sf::Sound> sound = std::make_unique<sf::Sound>();
 
     sound->setBuffer(buffer);
     sound->setVolume((float)(volume * 4));
@@ -130,7 +129,7 @@ void Indie::SoundManager::playPitchedSound(const std::string &key, float x, floa
     // Ils ont menti.
     // C'est tjrs absolu. fuk u è_é
     sound->setPosition(x - sf::Listener::getPosition().x, y - sf::Listener::getPosition().y, z - sf::Listener::getPosition().z);
-    toPlay.push_back(sound);
+    toPlay.push_back(std::move(sound));
 }
 
 void Indie::SoundManager::update()
@@ -141,7 +140,7 @@ void Indie::SoundManager::update()
             break;
         }
         toPlay[0]->play();
-        playing.push_back(toPlay[0]);
+        playing.push_back(std::move(toPlay[0]));
         toPlay.erase(toPlay.begin());
     }
     for (size_t i = 0; i < playing.size(); i++) {

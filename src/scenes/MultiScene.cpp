@@ -26,7 +26,7 @@ void Indie::MultiScene::skipScene(bool update, bool render, bool subUpdate, bool
 }
 
 const std::unordered_map<Indie::MultiScene::UI_SELECTOR_TYPE, irr::core::vector2di> Indie::MultiScene::uiSelectorsSize
-    = { { Indie::MultiScene::UI_SELECTOR_TYPE::DEFAULT, { 2, 6 } }, { Indie::MultiScene::UI_SELECTOR_TYPE::THEME, { 2, 1 } },
+    = { { Indie::MultiScene::UI_SELECTOR_TYPE::DEFAULT, { 3, 6 } }, { Indie::MultiScene::UI_SELECTOR_TYPE::THEME, { 2, 1 } },
           { Indie::MultiScene::UI_SELECTOR_TYPE::MAP, { 1, 1 } }, { Indie::MultiScene::UI_SELECTOR_TYPE::AI, { 3, 1 } },
           { Indie::MultiScene::UI_SELECTOR_TYPE::TIME, { 61, 1 } } };
 
@@ -44,11 +44,16 @@ Indie::MultiScene::MultiScene(Indie::ContextManager &context)
             std::make_unique<UiSelector>(
                 x, y, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT) });
     }
+    uiSelectors.at(UI_SELECTOR_TYPE::THEME)->setBLockSound(true, false);
+    uiSelectors.at(UI_SELECTOR_TYPE::MAP)->setBLockSound(true, false);
+    uiSelectors.at(UI_SELECTOR_TYPE::AI)->setBLockSound(true, false);
+    uiSelectors.at(UI_SELECTOR_TYPE::TIME)->setBLockSound(true, false);
     this->modelRotation = 0;
     this->initGame->powerUp = true;
     this->initGame->nbAi = 0;
     this->initGame->timeLimit = 18 * 5;
     this->pUps->setStatus(this->initGame->powerUp);
+    this->uiSelectors.at(UI_SELECTOR_TYPE::DEFAULT)->setPos(1, 0);
     this->uiSelectors.at(UI_SELECTOR_TYPE::TIME)->setPos(18, 0);
     mapPaths.push_back("Default");
     mapPaths.push_back("Random");
@@ -80,14 +85,14 @@ void Indie::MultiScene::init() // Check all paths & init values
     // FONT GET
     this->font = context.getGuiEnv()->getFont("../ressources/font/Banschrift.xml");
     // BUTTONS INIT
-    this->buttons.at(BUTTON_TYPE::PLAY)->init(context, "../ressources/images/multi1/Suivant.png", 1, 4, POS(0, 0));
-    this->buttons.at(BUTTON_TYPE::BACK)->init(context, "../ressources/images/multi1/Retour.png", 1, 5, POS(0, 0));
-    this->buttons.at(BUTTON_TYPE::MAP)->init(context, "../ressources/images/multi1/Niveau.png", 0, 0, POS(0, 0));
-    this->buttons.at(BUTTON_TYPE::THEME)->init(context, "../ressources/images/multi1/Theme.png", 0, 1, POS(0, 0));
-    this->buttons.at(BUTTON_TYPE::TIME)->init(context, "../ressources/images/multi1/Temps.png", 0, 2, POS(0, 0));
-    this->buttons.at(BUTTON_TYPE::AI)->init(context, "../ressources/images/multi1/IA.png", 0, 3, POS(0, 0));
+    this->buttons.at(BUTTON_TYPE::PLAY)->init(context, "../ressources/images/multi1/Suivant.png", 2, 4, POS(0, 0), false);
+    this->buttons.at(BUTTON_TYPE::BACK)->init(context, "../ressources/images/multi1/Retour.png", 2, 5, POS(0, 0), false);
+    this->buttons.at(BUTTON_TYPE::MAP)->init(context, "../ressources/images/multi1/Niveau.png", 1, 0, POS(0, 0), false);
+    this->buttons.at(BUTTON_TYPE::THEME)->init(context, "../ressources/images/multi1/Theme.png", 1, 1, POS(0, 0), false);
+    this->buttons.at(BUTTON_TYPE::TIME)->init(context, "../ressources/images/multi1/Temps.png", 1, 2, POS(0, 0), false);
+    this->buttons.at(BUTTON_TYPE::AI)->init(context, "../ressources/images/multi1/IA.png", 1, 3, POS(0, 0), false);
     // CHECKBOXES INIT
-    this->pUps->init("../ressources/images/multi1/Check.png", 0, 4, POS(0, 0));
+    this->pUps->init("../ressources/images/multi1/Check.png", 1, 4, POS(0, 0));
     this->pUps->setStatus(this->initGame->powerUp);
     this->initGame->mapPath = mapPaths.at(this->uiSelectors.at(UI_SELECTOR_TYPE::MAP)->getPos().first);
     this->initGame->mapTheme
@@ -112,7 +117,7 @@ irr::scene::IAnimatedMeshSceneNode *Indie::MultiScene::createTheme(const std::st
 void Indie::MultiScene::reset()
 {
     context.getSceneManager()->clear();
-    this->uiSelectors.at(UI_SELECTOR_TYPE::DEFAULT)->setPos(0, 0);
+    this->uiSelectors.at(UI_SELECTOR_TYPE::DEFAULT)->setPos(1, 0);
     init();
 }
 
@@ -130,12 +135,19 @@ void Indie::MultiScene::update(irr::f32 ticks)
     // LAYOUTS SKIP
     /* ================================================================== */
     this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->update(); // We update the main selector
-    if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().second < 4) {
-        this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->setPos(
-            0, this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().second); // Can't move right in the first 4 selectors
-    }
     if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().second == 5) {
-        this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->setPos(1, 5); // Can't move left from the last button
+        if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().first != 2) {
+            ServiceLocator::getInstance().get<SoundManager>().playSound("menu_lock");
+            this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->setPos(2, 5); // Can't move left from the last button
+        }
+    }
+    if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().first != 1 && this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().second < 4) {
+        //ServiceLocator::getInstance().get<SoundManager>().playSound("menu_lock");
+        this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->setPos(1, this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().second); // First selectors
+    }
+    if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().first == 0 && this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().second == 4) {
+        ServiceLocator::getInstance().get<SoundManager>().playSound("menu_lock");
+        this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->setPos(1, this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().second); // Checkbox
     }
     /* ================================================================== */
     // UPDATE BUTTONS
@@ -151,20 +163,20 @@ void Indie::MultiScene::update(irr::f32 ticks)
     /* ================================================================== */
     // UPDATE SELECTORS
     /* ================================================================== */
-    if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().first == 0 && this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().second == 0) {
+    if (buttons.at(BUTTON_TYPE::MAP)->getStatus() == Button::Status::Selected) {
         this->uiSelectors[UI_SELECTOR_TYPE::MAP]->update();
         this->initGame->mapPath = mapPaths.at(this->uiSelectors[UI_SELECTOR_TYPE::MAP]->getPos().first);
     }
-    if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().first == 0 && this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().second == 1) {
+    if (buttons.at(BUTTON_TYPE::THEME)->getStatus() == Button::Status::Selected) {
         this->uiSelectors[UI_SELECTOR_TYPE::THEME]->update();
         this->initGame->mapTheme
             = (this->uiSelectors[UI_SELECTOR_TYPE::THEME]->getPos().first == 0) ? Components::THEME::DIRT : Components::THEME::STONE;
     }
-    if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().first == 0 && this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().second == 2) {
+    if (buttons.at(BUTTON_TYPE::TIME)->getStatus() == Button::Status::Selected) {
         this->uiSelectors[UI_SELECTOR_TYPE::TIME]->update();
         this->initGame->timeLimit = (time_t)(this->uiSelectors[UI_SELECTOR_TYPE::TIME]->getPos().first * 5);
     }
-    if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().first == 0 && this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().second == 3) {
+    if (buttons.at(BUTTON_TYPE::AI)->getStatus() == Button::Status::Selected) {
         this->uiSelectors[UI_SELECTOR_TYPE::AI]->update();
         this->initGame->nbAi = this->uiSelectors[UI_SELECTOR_TYPE::AI]->getPos().first;
     }
