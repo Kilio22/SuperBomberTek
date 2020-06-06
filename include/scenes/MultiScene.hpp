@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2020
 ** OOP_indie_studio_2019
 ** File description:
-** Multi1Scene
+** MultiScene
 */
 
 #ifndef MULTI1SCENE_HPP_
@@ -21,11 +21,11 @@
 namespace Indie
 {
     struct InitGame;
-    class Multi1Scene : public IScene
+    class MultiScene : public IScene
     {
     public:
-        Multi1Scene(ContextManager &context);
-        ~Multi1Scene();
+        MultiScene(ContextManager &context);
+        ~MultiScene();
 
         void init() final;
         void reset() final;

@@ -3,21 +3,21 @@
 ** EPITECH PROJECT, 2020
 ** OOP_indie_studio_2019
 ** File description:
-** Multi1Scene
+** MultiScene
 */
 
-#include "Multi1Scene.hpp"
+#include "MultiScene.hpp"
 #include "GameScene.hpp"
 #include "InitGame.hpp"
 #include "IntroScene.hpp"
 #include "MainMenuScene.hpp"
 #include "MenuScene.hpp"
-#include "Multi2Scene.hpp"
+#include "MultiKeybindsScene.hpp"
 #include "PauseScene.hpp"
 #include "ServiceLocator.hpp"
 #include <filesystem>
 
-void Indie::Multi1Scene::skipScene(bool update, bool render, bool subUpdate, bool subRender)
+void Indie::MultiScene::skipScene(bool update, bool render, bool subUpdate, bool subRender)
 {
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(update);
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(render);
@@ -25,13 +25,13 @@ void Indie::Multi1Scene::skipScene(bool update, bool render, bool subUpdate, boo
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneRenderActive(subRender);
 }
 
-const std::unordered_map<Indie::Multi1Scene::UI_SELECTOR_TYPE, irr::core::vector2di> Indie::Multi1Scene::uiSelectorsSize
-    = { { Indie::Multi1Scene::UI_SELECTOR_TYPE::DEFAULT, { 2, 6 } }, { Indie::Multi1Scene::UI_SELECTOR_TYPE::THEME, { 2, 1 } },
-          { Indie::Multi1Scene::UI_SELECTOR_TYPE::MAP, { 1, 1 } }, { Indie::Multi1Scene::UI_SELECTOR_TYPE::AI, { 3, 1 } },
-          { Indie::Multi1Scene::UI_SELECTOR_TYPE::TIME, { 61, 1 } } };
+const std::unordered_map<Indie::MultiScene::UI_SELECTOR_TYPE, irr::core::vector2di> Indie::MultiScene::uiSelectorsSize
+    = { { Indie::MultiScene::UI_SELECTOR_TYPE::DEFAULT, { 2, 6 } }, { Indie::MultiScene::UI_SELECTOR_TYPE::THEME, { 2, 1 } },
+          { Indie::MultiScene::UI_SELECTOR_TYPE::MAP, { 1, 1 } }, { Indie::MultiScene::UI_SELECTOR_TYPE::AI, { 3, 1 } },
+          { Indie::MultiScene::UI_SELECTOR_TYPE::TIME, { 61, 1 } } };
 
 // Il faut changer les valeurs ici dans les constructeurs des selecteurs quand on aura le nombre de map max etc
-Indie::Multi1Scene::Multi1Scene(Indie::ContextManager &context)
+Indie::MultiScene::MultiScene(Indie::ContextManager &context)
     : context(context)
     , pUps(std::make_unique<Checkbox>(context))
     , initGame(std::make_unique<InitGame>())
@@ -60,9 +60,9 @@ Indie::Multi1Scene::Multi1Scene(Indie::ContextManager &context)
     }
 }
 
-Indie::Multi1Scene::~Multi1Scene() {}
+Indie::MultiScene::~MultiScene() {}
 
-void Indie::Multi1Scene::init() // Check all paths & init values
+void Indie::MultiScene::init() // Check all paths & init values
 {
     // TODO : XP BAR
     // 3D INIT
@@ -94,7 +94,7 @@ void Indie::Multi1Scene::init() // Check all paths & init values
         = (this->uiSelectors.at(UI_SELECTOR_TYPE::THEME)->getPos().first == 0) ? Components::THEME::DIRT : Components::THEME::STONE;
 }
 
-irr::scene::IAnimatedMeshSceneNode *Indie::Multi1Scene::createTheme(const std::string &filepath)
+irr::scene::IAnimatedMeshSceneNode *Indie::MultiScene::createTheme(const std::string &filepath)
 {
     irr::scene::IAnimatedMeshSceneNode *newTheme
         = context.getSceneManager()->addAnimatedMeshSceneNode(context.getSceneManager()->getMesh(filepath.c_str()));
@@ -109,14 +109,14 @@ irr::scene::IAnimatedMeshSceneNode *Indie::Multi1Scene::createTheme(const std::s
     return newTheme;
 }
 
-void Indie::Multi1Scene::reset()
+void Indie::MultiScene::reset()
 {
     context.getSceneManager()->clear();
     this->uiSelectors.at(UI_SELECTOR_TYPE::DEFAULT)->setPos(0, 0);
     init();
 }
 
-void Indie::Multi1Scene::update(irr::f32 ticks)
+void Indie::MultiScene::update(irr::f32 ticks)
 {
     /* ================================================================== */
     // 3D UPDATE
@@ -179,8 +179,8 @@ void Indie::Multi1Scene::update(irr::f32 ticks)
             ? Components::MAP_TYPE::DEFAULT
             : ((this->uiSelectors[UI_SELECTOR_TYPE::MAP]->getPos().first == 1) ? Components::MAP_TYPE::RANDOM : Components::MAP_TYPE::SAVED);
         std::cout << this->initGame->nbAi << std::endl;
-        ServiceLocator::getInstance().get<SceneManager>().getScene<Multi2Scene>()->setData(this->initGame.get());
-        ServiceLocator::getInstance().get<SceneManager>().setSubScene<Multi2Scene>();
+        ServiceLocator::getInstance().get<SceneManager>().getScene<MultiKeybindsScene>()->setData(this->initGame.get());
+        ServiceLocator::getInstance().get<SceneManager>().setSubScene<MultiKeybindsScene>();
         skipScene(true, true, true, true);
         EventHandler::getInstance().resetKeys();
     }
@@ -193,7 +193,7 @@ void Indie::Multi1Scene::update(irr::f32 ticks)
     }
 }
 
-void Indie::Multi1Scene::renderPre3D()
+void Indie::MultiScene::renderPre3D()
 {
     /* ================================================================== */
     // DISPLAY IMAGES
@@ -203,7 +203,7 @@ void Indie::Multi1Scene::renderPre3D()
     context.displayImage(whiteBg);
 }
 
-void Indie::Multi1Scene::renderPost3D()
+void Indie::MultiScene::renderPost3D()
 {
     // DISPLAY BUTONS
     for (const auto &button : this->buttons) {
@@ -238,7 +238,7 @@ void Indie::Multi1Scene::renderPost3D()
     font->draw(aiAmmount.c_str(), RECT(410 - (5 * int(aiAmmount.size())), 384, 0, 0), { 255, 255, 255, 255 });
 }
 
-std::string Indie::Multi1Scene::getFileName(std::string const &filepath)
+std::string Indie::MultiScene::getFileName(std::string const &filepath)
 {
     std::string filename(filepath.c_str());
     const size_t last_slash_id = filename.find_last_of("\\/");

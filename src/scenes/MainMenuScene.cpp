@@ -8,10 +8,10 @@
 #include "MainMenuScene.hpp"
 #include "EndScene.hpp"
 #include "GameScene.hpp"
-#include "Multi1Scene.hpp"
+#include "MultiScene.hpp"
 #include "OptionsScene.hpp"
 #include "PauseScene.hpp"
-#include "Scenes.hpp"
+#include "Scenes.h"
 #include "ServiceLocator.hpp"
 
 Indie::MainMenuScene::MainMenuScene(ContextManager &context)
@@ -54,7 +54,7 @@ void Indie::MainMenuScene::update(irr::f32)
         skipScene(true, true, true, true);
     }
     if (this->buttons.at(BUTTON_TYPE::MULTI)->getStatus() == Button::Status::Pressed) {
-        ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::Multi1Scene>();
+        ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::MultiScene>();
         skipScene(true, true, true, true);
     }
     if (this->buttons.at(BUTTON_TYPE::OPTIONS)->getStatus() == Button::Status::Pressed) {

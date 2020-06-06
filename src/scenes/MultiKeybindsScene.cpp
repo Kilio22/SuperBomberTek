@@ -2,18 +2,18 @@
 ** EPITECH PROJECT, 2020
 ** OOP_indie_studio_2019
 ** File description:
-** Multi2Scene
+** MultiKeybindsScene
 */
 
-#include "Multi2Scene.hpp"
+#include "MultiKeybindsScene.hpp"
 #include "GameScene.hpp"
 #include "InitGame.hpp"
 #include "IntroScene.hpp"
-#include "Multi1Scene.hpp"
+#include "MultiScene.hpp"
 #include "ServiceLocator.hpp"
 #include "SoloScene.hpp"
 
-void Indie::Multi2Scene::skipScene(bool update, bool render, bool subUpdate, bool subRender)
+void Indie::MultiKeybindsScene::skipScene(bool update, bool render, bool subUpdate, bool subRender)
 {
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(update);
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(render);
@@ -21,7 +21,7 @@ void Indie::Multi2Scene::skipScene(bool update, bool render, bool subUpdate, boo
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneRenderActive(subRender);
 }
 
-Indie::Multi2Scene::Multi2Scene(Indie::ContextManager &context)
+Indie::MultiKeybindsScene::MultiKeybindsScene(Indie::ContextManager &context)
     : context(context)
     , selector(8, 6, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
     , p1CharaSelector(1, 1, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
@@ -67,9 +67,9 @@ Indie::Multi2Scene::Multi2Scene(Indie::ContextManager &context)
         Components::KEY_TYPE::DROP, new Keybind(context, irr::EKEY_CODE::KEY_KEY_F)));
 }
 
-Indie::Multi2Scene::~Multi2Scene() {}
+Indie::MultiKeybindsScene::~MultiKeybindsScene() {}
 
-void Indie::Multi2Scene::setData(InitGame *initGame)
+void Indie::MultiKeybindsScene::setData(InitGame *initGame)
 {
     this->initGame->mapPath.assign(initGame->mapPath);
     this->initGame->mapTheme = initGame->mapTheme;
@@ -81,7 +81,7 @@ void Indie::Multi2Scene::setData(InitGame *initGame)
     this->initGame->timeLimit = initGame->timeLimit;
 }
 
-void Indie::Multi2Scene::init()
+void Indie::MultiKeybindsScene::init()
 {
     /* ================================================================== */
     // Buttons
@@ -131,13 +131,13 @@ void Indie::Multi2Scene::init()
     pKeybinds.insert(pKeybinds.end(), p2Keybinds.begin(), p2Keybinds.end());
 }
 
-void Indie::Multi2Scene::reset()
+void Indie::MultiKeybindsScene::reset()
 {
     selector.setPos(0, 0);
     init();
 }
 
-void Indie::Multi2Scene::update(irr::f32 ticks)
+void Indie::MultiKeybindsScene::update(irr::f32 ticks)
 {
     /* ================================================================== */
     // KEYBINDS UPDATE
@@ -196,12 +196,12 @@ void Indie::Multi2Scene::update(irr::f32 ticks)
     if (back->getStatus() == Button::Status::Pressed || EventHandler::getInstance().isKeyPressed(irr::EKEY_CODE::KEY_ESCAPE) == true) {
         context.getSceneManager()->clear();
         skipScene(true, true, true, true);
-        ServiceLocator::getInstance().get<SceneManager>().setSubScene<Multi1Scene>();
+        ServiceLocator::getInstance().get<SceneManager>().setSubScene<MultiScene>();
         EventHandler::getInstance().resetKeys();
     }
 }
 
-void Indie::Multi2Scene::initGameStruct(SceneManager &sceneManager)
+void Indie::MultiKeybindsScene::initGameStruct(SceneManager &sceneManager)
 {
     PlayerParams p1Params;
     PlayerParams p2Params;
@@ -221,7 +221,7 @@ void Indie::Multi2Scene::initGameStruct(SceneManager &sceneManager)
     sceneManager.getScene<GameScene>()->setInitGame(*this->initGame);
 }
 
-void Indie::Multi2Scene::renderPre3D()
+void Indie::MultiKeybindsScene::renderPre3D()
 {
     /* ================================================================== */
     // DISPLAY IMAGES
@@ -230,7 +230,7 @@ void Indie::Multi2Scene::renderPre3D()
     context.displayImage(layout);
 }
 
-void Indie::Multi2Scene::renderPost3D()
+void Indie::MultiKeybindsScene::renderPost3D()
 {
     bool wasKeyUpdated = false;
 
@@ -261,7 +261,7 @@ void Indie::Multi2Scene::renderPost3D()
         context.displayImage((pKeybinds.begin())->second->tick);
 }
 
-std::string Indie::Multi2Scene::getFileName(std::string const &filepath)
+std::string Indie::MultiKeybindsScene::getFileName(std::string const &filepath)
 {
     std::string filename(filepath.c_str());
     const size_t last_slash_id = filename.find_last_of("\\/");

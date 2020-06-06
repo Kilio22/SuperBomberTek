@@ -9,7 +9,7 @@
 #include "CSVParser.hpp"
 #include "InitGame.hpp"
 #include "SceneManager.hpp"
-#include "Scenes.hpp"
+#include "Scenes.h"
 #include "ServiceLocator.hpp"
 #include <fstream>
 #include <iostream>
@@ -113,8 +113,8 @@ void Indie::GameEngine::setupSceneManager(ContextManager &context)
     ServiceLocator::getInstance().get<SceneManager>().addScene<IntroScene>(context);
     ServiceLocator::getInstance().get<SceneManager>().addScene<SoloScene>(context);
     ServiceLocator::getInstance().get<SceneManager>().addScene<EndScene>(context);
-    ServiceLocator::getInstance().get<SceneManager>().addScene<Multi1Scene>(context);
-    ServiceLocator::getInstance().get<SceneManager>().addScene<Multi2Scene>(context);
+    ServiceLocator::getInstance().get<SceneManager>().addScene<MultiScene>(context);
+    ServiceLocator::getInstance().get<SceneManager>().addScene<MultiKeybindsScene>(context);
     ServiceLocator::getInstance().get<SceneManager>().setScene<SplashScene>(context);
     ServiceLocator::getInstance().get<SceneManager>().setSceneUpdateActive(true);
     ServiceLocator::getInstance().get<SceneManager>().setSceneRenderActive(true);

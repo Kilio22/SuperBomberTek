@@ -8,7 +8,7 @@
 #include "PauseScene.hpp"
 #include "Components.h"
 #include "GameScene.hpp"
-#include "Scenes.hpp"
+#include "Scenes.h"
 #include "ServiceLocator.hpp"
 
 const std::unordered_map<Indie::PauseScene::PAUSE_ASSETS, std::string> Indie::PauseScene::assets_paths

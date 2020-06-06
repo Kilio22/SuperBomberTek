@@ -6,7 +6,7 @@
 */
 
 #include "EndScene.hpp"
-#include "Scenes.hpp"
+#include "Scenes.h"
 #include "IntroScene.hpp"
 #include "MenuScene.hpp"
 #include "MainMenuScene.hpp"

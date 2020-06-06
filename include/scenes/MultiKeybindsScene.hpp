@@ -2,11 +2,11 @@
 ** EPITECH PROJECT, 2020
 ** OOP_indie_studio_2019
 ** File description:
-** Multi2Scene
+** MultiKeybindsScene
 */
 
-#ifndef MULTI2SCENE_HPP_
-#define MULTI2SCENE_HPP_
+#ifndef MULTIKEYBINDSSCENE_HPP_
+#define MULTIKEYBINDSSCENE_HPP_
 
 #include "Checkbox.hpp"
 #include "Components.h"
@@ -21,11 +21,11 @@
 namespace Indie
 {
     struct InitGame;
-    class Multi2Scene : public IScene
+    class MultiKeybindsScene : public IScene
     {
     public:
-        Multi2Scene(ContextManager &context);
-        ~Multi2Scene();
+        MultiKeybindsScene(ContextManager &context);
+        ~MultiKeybindsScene();
 
         void init() final;
         void reset() final;
@@ -62,4 +62,4 @@ namespace Indie
     };
 }
 
-#endif /* !MULTI2SCENE_HPP_ */
+#endif /* !MULTIKEYBINDSSCENE_HPP_ */
