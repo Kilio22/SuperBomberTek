@@ -13,6 +13,7 @@
 #include "EndGameInfo.hpp"
 #include "IScene.hpp"
 #include "UiSelector.hpp"
+#include "MenuScene.hpp"
 #include <string>
 #include <memory>
 
@@ -35,6 +36,8 @@ namespace Indie
             const Indie::EndGame &getEndGame(void) const;
             void setEndGame(const Indie::EndGame &endGame);
 
+            void increaseXp(Indie::MasterInfo *info);
+
         private:
             ContextManager &context;
             UiSelector selector;
@@ -43,6 +46,9 @@ namespace Indie
             Image *title;
             irr::gui::IGUIFont *font;
             EndGame endGame;
+
+            float nbXpToSub = 0;
+            float xpToAdd = 0;
     };
 }
 
