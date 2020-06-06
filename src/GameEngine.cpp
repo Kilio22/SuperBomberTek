@@ -166,9 +166,9 @@ void Indie::GameEngine::gameLoop(void)
         totalDeltaTime += deltaTime;
         // std::cout << "Delta time: " << deltaTime << ", FPS: " << this->context.getDriver()->getFPS() << std::endl;
         if (totalDeltaTime >= 0.016f) { // limit framerate
-            ServiceLocator::getInstance().get<MusicManager>().update();
-            ServiceLocator::getInstance().get<SoundManager>().update();
             ServiceLocator::getInstance().get<SceneManager>().update(context, totalDeltaTime);
+            ServiceLocator::getInstance().get<SoundManager>().update();
+            ServiceLocator::getInstance().get<MusicManager>().update();
             totalDeltaTime = 0.f;
             EventHandler::getInstance().resetKeysReleased();
             EventHandler::getInstance().resetKeysStatusOnce();
