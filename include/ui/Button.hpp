@@ -20,8 +20,8 @@
 namespace Indie {
     class Button {
         public:
-            Button(ContextManager &context);
-            ~Button();
+            Button(ContextManager &context, bool sound = true);
+            ~Button() = default;
 
             enum class Status : int {
                     Idle,
@@ -30,12 +30,15 @@ namespace Indie {
                 };
 
             void init(ContextManager &context, const std::string &filepath, int posX, int posY, irr::core::position2d<irr::s32> pos);
+            void init(ContextManager &context, const std::string &filepath, int posX, int posY, irr::core::position2d<irr::s32> pos, bool);
             void update(std::pair<int, int>);
             void draw();
             Status getStatus() const;
+            void setStatus(Status);
 
         protected:
         private:
+            bool playSounds;
             ContextManager &context;
             int posX;
             int posY;

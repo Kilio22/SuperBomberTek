@@ -16,7 +16,7 @@ namespace Indie {
     class Parallax {
         public:
             Parallax(ContextManager &context);
-            ~Parallax();
+            ~Parallax() = default;
 
             void init(ContextManager &context, const std::string &filepath, irr::core::position2d<irr::s32> size, irr::core::position2d<float> vel);
             void update(irr::f32 ticks);

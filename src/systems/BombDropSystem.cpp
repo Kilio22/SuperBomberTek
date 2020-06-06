@@ -63,15 +63,15 @@ void Indie::Systems::BombDropSystem::onUpdate(irr::f32, EntityManager &entityMan
         irr::f32 midZ = (irr::f32)this->getCenter((int)positionComponent->getPosition().Z);
 
         if (moveComponent->getDrop() == true && playerComponent->getCurrentBombNb() > 0 && entity->has<TimerComponent>() == false
-            && this->hasBombAtPosition(entityManager, irr::core::vector3df(midX, 20, midZ)) == false) {
+            && this->hasBombAtPosition(entityManager, { midX, 20.f, midZ }) == false) {
             if (playerComponent->getWallPass() == true && this->checkBombPositionWallPass(entityManager, (int)midX, (int)midZ) == false) {
                 continue;
             }
 
             auto mapComponent = entityManager.getUniqueEntity<MapComponent>()->getComponent<MapComponent>();
             mapComponent->setMap(this->updateMap(mapComponent->getMap(), midX, midZ));
-            ServiceLocator::getInstance().get<SoundManager>().playPitchedSound("bomb_drop", int(positionComponent->getPosition().X), int(positionComponent->getPosition().Y), int(positionComponent->getPosition().Z));
-            entityBuilder.createBomb(irr::core::vector3df(midX, 20, midZ), "../ressources/animated_mesh/bomb/bomb.b3d",
+            ServiceLocator::getInstance().get<SoundManager>().playPitchedSound("bomb_drop", positionComponent->getPosition().X, positionComponent->getPosition().Y, positionComponent->getPosition().Z);
+            entityBuilder.createBomb({ midX, 20.f, midZ }, "../ressources/animated_mesh/bomb/bomb.b3d",
                 "../ressources/textures/bomb/bomb.png", entity->getId(), playerComponent->getBombsRange());
             playerComponent->setCurrentBombNb(playerComponent->getCurrentBombNb() - 1);
         }

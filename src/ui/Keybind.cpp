@@ -94,11 +94,14 @@ const std::vector<std::pair<irr::EKEY_CODE, irr::core::stringw>> Indie::Keybind:
     {irr::EKEY_CODE::KEY_PERIOD, L"Period"}
 };
 
-Indie::Keybind::Keybind(Indie::ContextManager &context, irr::EKEY_CODE key) : context(context), status(false), button(context), pos(POS(0, 0)), key(key)
-{}
-
-Indie::Keybind::~Keybind()
-{}
+Indie::Keybind::Keybind(Indie::ContextManager &context, irr::EKEY_CODE key)
+    : context(context)
+    , status(false)
+    , button(context)
+    , pos(POS(0, 0))
+    , key(key)
+{
+}
 
 void Indie::Keybind::init(std::string const &filepath, int posX, int posY, irr::core::position2d<irr::s32> pos)
 {
@@ -129,14 +132,18 @@ void Indie::Keybind::update(std::pair<int, int> pos)
             if (EventHandler::getInstance().isKeyPressedAtOnce(it.first)) {
                 if (it.first == key) {
                     status = false;
+                    ServiceLocator::getInstance().get<SoundManager>().playSound("menu_back");
                     EventHandler::getInstance().resetKeysStatus();
                     EventHandler::getInstance().resetKeysStatusOnce();
                     break;
                 }
-                if (std::find(usedKeys.begin(), usedKeys.end(), it.first) != usedKeys.end())
+                if (std::find(usedKeys.begin(), usedKeys.end(), it.first) != usedKeys.end()) {
+                    ServiceLocator::getInstance().get<SoundManager>().playSound("bad");
                     continue;
+                }
                 key = it.first;
                 status = false;
+                ServiceLocator::getInstance().get<SoundManager>().playSound("menu_back");
                 EventHandler::getInstance().resetKeysStatus();
                 EventHandler::getInstance().resetKeysStatusOnce();
                 break;
@@ -156,8 +163,11 @@ void Indie::Keybind::draw()
         button.draw();
         font->draw(keyStr, RECT(pos.X - (5 * int(keyStr.size())), pos.Y, 0, 0), irr::video::SColor(255, 255, 255, 255));
     }
+    // Si jamais on a qu'une keybind c'est cool ça.
+    // Mais comme on en a plusieurs on le fait à la mano.
     //if (status)
     //    this->context.displayImage(tick, POS(0,0));
+    // Je laisse ça ici au cas où quand même
 }
 
 bool Indie::Keybind::getStatus() const

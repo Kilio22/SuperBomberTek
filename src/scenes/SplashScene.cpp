@@ -90,7 +90,7 @@ void Indie::SplashScene::update(irr::f32)
             this->lastTime = currentTime;
         }
     }
-    if (EventHandler::getInstance().isAnyKeyPressedAtOnce()) {
+    if (EventHandler::getInstance().isAnyKeyPressedAtOnce() || ServiceLocator::getInstance().get<MusicManager>().getStatus() == Music::Status::Loop) {
         ServiceLocator::getInstance().get<MusicManager>().setStatus(Music::Status::Loop);
         this->skipScene();
         Indie::EventHandler::getInstance().resetKeys();

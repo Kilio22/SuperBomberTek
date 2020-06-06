@@ -18,7 +18,7 @@ static float getPercentage(Indie::MasterInfo *info)
 
     for (int i = 0; i < info->lvl + 1; i++)
         sumXp += i * 250;
-    return float(info->xp - sumXp) / float((info->lvl + 1) * 250) * 100.f;
+    return (float(info->xp - sumXp) / float((info->lvl + 1) * 250)) * 100.f;
 }
 
 Indie::EndScene::EndScene(ContextManager &context)
@@ -81,7 +81,7 @@ void Indie::EndScene::renderPost3D()
     this->menu->draw();
     this->restart->draw();
     context.displayImage(title);
-    int actualLevel = (int)round((1 + sqrt(1 + 8 * (int)info->xp / 250) / 2) - 1);
+    unsigned int actualLevel = (unsigned int)floor(((1 + sqrt(1 + 8 * (int)info->xp / 250)) / 2) - 1);
 
     // if (this->endGame.matchPlay == MATCH_PLAY::WIN)
     //     font->draw("Gagne", RECT(800, 100, 0, 0), {255, 255, 255, 255});
@@ -98,16 +98,16 @@ void Indie::EndScene::renderPost3D()
     // Increase Xp
     this->increaseXp(info);
 
-    std::cout << getPercentage(info) << std::endl;
-
     // Level calculator
-    info->lvl = (unsigned int)round((1 + sqrt(1 + 8 * (int)info->xp / 250) / 2) - 2);
+    info->lvl = (unsigned int)floor(((1 + sqrt(1 + 8 * (int)info->xp / 250)) / 2) - 1);
+
+    std::cout << getPercentage(info) << std::endl;
 
     //play sound if player has level up
     if (actualLevel < info->lvl)
         ServiceLocator::getInstance().get<SoundManager>().playSound("level_up");
 
-    font->draw("Xp", RECT(300, 500, 0, 0), {255, 255, 255, 255});
+    font->draw("Xp", RECT(300, 600, 0, 0), {255, 255, 255, 255});
     font->draw(std::to_string(info->xp).c_str(), RECT(400, 600, 0, 0), {255, 255, 255, 255});
     font->draw("Level", RECT(300, 500, 0, 0), {255, 255, 255, 255});
     font->draw(std::to_string(info->lvl).c_str(), RECT(400, 500, 0, 0), {255, 255, 255, 255});

@@ -27,15 +27,15 @@ class SoundManager {
             bool isMuted() const;
             int getVolume() const;
 
-            void addSound(std::string);
-            void playSound(std::string);
-            void playSound(std::string, int, int, int);
-            void playPitchedSound(std::string);
-            void playPitchedSound(std::string, int, int, int);
+            void addSound(const std::string &);
+            void playSound(const std::string &);
+            void playSound(const std::string &, float, float, float);
+            void playPitchedSound(const std::string &);
+            void playPitchedSound(const std::string &, float, float, float);
 
         private:
-            std::string getFileName(std::string const &);
-            sf::SoundBuffer &getBuffer(std::string &);
+            std::string getFileName(std::string const &) const;
+            const sf::SoundBuffer &getBuffer(const std::string &) const;
 
         private:
             bool muted;

@@ -9,11 +9,10 @@
 #include "Exceptions.h"
 #include "ServiceLocator.hpp"
 
-Indie::Parallax::Parallax(ContextManager &context) : context(context)
-{}
-
-Indie::Parallax::~Parallax()
-{}
+Indie::Parallax::Parallax(ContextManager &context)
+    : context(context)
+{
+}
 
 void Indie::Parallax::init(ContextManager &context, const std::string &filepath, irr::core::position2d<irr::s32> size, irr::core::position2d<float> vel)
 {

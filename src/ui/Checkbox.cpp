@@ -8,11 +8,13 @@
 #include "Checkbox.hpp"
 #include "ServiceLocator.hpp"
 
-Indie::Checkbox::Checkbox(Indie::ContextManager &context) : context(context), status(false), button(context), pos(POS(0, 0))
-{}
-
-Indie::Checkbox::~Checkbox()
-{}
+Indie::Checkbox::Checkbox(Indie::ContextManager &context)
+    : context(context)
+    , status(false)
+    , button(context)
+    , pos(POS(0, 0))
+{
+}
 
 void Indie::Checkbox::init(std::string const &filepath, int posX, int posY, irr::core::position2d<irr::s32> pos)
 {
