@@ -8,6 +8,7 @@
 #include "TitleScene.hpp"
 #include "Exceptions.h"
 #include "MainMenuScene.hpp"
+#include "ServiceLocator.hpp"
 
 // Passer ça en méthode de TitleScene ??
 // putain t'as commenté chaque fichier enfaite.
@@ -45,7 +46,6 @@ void Indie::TitleScene::reset()
 
 void Indie::TitleScene::skipScene(bool update, bool render, bool subUpdate, bool subRender)
 {
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::MainMenuScene>();
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(update);
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(render);
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneUpdateActive(subUpdate);
@@ -59,7 +59,9 @@ void Indie::TitleScene::update(irr::f32 ticks)
         return;
     }
     if (EventHandler::getInstance().isAnyKeyPressedAtOnce()) {
+        ServiceLocator::getInstance().get<SceneManager>().setSubScene<MainMenuScene>();
         skipScene(true, true, true, true);
+        ServiceLocator::getInstance().get<SoundManager>().playSound("title_select");
     }
     this->offsetY = (this->offsetY < 2 * M_PI) ? this->offsetY + this->updateRate * ticks : 0;
     this->offsetAlpha = (this->offsetAlpha < 2 * M_PI) ? this->offsetAlpha + 3 * ticks : 0;
