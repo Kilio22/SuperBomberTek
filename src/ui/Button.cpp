@@ -8,24 +8,15 @@
 #include "Button.hpp"
 #include "ServiceLocator.hpp"
 
-Indie::Button::Button(ContextManager &context) : playSounds(true), context(context)
+Indie::Button::Button(ContextManager &context, bool sounds)
+    : playSounds(sounds)
+    , context(context)
+    , posX(0)
+    , posY(0)
+    , status(Status::Idle)
+    , keyPressed(false)
 {
-    posX = 0;
-    posY = 0;
-    status = Status::Idle;
-    keyPressed = false;
 }
-
-Indie::Button::Button(ContextManager &context, bool sounds) : playSounds(sounds), context(context)
-{
-    posX = 0;
-    posY = 0;
-    status = Status::Idle;
-    keyPressed = false;
-}
-
-Indie::Button::~Button()
-{}
 
 void Indie::Button::init(Indie::ContextManager &context, const std::string &filepath, int posX, int posY, irr::core::position2d<irr::s32> pos)
 {

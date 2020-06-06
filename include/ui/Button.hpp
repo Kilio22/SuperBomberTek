@@ -20,9 +20,8 @@
 namespace Indie {
     class Button {
         public:
-            Button(ContextManager &context, bool sound);
-            Button(ContextManager &context);
-            ~Button();
+            Button(ContextManager &context, bool sound = true);
+            ~Button() = default;
 
             enum class Status : int {
                     Idle,

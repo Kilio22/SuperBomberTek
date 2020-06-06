@@ -8,17 +8,17 @@
 #include "UiSelector.hpp"
 #include "ServiceLocator.hpp"
 
-Indie::UiSelector::UiSelector(int sizeX, int sizeY, irr::EKEY_CODE up, irr::EKEY_CODE down, irr::EKEY_CODE left, irr::EKEY_CODE right)
-: posX(0), posY(0), sizeX(sizeX), sizeY(sizeY), up(up), down(down), left(left), right(right), soundX(true), soundY(true)
-{
-}
-
 Indie::UiSelector::UiSelector(int sizeX, int sizeY, irr::EKEY_CODE up, irr::EKEY_CODE down, irr::EKEY_CODE left, irr::EKEY_CODE right, bool soundX, bool soundY)
-: posX(0), posY(0), sizeX(sizeX), sizeY(sizeY), up(up), down(down), left(left), right(right), soundX(soundX), soundY(soundY)
-{
-}
-
-Indie::UiSelector::~UiSelector()
+    : posX(0)
+    , posY(0)
+    , sizeX(sizeX)
+    , sizeY(sizeY)
+    , up(up)
+    , down(down)
+    , left(left)
+    , right(right)
+    , soundX(soundX)
+    , soundY(soundY)
 {}
 
 std::pair<int, int> Indie::UiSelector::getPos() const

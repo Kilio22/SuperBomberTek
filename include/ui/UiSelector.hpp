@@ -15,9 +15,8 @@
 namespace Indie {
     class UiSelector {
         public:
-            UiSelector(int sizeX, int sizeY, irr::EKEY_CODE up, irr::EKEY_CODE down, irr::EKEY_CODE left, irr::EKEY_CODE right);
-            UiSelector(int sizeX, int sizeY, irr::EKEY_CODE up, irr::EKEY_CODE down, irr::EKEY_CODE left, irr::EKEY_CODE right, bool, bool);
-            ~UiSelector();
+            UiSelector(int sizeX, int sizeY, irr::EKEY_CODE up, irr::EKEY_CODE down, irr::EKEY_CODE left, irr::EKEY_CODE right, bool x = false, bool y = false);
+            ~UiSelector() = default;
 
             void setBLockSound(bool, bool);
             std::pair<int, int> getPos() const;
