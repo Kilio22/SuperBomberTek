@@ -24,8 +24,8 @@ void Indie::MultiKeybindsScene::skipScene(bool update, bool render, bool subUpda
 Indie::MultiKeybindsScene::MultiKeybindsScene(Indie::ContextManager &context)
     : context(context)
     , selector(8, 6, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
-    , p1CharaSelector(1, 1, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
-    , p2CharaSelector(1, 1, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
+    , p1CharaSelector(1, 1, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT, true, false)
+    , p2CharaSelector(1, 1, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT, true, false)
     , play(std::make_unique<Button>(context))
     , back(std::make_unique<Button>(context))
     , p1CharaButton(std::make_unique<Button>(context))
@@ -86,10 +86,10 @@ void Indie::MultiKeybindsScene::init()
     /* ================================================================== */
     // Buttons
     /* ================================================================== */
-    p1CharaButton->init(context, "../ressources/images/multi2/Perso1.png", 0, 2, POS(0, 0));
-    p2CharaButton->init(context, "../ressources/images/multi2/Perso2.png", 0, 3, POS(0, 0));
-    play->init(context, "../ressources/images/multi2/Jouer.png", 0, 4, POS(0, 0));
-    back->init(context, "../ressources/images/multi2/Retour.png", 0, 5, POS(0, 0));
+    p1CharaButton->init(context, "../ressources/images/multi2/Perso1.png", 1, 2, POS(0, 0), false);
+    p2CharaButton->init(context, "../ressources/images/multi2/Perso2.png", 1, 3, POS(0, 0), false);
+    play->init(context, "../ressources/images/multi2/Jouer.png", 1, 4, POS(0, 0));
+    back->init(context, "../ressources/images/multi2/Retour.png", 1, 5, POS(0, 0));
     /* ================================================================== */
     // Keybinds p1
     /* ================================================================== */
@@ -154,11 +154,16 @@ void Indie::MultiKeybindsScene::update(irr::f32 ticks)
     // LAYOUT EDIT
     /* ================================================================== */
     selector.update();
-    if (selector.getPos().second > 1 && selector.getPos().first != 0)
-        selector.setPos(0, selector.getPos().second); // Cannot move right after keys;
-    if (selector.getPos().second == 0) {
-        if (selector.getPos().first == 0)
+    if (selector.getPos().second > 1 && selector.getPos().first != 1) {
+        if (selector.getPos().second != 2 && selector.getPos().second != 3)
+            ServiceLocator::getInstance().get<SoundManager>().playSound("menu_lock");
+        selector.setPos(1, selector.getPos().second); // Cannot move in x axis after keys;
+    }
+    if (selector.getPos().second == 0) { // All of this is the first row btw to skip empty spaces & go back to the up key
+        if (selector.getPos().first == 0) {
+            ServiceLocator::getInstance().get<SoundManager>().playSound("menu_lock");
             selector.setPos(1, 0);
+        }
         if (selector.getPos().first == 2)
             selector.setPos(1, 0);
         if (selector.getPos().first == 3)
@@ -167,8 +172,10 @@ void Indie::MultiKeybindsScene::update(irr::f32 ticks)
             selector.setPos(5, 0);
         if (selector.getPos().first == 6)
             selector.setPos(5, 0);
-        if (selector.getPos().first == 7) // All of this is the first row btw.
-            selector.setPos(5, 0); // To skip empty spaces & go back to the up key
+        if (selector.getPos().first == 7) {
+            ServiceLocator::getInstance().get<SoundManager>().playSound("menu_lock");
+            selector.setPos(5, 0); 
+        }
     }
     /* ================================================================== */
     // BUTTONS UPDATE
