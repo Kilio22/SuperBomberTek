@@ -5,12 +5,14 @@
 ** SoundManager
 */
 
+#include <iostream>
 #include "SoundManager.hpp"
 
-Indie::SoundManager::SoundManager() : muted(false), volume(20)
+Indie::SoundManager::SoundManager() : muted(false), volume(100)
 {
-    sf::Listener::setPosition(150, 40, 130);
-    sf::Listener::setDirection(0, -1, 0);
+    sf::Listener::setPosition(150, 100, 130);
+    sf::Listener::setDirection(1.f, 0.f, 1.f);
+    //sf::Listener::setUpVector(0.f, 0.f, 0.f);
 }
 
 std::string Indie::SoundManager::getFileName(std::string const &filepath)
@@ -33,7 +35,7 @@ void Indie::SoundManager::setMute(bool mute)
 
 void Indie::SoundManager::setVolume(int volume)
 {
-    this->volume = volume;
+    this->volume = volume * 5;
 }
 
 bool Indie::SoundManager::isMuted() const
@@ -43,7 +45,7 @@ bool Indie::SoundManager::isMuted() const
 
 int Indie::SoundManager::getVolume() const
 {
-    return volume;
+    return int(volume / 5);
 }
 
 void Indie::SoundManager::addSound(std::string filepath)
@@ -75,6 +77,7 @@ void Indie::SoundManager::playSound(std::string key)
     sound->setBuffer(buffer);
     sound->setVolume(float(volume));
     sound->setRelativeToListener(false);
+    sound->setPosition(float(sf::Listener::getPosition().x), float(sf::Listener::getPosition().y - 40), float(sf::Listener::getPosition().z));
     toPlay.push_back(sound);
 }
 
@@ -87,9 +90,9 @@ void Indie::SoundManager::playSound(std::string key, int x, int y, int z)
     std::shared_ptr<sf::Sound> sound = std::make_shared<sf::Sound>();
 
     sound->setBuffer(buffer);
-    sound->setVolume(float(volume));
+    sound->setVolume(float(volume * 4));
     sound->setRelativeToListener(true);
-    sound->setPosition(float(x), float(y), float(z));
+    sound->setPosition(float(x - sf::Listener::getPosition().x), float(y - sf::Listener::getPosition().y), float(z - sf::Listener::getPosition().z));
     toPlay.push_back(sound);
 }
 
@@ -103,8 +106,9 @@ void Indie::SoundManager::playPitchedSound(std::string key)
 
     sound->setBuffer(buffer);
     sound->setVolume(float(volume));
-    sound->setPitch(float((std::rand() % 5)));
+    sound->setPitch(float((std::rand() % 200 + 100) / 100));
     sound->setRelativeToListener(false);
+    sound->setPosition(float(sf::Listener::getPosition().x), float(sf::Listener::getPosition().y - 40), float(sf::Listener::getPosition().z));
     toPlay.push_back(sound);
 }
 
@@ -117,20 +121,30 @@ void Indie::SoundManager::playPitchedSound(std::string key, int x, int y, int z)
     std::shared_ptr<sf::Sound> sound = std::make_shared<sf::Sound>();
 
     sound->setBuffer(buffer);
-    sound->setVolume(float(volume));
-    sound->setPitch(float((std::rand() % 5)));
-    //sound->setRelativeToListener(true);
-    sound->setPosition(float(x), float(y), float(z));
+    sound->setVolume(float(volume * 4));
+    sound->setPitch(float((std::rand() % 200 + 100) / 100));
+    sound->setRelativeToListener(true);
+    // Dans la doc c'est dit que c'est absolue par défaut, mais quand on le met en relatif c'est bon.
+    // bah enfaite non, c'est des fdp.
+    // Ils ont menti.
+    // C'est tjrs absolu. fuk u è_é
+    sound->setPosition(float(x - sf::Listener::getPosition().x), float(y - sf::Listener::getPosition().y), float(z - sf::Listener::getPosition().z));
     toPlay.push_back(sound);
 }
 
 void Indie::SoundManager::update()
 {
     while (!toPlay.empty()) {
+        if (playing.size() >= 126) {
+            toPlay.clear();
+            break;
+        }
         toPlay[0]->play();
         playing.push_back(toPlay[0]);
         toPlay.erase(toPlay.begin());
     }
+    // NEVER PLAY MORE THAN 126 BUFFERS AT ONCE. OpenAL big pooopoo.
+    //std::cout << "SIZE : ======================================================= " << playing.size() << std::endl;
     for (size_t i = 0; i < playing.size(); i++) {
         if (playing[i]->getStatus() != sf::SoundSource::Status::Playing)
             playing.erase(playing.begin() + i);

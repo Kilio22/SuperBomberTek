@@ -8,7 +8,7 @@
 #include "MusicManager.hpp"
 
 Indie::MusicManager::MusicManager()
-    : musics(), currentMusic(0), volume(20), isMuted(false), isPlaying(false)
+    : musics(), currentMusic(0), volume(100), isMuted(false), isPlaying(false)
 {
 }
 
@@ -17,7 +17,7 @@ void Indie::MusicManager::addMusic(const std::string filepath)
     auto ptr = std::make_unique<Indie::Music>(filepath);
 
     ptr->loop();
-    ptr->setVolume(volume);
+    ptr->setVolume(float(volume));
     if (isMuted)
         ptr->setVolume(0);
     musics.push_back(std::move(ptr));
@@ -40,7 +40,7 @@ void Indie::MusicManager::setVolume(int vol)
 {
     for (size_t i = 0; i < musics.size(); i++) {
         if (!isMuted)
-            musics[i]->setVolume((float)vol);
+            musics[i]->setVolume(float((vol + 3) / 4));
     }
     volume = vol;
 }

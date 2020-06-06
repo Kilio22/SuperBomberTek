@@ -74,10 +74,11 @@ void Indie::SplashScene::update(irr::f32)
     irr::u32 currentTime = this->context.getDevice()->getTimer()->getTime();
     irr::f32 elapsedTime = (irr::f32)((currentTime - this->lastTime) / 1000.f);
 
-    if (EventHandler::getInstance().isAnyKeyPressedAtOnce() || elapsedTime >= 4.f) {
+    if (elapsedTime >= 4.f) {
         if (this->currentAsset == Indie::SplashScene::SPLASH_ASSETS::BOMBER) {
-            this->skipScene();
-            ServiceLocator::getInstance().get<MusicManager>().setStatus(Music::Status::Loop);
+            // noooo du coup c'est pas timé avec la musique DD:
+            //this->skipScene();
+            //ServiceLocator::getInstance().get<MusicManager>().setStatus(Music::Status::Loop);
         } else {
             int currentAsset = (int)this->currentAsset;
             currentAsset++;
@@ -86,6 +87,10 @@ void Indie::SplashScene::update(irr::f32)
         if (elapsedTime >= 4.f) {
             this->lastTime = currentTime;
         }
+    }
+    if (EventHandler::getInstance().isAnyKeyPressedAtOnce()) {
+        this->skipScene();
+        ServiceLocator::getInstance().get<MusicManager>().setStatus(Music::Status::Loop);
     }
     if (Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().getStatus() == Indie::Music::Status::Loop)
         this->skipScene();
