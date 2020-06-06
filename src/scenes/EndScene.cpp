@@ -81,7 +81,7 @@ void Indie::EndScene::renderPost3D()
     this->menu->draw();
     this->restart->draw();
     context.displayImage(title);
-    int actualLevel = round((1 + sqrt(1 + 8 * (int)info->xp / 250) / 2) - 1);
+    int actualLevel = (int)round((1 + sqrt(1 + 8 * (int)info->xp / 250) / 2) - 1);
 
     // if (this->endGame.matchPlay == MATCH_PLAY::WIN)
     //     font->draw("Gagne", RECT(800, 100, 0, 0), {255, 255, 255, 255});
@@ -101,7 +101,7 @@ void Indie::EndScene::renderPost3D()
     std::cout << getPercentage(info) << std::endl;
 
     // Level calculator
-    info->lvl = round((1 + sqrt(1 + 8 * (int)info->xp / 250) / 2) - 2);
+    info->lvl = (unsigned int)round((1 + sqrt(1 + 8 * (int)info->xp / 250) / 2) - 2);
 
     //play sound if player has level up
     if (actualLevel < info->lvl)
