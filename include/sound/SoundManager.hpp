@@ -41,8 +41,8 @@ class SoundManager {
             bool muted;
             int volume;
             std::unordered_map<std::string, sf::SoundBuffer> buffers;
-            std::vector<std::shared_ptr<sf::Sound>> toPlay;
-            std::vector<std::shared_ptr<sf::Sound>> playing;
+            std::vector<std::unique_ptr<sf::Sound>> toPlay;
+            std::vector<std::unique_ptr<sf::Sound>> playing;
     };
 }
 
