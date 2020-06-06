@@ -24,18 +24,18 @@ const std::vector<std::pair<irr::core::vector3df, Indie::Components::PlayerCompo
           { { 20, 20, 220 }, Indie::Components::PlayerComponent::PLAYER_START_POSITION::TOP_LEFT } };
 
 const std::vector<std::pair<std::string, Indie::Components::PlayerComponent::PLAYER_COLOR>> Indie::GameScene::skins
-    = { { "../ressources/textures/character/blue1.png", Indie::Components::PlayerComponent::PLAYER_COLOR::BLUE },
-          { "../ressources/textures/character/blue2.png", Indie::Components::PlayerComponent::PLAYER_COLOR::BLUE },
-          { "../ressources/textures/character/generic1.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GENERIC },
-          { "../ressources/textures/character/generic2.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GENERIC },
-          { "../ressources/textures/character/green1.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GREEN },
-          { "../ressources/textures/character/green2.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GREEN },
-          { "../ressources/textures/character/red1.png", Indie::Components::PlayerComponent::PLAYER_COLOR::RED },
-          { "../ressources/textures/character/red2.png", Indie::Components::PlayerComponent::PLAYER_COLOR::RED },
-          { "../ressources/textures/character/yellow1.png", Indie::Components::PlayerComponent::PLAYER_COLOR::YELLOW },
-          { "../ressources/textures/character/yellow2.png", Indie::Components::PlayerComponent::PLAYER_COLOR::YELLOW },
-          { "../ressources/textures/character/purple1.png", Indie::Components::PlayerComponent::PLAYER_COLOR::PURPLE },
-          { "../ressources/textures/character/purple2.png", Indie::Components::PlayerComponent::PLAYER_COLOR::PURPLE } };
+    = { { "../ressources/textures/character/Gris.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GENERIC },
+        { "../ressources/textures/character/Bleu.png", Indie::Components::PlayerComponent::PLAYER_COLOR::BLUE },
+        { "../ressources/textures/character/Rouge.png", Indie::Components::PlayerComponent::PLAYER_COLOR::RED },
+        { "../ressources/textures/character/Vert.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GREEN },
+        { "../ressources/textures/character/Violet.png", Indie::Components::PlayerComponent::PLAYER_COLOR::PURPLE },
+        { "../ressources/textures/character/Jaune.png", Indie::Components::PlayerComponent::PLAYER_COLOR::YELLOW },
+        { "../ressources/textures/character/Gris+.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GENERIC },
+        { "../ressources/textures/character/Bleu+.png", Indie::Components::PlayerComponent::PLAYER_COLOR::BLUE },
+        { "../ressources/textures/character/Rouge+.png", Indie::Components::PlayerComponent::PLAYER_COLOR::RED },
+        { "../ressources/textures/character/Vert+.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GREEN },
+        { "../ressources/textures/character/Violet+.png", Indie::Components::PlayerComponent::PLAYER_COLOR::PURPLE },
+        { "../ressources/textures/character/Jaune+.png", Indie::Components::PlayerComponent::PLAYER_COLOR::YELLOW } };
 
 Indie::GameScene::GameScene(ContextManager &context)
     : context(context)
