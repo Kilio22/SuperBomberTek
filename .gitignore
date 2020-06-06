@@ -133,3 +133,4 @@ results.html
 build/
 /.vs
 CMakeFiles/*
+.*/
