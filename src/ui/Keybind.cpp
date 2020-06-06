@@ -129,14 +129,18 @@ void Indie::Keybind::update(std::pair<int, int> pos)
             if (EventHandler::getInstance().isKeyPressedAtOnce(it.first)) {
                 if (it.first == key) {
                     status = false;
+                    ServiceLocator::getInstance().get<SoundManager>().playSound("menu_back");
                     EventHandler::getInstance().resetKeysStatus();
                     EventHandler::getInstance().resetKeysStatusOnce();
                     break;
                 }
-                if (std::find(usedKeys.begin(), usedKeys.end(), it.first) != usedKeys.end())
+                if (std::find(usedKeys.begin(), usedKeys.end(), it.first) != usedKeys.end()) {
+                    ServiceLocator::getInstance().get<SoundManager>().playSound("bad");
                     continue;
+                }
                 key = it.first;
                 status = false;
+                ServiceLocator::getInstance().get<SoundManager>().playSound("menu_back");
                 EventHandler::getInstance().resetKeysStatus();
                 EventHandler::getInstance().resetKeysStatusOnce();
                 break;
@@ -156,8 +160,11 @@ void Indie::Keybind::draw()
         button.draw();
         font->draw(keyStr, RECT(pos.X - (5 * int(keyStr.size())), pos.Y, 0, 0), irr::video::SColor(255, 255, 255, 255));
     }
+    // Si jamais on a qu'une keybind c'est cool ça.
+    // Mais comme on en a plusieurs on le fait à la mano.
     //if (status)
     //    this->context.displayImage(tick, POS(0,0));
+    // Je laisse ça ici au cas où quand même
 }
 
 bool Indie::Keybind::getStatus() const

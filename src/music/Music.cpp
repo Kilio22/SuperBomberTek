@@ -40,11 +40,14 @@ float Indie::Music::getVolume() const
 void Indie::Music::loop()
 {
     isLooped = true;
+    musics[(int)Status::Loop]->setLoop(true);
 }
 
 void Indie::Music::unLoop()
 {
     isLooped = false;
+    musics[(int)Status::Loop]->setLoop(false);
+
 }
 
 void Indie::Music::setVolume(float _vol)
@@ -76,15 +79,13 @@ void Indie::Music::playMusic()
 
 void Indie::Music::pauseMusic()
 {
-    for (size_t i = 0; i < musics.size(); i++)
-        musics[i]->pause();
+    musics[(int)currentMusic]->pause();
     isPlaying = false;
 }
 
 void Indie::Music::stopMusic()
 {
-    for (size_t i = 0; i < musics.size(); i++)
-        musics[i]->stop();
+    musics[(int)currentMusic]->stop();
     currentMusic = Status::Intro;
     isPlaying = false;
 }
@@ -99,13 +100,11 @@ void Indie::Music::update()
 {
     if (!isPlaying)
         return;
-    musics[(int)Status::Loop]->setLoop(isLooped);
     if (musics[(int)currentMusic]->getStatus() == sf::SoundSource::Status::Stopped) {
         switch (currentMusic) {
         case Status::Intro:
             musics[(int)Status::Loop]->stop();
             musics[(int)Status::Loop]->play();
-            musics[(int)Status::Loop]->setLoop(isLooped);
             currentMusic = Status::Loop;
             break;
         case Status::Loop:
@@ -114,7 +113,6 @@ void Indie::Music::update()
                 musics[(int)Status::Outro]->play();
                 currentMusic = Status::Outro;
             } else {
-                musics[(int)currentMusic]->setLoop(isLooped);
                 musics[(int)currentMusic]->play();
             }
             break;
@@ -140,8 +138,12 @@ void Indie::Music::setStatus(Indie::Music::Status status)
     if (status == Status::NotPlaying)
         return;
     restartMusic();
-    if (status == Status::Loop)
+    if (status == Status::Loop) {
         musics[0]->stop();
-    if (status == Status::Outro)
+        musics[2]->stop();
+    }
+    if (status == Status::Outro) {
+        musics[0]->stop();
         musics[1]->stop();
+    }
 }

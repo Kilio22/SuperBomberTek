@@ -9,7 +9,12 @@
 #include "ServiceLocator.hpp"
 
 Indie::UiSelector::UiSelector(int sizeX, int sizeY, irr::EKEY_CODE up, irr::EKEY_CODE down, irr::EKEY_CODE left, irr::EKEY_CODE right)
-: posX(0), posY(0), sizeX(sizeX), sizeY(sizeY), up(up), down(down), left(left), right(right)
+: posX(0), posY(0), sizeX(sizeX), sizeY(sizeY), up(up), down(down), left(left), right(right), soundX(true), soundY(true)
+{
+}
+
+Indie::UiSelector::UiSelector(int sizeX, int sizeY, irr::EKEY_CODE up, irr::EKEY_CODE down, irr::EKEY_CODE left, irr::EKEY_CODE right, bool soundX, bool soundY)
+: posX(0), posY(0), sizeX(sizeX), sizeY(sizeY), up(up), down(down), left(left), right(right), soundX(soundX), soundY(soundY)
 {
 }
 
@@ -21,14 +26,19 @@ std::pair<int, int> Indie::UiSelector::getPos() const
     return std::pair<int, int>(posX, posY);
 }
 
-//ServiceLocator::getInstance().get<SoundManager>().playSound("menu_select");
+void Indie::UiSelector::setBLockSound(bool x, bool y)
+{
+    soundX = x;
+    soundY = y;
+}
+
 void Indie::UiSelector::update()
 {
     if (EventHandler::getInstance().isKeyPressedAtOnce(up)) {
         if (posY >= 1) {
             posY = posY - 1;
             ServiceLocator::getInstance().get<SoundManager>().playSound("menu_move");
-        } else {
+        } else if (soundY) {
             ServiceLocator::getInstance().get<SoundManager>().playSound("menu_lock");
         }
     }
@@ -36,7 +46,7 @@ void Indie::UiSelector::update()
         if (posX >= 1) {
             posX = posX - 1;
             ServiceLocator::getInstance().get<SoundManager>().playSound("menu_move");
-        } else {
+        } else if (soundX) {
             ServiceLocator::getInstance().get<SoundManager>().playSound("menu_lock");
         }
     }
@@ -44,7 +54,7 @@ void Indie::UiSelector::update()
         if (posY < sizeY - 1) {
             posY = posY + 1;
             ServiceLocator::getInstance().get<SoundManager>().playSound("menu_move");
-        } else {
+        } else if (soundY) {
             ServiceLocator::getInstance().get<SoundManager>().playSound("menu_lock");
         }
     }
@@ -52,7 +62,7 @@ void Indie::UiSelector::update()
         if (posX < sizeX - 1) {
             posX = posX + 1;
             ServiceLocator::getInstance().get<SoundManager>().playSound("menu_move");
-        } else {
+        } else if (soundX) {
             ServiceLocator::getInstance().get<SoundManager>().playSound("menu_lock");
         }
     }

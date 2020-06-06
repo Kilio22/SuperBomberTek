@@ -52,6 +52,9 @@ Indie::SoloScene::SoloScene(Indie::ContextManager &context)
             std::make_unique<UiSelector>(
                 x, y, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT) });
     }
+    uiSelectors.at(Indie::SoloScene::UI_SELECTOR_TYPE::SKIN)->setBLockSound(true, false);
+    uiSelectors.at(Indie::SoloScene::UI_SELECTOR_TYPE::THEME)->setBLockSound(true, false);
+    uiSelectors.at(Indie::SoloScene::UI_SELECTOR_TYPE::MAP)->setBLockSound(true, false);
     this->pUpsEnabled = true;
     this->pUps->setStatus(pUpsEnabled);
     this->uiSelectors[UI_SELECTOR_TYPE::SKIN]->setSize(int(charaPaths.size()), 1);
@@ -122,9 +125,9 @@ void Indie::SoloScene::init()
     /* ================================================================== */
     this->buttons.at(BUTTON_TYPE::PLAY)->init(context, "../ressources/images/solo/Play.png", 4, 4, POS(0, 0));
     this->buttons.at(BUTTON_TYPE::BACK)->init(context, "../ressources/images/solo/Retour.png", 4, 5, POS(0, 0));
-    this->buttons.at(BUTTON_TYPE::SKIN)->init(context, "../ressources/images/solo/Perso.png", 1, 1, POS(0, 0));
-    this->buttons.at(BUTTON_TYPE::THEME)->init(context, "../ressources/images/solo/Theme.png", 1, 2, POS(0, 0));
-    this->buttons.at(BUTTON_TYPE::MAP)->init(context, "../ressources/images/solo/Niveau.png", 1, 0, POS(0, 0));
+    this->buttons.at(BUTTON_TYPE::SKIN)->init(context, "../ressources/images/solo/Perso.png", 1, 1, POS(0, 0), false);
+    this->buttons.at(BUTTON_TYPE::THEME)->init(context, "../ressources/images/solo/Theme.png", 1, 2, POS(0, 0), false);
+    this->buttons.at(BUTTON_TYPE::MAP)->init(context, "../ressources/images/solo/Niveau.png", 1, 0, POS(0, 0), false);
     /* ================================================================== */
     // CHECKBOXES INIT
     /* ================================================================== */
@@ -232,10 +235,14 @@ void Indie::SoloScene::update(irr::f32 ticks)
             1, this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().second); // Can't move right or left in the first 3 selectors
     }
     if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().second == 4) {
-        if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().first == 0)
+        if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().first == 0) {
+            ServiceLocator::getInstance().get<SoundManager>().playSound("menu_lock");
             this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->setPos(1, 4); // Up <- == Up
-        if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().first == 2)
+        }
+        if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().first == 2) {
+            ServiceLocator::getInstance().get<SoundManager>().playSound("menu_lock");
             this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->setPos(1, 4); // Up -> == Up
+        }
         if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().first == 3)
             this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->setPos(1, 3); // Play <- == PowerUps
     }

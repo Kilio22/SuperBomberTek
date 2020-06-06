@@ -71,15 +71,13 @@ void Indie::MusicManager::playMusic()
 
 void Indie::MusicManager::pauseMusic()
 {
-    for (size_t i = 0; i < musics.size(); i++)
-        musics[i]->pauseMusic();
+    musics[currentMusic]->pauseMusic();
     isPlaying = false;
 }
 
 void Indie::MusicManager::stopMusic()
 {
-    for (size_t i = 0; i < musics.size(); i++)
-        musics[i]->stopMusic();
+    musics[currentMusic]->stopMusic();
     isPlaying = false;
 }
 
