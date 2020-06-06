@@ -25,8 +25,8 @@ Indie::PauseScene::PauseScene(ContextManager &context)
     , selector(1, 4, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
     , play(std::make_unique<Button>(context))
     , menu(std::make_unique<Button>(context))
-    , quit(std::make_unique<Button>(context))
     , restart(std::make_unique<Button>(context))
+    , quit(std::make_unique<Button>(context))
 {
 }
 

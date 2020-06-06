@@ -8,15 +8,27 @@
 #include "ContextManager.hpp"
 #include "MusicManager.hpp"
 #include "SceneManager.hpp"
-#include "driverChoice.h"
+#include "DeviceException.hpp"
 
 Indie::ContextManager::ContextManager(irr::core::dimension2d<irr::u32> size)
 {
     device = irr::createDevice(irr::video::EDT_OPENGL, size, 32);
+    if (device == nullptr) {
+        throw Indie::Exceptions::DeviceException(ERROR_STR, "Cannot create device.");
+    }
     this->size = size;
     driver = device->getVideoDriver();
+    if (driver == nullptr) {
+        throw Indie::Exceptions::DeviceException(ERROR_STR, "Cannot get driver.");
+    }
     sceneManager = device->getSceneManager();
+    if (sceneManager == nullptr) {
+        throw Indie::Exceptions::DeviceException(ERROR_STR, "Cannot get scene manager.");
+    }
     guiEnv = device->getGUIEnvironment();
+    if (guiEnv == nullptr) {
+        throw Indie::Exceptions::DeviceException(ERROR_STR, "Cannot get GUI Environment.");
+    }
 }
 
 Indie::ContextManager::~ContextManager()

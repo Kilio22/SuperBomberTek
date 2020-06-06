@@ -25,13 +25,14 @@ namespace Indie
         /**
          * @brief Starts the game
          */
-        void startGame();
+        void startGame(void);
 
     private:
-        void readOptions();
+        void gameLoop(void);
+        void readOptions(void);
         std::string findValueByName(std::vector<std::vector<std::string>> parsedData, const std::string &value) const;
-        void setupMusicManager();
-        void setupSoundManager();
+        void setupMusicManager(void);
+        void setupSoundManager(void);
         void setupSceneManager(Indie::ContextManager &context);
 
         ContextManager &context;

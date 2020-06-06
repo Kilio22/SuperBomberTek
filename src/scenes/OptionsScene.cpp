@@ -85,9 +85,8 @@ void Indie::OptionsScene::update(irr::f32 ticks)
         soundVolumeSelector.update();
     }
 
-    // Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setVolume(float(musicVolumeSelector.getPos().first * 5));
     Indie::ServiceLocator::getInstance().get<Indie::SoundManager>().setVolume(soundVolumeSelector.getPos().first);
-    Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setVolume(float(musicVolumeSelector.getPos().first));
+    Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setVolume(musicVolumeSelector.getPos().first);
     EventHandler::getInstance().resetKeysStatusOnce();
     EventHandler::getInstance().resetKeysStatus();
 }

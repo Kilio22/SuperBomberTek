@@ -125,7 +125,6 @@ void Indie::GameScene::reset()
 // beginScene -> events -> update -> renderPre3D -> render3D -> renderPost3D -> endScene
 void Indie::GameScene::update(irr::f32 deltaTime)
 {
-    irr::core::array<irr::core::vector3df> pointList = {};
     this->entityManager.cleanup();
     this->systemManager.getSystem<TimerTickSystem>()->onUpdate(deltaTime, entityManager);
     this->systemManager.getSystem<LavaSystem>()->onUpdate(deltaTime, entityManager);

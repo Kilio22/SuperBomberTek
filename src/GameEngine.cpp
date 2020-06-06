@@ -58,17 +58,17 @@ void Indie::GameEngine::readOptions()
         } else {
             soundManager.setMute(false);
         }
-        float musicVolumeValue = std::stof(musicVolume);
-        float soundVolumeValue = std::stof(soundVolume);
+        int musicVolumeValue = std::stoi(musicVolume);
+        int soundVolumeValue = std::stoi(soundVolume);
 
         if (musicVolumeValue > 20 || musicVolumeValue < 0 || soundVolumeValue > 20 || soundVolumeValue < 0)
             throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"../ressources/.saves/options.txt\" corrupted.");
         musicManager.setVolume(musicVolumeValue);
         soundManager.setVolume(soundVolumeValue);
     } catch (const std::exception &e) {
-        musicManager.setVolume(10.f);
+        musicManager.setVolume(10);
         musicManager.unMute();
-        soundManager.setVolume(10.f);
+        soundManager.setVolume(10);
         soundManager.setMute(false);
         std::cerr << e.what() << '\n';
     }
@@ -153,35 +153,19 @@ Indie::GameEngine::~GameEngine()
         context.getDriver()->removeTexture(loadImage);
 }
 
-void Indie::GameEngine::startGame()
+void Indie::GameEngine::gameLoop(void)
 {
-    /* ================================================================================ */
-    /* LOADING SCREEN */
-    /* ================================================================================ */
-    context.getDriver()->beginScene(true, true, irr::video::SColor(0, 0, 0, 0));
-    context.displayImage(loadImage);
-    context.getDriver()->endScene();
-    ServiceLocator::getInstance().get<ImageLoader>();
-    this->setupSoundManager();
-    this->setupMusicManager();
-    this->setupSceneManager(context);
-    /* ================================================================================ */
-    /* LOOP */
-    /* ================================================================================ */
-    this->context.getDevice()->setEventReceiver(&EventHandler::getInstance());
-    this->context.getDevice()->getTimer()->stop();
-    this->context.getDevice()->getTimer()->start();
-
     irr::u32 lastTime = this->context.getDevice()->getTimer()->getTime();
     irr::u32 currentTime = 0;
     irr::f32 deltaTime = 0;
     irr::f32 totalDeltaTime = 0;
+
     while (context.getDevice()->run()) {
         currentTime = this->context.getDevice()->getTimer()->getTime();
         deltaTime = (irr::f32)((currentTime - lastTime) / 1000.f);
         totalDeltaTime += deltaTime;
         // std::cout << "Delta time: " << deltaTime << ", FPS: " << this->context.getDriver()->getFPS() << std::endl;
-        if (totalDeltaTime >= 0.016f) {
+        if (totalDeltaTime >= 0.016f) { // limit framerate
             ServiceLocator::getInstance().get<MusicManager>().update();
             ServiceLocator::getInstance().get<SoundManager>().update();
             ServiceLocator::getInstance().get<SceneManager>().update(context, totalDeltaTime);
@@ -189,4 +173,25 @@ void Indie::GameEngine::startGame()
         }
         lastTime = currentTime;
     }
+}
+
+void Indie::GameEngine::startGame()
+{
+    /* LOADING SCREEN */
+    context.getDriver()->beginScene(true, true, irr::video::SColor(0, 0, 0, 0));
+    context.displayImage(loadImage);
+    context.getDriver()->endScene();
+
+    ServiceLocator::getInstance().get<ImageLoader>();
+
+    this->setupSoundManager();
+    this->setupMusicManager();
+    this->setupSceneManager(context);
+
+    this->context.getDevice()->setEventReceiver(&EventHandler::getInstance());
+
+    this->context.getDevice()->getTimer()->stop();
+    this->context.getDevice()->getTimer()->start();
+
+    this->gameLoop();
 }

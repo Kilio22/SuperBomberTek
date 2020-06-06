@@ -36,16 +36,16 @@ void Indie::MusicManager::setMusic(size_t id)
         musics[currentMusic]->playMusic();
 }
 
-void Indie::MusicManager::setVolume(float _vol)
+void Indie::MusicManager::setVolume(int vol)
 {
     for (size_t i = 0; i < musics.size(); i++) {
         if (!isMuted)
-            musics[i]->setVolume(_vol);
+            musics[i]->setVolume((float)vol);
     }
-    volume = _vol;
+    volume = vol;
 }
 
-float Indie::MusicManager::getMusicVolume(void) const
+int Indie::MusicManager::getMusicVolume(void) const
 {
     return this->volume;
 }

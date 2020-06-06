@@ -42,15 +42,15 @@ namespace Indie
 
         /**
          * @brief Sets the current volume
-         * @param _vol The new volume
+         * @param vol The new volume
          */
-        void setVolume(float _vol);
+        void setVolume(int vol);
 
         /**
          * @brief Gets the current volume
          * @return float The current volume
          */
-        float getMusicVolume(void) const;
+        int getMusicVolume(void) const;
 
         /**
          * @brief Mutes the current music
@@ -106,7 +106,7 @@ namespace Indie
     private:
         std::vector<std::unique_ptr<Indie::Music>> musics;
         size_t currentMusic;
-        float volume;
+        int volume;
         bool isMuted;
         bool isPlaying;
     };
