@@ -112,6 +112,7 @@ void Indie::GameScene::init()
     mapGenerator.generate(entityManager, entityBuilder);
 
     entityBuilder.createShake();
+    entityManager.createUniqueEntity<GameComponent>();
 
     device->getCursorControl()->setVisible(false);
 }
