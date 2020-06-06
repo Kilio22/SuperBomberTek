@@ -94,11 +94,14 @@ const std::vector<std::pair<irr::EKEY_CODE, irr::core::stringw>> Indie::Keybind:
     {irr::EKEY_CODE::KEY_PERIOD, L"Period"}
 };
 
-Indie::Keybind::Keybind(Indie::ContextManager &context, irr::EKEY_CODE key) : context(context), status(false), button(context), pos(POS(0, 0)), key(key)
-{}
-
-Indie::Keybind::~Keybind()
-{}
+Indie::Keybind::Keybind(Indie::ContextManager &context, irr::EKEY_CODE key)
+    : context(context)
+    , status(false)
+    , button(context)
+    , pos(POS(0, 0))
+    , key(key)
+{
+}
 
 void Indie::Keybind::init(std::string const &filepath, int posX, int posY, irr::core::position2d<irr::s32> pos)
 {

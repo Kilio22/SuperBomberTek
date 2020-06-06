@@ -19,7 +19,8 @@ Indie::UiSelector::UiSelector(int sizeX, int sizeY, irr::EKEY_CODE up, irr::EKEY
     , right(right)
     , soundX(soundX)
     , soundY(soundY)
-{}
+{
+}
 
 std::pair<int, int> Indie::UiSelector::getPos() const
 {

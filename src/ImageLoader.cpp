@@ -34,6 +34,5 @@ Indie::ImageLoader::~ImageLoader()
 
 Image *Indie::ImageLoader::getImage(std::string const &filepath)
 {
-    // std::cout << "Accessing ressource : " << filepath << std::endl;
     return this->images.at(filepath);
 }

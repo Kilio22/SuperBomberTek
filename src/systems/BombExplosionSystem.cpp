@@ -62,7 +62,7 @@ void Indie::Systems::BombExplosionSystem::explodeBombs(std::vector<std::vector<O
     if (bomb->hasExploded() == true || player == nullptr)
         return;
     bomb->setExploded(true);
-    ServiceLocator::getInstance().get<SoundManager>().playPitchedSound("bomb_explode", int(position->getPosition().X), int(position->getPosition().Y), int(position->getPosition().Z));
+    ServiceLocator::getInstance().get<SoundManager>().playPitchedSound("bomb_explode", position->getPosition().X, position->getPosition().Y, position->getPosition().Z);
     for (unsigned int i = 0; i <= range; ++i) {
         if (right == true && map.at(mapZ).at(mapX + 1) != OBJECT::WALL_OUT && map.at(mapZ).at(mapX + 1) != OBJECT::WALL_IN)
             right = this->explodeBomb(map, entityManager, playerEntity, mapX + i, mapZ, 90.0f, i > 0);

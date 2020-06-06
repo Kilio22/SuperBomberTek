@@ -15,7 +15,7 @@ void Indie::Systems::CollisionSystem::checkCollisionWithPowerDowns(
 
     if (powerDownComponent == nullptr)
         return;
-    ServiceLocator::getInstance().get<SoundManager>().playSound("power_down", int(characterBoundingBox.getCenter().X), int(characterBoundingBox.getCenter().Y), int(characterBoundingBox.getCenter().Z));
+    ServiceLocator::getInstance().get<SoundManager>().playSound("power_down", characterBoundingBox.getCenter().X, characterBoundingBox.getCenter().Y, characterBoundingBox.getCenter().Z);
     playerComponent->setScore(playerComponent->getScore() - 10);
     if (powerDownComponent->getType() == Components::POWERDOWN_TYPE::BOMB_DOWN && playerComponent->getMaxBombNb() > 1) {
         playerComponent->setMaxBombNb(playerComponent->getMaxBombNb() - 1);
@@ -41,7 +41,7 @@ void Indie::Systems::CollisionSystem::checkCollisionWithPowerUps(
 
     if (powerUpComponent == nullptr)
         return;
-    ServiceLocator::getInstance().get<SoundManager>().playSound("power_up", int(characterBoundingBox.getCenter().X), int(characterBoundingBox.getCenter().Y), int(characterBoundingBox.getCenter().Z));
+    ServiceLocator::getInstance().get<SoundManager>().playSound("power_up", characterBoundingBox.getCenter().X, characterBoundingBox.getCenter().Y, characterBoundingBox.getCenter().Z);
     playerComponent->setScore(playerComponent->getScore() + 15);
     if (powerUpComponent->getType() == Components::POWERUP_TYPE::BOMB_UP) {
         playerComponent->setMaxBombNb(playerComponent->getMaxBombNb() + 1);
@@ -177,7 +177,7 @@ void Indie::Systems::CollisionSystem::onUpdate(irr::f32, EntityManager &entityMa
                     colliderPlayerComponent->setScore(colliderPlayerComponent->getScore() + 100);
                 }
                 entity->addComponent<Components::TimerComponent>(1.75f);
-                ServiceLocator::getInstance().get<SoundManager>().playSound("die", int(currentPosition.X), int(currentPosition.Y), int(currentPosition.Z));
+                ServiceLocator::getInstance().get<SoundManager>().playSound("die", currentPosition.X, currentPosition.Y, currentPosition.Z);
                 entityPlayerComponent->setIsDead(true);
                 entityVelocityComponent->setVelocity(0);
                 entityPositionComponent->setPosition(currentPosition);
@@ -210,7 +210,7 @@ void Indie::Systems::CollisionSystem::onUpdate(irr::f32, EntityManager &entityMa
                 colliderPlayerComponent->setScore(colliderPlayerComponent->getScore() + 100);
             }
             entity->addComponent<Components::TimerComponent>(1.75f);
-            ServiceLocator::getInstance().get<SoundManager>().playSound("die", int(currentPosition.X), int(currentPosition.Y), int(currentPosition.Z));
+            ServiceLocator::getInstance().get<SoundManager>().playSound("die", currentPosition.X, currentPosition.Y, currentPosition.Z);
             entityPlayerComponent->setIsDead(true);
         }
     }

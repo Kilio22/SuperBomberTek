@@ -22,15 +22,15 @@ void Indie::Button::init(Indie::ContextManager &context, const std::string &file
 {
     std::string extension = filepath.substr(filepath.find_last_of("."));
     std::string fp = filepath;
-    fp.resize(fp.size() - extension.size());
 
+    fp.resize(fp.size() - extension.size());
     this->context = context;
     this->pos = pos;
     this->posX = posX;
     this->posY = posY;
-    idle = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage(std::string(fp + "_idle" + extension).c_str());
-    selected = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage(std::string(fp + "_selected" + extension).c_str());
-    pressed = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage(std::string(fp + "_pressed" + extension).c_str());
+    idle = ServiceLocator::getInstance().get<ImageLoader>().getImage((fp + "_idle" + extension).c_str());
+    selected = ServiceLocator::getInstance().get<ImageLoader>().getImage((fp + "_selected" + extension).c_str());
+    pressed = ServiceLocator::getInstance().get<ImageLoader>().getImage((fp + "_pressed" + extension).c_str());
 }
 
 void Indie::Button::init(Indie::ContextManager &context, const std::string &filepath, int posX, int posY, irr::core::position2d<irr::s32> pos, bool sound)

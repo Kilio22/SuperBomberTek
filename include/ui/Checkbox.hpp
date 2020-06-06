@@ -20,7 +20,7 @@ namespace Indie {
     class Checkbox {
         public:
             Checkbox(ContextManager &context);
-            ~Checkbox();
+            ~Checkbox() = default;
 
             void init(std::string const &filepath, int posX, int posY, irr::core::position2d<irr::s32> pos);
             void update(std::pair<int, int>);

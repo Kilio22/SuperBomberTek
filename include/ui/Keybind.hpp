@@ -24,7 +24,7 @@ namespace Indie
     {
     public:
         Keybind(ContextManager &context, irr::EKEY_CODE key);
-        ~Keybind();
+        ~Keybind() = default;
 
         void init(std::string const &filepath, int posX, int posY, irr::core::position2d<irr::s32> pos);
         void update(std::pair<int, int>);

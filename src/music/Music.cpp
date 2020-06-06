@@ -22,11 +22,11 @@ Indie::Music::Music(std::string filepath)
     this->isPlaying = false;
     this->currentMusic = Status::Intro;
     if (!intro->openFromFile(filepath + "_intro" + extension))
-        throw Indie::Exceptions::FileNotFoundException(ERROR_STR, "File \"" + filepath + "intro" + extension + "\" not found.");
+        throw Exceptions::FileNotFoundException(ERROR_STR, "File \"" + filepath + "_intro" + extension + "\" not found.");
     if (!loop->openFromFile(filepath + "_loop" + extension))
-        throw Indie::Exceptions::FileNotFoundException(ERROR_STR, "File \"" + filepath + "loop" + extension + "\" not found.");
+        throw Exceptions::FileNotFoundException(ERROR_STR, "File \"" + filepath + "_loop" + extension + "\" not found.");
     if (!outro->openFromFile(filepath + "_outro" + extension))
-        throw Indie::Exceptions::FileNotFoundException(ERROR_STR, "File \"" + filepath + "outro" + extension + "\" not found.");
+        throw Exceptions::FileNotFoundException(ERROR_STR, "File \"" + filepath + "_outro" + extension + "\" not found.");
     musics.push_back(std::move(intro));
     musics.push_back(std::move(loop));
     musics.push_back(std::move(outro));
@@ -72,7 +72,6 @@ void Indie::Music::unMute()
 
 void Indie::Music::playMusic()
 {
-    pauseMusic();
     musics[(int)currentMusic]->play();
     isPlaying = true;
 }
