@@ -61,12 +61,14 @@ void Indie::SplashScene::reset()
 
 void Indie::SplashScene::skipScene(void)
 {
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setScene<Indie::MenuScene>(this->context);
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::TitleScene>();
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(true);
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(true);
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneUpdateActive(true);
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneRenderActive(true);
+    auto &sceneManager = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>();
+
+    sceneManager.setScene<Indie::MenuScene>(this->context);
+    sceneManager.setSubScene<Indie::TitleScene>();
+    sceneManager.setSceneUpdateActive(true);
+    sceneManager.setSceneRenderActive(true);
+    sceneManager.setSubSceneUpdateActive(true);
+    sceneManager.setSubSceneRenderActive(true);
 }
 
 void Indie::SplashScene::update(irr::f32)
@@ -74,10 +76,11 @@ void Indie::SplashScene::update(irr::f32)
     irr::u32 currentTime = this->context.getDevice()->getTimer()->getTime();
     irr::f32 elapsedTime = (irr::f32)((currentTime - this->lastTime) / 1000.f);
 
-    if (EventHandler::getInstance().isAnyKeyPressedAtOnce() || elapsedTime >= 4.f) {
+    if (elapsedTime >= 4.f) {
         if (this->currentAsset == Indie::SplashScene::SPLASH_ASSETS::BOMBER) {
-            this->skipScene();
-            ServiceLocator::getInstance().get<MusicManager>().setStatus(Music::Status::Loop);
+            // noooo du coup c'est pas timé avec la musique DD:
+            //this->skipScene();
+            //ServiceLocator::getInstance().get<MusicManager>().setStatus(Music::Status::Loop);
         } else {
             int currentAsset = (int)this->currentAsset;
             currentAsset++;
@@ -87,9 +90,11 @@ void Indie::SplashScene::update(irr::f32)
             this->lastTime = currentTime;
         }
     }
-    if (Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().getStatus() == Indie::Music::Status::Loop)
+    if (EventHandler::getInstance().isAnyKeyPressedAtOnce()) {
+        ServiceLocator::getInstance().get<MusicManager>().setStatus(Music::Status::Loop);
         this->skipScene();
-    Indie::EventHandler::getInstance().resetKeys();
+        Indie::EventHandler::getInstance().resetKeys();
+    }
 }
 
 void Indie::SplashScene::renderPre3D()

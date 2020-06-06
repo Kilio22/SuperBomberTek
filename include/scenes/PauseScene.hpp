@@ -31,15 +31,20 @@ namespace Indie
         void renderPost3D() final;
 
         private:
+        enum class BUTTON_TYPE {
+            PLAY,
+            MENU,
+            RESTART,
+            QUIT,
+            NONE
+        };
+
         ContextManager &context;
         UiSelector selector;
         Image *bg;
         Image *bomber;
         Image *title;
-        std::unique_ptr<Button> play;
-        std::unique_ptr<Button> menu;
-        std::unique_ptr<Button> restart;
-        std::unique_ptr<Button> quit;
+        std::unordered_map<BUTTON_TYPE, std::unique_ptr<Button>> buttons;
 
         static const std::unordered_map<PAUSE_ASSETS, std::string> assets_paths;
     };

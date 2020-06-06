@@ -20,26 +20,19 @@ void Indie::Systems::AISystem::onUpdate(irr::f32, EntityManager &entityManager) 
         auto move = entity->getComponent<MoveComponent>();
         auto position = entity->getComponent<PositionComponent>();
 
-        // SetMap si elle sont vide jamais init
         if (pathFinder->getMap().empty())
             pathFinder->setMap(map);
         if (pathFinder->getMapBomb().empty())
             pathFinder->setMapBomb(map);
-        //Get Map Pathfinding
         mapPathFinding = pathFinder->getMap();
-
-        // Bomb placé -> en attente d'instruction
         if (ai->getAction() == ACTION::PLACE_BOMB && hasDropBomb(entityManager, entity->getId())) {
             move->setDrop(false);
             ai->setAction(ACTION::STANDBY);
         }
-
-        // S'il est sur une bombe et qu'il vient d'en poser une en gros
         if (isOnBomb(pathFinder->getMapBomb(), position) && hasArrived(mapPathFinding, pathFinder) && ai->getAction() == ACTION::STANDBY &&
         ai->hasMoved(irr::core::vector3df(position->getPosition().X, 20, position->getPosition().Z),irr::core::vector3df((irr::f32)((pathFinder->getEndMapPos().X) * 20.f), 20.f, (irr::f32)((pathFinder->getEndMapPos().Y) * 20.f)), ai)) {
             ai->setAction(ACTION::DODGE);
         }
-        // Faire le déplacement et check qu'il a bien bougé sur la case.
         if (ai->getDirection() != DIRECTION::NONE &&
         ai->hasMoved(irr::core::vector3df(position->getPosition().X, 20, position->getPosition().Z),irr::core::vector3df((irr::f32)((ai->getNextPosition().X) * 20.f), 20.f, (irr::f32)((ai->getNextPosition().Y) * 20.f)), ai) == false) {
             move->setUp(isMoving(DIRECTION::UP, ai));
@@ -51,13 +44,11 @@ void Indie::Systems::AISystem::onUpdate(irr::f32, EntityManager &entityManager) 
         else if (ai->getAction() == ACTION::STANDBY && !hasDropBomb(entityManager, entity->getId())) {
             ai->setAction(ACTION::FIND_BOX);
         }
-        // Il pose une bomb s'il est arrivé a coté d'une boite
         else if (hasArrived(mapPathFinding, pathFinder) && ai->getAction() == ACTION::GO_BOX) {
             ai->setAction(ACTION::PLACE_BOMB);
             move->setDrop(true);
             ai->setDirection(DIRECTION::NONE);
         }
-        // Mettre en attente s'il est en sécurité
         else if (hasArrived(mapPathFinding, pathFinder) && ai->getAction() == ACTION::GO_SAFE) {
             ai->setAction(ACTION::STANDBY);
             ai->setDirection(DIRECTION::NONE);

@@ -11,6 +11,7 @@
 #include "EndGameInfo.hpp"
 #include "ISystem.hpp"
 #include "SceneManager.hpp"
+#include "GameComponent.hpp"
 
 namespace Indie::Systems
 {
@@ -23,8 +24,9 @@ namespace Indie::Systems
         void onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const final;
 
     private:
-        std::pair<unsigned int, unsigned int> countPlayers(EntityManager &entityManager) const;
+        bool isGameEnded(EntityManager &entityManager, Components::GameComponent *game) const;
         void endGame(EntityManager &entityManager, SceneManager &sceneManager, MATCH_PLAY endType) const;
+        bool noTimersLeft(EntityManager &entityManager) const;
     };
 }
 

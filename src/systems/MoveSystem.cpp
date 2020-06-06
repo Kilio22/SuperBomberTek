@@ -31,6 +31,4 @@ void Indie::Systems::MoveSystem::onUpdate(irr::f32, Indie::EntityManager &entity
         moveComponent->setLeft(false);
         moveComponent->setDrop(false);
     }
-    EventHandler::getInstance().resetKeysReleased();
-    EventHandler::getInstance().resetKeysStatusOnce();
 }

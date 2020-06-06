@@ -26,7 +26,7 @@ namespace Indie
 
     struct InitGame {
         Indie::GameScene::MODE mode = Indie::GameScene::MODE::SOLO;
-        char nbAi = 0;
+        int nbAi = 0;
         Components::THEME mapTheme = Components::THEME::DIRT;
         Components::MAP_TYPE mapType = Components::MAP_TYPE::DEFAULT;
         bool powerUp = false;

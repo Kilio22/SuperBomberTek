@@ -10,6 +10,7 @@
 
 #include "AIComponent.hpp"
 #include "BombComponent.hpp"
+#include "GameComponent.hpp"
 #include "HitboxComponent.hpp"
 #include "InputComponent.hpp"
 #include "KillComponent.hpp"

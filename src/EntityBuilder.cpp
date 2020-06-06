@@ -49,12 +49,12 @@ Indie::Entity *Indie::EntityBuilder::createAi(const irr::core::vector3df &positi
     entity->addComponent<RenderComponent>(modelPath, texturePath, this->contextManager, position, true);
     entity->addComponent<HitboxComponent>(position, this->contextManager);
     entity->addComponent<AIComponent>();
+    entity->addComponent<PathFinderComponent>();
     entity->addComponent<MoveComponent>();
     entity->addComponent<VelocityComponent>();
     entity->addComponent<MeshComponent>(contextManager, texturePath);
     entity->addComponent<RotationComponent>();
     entity->addComponent<PlayerComponent>(playerName, playerColor, startPosition, false);
-    entity->addComponent<PathFinderComponent>();
     return entity;
 }
 

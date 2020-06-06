@@ -13,13 +13,14 @@
 #include "IScene.hpp"
 #include "UiSelector.hpp"
 #include <memory>
+#include <unordered_map>
 #include <vector>
 
 namespace Indie
 {
     class MainMenuScene : public IScene
     {
-        public:
+    public:
         MainMenuScene(ContextManager &context);
         ~MainMenuScene();
 
@@ -30,14 +31,20 @@ namespace Indie
         void renderPost3D() final;
         void skipScene(bool update, bool render, bool subUpdate, bool subRender);
 
-        private:
+    private:
+        enum class BUTTON_TYPE
+        {
+            SOLO,
+            MULTI,
+            OPTIONS,
+            CREDITS,
+            QUITTER,
+            NONE
+        };
+
         ContextManager &context;
         UiSelector selector;
-        std::unique_ptr<Button> solo;
-        std::unique_ptr<Button> multi;
-        std::unique_ptr<Button> options;
-        std::unique_ptr<Button> credits;
-        std::unique_ptr<Button> quitter;
+        std::unordered_map<BUTTON_TYPE, std::unique_ptr<Button>> buttons;
         Image *title;
         Image *bomb;
     };

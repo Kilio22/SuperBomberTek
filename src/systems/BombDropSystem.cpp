@@ -70,7 +70,7 @@ void Indie::Systems::BombDropSystem::onUpdate(irr::f32, EntityManager &entityMan
 
             auto mapComponent = entityManager.getUniqueEntity<MapComponent>()->getComponent<MapComponent>();
             mapComponent->setMap(this->updateMap(mapComponent->getMap(), midX, midZ));
-            ServiceLocator::getInstance().get<SoundManager>().playPitchedSound("bomb_drop", int(midX), 20, int(midZ));
+            ServiceLocator::getInstance().get<SoundManager>().playPitchedSound("bomb_drop", int(positionComponent->getPosition().X), int(positionComponent->getPosition().Y), int(positionComponent->getPosition().Z));
             entityBuilder.createBomb(irr::core::vector3df(midX, 20, midZ), "../ressources/animated_mesh/bomb/bomb.b3d",
                 "../ressources/textures/bomb/bomb.png", entity->getId(), playerComponent->getBombsRange());
             playerComponent->setCurrentBombNb(playerComponent->getCurrentBombNb() - 1);

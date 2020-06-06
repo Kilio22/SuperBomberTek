@@ -71,6 +71,7 @@ void Indie::OptionsScene::update(irr::f32 ticks)
     if (back->getStatus() == Button::Status::Pressed || Indie::EventHandler::getInstance().isKeyPressed(irr::KEY_ESCAPE) == true) {
         ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::MainMenuScene>();
         skipScene(true, true, true, true);
+        EventHandler::getInstance().resetKeys();
     }
     if (musicMute->getStatus()) {
         Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().mute();
@@ -84,11 +85,8 @@ void Indie::OptionsScene::update(irr::f32 ticks)
     if (soundVolume->getStatus() == Button::Status::Selected) {
         soundVolumeSelector.update();
     }
-
     Indie::ServiceLocator::getInstance().get<Indie::SoundManager>().setVolume(soundVolumeSelector.getPos().first);
     Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setVolume(musicVolumeSelector.getPos().first);
-    EventHandler::getInstance().resetKeysStatusOnce();
-    EventHandler::getInstance().resetKeysStatus();
 }
 
 void Indie::OptionsScene::renderPre3D() {}

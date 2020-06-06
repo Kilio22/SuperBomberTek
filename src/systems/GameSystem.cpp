@@ -9,47 +9,44 @@
 #include "AIComponent.hpp"
 #include "EndScene.hpp"
 #include "PauseScene.hpp"
-#include "PlayerComponent.hpp"
-#include "RenderComponent.hpp"
+#include "Components.h"
 
 using namespace Indie::Components;
 
 void Indie::Systems::GameSystem::onUpdate(irr::f32, EntityManager &entityManager) const
 {
     auto &sceneManager = ServiceLocator::getInstance().get<SceneManager>();
-    auto [playerCount, humanCount] = this->countPlayers(entityManager);
-    MATCH_PLAY endType = MATCH_PLAY::NOT_ENDED;
+    auto game = entityManager.getUniqueEntity<GameComponent>()->getComponent<GameComponent>();
 
-    if (EventHandler::getInstance().isKeyPressed(irr::EKEY_CODE::KEY_ESCAPE) == true) {
+    if (game->getGameStatus() == MATCH_PLAY::NOT_ENDED && this->isGameEnded(entityManager, game)) {
+        ServiceLocator::getInstance().get<MusicManager>().pauseMusic();
+        for (auto entity : entityManager.each<PlayerComponent>()) {
+            if (entity->has<MoveComponent>())
+                entity->removeComponent<MoveComponent>();
+            if (entity->has<HitboxComponent>())
+                entity->removeComponent<HitboxComponent>();
+            if (entity->has<VelocityComponent>())
+                entity->getComponent<VelocityComponent>()->setVelocity(0);
+        }
+    }
+    if (game->getGameStatus() == MATCH_PLAY::NOT_ENDED && EventHandler::getInstance().isKeyPressed(irr::EKEY_CODE::KEY_ESCAPE) == true) {
         for (auto entity : entityManager.each<RenderComponent>())
             entity->getComponent<RenderComponent>()->getMesh()->setAnimationSpeed(0.f);
         sceneManager.setSceneUpdateActive(false);
         sceneManager.setSceneRenderActive(false);
         sceneManager.setSubScene<PauseScene>();
     }
-    // On fait attention au scénario: "La touche pause est appuyée sur la même frame que quand la partie se termine."
-    // (Parce que la subScene est set à PauseScene)
-    if (playerCount == 0) {
-        std::cout << "Game ended with a draw." << std::endl;
-        endType = MATCH_PLAY::DRAW;
-    } else if (humanCount == 0) {
-        std::cout << "Game ended with a loss." << std::endl;
-        endType = MATCH_PLAY::LOSE;
-    } else if (playerCount == 1) {
-        std::cout << "Game ended with a win." << std::endl;
-        endType = MATCH_PLAY::WIN;
-    }
-    if (endType != MATCH_PLAY::NOT_ENDED) {
-        this->endGame(entityManager, sceneManager, endType);
-        for (auto entity : entityManager.each<RenderComponent>())
-            entity->getComponent<RenderComponent>()->getMesh()->setAnimationSpeed(0.f);
+    if (game->getGameStatus() != MATCH_PLAY::NOT_ENDED && this->noTimersLeft(entityManager)) {
+        this->endGame(entityManager, sceneManager, game->getGameStatus());
+        entityManager.cleanup();
         sceneManager.setSceneUpdateActive(false);
-        sceneManager.setSceneRenderActive(false);
+        sceneManager.setSceneRenderActive(true);
+        ServiceLocator::getInstance().get<MusicManager>().restartMusic();
         sceneManager.setSubScene<EndScene>();
     }
 }
 
-std::pair<unsigned int, unsigned int> Indie::Systems::GameSystem::countPlayers(EntityManager &entityManager) const
+bool Indie::Systems::GameSystem::isGameEnded(EntityManager &entityManager, GameComponent *game) const
 {
     unsigned int playerCount = 0;
     unsigned int humanCount = 0;
@@ -63,7 +60,15 @@ std::pair<unsigned int, unsigned int> Indie::Systems::GameSystem::countPlayers(E
         if (player->isHuman())
             ++humanCount;
     }
-    return { playerCount, humanCount };
+    if (playerCount == 0)
+        game->setGameStatus(MATCH_PLAY::DRAW);
+    else if (humanCount == 0)
+        game->setGameStatus(MATCH_PLAY::LOSE);
+    else if (playerCount == 1)
+        game->setGameStatus(MATCH_PLAY::WIN);
+    else
+        return false;
+    return true;
 }
 
 void Indie::Systems::GameSystem::endGame(EntityManager &entityManager, SceneManager &sceneManager, MATCH_PLAY endType) const
@@ -85,4 +90,14 @@ void Indie::Systems::GameSystem::endGame(EntityManager &entityManager, SceneMana
         }
     }
     sceneManager.getScene<EndScene>()->setEndGame(stats);
+}
+
+bool Indie::Systems::GameSystem::noTimersLeft(EntityManager &entityManager) const
+{
+    for (auto entity : entityManager.each<TimerComponent>()) {
+        if (entity->has<PowerUpComponent>() || entity->has<PowerDownComponent>())
+            continue;
+        return false;
+    }
+    return true;
 }
