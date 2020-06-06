@@ -10,18 +10,17 @@
 
 #include "ContextManager.hpp"
 #include "IScene.hpp"
-#include "Parallax.hpp"
 #include "MasterInfo.hpp"
-#include "CSVParser.hpp"
+#include "Parallax.hpp"
 #include <memory>
-#include <vector>
 #include <utility>
+#include <vector>
 
 namespace Indie
 {
     class MenuScene : public IScene
     {
-        public:
+    public:
         MenuScene(ContextManager &context);
         ~MenuScene();
 
@@ -37,8 +36,9 @@ namespace Indie
         Indie::MasterInfo *getMasterInfo(void) const;
         void setMasterInfo(const Indie::MasterInfo &masterInfo);
 
-        private:
-        void loadMasterInfo(void);
+    private:
+        std::string getFileName(std::string const &filepath);
+
         static const irr::core::vector2df velocities[5];
         static const std::string filepaths[5];
 

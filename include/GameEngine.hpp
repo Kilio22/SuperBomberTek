@@ -29,8 +29,6 @@ namespace Indie
 
     private:
         void gameLoop(void);
-        void readOptions(void);
-        std::string findValueByName(std::vector<std::vector<std::string>> parsedData, const std::string &value) const;
         void setupMusicManager(void);
         void setupSoundManager(void);
         void setupSceneManager(Indie::ContextManager &context);

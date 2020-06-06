@@ -6,23 +6,23 @@
 */
 
 #include "ImageLoader.hpp"
-#include "CSVParser.hpp"
+#include "FileParser.hpp"
 #include "Exceptions.h"
 #include "ServiceLocator.hpp"
 
 Indie::ImageLoader::ImageLoader()
     : context(Indie::ServiceLocator::getInstance().get<ContextManager>())
 {
-    std::vector<std::vector<std::string>> paths = {};
+    std::unordered_map<std::string, std::string> paths = {};
 
-    paths = ServiceLocator::getInstance().get<CSVParser>().parse("../ressources/image_paths.txt");
+    paths = ServiceLocator::getInstance().get<FileParser>().parse("../ressources/image_paths.txt", 1);
     for (auto path : paths) {
         Image *tmp = nullptr;
 
-        tmp = context.getDriver()->getTexture(path.at(0).c_str());
+        tmp = context.getDriver()->getTexture(path.first.c_str());
         if (tmp == nullptr)
-            throw Exceptions::FileNotFoundException(ERROR_STR, "File " + path.at(0) + " not found.");
-        images.insert({ path.at(0), tmp });
+            throw Exceptions::FileNotFoundException(ERROR_STR, "File " + path.first + " not found.");
+        images.insert({ path.first, tmp });
     }
 }
 

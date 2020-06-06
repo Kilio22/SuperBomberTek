@@ -34,13 +34,14 @@ namespace Indie
         void renderPre3D() final;
         void renderPost3D() final;
         void skipScene(bool update, bool render, bool subUpdate, bool subRender);
+        void setKeybinds(const std::vector<std::pair<Indie::Components::KEY_TYPE, std::unique_ptr<Keybind>>> &keybinds);
+        const std::vector<std::pair<Indie::Components::KEY_TYPE, std::unique_ptr<Keybind>>> &getKeybinds(void) const;
+        void resetKeybinds(void);
 
     public:
         static const std::vector<std::pair<std::string, Components::PlayerComponent::PLAYER_COLOR>> charaPaths;
 
     private:
-        void resetKeybinds(void);
-        void getSavedKeybinds(void);
         std::string getFileName(std::string const &filepath);
         irr::scene::IAnimatedMeshSceneNode *createTheme(const std::string &filepath);
         void initGameStruct(SceneManager &sceneManager);

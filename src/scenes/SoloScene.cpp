@@ -7,7 +7,6 @@
 */
 
 #include "SoloScene.hpp"
-#include "CSVParser.hpp"
 #include "GameScene.hpp"
 #include "InitGame.hpp"
 #include "IntroScene.hpp"
@@ -61,7 +60,6 @@ Indie::SoloScene::SoloScene(Indie::ContextManager &context)
     for (const auto &entry : std::filesystem::directory_iterator("../ressources/maps/"))
         this->mapPaths.push_back(entry.path().u8string());
     this->uiSelectors[UI_SELECTOR_TYPE::MAP]->setSize(int(mapPaths.size()), 1);
-    this->getSavedKeybinds();
     for (size_t buttonType = (size_t)BUTTON_TYPE::SKIN; buttonType < (size_t)BUTTON_TYPE::NONE; buttonType++) {
         this->buttons.insert({ (BUTTON_TYPE)buttonType, std::make_unique<Button>(context) });
     }
@@ -69,16 +67,6 @@ Indie::SoloScene::SoloScene(Indie::ContextManager &context)
 
 Indie::SoloScene::~SoloScene()
 {
-    std::vector<std::vector<std::string>> dataToWrite;
-
-    for (auto &keybind : this->keybinds) {
-        dataToWrite.push_back({ std::to_string((int)keybind.first), std::to_string((int)keybind.second->getKey()) });
-    }
-    try {
-        ServiceLocator::getInstance().get<CSVParser>().writeToFile("../ressources/.saves/keybinds.txt", dataToWrite);
-    } catch (const std::exception &e) {
-        std::cerr << e.what() << '\n';
-    }
 }
 
 irr::scene::IAnimatedMeshSceneNode *Indie::SoloScene::createTheme(const std::string &filepath)
@@ -165,38 +153,17 @@ void Indie::SoloScene::reset()
     this->init();
 }
 
-void Indie::SoloScene::getSavedKeybinds(void)
+void Indie::SoloScene::setKeybinds(const std::vector<std::pair<Indie::Components::KEY_TYPE, std::unique_ptr<Indie::Keybind>>> &keybinds)
 {
-    try {
-        std::vector<std::vector<std::string>> parsedData = ServiceLocator::getInstance().get<CSVParser>().parse("../ressources/.saves/keybinds.txt");
-
-        if (parsedData.size() != 5)
-            throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"../ressources/.saves/keybinds.txt\" corrupted.");
-        for (auto datas : parsedData) {
-            if (datas.size() != 2)
-                throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"../ressources/.saves/keybinds.txt\" corrupted.");
-            int keyType = std::stoi(datas.at(0));
-            int keyNb = std::stoi(datas.at(1));
-
-            if (keyType >= (int)KEY_TYPE::NONE || keyType < (int)KEY_TYPE::LEFT)
-                throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"../ressources/.saves/keybinds.txt\" corrupted.");
-            if (std::find_if(Keybind::keyCodes.begin(), Keybind::keyCodes.end(), [keyNb](const auto &var) { return ((int)var.first == keyNb); })
-                == Keybind::keyCodes.end())
-                throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"../ressources/.saves/keybinds.txt\" corrupted.");
-            if (std::find_if(this->keybinds.begin(), this->keybinds.end(),
-                    [keyType, keyNb](const auto &value) {
-                        if (value.first == (KEY_TYPE)keyType || value.second->getKey() == (irr::EKEY_CODE)keyNb)
-                            return true;
-                        return false;
-                    })
-                != this->keybinds.end())
-                throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"../ressources/.saves/keybinds.txt\" corrupted.");
-            this->keybinds.push_back({ (Indie::Components::KEY_TYPE)keyType, std::make_unique<Keybind>(context, (irr::EKEY_CODE)keyNb) });
-        }
-    } catch (const std::exception &e) {
-        this->resetKeybinds();
-        std::cout << e.what() << std::endl;
+    this->keybinds.clear();
+    for (auto &keybind : keybinds) {
+        this->keybinds.push_back({keybind.first, std::make_unique<Indie::Keybind>(*keybind.second)});
     }
+}
+
+const std::vector<std::pair<Indie::Components::KEY_TYPE, std::unique_ptr<Indie::Keybind>>> &Indie::SoloScene::getKeybinds(void) const
+{
+    return this->keybinds;
 }
 
 void Indie::SoloScene::update(irr::f32 ticks)
