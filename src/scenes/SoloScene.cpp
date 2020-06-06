@@ -18,19 +18,6 @@
 #include <filesystem>
 #include <fstream>
 
-static std::string getFileName(std::string const &filepath)
-{
-    std::string filename(filepath.c_str());
-    const size_t last_slash_id = filename.find_last_of("\\/");
-
-    if (std::string::npos != last_slash_id)
-        filename.erase(0, last_slash_id + 1);
-    const size_t period_id = filename.rfind('.');
-    if (std::string::npos != period_id)
-        filename.erase(period_id);
-    return (filename);
-}
-
 const std::vector<std::pair<std::string, Indie::Components::PlayerComponent::PLAYER_COLOR>> Indie::SoloScene::charaPaths {
     { "../ressources/textures/character/Gris.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GENERIC },
     { "../ressources/textures/character/Bleu.png", Indie::Components::PlayerComponent::PLAYER_COLOR::BLUE },
@@ -46,30 +33,34 @@ const std::vector<std::pair<std::string, Indie::Components::PlayerComponent::PLA
     { "../ressources/textures/character/Jaune+.png", Indie::Components::PlayerComponent::PLAYER_COLOR::YELLOW }
 };
 
-void Indie::SoloScene::skipScene(bool update, bool render, bool subUpdate, bool subRender)
-{
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(update);
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(render);
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneUpdateActive(subUpdate);
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneRenderActive(subRender);
-}
+const std::unordered_map<Indie::SoloScene::UI_SELECTOR_TYPE, irr::core::vector2di> Indie::SoloScene::uiSelectorsSize
+    = { { Indie::SoloScene::UI_SELECTOR_TYPE::DEFAULT, { 5, 6 } }, { Indie::SoloScene::UI_SELECTOR_TYPE::SKIN, { 1, 1 } },
+          { Indie::SoloScene::UI_SELECTOR_TYPE::THEME, { 2, 1 } }, { Indie::SoloScene::UI_SELECTOR_TYPE::MAP, { 1, 1 } } };
 
 // Il faut changer les valeurs ici dans les constructeurs des selecteurs quand on aura le nombre de map max etc
 Indie::SoloScene::SoloScene(Indie::ContextManager &context)
     : context(context)
-    , selector(5, 6, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
-    , charaSelector(1, 1, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
-    , themeSelector(2, 1, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
-    , mapSelector(1, 1, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
+    , pUps(std::make_unique<Checkbox>(context))
+    , initGame(std::make_unique<InitGame>())
+    , playerParams(std::make_unique<PlayerParams>())
 {
-    pUpsEnabled = true;
-    charaSelector.setSize(int(charaPaths.size()), 1); // On set juste la size en plus petit pour pas qu'il ai accès à des perso mdr
-    modelRotation = 0;
-    mapPaths.push_back("Default");
-    mapPaths.push_back("Random");
+    for (size_t uiSelectorType = (size_t)UI_SELECTOR_TYPE::DEFAULT; uiSelectorType < (size_t)UI_SELECTOR_TYPE::NONE; uiSelectorType++) {
+        int x = this->uiSelectorsSize.at((UI_SELECTOR_TYPE)uiSelectorType).X;
+        int y = this->uiSelectorsSize.at((UI_SELECTOR_TYPE)uiSelectorType).Y;
+
+        this->uiSelectors.insert({ (UI_SELECTOR_TYPE)uiSelectorType,
+            std::make_unique<UiSelector>(
+                x, y, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT) });
+    }
+    this->pUpsEnabled = true;
+    this->pUps->setStatus(pUpsEnabled);
+    this->uiSelectors[UI_SELECTOR_TYPE::SKIN]->setSize(int(charaPaths.size()), 1);
+    this->modelRotation = 0;
+    this->mapPaths.push_back("Default");
+    this->mapPaths.push_back("Random");
     for (const auto &entry : std::filesystem::directory_iterator("../ressources/maps/"))
-        mapPaths.push_back(entry.path().u8string());
-    mapSelector.setSize(int(mapPaths.size()), 1);
+        this->mapPaths.push_back(entry.path().u8string());
+    this->uiSelectors[UI_SELECTOR_TYPE::MAP]->setSize(int(mapPaths.size()), 1);
     this->getSavedKeybinds();
     for (size_t buttonType = (size_t)BUTTON_TYPE::SKIN; buttonType < (size_t)BUTTON_TYPE::NONE; buttonType++) {
         this->buttons.insert({ (BUTTON_TYPE)buttonType, std::make_unique<Button>(context) });
@@ -90,28 +81,32 @@ Indie::SoloScene::~SoloScene()
     }
 }
 
+irr::scene::IAnimatedMeshSceneNode *Indie::SoloScene::createTheme(const std::string &filepath)
+{
+    irr::scene::IAnimatedMeshSceneNode *newTheme
+        = context.getSceneManager()->addAnimatedMeshSceneNode(context.getSceneManager()->getMesh(filepath.c_str()));
+
+    if (newTheme == nullptr) {
+        throw Indie::Exceptions::AnimationException(ERROR_STR, "Cannot create new theme.");
+    }
+    newTheme->setMaterialFlag(irr::video::EMF_LIGHTING, true);
+    newTheme->setMaterialFlag(irr::video::EMF_FOG_ENABLE, false);
+    newTheme->setVisible(false);
+    newTheme->setScale(irr::core::vector3df(1.4f, 1.4f, 1.4f));
+    return newTheme;
+}
+
 void Indie::SoloScene::init()
 {
     // TODO : XP BAR
-    // TODO : SCORE
-    // unsigned short int xp = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo()->xp;
-    // unsigned short int lvl = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo()->lvl;
     /* ================================================================== */
     // 3D INIT
     /* ================================================================== */
-    camera = context.getSceneManager()->addCameraSceneNode(0, irr::core::vector3df(0, 0, -75), irr::core::vector3df(0, 0, 0), -1, true);
+    irr::scene::ICameraSceneNode *camera
+        = context.getSceneManager()->addCameraSceneNode(0, irr::core::vector3df(0, 0, -75), irr::core::vector3df(0, 0, 0), -1, true);
+
     camera->setTarget(irr::core::vector3df(-52, 0, 0));
     context.getSceneManager()->addLightSceneNode(camera, irr::core::vector3df(0, 0, 0), irr::video::SColorf(0.2f, 0.2f, 0.3f, 0.0f), 400.0f);
-    theme1 = context.getSceneManager()->addAnimatedMeshSceneNode(context.getSceneManager()->getMesh("../ressources/static_mesh/map1model.mc.ply"));
-    theme1->setMaterialFlag(irr::video::EMF_LIGHTING, true);
-    theme1->setMaterialFlag(irr::video::EMF_FOG_ENABLE, false);
-    theme1->setVisible(false);
-    theme1->setScale(irr::core::vector3df(1.4f, 1.4f, 1.4f));
-    theme2 = context.getSceneManager()->addAnimatedMeshSceneNode(context.getSceneManager()->getMesh("../ressources/static_mesh/map2model.mc.ply"));
-    theme2->setMaterialFlag(irr::video::EMF_LIGHTING, true);
-    theme2->setMaterialFlag(irr::video::EMF_FOG_ENABLE, false);
-    theme2->setVisible(false);
-    theme2->setScale(irr::core::vector3df(1.4f, 1.4f, 1.4f));
     /* ================================================================== */
     // IMAGES GET
     /* ================================================================== */
@@ -131,11 +126,6 @@ void Indie::SoloScene::init()
     this->buttons.at(BUTTON_TYPE::THEME)->init(context, "../ressources/images/solo/Theme.png", 1, 2, POS(0, 0));
     this->buttons.at(BUTTON_TYPE::MAP)->init(context, "../ressources/images/solo/Niveau.png", 1, 0, POS(0, 0));
     /* ================================================================== */
-    // CHECKBOXES CREATE
-    /* ================================================================== */
-    pUps.reset(new Checkbox(context));
-    pUps->setStatus(pUpsEnabled);
-    /* ================================================================== */
     // CHECKBOXES INIT
     /* ================================================================== */
     pUps->init("../ressources/images/solo/Check.png", 1, 3, POS(0, 0));
@@ -143,23 +133,36 @@ void Indie::SoloScene::init()
     /* ================================================================== */
     // KEYBINDS INIT
     /* ================================================================== */
-    std::find_if(keybinds.begin(), keybinds.end(), [](const auto &var){return (var.first == Indie::Components::KEY_TYPE::UP);})->second->init("../ressources/images/solo/KB_Up.png", 1, 4, POS(183, 468));
-    std::find_if(keybinds.begin(), keybinds.end(), [](const auto &var){return (var.first == Indie::Components::KEY_TYPE::DOWN);})->second->init("../ressources/images/solo/KB_Down.png", 1, 5, POS(183, 547));
-    std::find_if(keybinds.begin(), keybinds.end(), [](const auto &var){return (var.first == Indie::Components::KEY_TYPE::LEFT);})->second->init("../ressources/images/solo/KB_Left.png", 0, 5, POS(108, 547));
-    std::find_if(keybinds.begin(), keybinds.end(), [](const auto &var){return (var.first == Indie::Components::KEY_TYPE::RIGHT);})->second->init("../ressources/images/solo/KB_Right.png", 2, 5, POS(261, 547));
-    std::find_if(keybinds.begin(), keybinds.end(), [](const auto &var){return (var.first == Indie::Components::KEY_TYPE::DROP);})->second->init("../ressources/images/solo/KB_Bar.png", 3, 5, POS(456, 547));
+    std::find_if(keybinds.begin(), keybinds.end(), [](const auto &var) {
+        return (var.first == Indie::Components::KEY_TYPE::UP);
+    })->second->init("../ressources/images/solo/KB_Up.png", 1, 4, POS(183, 468));
+    std::find_if(keybinds.begin(), keybinds.end(), [](const auto &var) {
+        return (var.first == Indie::Components::KEY_TYPE::DOWN);
+    })->second->init("../ressources/images/solo/KB_Down.png", 1, 5, POS(183, 547));
+    std::find_if(keybinds.begin(), keybinds.end(), [](const auto &var) {
+        return (var.first == Indie::Components::KEY_TYPE::LEFT);
+    })->second->init("../ressources/images/solo/KB_Left.png", 0, 5, POS(108, 547));
+    std::find_if(keybinds.begin(), keybinds.end(), [](const auto &var) {
+        return (var.first == Indie::Components::KEY_TYPE::RIGHT);
+    })->second->init("../ressources/images/solo/KB_Right.png", 2, 5, POS(261, 547));
+    std::find_if(keybinds.begin(), keybinds.end(), [](const auto &var) {
+        return (var.first == Indie::Components::KEY_TYPE::DROP);
+    })->second->init("../ressources/images/solo/KB_Bar.png", 3, 5, POS(456, 547));
     // Some inits :
-    playerTexture = charaPaths[charaSelector.getPos().first].first;
-    playerColor = charaPaths[charaSelector.getPos().first].second;
-    mapPath = mapPaths[mapSelector.getPos().first];
-    mapTheme = (themeSelector.getPos().first == 0) ? Components::THEME::DIRT : Components::THEME::STONE;
+    this->playerParams->playerTexture = charaPaths[this->uiSelectors[UI_SELECTOR_TYPE::SKIN]->getPos().first].first;
+    this->playerParams->playerColor = charaPaths[this->uiSelectors[UI_SELECTOR_TYPE::SKIN]->getPos().first].second;
+    this->playerParams->playerKeys.clear();
+    this->initGame->mapPath = mapPaths[this->uiSelectors[UI_SELECTOR_TYPE::MAP]->getPos().first];
+    this->initGame->mapTheme = (this->uiSelectors[UI_SELECTOR_TYPE::THEME]->getPos().first == 0) ? Components::THEME::DIRT : Components::THEME::STONE;
+    this->theme1 = this->createTheme("../ressources/static_mesh/map1model.mc.ply");
+    this->theme2 = this->createTheme("../ressources/static_mesh/map2model.mc.ply");
 }
 
 void Indie::SoloScene::reset()
 {
     context.getSceneManager()->clear();
-    selector.setPos(0, 0);
-    init();
+    this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->setPos(0, 0);
+    this->init();
 }
 
 void Indie::SoloScene::getSavedKeybinds(void)
@@ -188,7 +191,7 @@ void Indie::SoloScene::getSavedKeybinds(void)
                     })
                 != this->keybinds.end())
                 throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"../ressources/.saves/keybinds.txt\" corrupted.");
-            this->keybinds.push_back({(Indie::Components::KEY_TYPE)keyType, std::make_unique<Keybind>(context, (irr::EKEY_CODE)keyNb)});
+            this->keybinds.push_back({ (Indie::Components::KEY_TYPE)keyType, std::make_unique<Keybind>(context, (irr::EKEY_CODE)keyNb) });
         }
     } catch (const std::exception &e) {
         this->resetKeybinds();
@@ -198,115 +201,121 @@ void Indie::SoloScene::getSavedKeybinds(void)
 
 void Indie::SoloScene::update(irr::f32 ticks)
 {
-    /* ================================================================== */
     // 3D UPDATE
-    /* ================================================================== */
-    theme1->setVisible(mapTheme == Components::THEME::DIRT);
-    theme2->setVisible(mapTheme == Components::THEME::STONE);
+    theme1->setVisible(this->initGame->mapTheme == Components::THEME::DIRT);
+    theme2->setVisible(this->initGame->mapTheme == Components::THEME::STONE);
     theme1->setRotation(irr::core::vector3df(0, modelRotation, 0));
     theme2->setRotation(irr::core::vector3df(0, modelRotation, 0));
     modelRotation += float(10 * ticks);
-    /* ================================================================== */
     // KEYBINDS SET USED
-    /* ================================================================== */
     for (auto &keybind : this->keybinds) {
         keybind.second->setUsedKeys(this->keybinds);
     }
-    /* ================================================================== */
     // UPDATE KEYBINDS
-    /* ================================================================== */
     for (auto &keybind : this->keybinds) {
-        keybind.second->update(selector.getPos());
+        keybind.second->update(this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos());
     }
-    if (this->keybinds[0].second->getStatus() || this->keybinds[1].second->getStatus()
-        || this->keybinds[2].second->getStatus() || this->keybinds[3].second->getStatus()
-        || this->keybinds[4].second->getStatus())
+    if (this->keybinds[0].second->getStatus() || this->keybinds[1].second->getStatus() || this->keybinds[2].second->getStatus()
+        || this->keybinds[3].second->getStatus() || this->keybinds[4].second->getStatus())
         return; // We don't check anything else while the player is setting a key
     /* ================================================================== */
     // LAYOUTS SKIP (psk le layout est chelou on doit le faire en dur)
     // En gros on skip des cases vides dans le selecteur pour retrouver
     // les boutons qui sont plus loin (psk la taille est pas pareille partout)
     /* ================================================================== */
-    selector.update(); // We update the main selector
-    if (selector.getPos().second == 3 && selector.getPos().first == 2) {
-        selector.setPos(4, 4); // PowerUps -> = Play
+    this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->update(); // We update the main selector
+    if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().second == 3 && this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().first == 2) {
+        this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->setPos(4, 4); // PowerUps -> = Play
     }
-    if (selector.getPos().second < 4) {
-        selector.setPos(1, selector.getPos().second); // Can't move right or left in the first 3 selectors
+    if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().second < 4) {
+        this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->setPos(
+            1, this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().second); // Can't move right or left in the first 3 selectors
     }
-    if (selector.getPos().second == 4) {
-        if (selector.getPos().first == 0)
-            selector.setPos(1, 4); // Up <- == Up
-        if (selector.getPos().first == 2)
-            selector.setPos(1, 4); // Up -> == Up
-        if (selector.getPos().first == 3)
-            selector.setPos(1, 3); // Play <- == PowerUps
+    if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().second == 4) {
+        if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().first == 0)
+            this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->setPos(1, 4); // Up <- == Up
+        if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().first == 2)
+            this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->setPos(1, 4); // Up -> == Up
+        if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().first == 3)
+            this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->setPos(1, 3); // Play <- == PowerUps
     }
     /* ================================================================== */
     // UPDATE BUTTONS
     /* ================================================================== */
-    this->buttons.at(BUTTON_TYPE::PLAY)->update(this->selector.getPos());
-    this->buttons.at(BUTTON_TYPE::BACK)->update(this->selector.getPos());
-    this->buttons.at(BUTTON_TYPE::SKIN)->update(this->selector.getPos());
-    this->buttons.at(BUTTON_TYPE::THEME)->update(this->selector.getPos());
-    this->buttons.at(BUTTON_TYPE::MAP)->update(this->selector.getPos());
+    for (const auto &button : this->buttons) {
+        button.second->update(this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos());
+    }
     /* ================================================================== */
     // UPDATE CHECKBOXES
     /* ================================================================== */
-    pUps->update(selector.getPos());
-    pUpsEnabled = pUps->getStatus();
+    this->pUps->update(this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos());
+    this->pUpsEnabled = this->pUps->getStatus();
     /* ================================================================== */
     // UPDATE SELECTORS
     /* ================================================================== */
-    if (selector.getPos().first == 1 && selector.getPos().second == 1) {
-        charaSelector.update();
-        playerTexture = charaPaths[charaSelector.getPos().first].first;
-        playerColor = charaPaths[charaSelector.getPos().first].second;
+    if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().first == 1 && this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().second == 1) {
+        this->uiSelectors[UI_SELECTOR_TYPE::SKIN]->update();
+        this->playerParams->playerTexture = charaPaths[this->uiSelectors[UI_SELECTOR_TYPE::SKIN]->getPos().first].first;
+        this->playerParams->playerColor = charaPaths[this->uiSelectors[UI_SELECTOR_TYPE::SKIN]->getPos().first].second;
     }
-    if (selector.getPos().first == 1 && selector.getPos().second == 0) {
-        mapSelector.update();
-        mapPath = mapPaths[mapSelector.getPos().first];
+    if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().first == 1 && this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().second == 0) {
+        this->uiSelectors[UI_SELECTOR_TYPE::MAP]->update();
+        this->initGame->mapPath = mapPaths[this->uiSelectors[UI_SELECTOR_TYPE::MAP]->getPos().first];
     }
-    if (selector.getPos().first == 1 && selector.getPos().second == 2) {
-        themeSelector.update();
-        mapTheme = (themeSelector.getPos().first == 0) ? Components::THEME::DIRT : Components::THEME::STONE;
+    if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().first == 1 && this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().second == 2) {
+        this->uiSelectors[UI_SELECTOR_TYPE::THEME]->update();
+        this->initGame->mapTheme
+            = (this->uiSelectors[UI_SELECTOR_TYPE::THEME]->getPos().first == 0) ? Components::THEME::DIRT : Components::THEME::STONE;
     }
     /* ================================================================== */
     // CLICK BUTTONS
     /* ================================================================== */
     if (this->buttons.at(BUTTON_TYPE::PLAY)->getStatus() == Button::Status::Pressed
         || EventHandler::getInstance().isKeyPressed(irr::EKEY_CODE::KEY_KEY_P) == true) {
-        InitGame init;
-        PlayerParams initPlayer;
+        auto &sceneManager = ServiceLocator::getInstance().get<SceneManager>();
 
-        context.getSceneManager()->clear();
-        init.mapPath = mapPath;
-        init.mode = GameScene::MODE::SOLO;
-        init.nbAi = 3;
-        init.mapTheme = mapTheme;
-        init.mapType = (mapSelector.getPos().first == 0)
-            ? Components::MAP_TYPE::DEFAULT
-            : ((mapSelector.getPos().first == 1) ? Components::MAP_TYPE::RANDOM : Components::MAP_TYPE::SAVED);
-        init.powerUp = pUpsEnabled;
-        init.timeLimit = 180;
-        initPlayer.playerTexture = charaPaths[charaSelector.getPos().first].first;
-        initPlayer.playerColor = charaPaths[charaSelector.getPos().first].second;
-        for (auto &it : keybinds) {
-            initPlayer.playerKeys.insert({it.second->getKey(), it.first});
-        }
-        init.playersParams = { initPlayer };
-        ServiceLocator::getInstance().get<SceneManager>().getScene<GameScene>()->setInitGame(init);
-        ServiceLocator::getInstance().get<SceneManager>().setScene<GameScene>(context);
-        ServiceLocator::getInstance().get<SceneManager>().setSubScene<IntroScene>();
+        this->initGameStruct(sceneManager);
+        sceneManager.setScene<GameScene>(context);
+        sceneManager.setSubScene<IntroScene>();
         skipScene(false, false, true, true);
+        Indie::EventHandler::getInstance().resetKeys();
     }
     if (this->buttons.at(BUTTON_TYPE::BACK)->getStatus() == Button::Status::Pressed
         || EventHandler::getInstance().isKeyPressed(irr::EKEY_CODE::KEY_ESCAPE) == true) {
         context.getSceneManager()->clear();
         skipScene(true, true, true, true);
         ServiceLocator::getInstance().get<SceneManager>().setSubScene<MainMenuScene>();
+        Indie::EventHandler::getInstance().resetKeys();
     }
-    EventHandler::getInstance().resetKeys();
+}
+
+void Indie::SoloScene::initGameStruct(SceneManager &sceneManager)
+{
+    context.getSceneManager()->clear();
+    this->initGame->mapPath = this->initGame->mapPath;
+    this->initGame->mode = GameScene::MODE::SOLO;
+    this->initGame->nbAi = 3;
+    this->initGame->mapTheme = this->initGame->mapTheme;
+    this->initGame->mapType = (this->uiSelectors[UI_SELECTOR_TYPE::MAP]->getPos().first == 0)
+        ? Components::MAP_TYPE::DEFAULT
+        : ((this->uiSelectors[UI_SELECTOR_TYPE::MAP]->getPos().first == 1) ? Components::MAP_TYPE::RANDOM : Components::MAP_TYPE::SAVED);
+    this->initGame->powerUp = pUpsEnabled;
+    this->initGame->timeLimit = 180;
+    for (auto &it : keybinds) {
+        this->playerParams->playerKeys.insert({ it.second->getKey(), it.first });
+    }
+    this->initGame->playersParams = { *this->playerParams };
+    sceneManager.getScene<GameScene>()->setInitGame(*this->initGame);
+}
+
+void Indie::SoloScene::skipScene(bool update, bool render, bool subUpdate, bool subRender)
+{
+    auto &sceneManager = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>();
+
+    sceneManager.setSceneUpdateActive(update);
+    sceneManager.setSceneRenderActive(render);
+    sceneManager.setSubSceneUpdateActive(subUpdate);
+    sceneManager.setSubSceneRenderActive(subRender);
 }
 
 void Indie::SoloScene::renderPre3D()
@@ -321,27 +330,23 @@ void Indie::SoloScene::renderPre3D()
 
 void Indie::SoloScene::renderPost3D()
 {
-    /* ================================================================== */
     // DISPLAY BUTONS
-    /* ================================================================== */
     for (auto const &button : this->buttons) {
         button.second->draw();
     }
-    /* ================================================================== */
+
     // DISPLAY CHECKBOXES
-    /* ================================================================== */
     pUps->draw();
-    /* ================================================================== */
+
     // DISPLAY TEXTS
-    /* ================================================================== */
-    std::string mPath = getFileName(mapPath);
-    std::string pName = getFileName(playerTexture);
-    std::string tName = (mapTheme == Components::THEME::DIRT) ? "Garden" : "Cobblestone";
+    std::string mPath = this->getFileName(this->initGame->mapPath);
+    std::string pName = this->getFileName(this->playerParams->playerTexture);
+    std::string tName = (this->initGame->mapTheme == Components::THEME::DIRT) ? "Garden" : "Cobblestone";
     std::map<std::string, int> scores_map
         = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo()->scores_map;
     int mapScore = 0;
     for (auto score : scores_map) {
-        if (score.first == getFileName(mapPath)) {
+        if (score.first == this->getFileName(this->initGame->mapPath)) {
             mapScore = score.second;
             break;
         }
@@ -357,9 +362,8 @@ void Indie::SoloScene::renderPost3D()
     for (auto const &keybind : this->keybinds) {
         keybind.second->draw();
     }
-    if (this->keybinds[0].second->getStatus() || this->keybinds[1].second->getStatus()
-        || this->keybinds[2].second->getStatus() || this->keybinds[3].second->getStatus()
-        || this->keybinds[4].second->getStatus())
+    if (this->keybinds[0].second->getStatus() || this->keybinds[1].second->getStatus() || this->keybinds[2].second->getStatus()
+        || this->keybinds[3].second->getStatus() || this->keybinds[4].second->getStatus())
         context.displayImage(this->keybinds[0].second->tick);
 }
 
@@ -371,4 +375,17 @@ void Indie::SoloScene::resetKeybinds(void)
     this->keybinds.push_back({ Indie::Components::KEY_TYPE::LEFT, std::make_unique<Keybind>(context, irr::EKEY_CODE::KEY_LEFT) });
     this->keybinds.push_back({ Indie::Components::KEY_TYPE::RIGHT, std::make_unique<Keybind>(context, irr::EKEY_CODE::KEY_RIGHT) });
     this->keybinds.push_back({ Indie::Components::KEY_TYPE::DROP, std::make_unique<Keybind>(context, irr::EKEY_CODE::KEY_SPACE) });
+}
+
+std::string Indie::SoloScene::getFileName(std::string const &filepath)
+{
+    std::string filename(filepath.c_str());
+    const size_t last_slash_id = filename.find_last_of("\\/");
+
+    if (std::string::npos != last_slash_id)
+        filename.erase(0, last_slash_id + 1);
+    const size_t period_id = filename.rfind('.');
+    if (std::string::npos != period_id)
+        filename.erase(period_id);
+    return (filename);
 }

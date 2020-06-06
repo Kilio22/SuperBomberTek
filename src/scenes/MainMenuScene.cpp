@@ -6,18 +6,22 @@
 */
 
 #include "MainMenuScene.hpp"
+#include "EndScene.hpp"
 #include "GameScene.hpp"
+#include "Multi1Scene.hpp"
 #include "OptionsScene.hpp"
 #include "PauseScene.hpp"
-#include "EndScene.hpp"
 #include "Scenes.hpp"
 #include "ServiceLocator.hpp"
-#include "Multi1Scene.hpp"
 
 Indie::MainMenuScene::MainMenuScene(ContextManager &context)
     : context(context)
     , selector(1, 5, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
-{}
+{
+    for (size_t buttonType = (size_t)BUTTON_TYPE::SOLO; buttonType < (size_t)BUTTON_TYPE::NONE; buttonType++) {
+        this->buttons.insert({ (BUTTON_TYPE)buttonType, std::make_unique<Button>(context) });
+    }
+}
 
 Indie::MainMenuScene::~MainMenuScene() {}
 
@@ -25,52 +29,39 @@ void Indie::MainMenuScene::init()
 {
     Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setMusic(0);
 
-    title = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/menu/title.png");
-    bomb = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/menu/bomb.png");
-    // Pk on refait un ptr ?? Autant garder le même, faudra refacto
-    solo.reset(new Button(context));
-    multi.reset(new Button(context));
-    options.reset(new Button(context));
-    credits.reset(new Button(context));
-    quitter.reset(new Button(context));
-    solo->init(context, "../ressources/images/menu/Solo.png", 0, 0, POS(0, 0));
-    multi->init(context, "../ressources/images/menu/Multi.png", 0, 1, POS(0, 0));
-    options->init(context, "../ressources/images/menu/Options.png", 0, 2, POS(0, 0));
-    credits->init(context, "../ressources/images/menu/Credits.png", 0, 3, POS(0, 0));
-    quitter->init(context, "../ressources/images/menu/Quitter.png", 0, 4, POS(0, 0));
+    this->title = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/menu/title.png");
+    this->bomb = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/menu/bomb.png");
+    this->buttons.at(BUTTON_TYPE::SOLO)->init(context, "../ressources/images/menu/Solo.png", 0, 0, POS(0, 0));
+    this->buttons.at(BUTTON_TYPE::MULTI)->init(context, "../ressources/images/menu/Multi.png", 0, 1, POS(0, 0));
+    this->buttons.at(BUTTON_TYPE::OPTIONS)->init(context, "../ressources/images/menu/Options.png", 0, 2, POS(0, 0));
+    this->buttons.at(BUTTON_TYPE::CREDITS)->init(context, "../ressources/images/menu/Credits.png", 0, 3, POS(0, 0));
+    this->buttons.at(BUTTON_TYPE::QUITTER)->init(context, "../ressources/images/menu/Quitter.png", 0, 4, POS(0, 0));
 }
 
 void Indie::MainMenuScene::reset()
 {
-    //selector.setPos(0, 0);
     init();
 }
 
 void Indie::MainMenuScene::update(irr::f32)
 {
     selector.update();
-    solo->update(selector.getPos());
-    multi->update(selector.getPos());
-    options->update(selector.getPos());
-    credits->update(selector.getPos());
-    quitter->update(selector.getPos());
-
-    if (solo->getStatus() == Button::Status::Pressed) {
-        //ServiceLocator::getInstance().get<Indie::SceneManager>().setScene<Indie::GameScene>(context);
-        //ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::PauseScene>();
-        //skipScene(true, true, false, false);
+    for (auto &button : this->buttons) {
+        button.second->update(selector.getPos());
+    }
+    if (this->buttons.at(BUTTON_TYPE::SOLO)->getStatus() == Button::Status::Pressed) {
         ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::SoloScene>();
         skipScene(true, true, true, true);
     }
-    if (multi->getStatus() == Button::Status::Pressed) {
+    if (this->buttons.at(BUTTON_TYPE::MULTI)->getStatus() == Button::Status::Pressed) {
         ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::Multi1Scene>();
         skipScene(true, true, true, true);
     }
-    if (options->getStatus() == Button::Status::Pressed) {
+    if (this->buttons.at(BUTTON_TYPE::OPTIONS)->getStatus() == Button::Status::Pressed) {
         ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::OptionsScene>();
         skipScene(true, true, true, true);
     }
-    if (quitter->getStatus() == Button::Status::Pressed) {
+    if (this->buttons.at(BUTTON_TYPE::QUITTER)->getStatus() == Button::Status::Pressed) {
         context.getDevice()->closeDevice();
     }
     if (Indie::EventHandler::getInstance().isKeyPressed(irr::KEY_ESCAPE) == true) {
@@ -79,20 +70,17 @@ void Indie::MainMenuScene::update(irr::f32)
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(true);
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneUpdateActive(true);
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneRenderActive(true);
+        EventHandler::getInstance().resetKeys();
     }
-    EventHandler::getInstance().resetKeysStatusOnce();
-    EventHandler::getInstance().resetKeysStatus();
 }
 
 void Indie::MainMenuScene::renderPre3D() {}
 
 void Indie::MainMenuScene::renderPost3D()
 {
-    solo->draw();
-    multi->draw();
-    options->draw();
-    credits->draw();
-    quitter->draw();
+    for (auto &button : this->buttons) {
+        button.second->draw();
+    }
     context.displayImage(title);
     context.displayImage(bomb);
 }

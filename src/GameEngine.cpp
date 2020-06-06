@@ -170,6 +170,8 @@ void Indie::GameEngine::gameLoop(void)
             ServiceLocator::getInstance().get<SoundManager>().update();
             ServiceLocator::getInstance().get<SceneManager>().update(context, totalDeltaTime);
             totalDeltaTime = 0.f;
+            EventHandler::getInstance().resetKeysReleased();
+            EventHandler::getInstance().resetKeysStatusOnce();
         }
         lastTime = currentTime;
     }

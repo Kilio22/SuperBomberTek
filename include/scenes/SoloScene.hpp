@@ -20,6 +20,8 @@
 
 namespace Indie
 {
+    struct InitGame;
+    struct PlayerParams;
     class SoloScene : public IScene
     {
     public:
@@ -39,6 +41,9 @@ namespace Indie
     private:
         void resetKeybinds(void);
         void getSavedKeybinds(void);
+        std::string getFileName(std::string const &filepath);
+        irr::scene::IAnimatedMeshSceneNode *createTheme(const std::string &filepath);
+        void initGameStruct(SceneManager &sceneManager);
 
         enum class BUTTON_TYPE
         {
@@ -50,12 +55,19 @@ namespace Indie
             NONE
         };
 
+        enum class UI_SELECTOR_TYPE {
+            DEFAULT,
+            SKIN,
+            THEME,
+            MAP,
+            NONE
+        };
+
+        static const std::unordered_map<UI_SELECTOR_TYPE, irr::core::vector2di> uiSelectorsSize;
+
         ContextManager &context;
-        UiSelector selector;
-        UiSelector charaSelector;
-        UiSelector themeSelector;
-        UiSelector mapSelector;
-        std::map<SoloScene::BUTTON_TYPE, std::unique_ptr<Button>> buttons;
+        std::unordered_map<SoloScene::UI_SELECTOR_TYPE, std::unique_ptr<UiSelector>> uiSelectors;
+        std::unordered_map<SoloScene::BUTTON_TYPE, std::unique_ptr<Button>> buttons;
         std::unique_ptr<Checkbox> pUps;
         bool pUpsEnabled;
         Image *title;
@@ -63,22 +75,16 @@ namespace Indie
         Image *kbLayout;
         irr::gui::IGUIFont *font;
         std::vector<std::pair<Indie::Components::KEY_TYPE, std::unique_ptr<Keybind>>> keybinds;
-        irr::scene::ICameraSceneNode *camera;
         irr::scene::IAnimatedMeshSceneNode *theme1;
         irr::scene::IAnimatedMeshSceneNode *theme2;
         float modelRotation;
         std::vector<std::string> mapPaths;
         // PARAMS (psk inclusion circulaire à cause du include GameScene.hpp dans InitGame.hpp)
-        char nbAi;
-        Components::THEME mapTheme;
-        Components::MAP_TYPE mapType;
-        bool powerUp;
-        std::string mapPath;
-        time_t timeLimit;
-        std::string playerTexture;
-        Components::PlayerComponent::PLAYER_COLOR playerColor;
+        std::unique_ptr<InitGame> initGame;
+        std::unique_ptr<PlayerParams> playerParams;
+        // std::string playerTexture;
+        // Components::PlayerComponent::PLAYER_COLOR playerColor;
         // TODO : XP BAR
-        // TODO : SCORE
         // TODO : Recup le level et l'xp qqpart. Faudra just set les valeurs du coup.
         unsigned short int xp;
         unsigned short int lvl;

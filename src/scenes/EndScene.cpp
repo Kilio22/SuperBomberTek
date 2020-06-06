@@ -58,8 +58,6 @@ void Indie::EndScene::update(irr::f32 ticks)
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<IntroScene>()->skipScene();
         EventHandler::getInstance().resetKeys();
     }
-    EventHandler::getInstance().resetKeysStatusOnce();
-    EventHandler::getInstance().resetKeysStatus();
 }
 
 void Indie::EndScene::renderPre3D() {}

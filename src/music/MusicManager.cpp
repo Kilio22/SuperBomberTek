@@ -17,7 +17,7 @@ void Indie::MusicManager::addMusic(const std::string filepath)
     auto ptr = std::make_unique<Indie::Music>(filepath);
 
     ptr->loop();
-    ptr->setVolume(float(volume));
+    ptr->setVolume((float)volume);
     if (isMuted)
         ptr->setVolume(0);
     musics.push_back(std::move(ptr));
