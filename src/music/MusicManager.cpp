@@ -85,8 +85,8 @@ void Indie::MusicManager::stopMusic()
 
 void Indie::MusicManager::restartMusic()
 {
-    for (size_t i = 0; i < musics.size(); i++)
-        musics[i]->restartMusic();
+    stopMusic();
+    playMusic();
 }
 
 void Indie::MusicManager::update()
