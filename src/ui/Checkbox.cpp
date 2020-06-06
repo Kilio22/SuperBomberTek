@@ -7,6 +7,8 @@
 
 #include "Checkbox.hpp"
 #include "ServiceLocator.hpp"
+#include "ImageLoader.hpp"
+#include "FileNotFoundException.hpp"
 
 Indie::Checkbox::Checkbox(Indie::ContextManager &context)
     : context(context)

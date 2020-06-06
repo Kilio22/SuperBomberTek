@@ -8,10 +8,9 @@
 #ifndef IMAGELOADER_HPP_
 #define IMAGELOADER_HPP_
 
+#include "ContextManager.hpp"
 #include <string>
 #include <unordered_map>
-#include <vector>
-#include "ContextManager.hpp"
 
 namespace Indie
 {

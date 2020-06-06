@@ -8,11 +8,9 @@
 #ifndef SYSTEMMANAGER_HPP_
 #define SYSTEMMANAGER_HPP_
 
+#include "ISystem.hpp"
 #include <unordered_map>
 #include <memory>
-#include "ISystem.hpp"
-#include "TypeIndex.hpp"
-#include "ObjectContainer.hpp"
 
 namespace Indie
 {

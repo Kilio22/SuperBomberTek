@@ -10,10 +10,11 @@
 
 #include "IObjectContainer.hpp"
 
-namespace Indie {
-
-template <class T>
-class ObjectContainer : public IObjectContainer {
+namespace Indie
+{
+    template <class T>
+    class ObjectContainer : public IObjectContainer
+    {
     public:
         template <typename... Args>
         ObjectContainer(Args &&... args)
@@ -22,8 +23,7 @@ class ObjectContainer : public IObjectContainer {
         ~ObjectContainer() = default;
 
         T data;
-};
-
+    };
 }
 
 #endif /* !COMPONENTCONTAINER_HPP_ */

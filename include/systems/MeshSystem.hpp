@@ -22,7 +22,7 @@ namespace Indie::Systems
             void onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const final;
 
         private:
-            void changeMesh(const ContextManager &contextManager, Indie::Components::RenderComponent *renderComp, irr::scene::IAnimatedMesh *mesh, irr::video::ITexture *texture) const;
+            void changeMesh(const ContextManager &contextManager, Components::RenderComponent *renderComp, irr::scene::IAnimatedMesh *mesh, irr::video::ITexture *texture) const;
     };
 }
 

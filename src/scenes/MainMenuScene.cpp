@@ -13,6 +13,9 @@
 #include "PauseScene.hpp"
 #include "Scenes.h"
 #include "ServiceLocator.hpp"
+#include "ImageLoader.hpp"
+#include "SceneManager.hpp"
+#include "MusicManager.hpp"
 
 Indie::MainMenuScene::MainMenuScene(ContextManager &context)
     : context(context)
@@ -22,8 +25,6 @@ Indie::MainMenuScene::MainMenuScene(ContextManager &context)
         this->buttons.insert({ (BUTTON_TYPE)buttonType, std::make_unique<Button>(context) });
     }
 }
-
-Indie::MainMenuScene::~MainMenuScene() {}
 
 void Indie::MainMenuScene::init()
 {

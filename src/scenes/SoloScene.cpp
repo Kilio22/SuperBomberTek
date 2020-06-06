@@ -14,6 +14,8 @@
 #include "MenuScene.hpp"
 #include "PauseScene.hpp"
 #include "ServiceLocator.hpp"
+#include "ImageLoader.hpp"
+#include "SoundManager.hpp"
 #include <filesystem>
 #include <fstream>
 
@@ -66,10 +68,6 @@ Indie::SoloScene::SoloScene(Indie::ContextManager &context)
     for (size_t buttonType = (size_t)BUTTON_TYPE::SKIN; buttonType < (size_t)BUTTON_TYPE::NONE; buttonType++) {
         this->buttons.insert({ (BUTTON_TYPE)buttonType, std::make_unique<Button>(context) });
     }
-}
-
-Indie::SoloScene::~SoloScene()
-{
 }
 
 irr::scene::IAnimatedMeshSceneNode *Indie::SoloScene::createTheme(const std::string &filepath)
@@ -316,7 +314,7 @@ void Indie::SoloScene::renderPost3D()
     std::string mPath = this->getFileName(this->initGame->mapPath);
     std::string pName = this->getFileName(this->playerParams->playerTexture);
     std::string tName = (this->initGame->mapTheme == Components::THEME::DIRT) ? "Garden" : "Cobblestone";
-    std::map<std::string, int> scores_map
+    std::unordered_map<std::string, int> scores_map
         = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo()->scores_map;
     int mapScore = 0;
     for (auto score : scores_map) {

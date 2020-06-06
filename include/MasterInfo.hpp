@@ -8,14 +8,14 @@
 #ifndef MASTERINFO_HPP_
 #define MASTERINFO_HPP_
 
-#include <map>
+#include <unordered_map>
 
 namespace Indie
 {
     struct MasterInfo {
         unsigned short int xp = 0;
         unsigned short int lvl = 0;
-        std::map<std::string, int> scores_map = {};
+        std::unordered_map<std::string, int> scores_map;
     };
 }
 

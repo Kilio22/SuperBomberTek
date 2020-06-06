@@ -8,37 +8,32 @@
 #ifndef SERVICELOCATOR_HPP_
 #define SERVICELOCATOR_HPP_
 
-#include "SceneManager.hpp"
-#include "MusicManager.hpp"
-#include "SoundManager.hpp"
-#include "ImageLoader.hpp"
-
 namespace Indie
 {
     class ServiceLocator
     {
-        private:
-            ServiceLocator() = default;
+    private:
+        ServiceLocator() = default;
 
-        public:
-            ServiceLocator(const ServiceLocator &) = delete;
-            ~ServiceLocator() = default;
-            ServiceLocator &operator=(const ServiceLocator &) = delete;
+    public:
+        ServiceLocator(const ServiceLocator &) = delete;
+        ~ServiceLocator() = default;
+        ServiceLocator &operator=(const ServiceLocator &) = delete;
 
-            static ServiceLocator &getInstance()
-            {
-                static ServiceLocator serviceLocator;
+        static ServiceLocator &getInstance()
+        {
+            static ServiceLocator serviceLocator;
 
-                return serviceLocator;
-            }
+            return serviceLocator;
+        }
 
-            template <typename T>
-            T &get()
-            {
-                static T service;
+        template <typename T>
+        T &get()
+        {
+            static T service;
 
-                return service;
-            }
+            return service;
+        }
     };
 }
 

@@ -9,10 +9,10 @@
 #include "Exceptions.h"
 #include "MainMenuScene.hpp"
 #include "ServiceLocator.hpp"
-
-// Passer ça en méthode de TitleScene ??
-// putain t'as commenté chaque fichier enfaite.
-// oui c'est fait
+#include "ImageLoader.hpp"
+#include "SceneManager.hpp"
+#include "SoundManager.hpp"
+#include "EventHandler.hpp"
 
 const double Indie::TitleScene::updateRate = (((2 * M_PI) / 96) / 32) * 3000;
 
@@ -20,8 +20,6 @@ Indie::TitleScene::TitleScene(ContextManager &context)
     : context(context)
 {
 }
-
-Indie::TitleScene::~TitleScene() {}
 
 void Indie::TitleScene::init()
 {
@@ -44,9 +42,9 @@ void Indie::TitleScene::reset()
 
 void Indie::TitleScene::skipScene(bool update, bool render, bool subUpdate, bool subRender)
 {
-    auto &sceneManager = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>();
+    auto &sceneManager = Indie::ServiceLocator::getInstance().get<SceneManager>();
 
-    sceneManager.setSubScene<Indie::MainMenuScene>();
+    sceneManager.setSubScene<MainMenuScene>();
     sceneManager.setSceneUpdateActive(update);
     sceneManager.setSceneRenderActive(render);
     sceneManager.setSubSceneUpdateActive(subUpdate);

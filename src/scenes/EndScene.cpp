@@ -11,6 +11,10 @@
 #include "MainMenuScene.hpp"
 #include "ServiceLocator.hpp"
 #include "InitGame.hpp"
+#include "ImageLoader.hpp"
+#include "SceneManager.hpp"
+#include "MusicManager.hpp"
+#include "SoundManager.hpp"
 
 static float getPercentage(Indie::MasterInfo *info)
 {
@@ -24,7 +28,8 @@ static float getPercentage(Indie::MasterInfo *info)
 Indie::EndScene::EndScene(ContextManager &context)
     : context(context)
     , selector(1, 2, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
-{}
+{
+}
 
 void Indie::EndScene::init()
 {

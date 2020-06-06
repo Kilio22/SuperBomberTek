@@ -9,15 +9,11 @@
 #define ENTITYBUILDER_HPP_
 
 #include "Components.h"
+#include "ContextManager.hpp"
 #include "EntityManager.hpp"
-#include "ServiceLocator.hpp"
-#include <irrlicht.h>
 
 namespace Indie
 {
-
-    using namespace Components;
-
     /**
      * @brief The EntityBuilder class
      */
@@ -49,7 +45,7 @@ namespace Indie
          * @param startPosition Where the player starts in the map
          * @return Entity* The new player entity
          */
-        Entity *createPlayer(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath, std::map<irr::EKEY_CODE, KEY_TYPE> keys, const std::string &playerName, PlayerComponent::PLAYER_COLOR playerColor, PlayerComponent::PLAYER_START_POSITION startPosition);
+        Entity *createPlayer(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath, std::unordered_map<irr::EKEY_CODE, Components::KEY_TYPE> keys, const std::string &playerName, Components::PlayerComponent::PLAYER_COLOR playerColor, Components::PlayerComponent::PLAYER_START_POSITION startPosition);
 
         /**
          * @brief Creates a AI entity
@@ -62,7 +58,7 @@ namespace Indie
          * @param startPosition Where the AI starts in the map
          * @return Entity* The new AI entity
          */
-        Entity *createAi(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath, const std::string &playerName, PlayerComponent::PLAYER_COLOR playerColor, PlayerComponent::PLAYER_START_POSITION startPosition);
+        Entity *createAi(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath, const std::string &playerName, Components::PlayerComponent::PLAYER_COLOR playerColor, Components::PlayerComponent::PLAYER_START_POSITION startPosition);
 
         /**
          * @brief Creates a Wall entity

@@ -9,7 +9,7 @@
 #define LAVASYSTEM_HPP_
 
 #include "ISystem.hpp"
-#include "Components.h"
+#include "MapComponent.hpp"
 
 namespace Indie::Systems
 {

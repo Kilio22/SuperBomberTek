@@ -10,7 +10,7 @@
 
 #include "ContextManager.hpp"
 #include <irrlicht.h>
-#include <map>
+#include <unordered_map>
 #include <string>
 
 namespace Indie::Components
@@ -61,7 +61,7 @@ namespace Indie::Components
         static const std::string RUN_MESH_PATH;
         static const std::string DIE_MESH_PATH;
 
-        std::map<MESH_STATE, irr::scene::IAnimatedMesh *> meshs;
+        std::unordered_map<MESH_STATE, irr::scene::IAnimatedMesh *> meshs;
         irr::video::ITexture *texture;
         MESH_STATE currentMeshState;
     };

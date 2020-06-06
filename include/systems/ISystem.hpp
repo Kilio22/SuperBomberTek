@@ -8,8 +8,8 @@
 #ifndef ISYSTEM_HPP_
 #define ISYSTEM_HPP_
 
-#include "ContextManager.hpp"
 #include "EntityManager.hpp"
+#include <irrlicht.h>
 
 namespace Indie::Systems
 {

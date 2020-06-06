@@ -12,6 +12,8 @@
 #include "MultiScene.hpp"
 #include "ServiceLocator.hpp"
 #include "SoloScene.hpp"
+#include "ImageLoader.hpp"
+#include "SoundManager.hpp"
 
 void Indie::MultiKeybindsScene::skipScene(bool update, bool render, bool subUpdate, bool subRender)
 {
@@ -66,8 +68,6 @@ Indie::MultiKeybindsScene::MultiKeybindsScene(Indie::ContextManager &context)
     p2Keybinds.push_back(std::pair<Indie::Components::KEY_TYPE, std::shared_ptr<Keybind>>(
         Components::KEY_TYPE::DROP, new Keybind(context, irr::EKEY_CODE::KEY_KEY_F)));
 }
-
-Indie::MultiKeybindsScene::~MultiKeybindsScene() {}
 
 void Indie::MultiKeybindsScene::setData(InitGame *initGame)
 {
@@ -174,7 +174,7 @@ void Indie::MultiKeybindsScene::update(irr::f32 ticks)
             selector.setPos(5, 0);
         if (selector.getPos().first == 7) {
             ServiceLocator::getInstance().get<SoundManager>().playSound("menu_lock");
-            selector.setPos(5, 0); 
+            selector.setPos(5, 0);
         }
     }
     /* ================================================================== */

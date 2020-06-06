@@ -7,6 +7,10 @@
 
 #include "Keybind.hpp"
 #include "ServiceLocator.hpp"
+#include "ImageLoader.hpp"
+#include "SoundManager.hpp"
+#include "EventHandler.hpp"
+#include "FileNotFoundException.hpp"
 
 const std::vector<std::pair<irr::EKEY_CODE, irr::core::stringw>> Indie::Keybind::keyCodes = {
     {irr::EKEY_CODE::KEY_TAB, L"Tab"},
@@ -185,16 +189,16 @@ void Indie::Keybind::setStatus(bool status)
     this->status = status;
 }
 
-void Indie::Keybind::setUsedKeys(std::vector<std::pair<Indie::Components::KEY_TYPE, std::unique_ptr<Keybind>>>& list)
+void Indie::Keybind::setUsedKeys(std::vector<std::pair<Indie::Components::KEY_TYPE, std::unique_ptr<Keybind>>> &list)
 {
     usedKeys.clear();
-    for (const auto& it : list)
+    for (const auto &it : list)
         usedKeys.push_back(it.second->getKey());
 }
 
-void Indie::Keybind::setUsedKeys(std::vector<std::pair<Indie::Components::KEY_TYPE, std::shared_ptr<Keybind>>>& list)
+void Indie::Keybind::setUsedKeys(std::vector<std::pair<Indie::Components::KEY_TYPE, std::shared_ptr<Keybind>>> &list)
 {
     usedKeys.clear();
-    for (const auto& it : list)
+    for (const auto &it : list)
         usedKeys.push_back(it.second->getKey());
 }

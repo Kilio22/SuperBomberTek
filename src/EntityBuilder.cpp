@@ -6,6 +6,9 @@
 */
 
 #include "EntityBuilder.hpp"
+#include "ServiceLocator.hpp"
+
+using namespace Indie::Components;
 
 Indie::EntityBuilder::EntityBuilder()
     : entityManager(ServiceLocator::getInstance().get<EntityManager>())
@@ -23,7 +26,7 @@ Indie::Entity *Indie::EntityBuilder::createGround(const irr::core::vector3df &po
 }
 
 Indie::Entity *Indie::EntityBuilder::createPlayer(const irr::core::vector3df &position, const std::string &modelPath, const std::string &texturePath,
-    std::map<irr::EKEY_CODE, KEY_TYPE> keys, const std::string &playerName, PlayerComponent::PLAYER_COLOR playerColor,
+    std::unordered_map<irr::EKEY_CODE, KEY_TYPE> keys, const std::string &playerName, PlayerComponent::PLAYER_COLOR playerColor,
     PlayerComponent::PLAYER_START_POSITION startPosition)
 {
     Entity *entity = this->entityManager.createEntity();

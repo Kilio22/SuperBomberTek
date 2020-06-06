@@ -8,10 +8,9 @@
 #ifndef INPUTSYSTEM_HPP_
 #define INPUTSYSTEM_HPP_
 
-#include <map>
 #include "ISystem.hpp"
-#include "EventHandler.hpp"
-#include "Components.h"
+#include "InputComponent.hpp"
+#include <unordered_map>
 
 namespace Indie::Systems
 {
@@ -24,7 +23,8 @@ namespace Indie::Systems
             void onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const final;
 
         private:
-            std::map<irr::EKEY_CODE, bool> updateKeys(std::map<irr::EKEY_CODE, bool>, Indie::Components::InputComponent *inputComp) const;
+            std::unordered_map<irr::EKEY_CODE, bool> updateKeys(
+                std::unordered_map<irr::EKEY_CODE, bool>, Indie::Components::InputComponent *inputComp) const;
     };
 }
 

@@ -7,6 +7,8 @@
 
 #include "Button.hpp"
 #include "ServiceLocator.hpp"
+#include "ImageLoader.hpp"
+#include "SoundManager.hpp"
 
 Indie::Button::Button(ContextManager &context, bool sounds)
     : playSounds(sounds)

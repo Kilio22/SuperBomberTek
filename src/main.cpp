@@ -8,6 +8,8 @@
 #include "Exceptions.h"
 #include "GameEngine.hpp"
 #include <exception>
+#include <iostream>
+#include <ctime>
 
 int main(void)
 {

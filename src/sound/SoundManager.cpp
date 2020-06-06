@@ -5,7 +5,9 @@
 ** SoundManager
 */
 
+#include "Exceptions.h"
 #include "SoundManager.hpp"
+#include <iostream>
 
 Indie::SoundManager::SoundManager()
     : muted(false)
@@ -53,7 +55,7 @@ void Indie::SoundManager::addSound(const std::string &filepath)
     sf::SoundBuffer buffer;
 
     if (!buffer.loadFromFile(filepath))
-        throw (Indie::Exceptions::FileNotFoundException(ERROR_STR, "File " + filepath + " not found."));
+        throw Indie::Exceptions::FileNotFoundException(ERROR_STR, "File " + filepath + " not found.");
     buffers.insert({ getFileName(filepath), buffer });
 }
 
@@ -62,7 +64,7 @@ const sf::SoundBuffer &Indie::SoundManager::getBuffer(const std::string &key) co
     auto it = buffers.find(key);
 
     if (it == buffers.end())
-        throw (Indie::Exceptions::SoundNotFoundException(ERROR_STR, "Sound " + key + " was never loaded and therefor could not be accessed."));
+        throw Indie::Exceptions::SoundNotFoundException(ERROR_STR, "Sound " + key + " was never loaded and therefor could not be accessed.");
     return it->second;
 }
 

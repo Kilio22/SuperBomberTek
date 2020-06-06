@@ -9,7 +9,7 @@
 #include <algorithm>
 #include "InputComponent.hpp"
 
-Indie::Components::InputComponent::InputComponent(std::map<irr::EKEY_CODE, KEY_TYPE> keys)
+Indie::Components::InputComponent::InputComponent(std::unordered_map<irr::EKEY_CODE, KEY_TYPE> keys)
     : keys(keys)
 {
     for (auto it = keys.begin(); it != keys.end(); ++it) {
@@ -29,12 +29,12 @@ bool Indie::Components::InputComponent::isKeyPressed(KEY_TYPE key) const
     return keyState->second;
 }
 
-const std::map<irr::EKEY_CODE, bool> &Indie::Components::InputComponent::getKeysState() const
+const std::unordered_map<irr::EKEY_CODE, bool> &Indie::Components::InputComponent::getKeysState() const
 {
     return this->keysState;
 }
 
-void Indie::Components::InputComponent::setKeys(std::map<irr::EKEY_CODE, KEY_TYPE> newKeys)
+void Indie::Components::InputComponent::setKeys(std::unordered_map<irr::EKEY_CODE, KEY_TYPE> newKeys)
 {
     this->keys = newKeys;
     this->keysState.clear();
@@ -42,7 +42,7 @@ void Indie::Components::InputComponent::setKeys(std::map<irr::EKEY_CODE, KEY_TYP
         this->keysState.at(it->first) = false;
     }
 }
-void Indie::Components::InputComponent::setKeysState(std::map<irr::EKEY_CODE, bool> newKeyStates)
+void Indie::Components::InputComponent::setKeysState(std::unordered_map<irr::EKEY_CODE, bool> newKeyStates)
 {
     this->keysState = newKeyStates;
 }

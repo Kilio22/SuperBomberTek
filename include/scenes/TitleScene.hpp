@@ -9,7 +9,6 @@
 #define TITLESCENE_HPP_
 
 #include "ContextManager.hpp"
-#include "EventHandler.hpp"
 #include "IScene.hpp"
 #include "ServiceLocator.hpp"
 #define _USE_MATH_DEFINES
@@ -23,7 +22,7 @@ namespace Indie
     {
         public:
         TitleScene(ContextManager &context);
-        ~TitleScene();
+        ~TitleScene() = default;
 
         void init() final;
         void reset() final;

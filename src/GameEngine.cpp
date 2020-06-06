@@ -11,7 +11,9 @@
 #include "SceneManager.hpp"
 #include "Scenes.h"
 #include "ServiceLocator.hpp"
-#include <fstream>
+#include "ImageLoader.hpp"
+#include "MusicManager.hpp"
+#include "SoundManager.hpp"
 #include <iostream>
 
 void Indie::GameEngine::setupMusicManager()

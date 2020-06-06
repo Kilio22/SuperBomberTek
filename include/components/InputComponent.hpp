@@ -9,7 +9,7 @@
 #define INPUTCOMPONENT_HPP_
 
 #include <irrlicht.h>
-#include <map>
+#include <unordered_map>
 
 namespace Indie::Components
 {
@@ -29,7 +29,7 @@ namespace Indie::Components
     class InputComponent
     {
     public:
-        InputComponent(std::map<irr::EKEY_CODE, KEY_TYPE> keys);
+        InputComponent(std::unordered_map<irr::EKEY_CODE, KEY_TYPE> keys);
         ~InputComponent() = default;
 
         /**
@@ -42,21 +42,21 @@ namespace Indie::Components
 
         /**
          * @brief Gets watched keys state
-         * @return const std::map<irr::EKEY_CODE, bool>& List with the state of each watched key
+         * @return const std::unordered_map<irr::EKEY_CODE, bool>& List with the state of each watched key
          */
-        const std::map<irr::EKEY_CODE, bool> &getKeysState(void) const;
+        const std::unordered_map<irr::EKEY_CODE, bool> &getKeysState(void) const;
 
         /**
          * @brief Sets keys to watch
          * @param newKeys Keys to watch
          */
-        void setKeys(std::map<irr::EKEY_CODE, KEY_TYPE> newKeys);
+        void setKeys(std::unordered_map<irr::EKEY_CODE, KEY_TYPE> newKeys);
 
         /**
          * @brief Sets watched keys state
          * @param newKeysState Watched keys state
          */
-        void setKeysState(std::map<irr::EKEY_CODE, bool> newKeysState);
+        void setKeysState(std::unordered_map<irr::EKEY_CODE, bool> newKeysState);
 
         /**
          * @brief Gets KEY_TYPE which corresponds to its irr::EKEY_CODE
@@ -66,8 +66,8 @@ namespace Indie::Components
         KEY_TYPE getKeyType(irr::EKEY_CODE key) const;
 
     private:
-        std::map<irr::EKEY_CODE, KEY_TYPE> keys;
-        std::map<irr::EKEY_CODE, bool> keysState;
+        std::unordered_map<irr::EKEY_CODE, KEY_TYPE> keys;
+        std::unordered_map<irr::EKEY_CODE, bool> keysState;
     };
 }
 

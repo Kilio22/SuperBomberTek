@@ -14,7 +14,6 @@
 #include "UiSelector.hpp"
 #include <memory>
 #include <unordered_map>
-#include <vector>
 
 namespace Indie
 {
@@ -22,7 +21,7 @@ namespace Indie
     {
     public:
         MainMenuScene(ContextManager &context);
-        ~MainMenuScene();
+        ~MainMenuScene() = default;
 
         void init() final;
         void reset() final;

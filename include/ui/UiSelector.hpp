@@ -8,12 +8,13 @@
 #ifndef UISELECTOR_HPP_
 #define UISELECTOR_HPP_
 
-#include "ContextManager.hpp"
-#include "EventHandler.hpp"
+#include <utility>
 #include <irrlicht.h>
 
-namespace Indie {
-    class UiSelector {
+namespace Indie
+{
+    class UiSelector
+    {
         public:
             UiSelector(int sizeX, int sizeY, irr::EKEY_CODE up, irr::EKEY_CODE down, irr::EKEY_CODE left, irr::EKEY_CODE right, bool x = true, bool y = true);
             ~UiSelector() = default;

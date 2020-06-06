@@ -10,10 +10,10 @@
 
 #include "Button.hpp"
 #include "ContextManager.hpp"
-#include "EndGameInfo.hpp"
 #include "IScene.hpp"
 #include "UiSelector.hpp"
-#include "MenuScene.hpp"
+#include "MasterInfo.hpp"
+#include "EndGameInfo.hpp"
 #include <string>
 #include <memory>
 

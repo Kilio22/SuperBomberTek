@@ -10,7 +10,6 @@
 
 #include "MapComponent.hpp"
 #include "ServiceLocator.hpp"
-#include <array>
 #include <irrlicht.h>
 #include <vector>
 

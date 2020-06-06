@@ -6,12 +6,11 @@
 */
 
 #include "InputSystem.hpp"
-#include "Components.h"
-#include "EntityManager.hpp"
+#include "EventHandler.hpp"
 #include <iostream>
 
-std::map<irr::EKEY_CODE, bool> Indie::Systems::InputSystem::updateKeys(
-    std::map<irr::EKEY_CODE, bool> keysStates, Indie::Components::InputComponent *inputComponent) const
+std::unordered_map<irr::EKEY_CODE, bool> Indie::Systems::InputSystem::updateKeys(
+    std::unordered_map<irr::EKEY_CODE, bool> keysStates, Indie::Components::InputComponent *inputComponent) const
 {
     for (auto &keyState : keysStates) {
         if (inputComponent->getKeyType(keyState.first) == Indie::Components::KEY_TYPE::DROP) {

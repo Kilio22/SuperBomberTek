@@ -10,6 +10,9 @@
 #include "MasterInfo.hpp"
 #include "Scenes.h"
 #include "ServiceLocator.hpp"
+#include "SceneManager.hpp"
+#include "MusicManager.hpp"
+#include "SoundManager.hpp"
 #include <filesystem>
 
 Indie::SaveManager::SaveManager()

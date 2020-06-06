@@ -13,29 +13,32 @@
 #include "Parallax.hpp"
 #include "PauseScene.hpp"
 #include "ServiceLocator.hpp"
+#include "MusicManager.hpp"
+#include "Systems.h"
 #include <sstream>
 
 using namespace Indie::Systems;
+using namespace Indie::Components;
 
-const std::vector<std::pair<irr::core::vector3df, Indie::Components::PlayerComponent::PLAYER_START_POSITION>> Indie::GameScene::defaultPositions
-    = { { { 20, 20, 20 }, Indie::Components::PlayerComponent::PLAYER_START_POSITION::DOWN_LEFT },
-          { { 260, 20, 20 }, Indie::Components::PlayerComponent::PLAYER_START_POSITION::DOWN_RIGHT },
-          { { 260, 20, 220 }, Indie::Components::PlayerComponent::PLAYER_START_POSITION::TOP_RIGHT },
-          { { 20, 20, 220 }, Indie::Components::PlayerComponent::PLAYER_START_POSITION::TOP_LEFT } };
+const std::vector<std::pair<irr::core::vector3df, PlayerComponent::PLAYER_START_POSITION>> Indie::GameScene::defaultPositions
+    = { { { 20, 20, 20 }, PlayerComponent::PLAYER_START_POSITION::DOWN_LEFT },
+          { { 260, 20, 20 }, PlayerComponent::PLAYER_START_POSITION::DOWN_RIGHT },
+          { { 260, 20, 220 }, PlayerComponent::PLAYER_START_POSITION::TOP_RIGHT },
+          { { 20, 20, 220 }, PlayerComponent::PLAYER_START_POSITION::TOP_LEFT } };
 
-const std::vector<std::pair<std::string, Indie::Components::PlayerComponent::PLAYER_COLOR>> Indie::GameScene::skins
-    = { { "../ressources/textures/character/Gris.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GENERIC },
-        { "../ressources/textures/character/Bleu.png", Indie::Components::PlayerComponent::PLAYER_COLOR::BLUE },
-        { "../ressources/textures/character/Rouge.png", Indie::Components::PlayerComponent::PLAYER_COLOR::RED },
-        { "../ressources/textures/character/Vert.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GREEN },
-        { "../ressources/textures/character/Violet.png", Indie::Components::PlayerComponent::PLAYER_COLOR::PURPLE },
-        { "../ressources/textures/character/Jaune.png", Indie::Components::PlayerComponent::PLAYER_COLOR::YELLOW },
-        { "../ressources/textures/character/Gris+.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GENERIC },
-        { "../ressources/textures/character/Bleu+.png", Indie::Components::PlayerComponent::PLAYER_COLOR::BLUE },
-        { "../ressources/textures/character/Rouge+.png", Indie::Components::PlayerComponent::PLAYER_COLOR::RED },
-        { "../ressources/textures/character/Vert+.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GREEN },
-        { "../ressources/textures/character/Violet+.png", Indie::Components::PlayerComponent::PLAYER_COLOR::PURPLE },
-        { "../ressources/textures/character/Jaune+.png", Indie::Components::PlayerComponent::PLAYER_COLOR::YELLOW } };
+const std::vector<std::pair<std::string, PlayerComponent::PLAYER_COLOR>> Indie::GameScene::skins
+    = { { "../ressources/textures/character/Gris.png", PlayerComponent::PLAYER_COLOR::GENERIC },
+        { "../ressources/textures/character/Bleu.png", PlayerComponent::PLAYER_COLOR::BLUE },
+        { "../ressources/textures/character/Rouge.png", PlayerComponent::PLAYER_COLOR::RED },
+        { "../ressources/textures/character/Vert.png", PlayerComponent::PLAYER_COLOR::GREEN },
+        { "../ressources/textures/character/Violet.png", PlayerComponent::PLAYER_COLOR::PURPLE },
+        { "../ressources/textures/character/Jaune.png", PlayerComponent::PLAYER_COLOR::YELLOW },
+        { "../ressources/textures/character/Gris+.png", PlayerComponent::PLAYER_COLOR::GENERIC },
+        { "../ressources/textures/character/Bleu+.png", PlayerComponent::PLAYER_COLOR::BLUE },
+        { "../ressources/textures/character/Rouge+.png", PlayerComponent::PLAYER_COLOR::RED },
+        { "../ressources/textures/character/Vert+.png", PlayerComponent::PLAYER_COLOR::GREEN },
+        { "../ressources/textures/character/Violet+.png", PlayerComponent::PLAYER_COLOR::PURPLE },
+        { "../ressources/textures/character/Jaune+.png", PlayerComponent::PLAYER_COLOR::YELLOW } };
 
 Indie::GameScene::GameScene(ContextManager &context)
     : context(context)

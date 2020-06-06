@@ -11,6 +11,8 @@
 #include "IndieException.hpp"
 #include "InitGame.hpp"
 #include "ServiceLocator.hpp"
+#include "SceneManager.hpp"
+#include "SoundManager.hpp"
 
 using namespace Indie::Components;
 

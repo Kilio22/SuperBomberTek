@@ -12,7 +12,6 @@
 #include <vector>
 #include <memory>
 #include <unordered_map>
-#include "Exceptions.h"
 
 namespace Indie {
 class SoundManager {

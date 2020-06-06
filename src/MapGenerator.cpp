@@ -10,6 +10,9 @@
 #include "FileNotFoundException.hpp"
 #include <fstream>
 #include <sstream>
+#include <iterator>
+
+using namespace Indie::Components;
 
 Indie::MapGenerator::MapGenerator(Indie::EntityBuilder &entityBuilder, irr::core::vector2di vector, Indie::Components::MAP_TYPE type,
     Indie::Components::THEME theme, const std::string &mapPath)

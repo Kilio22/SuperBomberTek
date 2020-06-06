@@ -6,6 +6,7 @@
 */
 
 #include "CollisionSystem.hpp"
+#include "SoundManager.hpp"
 
 void Indie::Systems::CollisionSystem::checkCollisionWithPowerDowns(
     EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox, Components::PlayerComponent *playerComponent) const

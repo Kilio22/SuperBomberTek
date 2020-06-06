@@ -34,11 +34,6 @@ Indie::ContextManager::ContextManager(irr::core::dimension2d<irr::u32> size)
 Indie::ContextManager::~ContextManager()
 {
     device->drop();
-    // MusicManager::drop(); // Why
-    // OUI tkt j'allais le virer
-    // Ok frr
-    // Ptn kylio tu del pas ça là je te vois >:c
-    // mdrr c'est encore là
 }
 
 void Indie::ContextManager::displayImage(Image *image, irr::core::position2d<irr::s32> pos, irr::video::SColor color)

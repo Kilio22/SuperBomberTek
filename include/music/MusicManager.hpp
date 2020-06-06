@@ -8,17 +8,12 @@
 #ifndef MUSICMANAGER_HPP_
 #define MUSICMANAGER_HPP_
 
-#include "Exceptions.h"
 #include "Music.hpp"
-#include <SFML/Audio.hpp>
-#include <iostream>
-#include <limits>
 #include <memory>
 #include <vector>
 
 namespace Indie
 {
-
     /**
      * @brief MusicManager class
      */
@@ -72,6 +67,10 @@ namespace Indie
          *
          */
         void pauseMusic();
+
+        /**
+         * @brief Stops the current music
+         */
         void stopMusic();
 
         /**
@@ -104,7 +103,7 @@ namespace Indie
         bool isMusicMuted() const;
 
     private:
-        std::vector<std::unique_ptr<Indie::Music>> musics;
+        std::vector<std::unique_ptr<Music>> musics;
         size_t currentMusic;
         int volume;
         bool isMuted;

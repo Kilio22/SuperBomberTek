@@ -9,13 +9,11 @@
 #define MULTI1SCENE_HPP_
 
 #include "Checkbox.hpp"
-#include "Components.h"
 #include "ContextManager.hpp"
 #include "IScene.hpp"
 #include "UiSelector.hpp"
 #include <memory>
 #include <unordered_map>
-#include <utility>
 #include <vector>
 
 namespace Indie
@@ -25,7 +23,7 @@ namespace Indie
     {
     public:
         MultiScene(ContextManager &context);
-        ~MultiScene();
+        ~MultiScene() = default;
 
         void init() final;
         void reset() final;

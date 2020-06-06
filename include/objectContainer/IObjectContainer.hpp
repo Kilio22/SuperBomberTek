@@ -8,10 +8,12 @@
 #ifndef ICOMPONENTCONTAINER_HPP_
 #define ICOMPONENTCONTAINER_HPP_
 
-namespace Indie {
-    class IObjectContainer {
-        public:
-            virtual ~IObjectContainer() = default;
+namespace Indie
+{
+    class IObjectContainer
+    {
+    public:
+        virtual ~IObjectContainer() = default;
     };
 }
 

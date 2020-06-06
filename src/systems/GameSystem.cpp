@@ -10,6 +10,8 @@
 #include "EndScene.hpp"
 #include "PauseScene.hpp"
 #include "Components.h"
+#include "SceneManager.hpp"
+#include "MusicManager.hpp"
 
 using namespace Indie::Components;
 

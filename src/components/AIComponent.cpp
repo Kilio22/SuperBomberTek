@@ -6,7 +6,6 @@
 */
 
 #include "AIComponent.hpp"
-#include <iostream>
 
 bool Indie::Components::AIComponent::hasMoved(irr::core::vector3df position, irr::core::vector3df nextPosition, AIComponent *ai) const
 {

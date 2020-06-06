@@ -7,7 +7,6 @@
 
 #include "MoveSystem.hpp"
 #include "Components.h"
-#include "EventHandler.hpp"
 
 void Indie::Systems::MoveSystem::onUpdate(irr::f32, Indie::EntityManager &entityManager) const
 {

@@ -9,7 +9,6 @@
 #define MOVECOMPONENT_HPP_
 
 #include "ContextManager.hpp"
-#include <string>
 
 namespace Indie::Components
 {

@@ -8,24 +8,24 @@
 #ifndef MULTIKEYBINDSSCENE_HPP_
 #define MULTIKEYBINDSSCENE_HPP_
 
-#include "Checkbox.hpp"
-#include "Components.h"
+#include "InputComponent.hpp"
 #include "ContextManager.hpp"
 #include "IScene.hpp"
 #include "Keybind.hpp"
 #include "UiSelector.hpp"
+#include "SceneManager.hpp"
 #include <memory>
-#include <utility>
 #include <vector>
 
 namespace Indie
 {
     struct InitGame;
+
     class MultiKeybindsScene : public IScene
     {
     public:
         MultiKeybindsScene(ContextManager &context);
-        ~MultiKeybindsScene();
+        ~MultiKeybindsScene() = default;
 
         void init() final;
         void reset() final;

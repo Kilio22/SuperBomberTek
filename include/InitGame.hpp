@@ -12,7 +12,7 @@
 #include "MapGenerator.hpp"
 #include "PlayerComponent.hpp"
 #include <irrlicht.h>
-#include <map>
+#include <unordered_map>
 #include <string>
 #include <vector>
 
@@ -20,12 +20,12 @@ namespace Indie
 {
     struct PlayerParams {
         std::string playerTexture;
-        std::map<irr::EKEY_CODE, Indie::Components::KEY_TYPE> playerKeys;
+        std::unordered_map<irr::EKEY_CODE, Components::KEY_TYPE> playerKeys;
         Components::PlayerComponent::PLAYER_COLOR playerColor;
     };
 
     struct InitGame {
-        Indie::GameScene::MODE mode = Indie::GameScene::MODE::SOLO;
+        GameScene::MODE mode = GameScene::MODE::SOLO;
         int nbAi = 0;
         Components::THEME mapTheme = Components::THEME::DIRT;
         Components::MAP_TYPE mapType = Components::MAP_TYPE::DEFAULT;

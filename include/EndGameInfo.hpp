@@ -9,7 +9,6 @@
 #define ENDGAME_HPP_
 
 #include <string>
-#include <utility>
 #include <vector>
 
 namespace Indie

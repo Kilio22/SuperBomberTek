@@ -8,7 +8,9 @@
 #include "BombDropSystem.hpp"
 #include "Components.h"
 #include "EntityBuilder.hpp"
-#include <iostream>
+#include "SoundManager.hpp"
+
+using namespace Indie::Components;
 
 std::vector<std::vector<Indie::Components::OBJECT>> Indie::Systems::BombDropSystem::updateMap(
     std::vector<std::vector<Components::OBJECT>> currentMap, irr::f32 midX, irr::f32 midZ) const

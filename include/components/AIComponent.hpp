@@ -8,10 +8,7 @@
 #ifndef AICOMPONENT_HPP_
 #define AICOMPONENT_HPP_
 
-#include "AIComponent.hpp"
 #include "MapComponent.hpp"
-#include "ServiceLocator.hpp"
-#include <array>
 #include <irrlicht.h>
 #include <vector>
 

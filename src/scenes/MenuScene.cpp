@@ -7,6 +7,7 @@
 
 #include "MenuScene.hpp"
 #include "ServiceLocator.hpp"
+#include "MusicManager.hpp"
 #include <filesystem>
 
 const std::string Indie::MenuScene::filepaths[5] = {

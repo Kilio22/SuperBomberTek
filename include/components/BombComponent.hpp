@@ -8,11 +8,8 @@
 #ifndef BOMBCOMPONENT_HPP_
 #define BOMBCOMPONENT_HPP_
 
-#include <irrlicht.h>
-
 namespace Indie::Components
 {
-
     /**
      * @brief Bomb component
      */

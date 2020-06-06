@@ -8,15 +8,16 @@
 #include "IntroScene.hpp"
 #include "CameraNotFoundException.hpp"
 #include "ServiceLocator.hpp"
+#include "SceneManager.hpp"
+#include "MusicManager.hpp"
 
 Indie::IntroScene::IntroScene(ContextManager &context)
     : context(context)
     , camera(nullptr)
     , currentRotationAngle(303.15f, 48.9909f, 0.f)
     , shouldResetTarget(true)
-{}
-
-Indie::IntroScene::~IntroScene() {}
+{
+}
 
 void Indie::IntroScene::init()
 {

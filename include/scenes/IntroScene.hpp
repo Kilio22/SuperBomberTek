@@ -16,7 +16,7 @@ namespace Indie
     {
         public:
         IntroScene(ContextManager &context);
-        ~IntroScene();
+        ~IntroScene() = default;
 
         void init() final;
         void reset() final;

@@ -19,8 +19,8 @@
 #include "PositionComponent.hpp"
 #include "BombComponent.hpp"
 #include "PlayerComponent.hpp"
-
 #include <irrlicht.h>
+
 namespace Indie::Systems
 {
     class AISystem : public ISystem

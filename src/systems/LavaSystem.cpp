@@ -6,6 +6,9 @@
 */
 
 #include "LavaSystem.hpp"
+#include "KillComponent.hpp"
+#include "TimerComponent.hpp"
+#include "PositionComponent.hpp"
 
 using namespace Indie::Components;
 

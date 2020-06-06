@@ -7,6 +7,7 @@
 */
 
 #include "PathFinderSystem.hpp"
+#include <array>
 #include <iomanip>
 
 using namespace Indie::Components;

@@ -10,6 +10,8 @@
 #include "GameScene.hpp"
 #include "Scenes.h"
 #include "ServiceLocator.hpp"
+#include "ImageLoader.hpp"
+#include "SceneManager.hpp"
 
 const std::unordered_map<Indie::PauseScene::PAUSE_ASSETS, std::string> Indie::PauseScene::assets_paths
     = { { Indie::PauseScene::PAUSE_ASSETS::CONTINUE, "../ressources/images/pause/Continue.png" },
@@ -28,8 +30,6 @@ Indie::PauseScene::PauseScene(ContextManager &context)
         this->buttons.insert({ (BUTTON_TYPE)buttonType, std::make_unique<Button>(context) });
     }
 }
-
-Indie::PauseScene::~PauseScene() {}
 
 void Indie::PauseScene::init()
 {
@@ -58,10 +58,10 @@ void Indie::PauseScene::update(irr::f32)
         button.second->update(this->selector.getPos());
     }
     if (this->buttons[BUTTON_TYPE::PLAY]->getStatus() == Button::Status::Pressed || Indie::EventHandler::getInstance().isKeyPressed(irr::KEY_ESCAPE) == true) {
-        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneUpdateActive(false);
-        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneRenderActive(false);
-        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(true);
-        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(true);
+        Indie::ServiceLocator::getInstance().get<SceneManager>().setSubSceneUpdateActive(false);
+        Indie::ServiceLocator::getInstance().get<SceneManager>().setSubSceneRenderActive(false);
+        Indie::ServiceLocator::getInstance().get<SceneManager>().setSceneUpdateActive(true);
+        Indie::ServiceLocator::getInstance().get<SceneManager>().setSceneRenderActive(true);
         for (auto entity : ServiceLocator::getInstance().get<EntityManager>().each<Components::RenderComponent>()) {
             entity->getComponent<Components::RenderComponent>()->getMesh()->setAnimationSpeed(25.f);
         }
@@ -72,19 +72,19 @@ void Indie::PauseScene::update(irr::f32)
     }
     if (this->buttons[BUTTON_TYPE::MENU]->getStatus() == Button::Status::Pressed) {
         ServiceLocator::getInstance().get<EntityManager>().reset();
-        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setScene<Indie::MenuScene>(context);
-        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::MainMenuScene>();
+        Indie::ServiceLocator::getInstance().get<SceneManager>().setScene<MenuScene>(context);
+        Indie::ServiceLocator::getInstance().get<SceneManager>().setSubScene<MainMenuScene>();
         EventHandler::getInstance().resetKeys();
     }
     if (this->buttons[BUTTON_TYPE::RESTART]->getStatus() == Button::Status::Pressed) {
         ServiceLocator::getInstance().get<EntityManager>().reset();
-        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::GameScene>()->reset();
-        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(false);
-        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(true);
-        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::IntroScene>();
-        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneUpdateActive(true);
-        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneRenderActive(true);
-        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<IntroScene>()->skipScene();
+        Indie::ServiceLocator::getInstance().get<SceneManager>().getScene<GameScene>()->reset();
+        Indie::ServiceLocator::getInstance().get<SceneManager>().setSceneUpdateActive(false);
+        Indie::ServiceLocator::getInstance().get<SceneManager>().setSceneRenderActive(true);
+        Indie::ServiceLocator::getInstance().get<SceneManager>().setSubScene<IntroScene>();
+        Indie::ServiceLocator::getInstance().get<SceneManager>().setSubSceneUpdateActive(true);
+        Indie::ServiceLocator::getInstance().get<SceneManager>().setSubSceneRenderActive(true);
+        Indie::ServiceLocator::getInstance().get<SceneManager>().getScene<IntroScene>()->skipScene();
         EventHandler::getInstance().resetKeys();
     }
 }

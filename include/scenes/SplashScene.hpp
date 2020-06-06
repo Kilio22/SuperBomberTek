@@ -9,11 +9,8 @@
 #define SPLASHSCENE_HPP_
 
 #include "ContextManager.hpp"
-#include "EventHandler.hpp"
 #include "IScene.hpp"
-#include "Parallax.hpp"
-#include "ServiceLocator.hpp"
-#include <vector>
+#include <unordered_map>
 
 namespace Indie
 {

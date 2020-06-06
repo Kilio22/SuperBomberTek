@@ -8,6 +8,7 @@
 #include "Parallax.hpp"
 #include "Exceptions.h"
 #include "ServiceLocator.hpp"
+#include "ImageLoader.hpp"
 
 Indie::Parallax::Parallax(ContextManager &context)
     : context(context)
@@ -16,7 +17,7 @@ Indie::Parallax::Parallax(ContextManager &context)
 
 void Indie::Parallax::init(ContextManager &context, const std::string &filepath, irr::core::position2d<irr::s32> size, irr::core::position2d<float> vel)
 {
-    image = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage(filepath.c_str());
+    image = ServiceLocator::getInstance().get<ImageLoader>().getImage(filepath.c_str());
     this->context = context;
     pos = irr::core::position2d<float>(0, 0);
     this->size = size;

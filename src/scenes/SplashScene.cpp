@@ -9,6 +9,11 @@
 #include "MenuScene.hpp"
 #include "ServiceLocator.hpp"
 #include "TitleScene.hpp"
+#include "ImageLoader.hpp"
+#include "SceneManager.hpp"
+#include "MusicManager.hpp"
+#include "EventHandler.hpp"
+#include "ServiceLocator.hpp"
 
 const std::unordered_map<Indie::SplashScene::SPLASH_ASSETS, std::string> Indie::SplashScene::splashPaths
     = { { Indie::SplashScene::SPLASH_ASSETS::BG, "../ressources/images/splash/bg.png" },
@@ -34,8 +39,8 @@ Indie::SplashScene::~SplashScene()
 
 void Indie::SplashScene::init()
 {
-    Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setMusic(0);
-    this->bg = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage(
+    Indie::ServiceLocator::getInstance().get<MusicManager>().setMusic(0);
+    this->bg = Indie::ServiceLocator::getInstance().get<ImageLoader>().getImage(
         this->splashPaths.at(Indie::SplashScene::SPLASH_ASSETS::BG).c_str());
     for (int type = (int)Indie::SplashScene::SPLASH_ASSETS::LOGO; type < (int)Indie::SplashScene::SPLASH_ASSETS::END; type++) {
         Image *newImage = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage(
@@ -61,7 +66,7 @@ void Indie::SplashScene::reset()
 
 void Indie::SplashScene::skipScene(void)
 {
-    auto &sceneManager = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>();
+    auto &sceneManager = Indie::ServiceLocator::getInstance().get<SceneManager>();
 
     sceneManager.setScene<Indie::MenuScene>(this->context);
     sceneManager.setSubScene<Indie::TitleScene>();

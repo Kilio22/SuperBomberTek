@@ -5,10 +5,15 @@
 ** MusicManager
 */
 
+#include "Exceptions.h"
 #include "MusicManager.hpp"
 
 Indie::MusicManager::MusicManager()
-    : musics(), currentMusic(0), volume(100), isMuted(false), isPlaying(false)
+    : musics()
+    , currentMusic(0)
+    , volume(100)
+    , isMuted(false)
+    , isPlaying(false)
 {
 }
 

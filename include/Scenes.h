@@ -10,15 +10,15 @@
 
 #include "EndScene.hpp"
 #include "GameScene.hpp"
-#include "OptionsScene.hpp"
+#include "IntroScene.hpp"
 #include "MainMenuScene.hpp"
 #include "MenuScene.hpp"
-#include "SplashScene.hpp"
-#include "TitleScene.hpp"
-#include "IntroScene.hpp"
+#include "MultiKeybindsScene.hpp"
+#include "MultiScene.hpp"
+#include "OptionsScene.hpp"
 #include "PauseScene.hpp"
 #include "SoloScene.hpp"
-#include "MultiScene.hpp"
-#include "MultiKeybindsScene.hpp"
+#include "SplashScene.hpp"
+#include "TitleScene.hpp"
 
 #endif /* !SCENES_HPP_ */

@@ -7,6 +7,8 @@
 
 #include "UiSelector.hpp"
 #include "ServiceLocator.hpp"
+#include "SoundManager.hpp"
+#include "EventHandler.hpp"
 
 Indie::UiSelector::UiSelector(int sizeX, int sizeY, irr::EKEY_CODE up, irr::EKEY_CODE down, irr::EKEY_CODE left, irr::EKEY_CODE right, bool soundX, bool soundY)
     : posX(0)

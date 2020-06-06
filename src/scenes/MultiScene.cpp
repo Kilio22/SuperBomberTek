@@ -15,6 +15,9 @@
 #include "MultiKeybindsScene.hpp"
 #include "PauseScene.hpp"
 #include "ServiceLocator.hpp"
+#include "ImageLoader.hpp"
+#include "SceneManager.hpp"
+#include "SoundManager.hpp"
 #include <filesystem>
 
 void Indie::MultiScene::skipScene(bool update, bool render, bool subUpdate, bool subRender)
@@ -64,8 +67,6 @@ Indie::MultiScene::MultiScene(Indie::ContextManager &context)
         this->buttons.insert({ (BUTTON_TYPE)buttonType, std::make_unique<Button>(context) });
     }
 }
-
-Indie::MultiScene::~MultiScene() {}
 
 void Indie::MultiScene::init() // Check all paths & init values
 {
@@ -230,7 +231,7 @@ void Indie::MultiScene::renderPost3D()
     std::string tName = (this->initGame->mapTheme == Components::THEME::DIRT) ? "Garden" : "Cobblestone";
     std::string aiAmmount = std::to_string(this->initGame->nbAi);
     std::string timeAmmount = std::to_string((this->initGame->timeLimit) / 60) + ":";
-    std::map<std::string, int> scores_map
+    std::unordered_map<std::string, int> scores_map
         = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo()->scores_map;
     int mapScore = 0;
     if (this->initGame->timeLimit % 60 < 10)

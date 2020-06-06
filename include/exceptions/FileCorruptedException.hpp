@@ -14,7 +14,7 @@ namespace Indie::Exceptions
 {
     class FileCorruptedException : public IndieException
     {
-        public:
+    public:
         FileCorruptedException(const std::string &component, const std::string &message);
         ~FileCorruptedException() = default;
     };

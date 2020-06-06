@@ -16,8 +16,8 @@ namespace Indie
     class MapGenerator
     {
         public:
-        MapGenerator(Indie::EntityBuilder &entityBuilder, irr::core::vector2di vector, Indie::Components::MAP_TYPE type,
-            Indie::Components::THEME theme, const std::string &mapPath);
+        MapGenerator(EntityBuilder &entityBuilder, irr::core::vector2di vector, Components::MAP_TYPE type,
+            Components::THEME theme, const std::string &mapPath);
         ~MapGenerator() = default;
 
         /**
@@ -25,7 +25,7 @@ namespace Indie
          * @param entityManager The entity manager
          * @param entityBuilder The entity builder
          */
-        void generate(Indie::EntityManager &entityManager, Indie::EntityBuilder &entityBuilder);
+        void generate(EntityManager &entityManager, EntityBuilder &entityBuilder);
 
         private:
         void createWallMap(std::vector<std::vector<Components::OBJECT>> &map, irr::core::vector2di dimension);

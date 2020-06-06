@@ -9,14 +9,12 @@
 #define KEYBIND_HPP_
 
 #include "Button.hpp"
-#include "Components.h"
+#include "InputComponent.hpp"
 #include "ContextManager.hpp"
-#include "EventHandler.hpp"
-#include "Exceptions.h"
 #include <irrlicht.h>
 #include <string>
-#include <utility>
 #include <vector>
+#include <memory>
 
 namespace Indie
 {
@@ -32,8 +30,8 @@ namespace Indie
         bool getStatus() const;
         irr::EKEY_CODE getKey() const;
         void setStatus(bool status);
-        void setUsedKeys(std::vector<std::pair<Indie::Components::KEY_TYPE, std::unique_ptr<Keybind>>>& list);
-        void setUsedKeys(std::vector<std::pair<Indie::Components::KEY_TYPE, std::shared_ptr<Keybind>>>& list);
+        void setUsedKeys(std::vector<std::pair<Indie::Components::KEY_TYPE, std::unique_ptr<Keybind>>> &list);
+        void setUsedKeys(std::vector<std::pair<Indie::Components::KEY_TYPE, std::shared_ptr<Keybind>>> &list);
 
         static const std::vector<std::pair<irr::EKEY_CODE, irr::core::stringw>> keyCodes;
         Image *tick;

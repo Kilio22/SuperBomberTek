@@ -9,24 +9,25 @@
 #define SOLOSCENE_HPP_
 
 #include "Checkbox.hpp"
-#include "Components.h"
-#include "ContextManager.hpp"
+#include "InputComponent.hpp"
+#include "PlayerComponent.hpp"
 #include "IScene.hpp"
 #include "Keybind.hpp"
 #include "UiSelector.hpp"
+#include "SceneManager.hpp"
 #include <memory>
-#include <utility>
 #include <vector>
 
 namespace Indie
 {
     struct InitGame;
     struct PlayerParams;
+
     class SoloScene : public IScene
     {
     public:
         SoloScene(ContextManager &context);
-        ~SoloScene();
+        ~SoloScene() = default;
 
         void init() final;
         void reset() final;

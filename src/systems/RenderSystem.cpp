@@ -7,6 +7,7 @@
 
 #include "RenderSystem.hpp"
 #include "Components.h"
+#include "FileNotFoundException.hpp"
 
 void Indie::Systems::RenderSystem::changeBox(Entity *wall, Components::MAP_STATE state) const
 {
@@ -17,7 +18,7 @@ void Indie::Systems::RenderSystem::changeBox(Entity *wall, Components::MAP_STATE
     irr::scene::IAnimatedMeshSceneNode *newAnimatedMesh = nullptr;
 
     if (newMesh == nullptr) {
-        throw Indie::Exceptions::FileNotFoundException("HitboxComponent::HitboxComponent", "Cannot found file: " + renderComponent->getMeshPath());
+        throw Exceptions::FileNotFoundException("HitboxComponent::HitboxComponent", "Cannot found file: " + renderComponent->getMeshPath());
     }
     if (state == Components::MAP_STATE::TRANSPARENT) {
         newAnimatedMesh = contextManager.getSceneManager()->addAnimatedMeshSceneNode(newMesh, 0);

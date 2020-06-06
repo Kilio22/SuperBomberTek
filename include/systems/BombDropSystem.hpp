@@ -9,9 +9,7 @@
 #define BOMBDROPSYSTEM_HPP_
 
 #include "ISystem.hpp"
-#include "Components.h"
-#include "EntityManager.hpp"
-#include "ContextManager.hpp"
+#include "MapComponent.hpp"
 
 namespace Indie::Systems
 {

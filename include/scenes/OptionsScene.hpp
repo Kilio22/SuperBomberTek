@@ -13,7 +13,6 @@
 #include "IScene.hpp"
 #include "UiSelector.hpp"
 #include <memory>
-#include <vector>
 
 namespace Indie
 {
@@ -21,7 +20,7 @@ namespace Indie
     {
     public:
         OptionsScene(ContextManager &context);
-        ~OptionsScene();
+        ~OptionsScene() = default;
 
         void init() final;
         void reset() final;

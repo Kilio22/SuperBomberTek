@@ -8,7 +8,6 @@
 #ifndef CONTEXTMANAGER_HPP_
 #define CONTEXTMANAGER_HPP_
 
-#include <iostream>
 #include <irrlicht.h>
 
 #define POS(x, y) (irr::core::position2d<irr::s32>((irr::s32)x, (irr::s32)y))

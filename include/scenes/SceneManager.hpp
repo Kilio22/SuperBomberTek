@@ -10,7 +10,7 @@
 
 #include "ContextManager.hpp"
 #include "EventHandler.hpp"
-#include "Exceptions.h"
+#include "SceneManagerException.hpp"
 #include "IScene.hpp"
 #include "TypeIndex.hpp"
 #include <memory>
@@ -42,11 +42,6 @@ namespace Indie
 
             scenes.insert({ getTypeIndex<T>(), std::move(ptr) });
         }
-
-        // template <typename T>
-        // void removeScene()
-        // {
-        // }
 
         template <typename T>
         void restartScene()
@@ -84,9 +79,6 @@ namespace Indie
         {
             auto index = getTypeIndex<T>();
 
-            //context->displayImage(loading);
-            //context->getDriver()->endScene();
-            //context->getDriver()->beginScene(true, true, irr::video::SColor(0,0,0,0));
             if (scenes.count(index) == 0)
                 throw Exceptions::SceneManagerException(ERROR_STR, "Scene " + std::string(index.name()) + "does not exist.");
             EventHandler::getInstance().resetKeys();

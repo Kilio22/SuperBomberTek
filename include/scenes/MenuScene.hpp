@@ -13,7 +13,6 @@
 #include "MasterInfo.hpp"
 #include "Parallax.hpp"
 #include <memory>
-#include <utility>
 #include <vector>
 
 namespace Indie
@@ -33,8 +32,8 @@ namespace Indie
 
         void saveHighScoreMap(std::string mapPath, int score);
 
-        Indie::MasterInfo *getMasterInfo(void) const;
-        void setMasterInfo(const Indie::MasterInfo &masterInfo);
+        MasterInfo *getMasterInfo(void) const;
+        void setMasterInfo(const MasterInfo &masterInfo);
 
     private:
         std::string getFileName(std::string const &filepath);
@@ -44,7 +43,7 @@ namespace Indie
 
         ContextManager &context;
         std::vector<std::unique_ptr<Parallax>> parallax;
-        std::unique_ptr<Indie::MasterInfo> masterInfo;
+        std::unique_ptr<MasterInfo> masterInfo;
     };
 }
 

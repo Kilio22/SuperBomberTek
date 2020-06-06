@@ -8,13 +8,17 @@
 #include "OptionsScene.hpp"
 #include "MainMenuScene.hpp"
 #include "ServiceLocator.hpp"
+#include "ImageLoader.hpp"
+#include "SceneManager.hpp"
+#include "MusicManager.hpp"
+#include "SoundManager.hpp"
 
 void Indie::OptionsScene::skipScene(bool update, bool render, bool subUpdate, bool subRender)
 {
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(update);
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(render);
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneUpdateActive(subUpdate);
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneRenderActive(subRender);
+    Indie::ServiceLocator::getInstance().get<SceneManager>().setSceneUpdateActive(update);
+    Indie::ServiceLocator::getInstance().get<SceneManager>().setSceneRenderActive(render);
+    Indie::ServiceLocator::getInstance().get<SceneManager>().setSubSceneUpdateActive(subUpdate);
+    Indie::ServiceLocator::getInstance().get<SceneManager>().setSubSceneRenderActive(subRender);
 }
 
 Indie::OptionsScene::OptionsScene(Indie::ContextManager &context)
@@ -32,8 +36,6 @@ Indie::OptionsScene::OptionsScene(Indie::ContextManager &context)
     musicVolumeSelector.setPos(20, 0);
     soundVolumeSelector.setPos(20, 0);
 }
-
-Indie::OptionsScene::~OptionsScene() {}
 
 void Indie::OptionsScene::init()
 {

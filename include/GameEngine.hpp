@@ -9,10 +9,6 @@
 #define GAMEENGINE_HPP_
 
 #include "ContextManager.hpp"
-#include "Exceptions.h"
-#include "MusicManager.hpp"
-#include "SceneManager.hpp"
-#include "ServiceLocator.hpp"
 
 namespace Indie
 {
@@ -31,7 +27,7 @@ namespace Indie
         void gameLoop(void);
         void setupMusicManager(void);
         void setupSoundManager(void);
-        void setupSceneManager(Indie::ContextManager &context);
+        void setupSceneManager(ContextManager &context);
 
         ContextManager &context;
         Image *loadImage;
