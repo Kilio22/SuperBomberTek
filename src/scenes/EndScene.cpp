@@ -28,9 +28,7 @@ Indie::EndScene::EndScene(ContextManager &context)
 
 void Indie::EndScene::init()
 {
-
     ServiceLocator::getInstance().get<MusicManager>().setMusic(0);
-    ServiceLocator::getInstance().get<MusicManager>().playMusic();
     this->title = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/menu/title.png");
     this->menu.reset(new Button(context));
     this->restart.reset(new Button(context));
