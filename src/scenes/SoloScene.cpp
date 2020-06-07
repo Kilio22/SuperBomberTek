@@ -315,7 +315,7 @@ void Indie::SoloScene::renderPost3D()
     std::string pName = this->getFileName(this->playerParams->playerTexture);
     std::string tName = (this->initGame->mapTheme == Components::THEME::DIRT) ? "Garden" : "Cobblestone";
     std::unordered_map<std::string, int> scores_map
-        = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo()->scores_map;
+        = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo().scores_map;
     int mapScore = 0;
     for (auto score : scores_map) {
         if (score.first == this->getFileName(this->initGame->mapPath)) {

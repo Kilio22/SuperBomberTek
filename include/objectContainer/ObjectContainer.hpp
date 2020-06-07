@@ -9,6 +9,7 @@
 #define COMPONENTCONTAINER_HPP_
 
 #include "IObjectContainer.hpp"
+#include <utility>
 
 namespace Indie
 {

@@ -6,6 +6,8 @@
 */
 
 #include "AISystem.hpp"
+#include "BombComponent.hpp"
+#include "MapComponent.hpp"
 
 using namespace Indie::Components;
 
@@ -40,7 +42,6 @@ void Indie::Systems::AISystem::onUpdate(irr::f32, EntityManager &entityManager) 
             move->setRight(isMoving(DIRECTION::RIGHT, ai));
             move->setLeft(isMoving(DIRECTION::LEFT, ai));
         }
-        // S'il a rien a faire et qu'il a une bombe il va checher une box
         else if (ai->getAction() == ACTION::STANDBY && !hasDropBomb(entityManager, entity->getId())) {
             ai->setAction(ACTION::FIND_BOX);
         }

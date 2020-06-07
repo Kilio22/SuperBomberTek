@@ -32,7 +32,7 @@ namespace Indie
 
         void saveHighScoreMap(std::string mapPath, int score);
 
-        MasterInfo *getMasterInfo(void) const;
+        const MasterInfo &getMasterInfo(void) const;
         void setMasterInfo(const MasterInfo &masterInfo);
 
     private:
@@ -43,7 +43,7 @@ namespace Indie
 
         ContextManager &context;
         std::vector<std::unique_ptr<Parallax>> parallax;
-        std::unique_ptr<MasterInfo> masterInfo;
+        MasterInfo masterInfo;
     };
 }
 

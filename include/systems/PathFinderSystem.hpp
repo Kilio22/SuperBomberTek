@@ -8,17 +8,10 @@
 #ifndef PATHFINDERSYSTEM_HPP_
 #define PATHFINDERSYSTEM_HPP_
 
-#include <irrlicht.h>
-#include <math.h>
 #include "ISystem.hpp"
 #include "EntityManager.hpp"
-#include "AIComponent.hpp"
-#include "BombComponent.hpp"
 #include "PathFinderComponent.hpp"
-#include "PositionComponent.hpp"
-#include "PowerUpComponent.hpp"
-#include "PowerDownComponent.hpp"
-#include "PlayerComponent.hpp"
+#include <irrlicht.h>
 
 namespace Indie::Systems
 {
@@ -30,25 +23,18 @@ namespace Indie::Systems
 
             void onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const final;
 
-
-            int getNbPlayerInZone(std::vector<std::vector<Indie::Components::OBJECT>> map,  EntityManager &entityManager, irr::core::vector2di aiPosition) const;
-
-            void findPosition(std::vector<std::vector<Indie::Components::OBJECT>> &map, Indie::Components::PathFinderComponent *pathFinder, irr::core::vector2di aiPosition) const;
-            void findFirstPosition(std::vector<std::vector<Indie::Components::OBJECT>> &map, std::vector<std::vector<Indie::Components::OBJECT>> &mapBomb, Indie::Components::PathFinderComponent *pathFinder, irr::core::vector2di aiPosition) const;
-
+        private:
             int getCenter(int value) const;
-            bool hasArrived(std::vector<std::vector<Indie::Components::OBJECT>> &map, Indie::Components::PathFinderComponent *pathFinder) const;
             int getDistance2D(irr::core::vector2di v1, irr::core::vector2di v2) const;
-            //set PathFinding
+            void findFirstPosition(std::vector<std::vector<Indie::Components::OBJECT>> &map, std::vector<std::vector<Indie::Components::OBJECT>> &mapBomb, Indie::Components::PathFinderComponent *pathFinder, irr::core::vector2di aiPosition) const;
+            void findPosition(std::vector<std::vector<Indie::Components::OBJECT>> &map, Indie::Components::PathFinderComponent *pathFinder, irr::core::vector2di aiPosition) const;
             void setPathFinding(std::vector<std::vector<Indie::Components::OBJECT>> &map, irr::core::vector2di aiPosition, std::vector<std::vector<Indie::Components::OBJECT>> mapBomb, std::vector<std::vector<Indie::Components::OBJECT>> mapPower) const;
-
-            //Get
             void setShortlessPath(std::vector<std::vector<Indie::Components::OBJECT>> &map, irr::core::vector2di acPos, irr::core::vector2di nextPos) const;
-
-            //set Map
-            void setMapBomb(std::vector<std::vector<Indie::Components::OBJECT>> &map, EntityManager &entityManager) const;
             void setMapPower(std::vector<std::vector<Indie::Components::OBJECT>> &map, EntityManager &entityManager) const;
+            void setMapBomb(std::vector<std::vector<Indie::Components::OBJECT>> &map, EntityManager &entityManager) const;
             void cleanMap(std::vector<std::vector<Indie::Components::OBJECT>> &map) const;
+
+
     };
 }
 

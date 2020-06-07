@@ -36,9 +36,9 @@ namespace Indie
             const Indie::EndGame &getEndGame(void) const;
             void setEndGame(const Indie::EndGame &endGame);
 
-            void increaseXp(Indie::MasterInfo *info);
-
         private:
+            void increaseXp(Indie::MasterInfo &info);
+
             ContextManager &context;
             UiSelector selector;
             std::unique_ptr<Button> menu;

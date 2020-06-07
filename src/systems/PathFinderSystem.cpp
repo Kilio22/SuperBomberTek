@@ -7,8 +7,11 @@
 */
 
 #include "PathFinderSystem.hpp"
-#include <array>
-#include <iomanip>
+#include "AIComponent.hpp"
+#include "BombComponent.hpp"
+#include "PositionComponent.hpp"
+#include "PowerUpComponent.hpp"
+#include "PowerDownComponent.hpp"
 
 using namespace Indie::Components;
 
@@ -39,7 +42,6 @@ void Indie::Systems::PathFinderSystem::onUpdate(irr::f32, Indie::EntityManager &
         mapPathFinding = pathFinder->getMap();
         if (ai->getAction() == ACTION::STANDBY)
             continue;
-        ai->setBehavior((unsigned int)getNbPlayerInZone(map, entityManager, {aiX, aiZ}));
         setPathFinding(mapPathFinding, {aiX, aiZ}, mapBomb, mapPower);
         if (ai->getAction() == ACTION::DODGE) {
             findFirstPosition(mapPathFinding, mapBomb, pathFinder, irr::core::vector2di(aiX, aiZ));
@@ -65,23 +67,6 @@ void Indie::Systems::PathFinderSystem::onUpdate(irr::f32, Indie::EntityManager &
     }
 }
 
-int Indie::Systems::PathFinderSystem::getNbPlayerInZone(std::vector<std::vector<OBJECT>> map,  EntityManager &entityManager, irr::core::vector2di aiPosition) const
-{
-    int nbPlayer = 0;
-
-    setPathFinding(map, irr::core::vector2di(aiPosition.X, aiPosition.Y), map, map);
-    for (auto entity : entityManager.each<PlayerComponent, PositionComponent>()) {
-        auto position = entity->getComponent<PositionComponent>();
-
-        int playerX = (getCenter((int)position->getPosition().X)) / 20;
-        int playerZ = (getCenter((int)position->getPosition().Z)) / 20;
-
-        if (map.at(playerZ).at(playerX) >= static_cast<OBJECT>(6) && !(playerX == aiPosition.X && playerZ == aiPosition.Y))
-            nbPlayer += 1;
-    }
-    return nbPlayer;
-}
-
 int Indie::Systems::PathFinderSystem::getCenter(int value) const
 {
     if (value % 20 < 10) {
@@ -89,11 +74,6 @@ int Indie::Systems::PathFinderSystem::getCenter(int value) const
     } else {
         return value + 20 - (value % 20);
     }
-}
-
-bool Indie::Systems::PathFinderSystem::hasArrived(std::vector<std::vector<OBJECT>> &map, PathFinderComponent *pathFinder) const
-{
-    return map.at(pathFinder->getEndMapPos().Y).at(pathFinder->getEndMapPos().X) != static_cast<OBJECT>(-99);
 }
 
 int Indie::Systems::PathFinderSystem::getDistance2D(irr::core::vector2di v1, irr::core::vector2di v2) const

@@ -16,13 +16,13 @@
 #include "MusicManager.hpp"
 #include "SoundManager.hpp"
 
-static float getPercentage(Indie::MasterInfo *info)
+static float getPercentage(Indie::MasterInfo &info)
 {
     int sumXp = 0;
 
-    for (int i = 0; i < info->lvl + 1; i++)
+    for (int i = 0; i < info.lvl + 1; i++)
         sumXp += i * 250;
-    return (float(info->xp - sumXp) / float((info->lvl + 1) * 250)) * 100.f;
+    return (float(info.xp - sumXp) / float((info.lvl + 1) * 250)) * 100.f;
 }
 
 Indie::EndScene::EndScene(ContextManager &context)
@@ -80,13 +80,13 @@ void Indie::EndScene::renderPre3D() {}
 
 void Indie::EndScene::renderPost3D()
 {
-    MasterInfo *info = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo();
+    MasterInfo info;
     InitGame *gameInfo = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::GameScene>()->getInitGame();
 
     this->menu->draw();
     this->restart->draw();
     context.displayImage(title);
-    unsigned int actualLevel = (unsigned int)floor(((1 + sqrt(1 + 8 * (int)info->xp / 250)) / 2) - 1);
+    unsigned int actualLevel = 0;
 
     // if (this->endGame.matchPlay == MATCH_PLAY::WIN)
     //     font->draw("Gagne", RECT(800, 100, 0, 0), {255, 255, 255, 255});
@@ -97,26 +97,20 @@ void Indie::EndScene::renderPost3D()
     for (size_t i = 0; i < this->endGame.scores.size(); i++)
         font->draw(std::to_string(this->endGame.scores.at(i).second).c_str(), RECT(400, 300 + ((int)i * 50), 0, 0), {255, 255, 255, 255});
 
-    // Save du HighScore
+
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->saveHighScoreMap(gameInfo->mapPath, this->endGame.scores.at(0).second);
-
-    // Increase Xp
+    info = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo();
+    actualLevel = (unsigned int)floor(((1 + sqrt(1 + 8 * (int)info.xp / 250)) / 2) - 1);
     this->increaseXp(info);
-
-    // Level calculator
-    info->lvl = (unsigned int)floor(((1 + sqrt(1 + 8 * (int)info->xp / 250)) / 2) - 1);
-
-    std::cout << getPercentage(info) << std::endl;
-
-    //play sound if player has level up
-    if (actualLevel < info->lvl)
+    info.lvl = (unsigned int)floor(((1 + sqrt(1 + 8 * (int)info.xp / 250)) / 2) - 1);
+    if (actualLevel < info.lvl)
         ServiceLocator::getInstance().get<SoundManager>().playSound("level_up");
+    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->setMasterInfo(info);
 
     font->draw("Xp", RECT(300, 600, 0, 0), {255, 255, 255, 255});
-    font->draw(std::to_string(info->xp).c_str(), RECT(400, 600, 0, 0), {255, 255, 255, 255});
+    font->draw(std::to_string(info.xp).c_str(), RECT(400, 600, 0, 0), {255, 255, 255, 255});
     font->draw("Level", RECT(300, 500, 0, 0), {255, 255, 255, 255});
-    font->draw(std::to_string(info->lvl).c_str(), RECT(400, 500, 0, 0), {255, 255, 255, 255});
-
+    font->draw(std::to_string(info.lvl).c_str(), RECT(400, 500, 0, 0), {255, 255, 255, 255});
 }
 
 void Indie::EndScene::skipScene(bool update, bool render, bool subUpdate, bool subRender)
@@ -137,18 +131,18 @@ void Indie::EndScene::setEndGame(const Indie::EndGame &endGame)
     this->endGame = endGame;
 }
 
-void Indie::EndScene::increaseXp(Indie::MasterInfo *info)
+void Indie::EndScene::increaseXp(Indie::MasterInfo &info)
 {
     if (this->endGame.xp != 0) {
         if (this->endGame.xp < (unsigned int)this->nbXpToSub) {
-            info->xp += this->endGame.xp;
+            info.xp += this->endGame.xp;
             this->endGame.xp = 0;
         }
         else {
             this->xpToAdd += this->nbXpToSub;
             if ((int)floor(this->xpToAdd) >= 1) {
                 this->endGame.xp -= (int)floor(this->xpToAdd);
-                info->xp += (int)floor(this->xpToAdd);
+                info.xp += (int)floor(this->xpToAdd);
                 this->xpToAdd = 0;
             }
         }

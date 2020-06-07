@@ -232,7 +232,7 @@ void Indie::MultiScene::renderPost3D()
     std::string aiAmmount = std::to_string(this->initGame->nbAi);
     std::string timeAmmount = std::to_string((this->initGame->timeLimit) / 60) + ":";
     std::unordered_map<std::string, int> scores_map
-        = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo()->scores_map;
+        = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo().scores_map;
     int mapScore = 0;
     if (this->initGame->timeLimit % 60 < 10)
         timeAmmount += "0";

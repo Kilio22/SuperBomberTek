@@ -230,11 +230,11 @@ void Indie::SaveManager::saveMusicParams(void)
 
 void Indie::SaveManager::saveMasterInfos(void)
 {
-    MasterInfo *info = ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->getMasterInfo();
+    const MasterInfo &info = ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->getMasterInfo();
 
-    this->saveValue({ "LVL", std::to_string((int)info->lvl) });
-    this->saveValue({ "XP", std::to_string((int)info->xp) });
-    for (auto highScoreMap : info->scores_map)
+    this->saveValue({ "LVL", std::to_string((int)info.lvl) });
+    this->saveValue({ "XP", std::to_string((int)info.xp) });
+    for (auto highScoreMap : info.scores_map)
         this->saveValue({ highScoreMap.first, std::to_string((int)highScoreMap.second) });
 }
 

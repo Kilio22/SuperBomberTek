@@ -28,7 +28,7 @@ const irr::core::vector2df Indie::MenuScene::velocities[5] = {
 
 Indie::MenuScene::MenuScene(ContextManager &context)
     : context(context)
-    , masterInfo(std::make_unique<Indie::MasterInfo>())
+    , masterInfo(Indie::MasterInfo())
 {
 }
 
@@ -75,14 +75,14 @@ void Indie::MenuScene::renderPre3D()
 void Indie::MenuScene::renderPost3D() {}
 
 
-Indie::MasterInfo *Indie::MenuScene::getMasterInfo(void) const
+const Indie::MasterInfo &Indie::MenuScene::getMasterInfo(void) const
 {
-    return this->masterInfo.get();
+    return this->masterInfo;
 }
 
 void Indie::MenuScene::setMasterInfo(const Indie::MasterInfo &masterInfo)
 {
-    this->masterInfo = std::make_unique<Indie::MasterInfo>(masterInfo);
+    this->masterInfo = masterInfo;
 }
 
 std::string Indie::MenuScene::getFileName(std::string const &filepath)
@@ -100,10 +100,10 @@ std::string Indie::MenuScene::getFileName(std::string const &filepath)
 
 void Indie::MenuScene::saveHighScoreMap(std::string mapPath, int score)
 {
-    MasterInfo *info = this->getMasterInfo();
+    MasterInfo info = this->getMasterInfo();
     bool isExist = false;
 
-    for (auto &HighScoredMap : info->scores_map) {
+    for (auto &HighScoredMap : info.scores_map) {
         if (getFileName(mapPath) == HighScoredMap.first) {
             if (score > HighScoredMap.second) {
                 isExist = true;
@@ -113,5 +113,6 @@ void Indie::MenuScene::saveHighScoreMap(std::string mapPath, int score)
         }
     }
     if (isExist == false)
-        info->scores_map.insert(std::pair<std::string, int>(getFileName(mapPath), score));
+        info.scores_map.insert(std::pair<std::string, int>(getFileName(mapPath), score));
+    this->setMasterInfo(info);
 }
