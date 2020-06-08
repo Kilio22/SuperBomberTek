@@ -129,7 +129,7 @@ void Indie::Systems::BombExplosionSystem::spawnEffects(const irr::core::vector3d
 
     if (std::rand() % 5 != 0)
         return;
-    if (std::rand() % 5 >= 3) {
+    if (std::rand() % 10 >= 7) {
         index = std::rand() % (int)POWERDOWN_TYPE::NONE;
         ServiceLocator::getInstance().get<EntityBuilder>().createPowerDown(
             position, this->powerDowns.at((POWERDOWN_TYPE)index).first, this->powerDowns.at((POWERDOWN_TYPE)index).second, (POWERDOWN_TYPE)index);
