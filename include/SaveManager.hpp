@@ -24,7 +24,7 @@ namespace Indie
         void saveCurrentSave(void);
         void setCurrentSave(const std::unordered_map<std::string, std::string> &newSave);
         void saveValue(const std::pair<std::string, std::string> &value);
-        std::unordered_map<std::string, std::time_t> getSavedGame(void);
+        std::unordered_map<std::string, time_t> getSavedGame(void);
     private:
         void loadMusicParams(void);
         void loadMasterInfos(void);
