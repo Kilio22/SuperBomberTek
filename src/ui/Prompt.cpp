@@ -65,8 +65,9 @@ const std::vector<std::pair<irr::EKEY_CODE, std::string>> Indie::Prompt::keyCode
     {irr::EKEY_CODE::KEY_KEY_X, "x"},
     {irr::EKEY_CODE::KEY_KEY_Y, "y"},
     {irr::EKEY_CODE::KEY_KEY_Z, "z"},
-    {irr::EKEY_CODE::KEY_SPACE, " "},
+    {irr::EKEY_CODE::KEY_SPACE, "_"},
     {irr::EKEY_CODE::KEY_BACK, ""},
+
 };
 
 Indie::Prompt::Prompt(ContextManager &context)

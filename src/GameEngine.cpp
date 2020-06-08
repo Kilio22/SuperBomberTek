@@ -113,7 +113,7 @@ void Indie::GameEngine::startGame()
     this->setupMusicManager();
     this->setupSceneManager(context);
 
-    ServiceLocator::getInstance().get<SaveManager>().loadSave("../ressources/.saves/default.txt");
+    ServiceLocator::getInstance().get<MusicManager>().setVolume(10);
     ServiceLocator::getInstance().get<MusicManager>().playMusic();
 
     this->context.getDevice()->setEventReceiver(&EventHandler::getInstance());
