@@ -12,7 +12,7 @@
 #include "IScene.hpp"
 #include "InputComponent.hpp"
 #include "Keybind.hpp"
-#include "PlayerComponent.hpp"
+#include "PlayerSkins.hpp"
 #include "SceneManager.hpp"
 #include "UiSelector.hpp"
 #include <memory>
@@ -39,14 +39,9 @@ namespace Indie
         void resetKeybinds(void);
         std::string getFileName(std::string const &filepath);
 
-    public:
-        static const std::vector<std::pair<std::string, Components::PlayerComponent::PLAYER_COLOR>> charaPaths;
+        static const std::vector<std::pair<std::string, unsigned int>> mapPaths;
 
     private:
-        void skipScene(bool update, bool render, bool subUpdate, bool subRender);
-        irr::scene::IAnimatedMeshSceneNode *createTheme(const std::string &filepath);
-        void initGameStruct(SceneManager &sceneManager);
-
         enum class BUTTON_TYPE
         {
             SKIN,
@@ -68,6 +63,10 @@ namespace Indie
 
         static const std::unordered_map<UI_SELECTOR_TYPE, irr::core::vector2di> uiSelectorsSize;
 
+        void skipScene(bool update, bool render, bool subUpdate, bool subRender);
+        irr::scene::IAnimatedMeshSceneNode *createTheme(const std::string &filepath);
+        void initGameStruct(SceneManager &sceneManager);
+
         ContextManager &context;
         std::unordered_map<SoloScene::UI_SELECTOR_TYPE, std::unique_ptr<UiSelector>> uiSelectors;
         std::unordered_map<SoloScene::BUTTON_TYPE, std::unique_ptr<Button>> buttons;
@@ -80,13 +79,11 @@ namespace Indie
         irr::scene::IAnimatedMeshSceneNode *theme1;
         irr::scene::IAnimatedMeshSceneNode *theme2;
         float modelRotation;
-        std::vector<std::string> mapPaths;
+        std::vector<std::string> availableMaps;
+        std::vector<std::pair<std::string, Components::PlayerComponent::PLAYER_COLOR>> availableSkins;
         std::unique_ptr<InitGame> initGame;
         std::unique_ptr<PlayerParams> playerParams;
-        // TODO : XP BAR
-        // TODO : Recup le level et l'xp qqpart. Faudra just set les valeurs du coup.
-        unsigned short int xp;
-        unsigned short int lvl;
+        unsigned int lvl;
     };
 }
 

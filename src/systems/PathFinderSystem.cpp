@@ -12,6 +12,7 @@
 #include "PositionComponent.hpp"
 #include "PowerUpComponent.hpp"
 #include "PowerDownComponent.hpp"
+#include <array>
 
 using namespace Indie::Components;
 

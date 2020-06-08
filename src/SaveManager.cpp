@@ -94,18 +94,12 @@ void Indie::SaveManager::loadMusicParams(void)
 
 void Indie::SaveManager::loadMasterInfos(void)
 {
-    MasterInfo info = {};
-    std::vector<std::string> mapPaths = { "Default", "Random" };
-    std::unordered_map<std::string, std::string> mapsData = {};
+    std::unordered_map<std::string, std::string> mapsData;
+    MasterInfo info;
 
-    for (const auto &entry : std::filesystem::directory_iterator("../ressources/maps/")) {
-        if (entry.is_regular_file() == true) {
-            mapPaths.push_back(ServiceLocator::getInstance().get<SceneManager>().getScene<Indie::SoloScene>()->getFileName(entry.path().u8string()));
-        }
-    }
-    for (const auto &mapPath : mapPaths) {
+    for (const auto &mapPath : SoloScene::mapPaths) {
         const auto &it
-            = std::find_if(this->currentSave.begin(), this->currentSave.end(), [mapPath](const auto &ref) { return ref.first == mapPath; });
+            = std::find_if(this->currentSave.begin(), this->currentSave.end(), [mapPath](const auto &ref) { return ref.first == mapPath.first; });
 
         if (it != this->currentSave.end()) {
             mapsData.insert({ it->first, it->second });

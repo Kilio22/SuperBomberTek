@@ -13,8 +13,8 @@
 namespace Indie
 {
     struct MasterInfo {
-        unsigned short int xp = 0;
-        unsigned short int lvl = 0;
+        unsigned int xp;
+        unsigned int lvl;
         std::unordered_map<std::string, int> scores_map;
     };
 }

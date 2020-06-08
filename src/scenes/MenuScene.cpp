@@ -15,9 +15,7 @@
 const std::string Indie::MenuScene::filepaths[5] = { "../ressources/images/bg_boxes.png", "../ressources/images/clouds.png",
     "../ressources/images/mountains.png", "../ressources/images/trees.png", "../ressources/images/ground.png" };
 
-const irr::core::vector2df Indie::MenuScene::velocities[5] = { irr::core::vector2df((irr::f32)10.f, (irr::f32)10.f),
-    irr::core::vector2df((irr::f32)15.f, (irr::f32)0.000), irr::core::vector2df((irr::f32)20.f, (irr::f32)0.000),
-    irr::core::vector2df((irr::f32)25.f, (irr::f32)0.000), irr::core::vector2df((irr::f32)30.f, (irr::f32)0.000) };
+const irr::core::vector2df Indie::MenuScene::velocities[5] = { { 10.f, 10.f}, { 15.f, 0.f}, { 20.f, 0.f}, { 25.f, 0.f}, { 30.f, 0.f} };
 
 Indie::MenuScene::MenuScene(ContextManager &context)
     : context(context)

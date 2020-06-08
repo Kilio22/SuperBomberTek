@@ -25,7 +25,6 @@ namespace Indie
             void setSize(int sizeX, int sizeY);
             void update();
 
-        protected:
         private:
             int posX;
             int posY;
