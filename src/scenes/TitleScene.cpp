@@ -59,7 +59,7 @@ void Indie::TitleScene::update(irr::f32 ticks)
     }
     if (EventHandler::getInstance().isAnyKeyPressedAtOnce()) {
         ServiceLocator::getInstance().get<SceneManager>().setSubScene<MainMenuScene>();
-        skipScene(true, true, true, true);
+        this->skipScene(true, true, true, true);
         ServiceLocator::getInstance().get<SoundManager>().playSound("title_select");
         EventHandler::getInstance().resetKeys();
     }

@@ -10,35 +10,42 @@
 #include "EntityBuilder.hpp"
 #include "InitGame.hpp"
 #include "MapGenerator.hpp"
+#include "MusicManager.hpp"
 #include "Parallax.hpp"
 #include "PauseScene.hpp"
 #include "ServiceLocator.hpp"
-#include "MusicManager.hpp"
 #include "Systems.h"
 #include <sstream>
 
 using namespace Indie::Systems;
 using namespace Indie::Components;
 
-const std::vector<std::pair<irr::core::vector3df, PlayerComponent::PLAYER_START_POSITION>> Indie::GameScene::defaultPositions
-    = { { { 20, 20, 20 }, PlayerComponent::PLAYER_START_POSITION::DOWN_LEFT },
-          { { 260, 20, 20 }, PlayerComponent::PLAYER_START_POSITION::DOWN_RIGHT },
-          { { 260, 20, 220 }, PlayerComponent::PLAYER_START_POSITION::TOP_RIGHT },
-          { { 20, 20, 220 }, PlayerComponent::PLAYER_START_POSITION::TOP_LEFT } };
+const std::vector<std::pair<irr::core::vector3df, PlayerComponent::PLAYER_START_POSITION>> Indie::GameScene::defaultPositions = {
+    { { 20, 20, 20 }, PlayerComponent::PLAYER_START_POSITION::DOWN_LEFT }, { { 260, 20, 20 }, PlayerComponent::PLAYER_START_POSITION::DOWN_RIGHT },
+    { { 260, 20, 220 }, PlayerComponent::PLAYER_START_POSITION::TOP_RIGHT }, { { 20, 20, 220 }, PlayerComponent::PLAYER_START_POSITION::TOP_LEFT }
+};
 
 const std::vector<std::pair<std::string, PlayerComponent::PLAYER_COLOR>> Indie::GameScene::skins
     = { { "../ressources/textures/character/Gris.png", PlayerComponent::PLAYER_COLOR::GENERIC },
-        { "../ressources/textures/character/Bleu.png", PlayerComponent::PLAYER_COLOR::BLUE },
-        { "../ressources/textures/character/Rouge.png", PlayerComponent::PLAYER_COLOR::RED },
-        { "../ressources/textures/character/Vert.png", PlayerComponent::PLAYER_COLOR::GREEN },
-        { "../ressources/textures/character/Violet.png", PlayerComponent::PLAYER_COLOR::PURPLE },
-        { "../ressources/textures/character/Jaune.png", PlayerComponent::PLAYER_COLOR::YELLOW },
-        { "../ressources/textures/character/Gris+.png", PlayerComponent::PLAYER_COLOR::GENERIC },
-        { "../ressources/textures/character/Bleu+.png", PlayerComponent::PLAYER_COLOR::BLUE },
-        { "../ressources/textures/character/Rouge+.png", PlayerComponent::PLAYER_COLOR::RED },
-        { "../ressources/textures/character/Vert+.png", PlayerComponent::PLAYER_COLOR::GREEN },
-        { "../ressources/textures/character/Violet+.png", PlayerComponent::PLAYER_COLOR::PURPLE },
-        { "../ressources/textures/character/Jaune+.png", PlayerComponent::PLAYER_COLOR::YELLOW } };
+          { "../ressources/textures/character/Bleu.png", PlayerComponent::PLAYER_COLOR::BLUE },
+          { "../ressources/textures/character/Rouge.png", PlayerComponent::PLAYER_COLOR::RED },
+          { "../ressources/textures/character/Vert.png", PlayerComponent::PLAYER_COLOR::GREEN },
+          { "../ressources/textures/character/Violet.png", PlayerComponent::PLAYER_COLOR::PURPLE },
+          { "../ressources/textures/character/Jaune.png", PlayerComponent::PLAYER_COLOR::YELLOW },
+          { "../ressources/textures/character/Gris+.png", PlayerComponent::PLAYER_COLOR::GENERIC },
+          { "../ressources/textures/character/Bleu+.png", PlayerComponent::PLAYER_COLOR::BLUE },
+          { "../ressources/textures/character/Rouge+.png", PlayerComponent::PLAYER_COLOR::RED },
+          { "../ressources/textures/character/Vert+.png", PlayerComponent::PLAYER_COLOR::GREEN },
+          { "../ressources/textures/character/Violet+.png", PlayerComponent::PLAYER_COLOR::PURPLE },
+          { "../ressources/textures/character/Jaune+.png", PlayerComponent::PLAYER_COLOR::YELLOW } };
+
+const std::unordered_map<Indie::GameScene::SKYBOX_TYPE, std::string> Indie::GameScene::skyboxTexturesPath
+    = { { Indie::GameScene::SKYBOX_TYPE::TOP, "../ressources/skybox/skybox_top.png" },
+          { Indie::GameScene::SKYBOX_TYPE::BOTTOM, "../ressources/skybox/skybox_bottom.png" },
+          { Indie::GameScene::SKYBOX_TYPE::LEFT, "../ressources/skybox/skybox_left.png" },
+          { Indie::GameScene::SKYBOX_TYPE::RIGHT, "../ressources/skybox/skybox_right.png" },
+          { Indie::GameScene::SKYBOX_TYPE::FRONT, "../ressources/skybox/skybox_front.png" },
+          { Indie::GameScene::SKYBOX_TYPE::BACK, "../ressources/skybox/skybox_back.png" } };
 
 Indie::GameScene::GameScene(ContextManager &context)
     : context(context)
@@ -50,6 +57,9 @@ Indie::GameScene::GameScene(ContextManager &context)
     this->driver = this->context.getDriver();
     this->sceneManager = this->context.getSceneManager();
     this->font = this->context.getGuiEnv()->getFont("../ressources/font/Banschrift.xml");
+    if (this->font == nullptr) {
+        throw Indie::Exceptions::FileNotFoundException(ERROR_STR, "Cannot open file: \"../ressources/font/Banschrift.xml\"");
+    }
     this->systemManager.addSystem<AISystem>();
     this->systemManager.addSystem<BombDropSystem>();
     this->systemManager.addSystem<BombExplosionSystem>();
@@ -79,6 +89,9 @@ void Indie::GameScene::init()
     int n = 0;
 
     ServiceLocator::getInstance().get<MusicManager>().setMusic(1);
+    if (camera == nullptr) {
+        throw Indie::Exceptions::SceneManagerException(ERROR_STR, "Cannot add camera scene node.");
+    }
     camera->bindTargetAndRotation(true);
     camera->setPosition(irr::core::vector3df(138.577f, 280.f, 65.f));
     camera->setTarget(irr::core::vector3df(138.593f, 280.f, 121.f));
@@ -87,10 +100,19 @@ void Indie::GameScene::init()
     driver->setFog(irr::video::SColor(10, 255, 255, 255), irr::video::EFT_FOG_LINEAR, 200.0f, 2000.0f, 0.005f, false, false);
     sceneManager->addLightSceneNode(camera, irr::core::vector3df(0, 0, 0), irr::video::SColorf(0.1f, 0.1f, 0.1f, 0.0f), 700.0f);
     sceneManager->addLightSceneNode(0, irr::core::vector3df(150, 100, 130), irr::video::SColorf(1.0f, 1.0f, 1.0f, 0.5f), 700.0f);
-    sceneManager->addSkyBoxSceneNode(driver->getTexture("../ressources/skybox/skybox_top.png"),
-        driver->getTexture("../ressources/skybox/skybox_bottom.png"), driver->getTexture("../ressources/skybox/skybox_left.png"),
-        driver->getTexture("../ressources/skybox/skybox_right.png"), driver->getTexture("../ressources/skybox/skybox_front.png"),
-        driver->getTexture("../ressources/skybox/skybox_back.png"));
+    std::unordered_map<Indie::GameScene::SKYBOX_TYPE, irr::video::ITexture *> skyboxTextures;
+
+    for (const auto &value : this->skyboxTexturesPath) {
+        irr::video::ITexture *newTexture = driver->getTexture(value.second.c_str());
+
+        if (newTexture == nullptr) {
+            throw Indie::Exceptions::FileNotFoundException(ERROR_STR, "Cannot found file: " + value.second);
+        }
+        skyboxTextures.insert({ value.first, newTexture });
+    }
+    sceneManager->addSkyBoxSceneNode(skyboxTextures.at(Indie::GameScene::SKYBOX_TYPE::TOP), skyboxTextures.at(Indie::GameScene::SKYBOX_TYPE::BOTTOM),
+        skyboxTextures.at(Indie::GameScene::SKYBOX_TYPE::LEFT), skyboxTextures.at(Indie::GameScene::SKYBOX_TYPE::RIGHT),
+        skyboxTextures.at(Indie::GameScene::SKYBOX_TYPE::FRONT), skyboxTextures.at(Indie::GameScene::SKYBOX_TYPE::BACK));
 
     for (auto player : this->initGame->playersParams) {
         entityBuilder.createPlayer(this->defaultPositions.at(idx).first, "../ressources/animated_mesh/character/character_idle.b3d",

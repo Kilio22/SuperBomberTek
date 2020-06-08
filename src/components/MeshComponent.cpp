@@ -18,21 +18,21 @@ Indie::Components::MeshComponent::MeshComponent(const ContextManager &contextMan
     irr::video::ITexture *newTexture = contextManager.getDriver()->getTexture(texturePath.c_str());
 
     if (newMesh == nullptr) {
-        throw Indie::Exceptions::FileNotFoundException("HitboxComponent::HitboxComponent", "Cannot found file: ");
+        throw Indie::Exceptions::FileNotFoundException(ERROR_STR, "Cannot found file: " + STAND_MESH_PATH);
     }
     if (newTexture == nullptr) {
-        throw Indie::Exceptions::FileNotFoundException("HitboxComponent::HitboxComponent", "Cannot found file: " + texturePath);
+        throw Indie::Exceptions::FileNotFoundException(ERROR_STR, "Cannot found file: " + texturePath);
     }
     this->texture = newTexture;
     this->meshs.insert({MESH_STATE::STAND, newMesh});
     newMesh = contextManager.getSceneManager()->getMesh(RUN_MESH_PATH.c_str());
     if (newMesh == nullptr) {
-        throw Indie::Exceptions::FileNotFoundException("HitboxComponent::HitboxComponent", "Cannot found file: ");
+        throw Indie::Exceptions::FileNotFoundException(ERROR_STR, "Cannot found file: " + RUN_MESH_PATH);
     }
     this->meshs.insert({MESH_STATE::RUN, newMesh});
     newMesh = contextManager.getSceneManager()->getMesh(DIE_MESH_PATH.c_str());
     if (newMesh == nullptr) {
-        throw Indie::Exceptions::FileNotFoundException("HitboxComponent::HitboxComponent", "Cannot found file: ");
+        throw Indie::Exceptions::FileNotFoundException(ERROR_STR, "Cannot found file: " + DIE_MESH_PATH);
     }
     this->meshs.insert({MESH_STATE::DIE, newMesh});
     this->currentMeshState = MESH_STATE::STAND;

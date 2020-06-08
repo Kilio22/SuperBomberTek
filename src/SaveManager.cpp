@@ -53,19 +53,6 @@ void Indie::SaveManager::loadSave(const std::string &filepath)
     this->loadKeybinds();
 }
 
-std::string Indie::SaveManager::getFileName(std::string const &filepath)
-{
-    std::string filename(filepath.c_str());
-    const size_t last_slash_id = filename.find_last_of("\\/");
-
-    if (std::string::npos != last_slash_id)
-        filename.erase(0, last_slash_id + 1);
-    const size_t period_id = filename.rfind('.');
-    if (std::string::npos != period_id)
-        filename.erase(period_id);
-    return (filename);
-}
-
 void Indie::SaveManager::loadMusicParams(void)
 {
     MusicManager &musicManager = ServiceLocator::getInstance().get<MusicManager>();
@@ -112,7 +99,7 @@ void Indie::SaveManager::loadMasterInfos(void)
 
     for (const auto &entry : std::filesystem::directory_iterator("../ressources/maps/")) {
         if (entry.is_regular_file() == true) {
-            mapPaths.push_back(this->getFileName(entry.path().u8string()));
+            mapPaths.push_back(ServiceLocator::getInstance().get<SceneManager>().getScene<Indie::SoloScene>()->getFileName(entry.path().u8string()));
         }
     }
     for (const auto &mapPath : mapPaths) {

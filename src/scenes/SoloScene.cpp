@@ -97,6 +97,9 @@ void Indie::SoloScene::init()
     irr::scene::ICameraSceneNode *camera
         = context.getSceneManager()->addCameraSceneNode(0, irr::core::vector3df(0, 0, -75), irr::core::vector3df(0, 0, 0), -1, true);
 
+    if (camera == nullptr) {
+        throw Indie::Exceptions::SceneManagerException(ERROR_STR, "Cannot add camera scene node.");
+    }
     camera->setTarget(irr::core::vector3df(-52, 0, 0));
     context.getSceneManager()->addLightSceneNode(camera, irr::core::vector3df(0, 0, 0), irr::video::SColorf(0.2f, 0.2f, 0.3f, 0.0f), 400.0f);
     /* ================================================================== */
@@ -109,6 +112,9 @@ void Indie::SoloScene::init()
     // FONT GET
     /* ================================================================== */
     font = context.getGuiEnv()->getFont("../ressources/font/Banschrift.xml");
+    if (font == nullptr) {
+        throw Indie::Exceptions::FileNotFoundException(ERROR_STR, "Cannot open file: \"../ressources/font/Banschrift.xml\"");
+    }
     /* ================================================================== */
     // BUTTONS INIT
     /* ================================================================== */

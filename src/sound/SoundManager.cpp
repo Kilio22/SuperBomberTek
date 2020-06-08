@@ -126,10 +126,6 @@ void Indie::SoundManager::playPitchedSound(const std::string &key, float x, floa
     sound->setVolume((float)(volume * 4));
     sound->setPitch((std::rand() % 200 + 100) / 100.f);
     sound->setRelativeToListener(true);
-    // Dans la doc c'est dit que c'est absolue par défaut, mais quand on le met en relatif c'est bon.
-    // bah enfaite non, c'est des fdp.
-    // Ils ont menti.
-    // C'est tjrs absolu. fuk u è_é
     sound->setPosition(x - sf::Listener::getPosition().x, y - sf::Listener::getPosition().y, z - sf::Listener::getPosition().z);
     toPlay.push_back(std::move(sound));
 }

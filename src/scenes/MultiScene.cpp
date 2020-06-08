@@ -18,15 +18,8 @@
 #include "SceneManager.hpp"
 #include "ServiceLocator.hpp"
 #include "SoundManager.hpp"
+#include "SoloScene.hpp"
 #include <filesystem>
-
-void Indie::MultiScene::skipScene(bool update, bool render, bool subUpdate, bool subRender)
-{
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(update);
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(render);
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneUpdateActive(subUpdate);
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneRenderActive(subRender);
-}
 
 const std::unordered_map<Indie::MultiScene::UI_SELECTOR_TYPE, irr::core::vector2di> Indie::MultiScene::uiSelectorsSize
     = { { Indie::MultiScene::UI_SELECTOR_TYPE::DEFAULT, { 3, 6 } }, { Indie::MultiScene::UI_SELECTOR_TYPE::THEME, { 2, 1 } },
@@ -42,15 +35,12 @@ Indie::MultiScene::MultiScene(Indie::ContextManager &context)
     for (size_t uiSelectorType = (size_t)UI_SELECTOR_TYPE::DEFAULT; uiSelectorType < (size_t)UI_SELECTOR_TYPE::NONE; uiSelectorType++) {
         int x = this->uiSelectorsSize.at((UI_SELECTOR_TYPE)uiSelectorType).X;
         int y = this->uiSelectorsSize.at((UI_SELECTOR_TYPE)uiSelectorType).Y;
+        std::unique_ptr<UiSelector> newUiSelector = std::make_unique<UiSelector>(
+            x, y, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT);
 
-        this->uiSelectors.insert({ (UI_SELECTOR_TYPE)uiSelectorType,
-            std::make_unique<UiSelector>(
-                x, y, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT) });
+        newUiSelector->setBLockSound(true, false);
+        this->uiSelectors.insert({ (UI_SELECTOR_TYPE)uiSelectorType, std::move(newUiSelector) });
     }
-    uiSelectors.at(UI_SELECTOR_TYPE::THEME)->setBLockSound(true, false);
-    uiSelectors.at(UI_SELECTOR_TYPE::MAP)->setBLockSound(true, false);
-    uiSelectors.at(UI_SELECTOR_TYPE::AI)->setBLockSound(true, false);
-    uiSelectors.at(UI_SELECTOR_TYPE::TIME)->setBLockSound(true, false);
     this->modelRotation = 0;
     this->initGame->powerUp = true;
     this->initGame->nbAi = 0;
@@ -77,6 +67,10 @@ void Indie::MultiScene::init() // Check all paths & init values
     // 3D INIT
     irr::scene::ICameraSceneNode *camera
         = context.getSceneManager()->addCameraSceneNode(0, irr::core::vector3df(0, 0, -75), irr::core::vector3df(0, 0, 0), -1, true);
+
+    if (camera == nullptr) {
+        throw Indie::Exceptions::SceneManagerException(ERROR_STR, "Cannot add camera scene node.");
+    }
     camera->setTarget(irr::core::vector3df(-52, 0, 0));
     context.getSceneManager()->addLightSceneNode(camera, irr::core::vector3df(0, 0, 0), irr::video::SColorf(0.2f, 0.2f, 0.3f, 0.0f), 400.0f);
 
@@ -88,6 +82,9 @@ void Indie::MultiScene::init() // Check all paths & init values
     this->whiteBg = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/multi1/WhiteBG.png");
     // FONT GET
     this->font = context.getGuiEnv()->getFont("../ressources/font/Banschrift.xml");
+    if (this->font == nullptr) {
+        throw Indie::Exceptions::FileNotFoundException(ERROR_STR, "Cannot open file: \"../ressources/font/Banschrift.xml\"");
+    }
     // BUTTONS INIT
     this->buttons.at(BUTTON_TYPE::PLAY)->init(context, "../ressources/images/multi1/Suivant.png", 2, 4, POS(0, 0), false);
     this->buttons.at(BUTTON_TYPE::BACK)->init(context, "../ressources/images/multi1/Retour.png", 2, 5, POS(0, 0), false);
@@ -194,7 +191,6 @@ void Indie::MultiScene::update(irr::f32 ticks)
         this->initGame->mapType = (this->uiSelectors[UI_SELECTOR_TYPE::MAP]->getPos().first == 0)
             ? Components::MAP_TYPE::DEFAULT
             : ((this->uiSelectors[UI_SELECTOR_TYPE::MAP]->getPos().first == 1) ? Components::MAP_TYPE::RANDOM : Components::MAP_TYPE::SAVED);
-        std::cout << this->initGame->nbAi << std::endl;
         ServiceLocator::getInstance().get<SceneManager>().getScene<MultiKeybindsScene>()->setData(this->initGame.get());
         ServiceLocator::getInstance().get<SceneManager>().setSubScene<MultiKeybindsScene>();
         skipScene(true, true, true, true);
@@ -230,7 +226,7 @@ void Indie::MultiScene::renderPost3D()
     pUps->draw();
 
     // DISPLAY TEXTS
-    std::string mPath = getFileName(this->initGame->mapPath);
+    std::string mPath = ServiceLocator::getInstance().get<SceneManager>().getScene<Indie::SoloScene>()->getFileName(this->initGame->mapPath);
     std::string tName = (this->initGame->mapTheme == Components::THEME::DIRT) ? "Garden" : "Cobblestone";
     std::string aiAmmount = std::to_string(this->initGame->nbAi);
     std::string timeAmmount = std::to_string((this->initGame->timeLimit) / 60) + ":";
@@ -254,15 +250,10 @@ void Indie::MultiScene::renderPost3D()
     font->draw(aiAmmount.c_str(), RECT(410 - (5 * int(aiAmmount.size())), 384, 0, 0), { 255, 255, 255, 255 });
 }
 
-std::string Indie::MultiScene::getFileName(std::string const &filepath)
+void Indie::MultiScene::skipScene(bool update, bool render, bool subUpdate, bool subRender)
 {
-    std::string filename(filepath.c_str());
-    const size_t last_slash_id = filename.find_last_of("\\/");
-
-    if (std::string::npos != last_slash_id)
-        filename.erase(0, last_slash_id + 1);
-    const size_t period_id = filename.rfind('.');
-    if (std::string::npos != period_id)
-        filename.erase(period_id);
-    return (filename);
+    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(update);
+    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(render);
+    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneUpdateActive(subUpdate);
+    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneRenderActive(subRender);
 }

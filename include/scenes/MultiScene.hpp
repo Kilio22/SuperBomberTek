@@ -33,7 +33,6 @@ namespace Indie
 
     private:
         void skipScene(bool update, bool render, bool subUpdate, bool subRender);
-        std::string getFileName(std::string const &filepath);
         irr::scene::IAnimatedMeshSceneNode *createTheme(const std::string &filepath);
 
     private:

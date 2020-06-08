@@ -16,12 +16,15 @@ Indie::Components::RenderComponent::RenderComponent(std::string const &meshPath,
     irr::video::ITexture *newTexture = contextManager.getDriver()->getTexture(texturePath.c_str());
 
     if (newMesh == nullptr) {
-        throw Indie::Exceptions::FileNotFoundException("HitboxComponent::HitboxComponent", "Cannot found file: " + meshPath);
+        throw Indie::Exceptions::FileNotFoundException(ERROR_STR, "Cannot found file: " + meshPath);
     }
     if (newTexture == nullptr) {
-        throw Indie::Exceptions::FileNotFoundException("HitboxComponent::HitboxComponent", "Cannot found file: " + texturePath);
+        throw Indie::Exceptions::FileNotFoundException(ERROR_STR, "Cannot found file: " + texturePath);
     }
     this->mesh = contextManager.getSceneManager()->addAnimatedMeshSceneNode(newMesh, 0);
+    if (this->mesh == nullptr) {
+        throw Indie::Exceptions::DeviceException(ERROR_STR, "Cannot add animatedMeshSceneNode");
+    }
     this->mesh->setMaterialFlag(irr::video::EMF_LIGHTING, lightSensible);
     this->mesh->setMaterialFlag(irr::video::EMF_FOG_ENABLE, true);
     this->mesh->setMaterialTexture(0, newTexture);

@@ -36,8 +36,6 @@ namespace Indie
         void resetMasterInfos(void);
         void resetKeybinds(void);
 
-        std::string getFileName(std::string const &filepath);
-
         std::unordered_map<std::string, std::string> currentSave;
         std::string currentSavePath;
     };

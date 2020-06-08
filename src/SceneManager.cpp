@@ -6,6 +6,7 @@
 */
 
 #include "SceneManager.hpp"
+#include "FileNotFoundException.hpp"
 #include <algorithm>
 
 Indie::SceneManager::SceneManager()
@@ -29,6 +30,9 @@ void Indie::SceneManager::initLoading(Indie::ContextManager *context)
 {
     this->context = context;
     loading = context->getDriver()->getTexture("../ressources/images/Loading.png");
+    if (loading == nullptr) {
+        Indie::Exceptions::FileNotFoundException(ERROR_STR, "Cannot found file: \"../ressources/images/Loading.png\"");
+    }
 }
 
 void Indie::SceneManager::restartScenes()

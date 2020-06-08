@@ -9,8 +9,8 @@
 #define GAMESCENE_HPP_
 
 #include "IScene.hpp"
-#include "SystemManager.hpp"
 #include "PlayerComponent.hpp"
+#include "SystemManager.hpp"
 
 namespace Indie
 {
@@ -19,7 +19,11 @@ namespace Indie
     class GameScene : public IScene
     {
     public:
-        enum class MODE { SOLO, MULTI };
+        enum class MODE
+        {
+            SOLO,
+            MULTI
+        };
 
         GameScene(ContextManager &context);
         ~GameScene() = default;
@@ -34,8 +38,19 @@ namespace Indie
         void setInitGame(const InitGame &initGame);
 
     private:
+        enum class SKYBOX_TYPE
+        {
+            TOP,
+            BOTTOM,
+            LEFT,
+            RIGHT,
+            FRONT,
+            BACK
+        };
+
         static const std::vector<std::pair<irr::core::vector3df, Components::PlayerComponent::PLAYER_START_POSITION>> defaultPositions;
         static const std::vector<std::pair<std::string, Components::PlayerComponent::PLAYER_COLOR>> skins;
+        static const std::unordered_map<SKYBOX_TYPE, std::string> skyboxTexturesPath;
 
         irr::IrrlichtDevice *device;
         irr::video::IVideoDriver *driver;
