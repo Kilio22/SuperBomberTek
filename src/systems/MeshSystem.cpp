@@ -15,6 +15,9 @@ void Indie::Systems::MeshSystem::changeMesh(const ContextManager &contextManager
     irr::scene::IAnimatedMeshSceneNode *newMeshNode
         = contextManager.getSceneManager()->addAnimatedMeshSceneNode(mesh, renderComp->getMesh()->getParent());
 
+    if (newMeshNode == nullptr) {
+        throw Indie::Exceptions::DeviceException(ERROR_STR, "Cannot add animatedMeshSceneNode");
+    }
     newMeshNode->setMaterialFlag(irr::video::EMF_LIGHTING, true);
     newMeshNode->setMaterialFlag(irr::video::EMF_FOG_ENABLE, true);
     newMeshNode->setMaterialTexture(0, texture);

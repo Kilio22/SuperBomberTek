@@ -114,6 +114,9 @@ void Indie::Keybind::init(std::string const &filepath, int posX, int posY, irr::
     std::copy(filepath.c_str(), filepath.c_str() + filepath.size() - extension.size(), std::back_inserter(strippedFilepath));
 
     font = context.getGuiEnv()->getFont("../ressources/font/Banschrift.xml");
+    if (font == nullptr) {
+        throw Indie::Exceptions::FileNotFoundException(ERROR_STR, "Cannot open file: \"../ressources/font/Banschrift.xml\"");
+    }
     this->pos = pos;
     tick = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage(std::string(strippedFilepath + "_tick" + extension).c_str());
     if (tick == nullptr) {
@@ -167,11 +170,6 @@ void Indie::Keybind::draw()
         button.draw();
         font->draw(keyStr, RECT(pos.X - (5 * int(keyStr.size())), pos.Y, 0, 0), irr::video::SColor(255, 255, 255, 255));
     }
-    // Si jamais on a qu'une keybind c'est cool ça.
-    // Mais comme on en a plusieurs on le fait à la mano.
-    //if (status)
-    //    this->context.displayImage(tick, POS(0,0));
-    // Je laisse ça ici au cas où quand même
 }
 
 bool Indie::Keybind::getStatus() const

@@ -42,7 +42,7 @@ void Indie::SaveManager::loadSave(const std::string &filepath)
     try {
         this->currentSave = Indie::ServiceLocator::getInstance().get<FileParser>().parse(filepath);
     } catch (const std::exception &e) {
-        std::cerr << e.what() << '\n';
+        std::cerr << e.what() << std::endl;
         this->resetMasterInfos();
         this->resetVolume();
         this->resetKeybinds();
@@ -51,19 +51,6 @@ void Indie::SaveManager::loadSave(const std::string &filepath)
     this->loadMusicParams();
     this->loadMasterInfos();
     this->loadKeybinds();
-}
-
-std::string Indie::SaveManager::getFileName(std::string const &filepath)
-{
-    std::string filename(filepath.c_str());
-    const size_t last_slash_id = filename.find_last_of("\\/");
-
-    if (std::string::npos != last_slash_id)
-        filename.erase(0, last_slash_id + 1);
-    const size_t period_id = filename.rfind('.');
-    if (std::string::npos != period_id)
-        filename.erase(period_id);
-    return (filename);
 }
 
 void Indie::SaveManager::loadMusicParams(void)
@@ -100,7 +87,8 @@ void Indie::SaveManager::loadMusicParams(void)
         soundManager.setVolume(soundVolumeValue);
     } catch (const std::exception &e) {
         this->resetVolume();
-        std::cerr << e.what() << '\n';
+        std::cerr << e.what() << std::endl;
+        std::cerr << "Reseting options..." << std::endl;
     }
 }
 
@@ -112,7 +100,7 @@ void Indie::SaveManager::loadMasterInfos(void)
 
     for (const auto &entry : std::filesystem::directory_iterator("../ressources/maps/")) {
         if (entry.is_regular_file() == true) {
-            mapPaths.push_back(this->getFileName(entry.path().u8string()));
+            mapPaths.push_back(ServiceLocator::getInstance().get<SceneManager>().getScene<Indie::SoloScene>()->getFileName(entry.path().u8string()));
         }
     }
     for (const auto &mapPath : mapPaths) {
@@ -144,7 +132,8 @@ void Indie::SaveManager::loadMasterInfos(void)
         ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->setMasterInfo(info);
     } catch (const std::exception &e) {
         this->resetMasterInfos();
-        std::cout << e.what() << std::endl;
+        std::cerr << e.what() << std::endl;
+        std::cerr << "Reseting game informations..." << std::endl;
     }
 }
 
@@ -184,7 +173,8 @@ void Indie::SaveManager::loadKeybinds(void)
         }
     } catch (const std::exception &e) {
         soloScene->resetKeybinds();
-        std::cout << e.what() << std::endl;
+        std::cerr << e.what() << std::endl;
+        std::cerr << "Reseting keybinds..." << std::endl;
     }
 }
 
@@ -193,7 +183,12 @@ void Indie::SaveManager::saveCurrentSave(void)
     this->saveMusicParams();
     this->saveMasterInfos();
     this->saveKeybinds();
-    Indie::ServiceLocator::getInstance().get<FileParser>().writeToFile(this->currentSavePath, this->currentSave);
+    try {
+        Indie::ServiceLocator::getInstance().get<FileParser>().writeToFile(this->currentSavePath, this->currentSave);
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << std::endl;
+        std::cerr << "Can't save game" << std::endl;
+    }
 }
 
 void Indie::SaveManager::saveMusicParams(void)

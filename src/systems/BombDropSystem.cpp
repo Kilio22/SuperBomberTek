@@ -69,12 +69,13 @@ void Indie::Systems::BombDropSystem::onUpdate(irr::f32, EntityManager &entityMan
             if (playerComponent->getWallPass() == true && this->checkBombPositionWallPass(entityManager, (int)midX, (int)midZ) == false) {
                 continue;
             }
-
             auto mapComponent = entityManager.getUniqueEntity<MapComponent>()->getComponent<MapComponent>();
+
             mapComponent->setMap(this->updateMap(mapComponent->getMap(), midX, midZ));
-            ServiceLocator::getInstance().get<SoundManager>().playPitchedSound("bomb_drop", positionComponent->getPosition().X, positionComponent->getPosition().Y, positionComponent->getPosition().Z);
-            entityBuilder.createBomb({ midX, 20.f, midZ }, "../ressources/animated_mesh/bomb/bomb.b3d",
-                "../ressources/textures/bomb/bomb.png", entity->getId(), playerComponent->getBombsRange());
+            ServiceLocator::getInstance().get<SoundManager>().playPitchedSound(
+                "bomb_drop", positionComponent->getPosition().X, positionComponent->getPosition().Y, positionComponent->getPosition().Z);
+            entityBuilder.createBomb({ midX, 20.f, midZ }, "../ressources/animated_mesh/bomb/bomb.b3d", "../ressources/textures/bomb/bomb.png",
+                entity->getId(), playerComponent->getBombsRange());
             playerComponent->setCurrentBombNb(playerComponent->getCurrentBombNb() - 1);
         }
     }

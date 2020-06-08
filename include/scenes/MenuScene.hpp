@@ -37,8 +37,6 @@ namespace Indie
         void setMasterInfo(const MasterInfo &masterInfo);
 
     private:
-        std::string getFileName(std::string const &filepath);
-
         static const irr::core::vector2df velocities[5];
         static const std::string filepaths[5];
 

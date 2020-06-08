@@ -6,20 +6,12 @@
 */
 
 #include "OptionsScene.hpp"
-#include "MainMenuScene.hpp"
-#include "ServiceLocator.hpp"
 #include "ImageLoader.hpp"
-#include "SceneManager.hpp"
+#include "MainMenuScene.hpp"
 #include "MusicManager.hpp"
+#include "SceneManager.hpp"
+#include "ServiceLocator.hpp"
 #include "SoundManager.hpp"
-
-void Indie::OptionsScene::skipScene(bool update, bool render, bool subUpdate, bool subRender)
-{
-    Indie::ServiceLocator::getInstance().get<SceneManager>().setSceneUpdateActive(update);
-    Indie::ServiceLocator::getInstance().get<SceneManager>().setSceneRenderActive(render);
-    Indie::ServiceLocator::getInstance().get<SceneManager>().setSubSceneUpdateActive(subUpdate);
-    Indie::ServiceLocator::getInstance().get<SceneManager>().setSubSceneRenderActive(subRender);
-}
 
 Indie::OptionsScene::OptionsScene(Indie::ContextManager &context)
     : context(context)
@@ -44,7 +36,9 @@ void Indie::OptionsScene::init()
     layout = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/options/Layout.png");
 
     font = context.getGuiEnv()->getFont("../ressources/font/Banschrift.xml");
-
+    if (font == nullptr) {
+        throw Indie::Exceptions::FileNotFoundException(ERROR_STR, "Cannot open file: \"../ressources/font/Banschrift.xml\"");
+    }
     musicVolume->init(context, "../ressources/images/options/Vol2.png", 1, 0, POS(0, 0));
     musicMute->init("../ressources/images/options/Check2.png", 1, 1, POS(0, 0));
     soundVolume->init(context, "../ressources/images/options/Vol1.png", 1, 2, POS(0, 0));
@@ -117,4 +111,12 @@ void Indie::OptionsScene::renderPost3D()
     soundMute->draw();
     font->draw(musicVol.c_str(), irr::core::rect<irr::s32>(1175 - (8 * (musicVol.size() - 1)), 218, 0, 0), irr::video::SColor(255, 255, 255, 255));
     font->draw(soundVol.c_str(), irr::core::rect<irr::s32>(1175 - (8 * (soundVol.size() - 1)), 395, 0, 0), irr::video::SColor(255, 255, 255, 255));
+}
+
+void Indie::OptionsScene::skipScene(bool update, bool render, bool subUpdate, bool subRender)
+{
+    Indie::ServiceLocator::getInstance().get<SceneManager>().setSceneUpdateActive(update);
+    Indie::ServiceLocator::getInstance().get<SceneManager>().setSceneRenderActive(render);
+    Indie::ServiceLocator::getInstance().get<SceneManager>().setSubSceneUpdateActive(subUpdate);
+    Indie::ServiceLocator::getInstance().get<SceneManager>().setSubSceneRenderActive(subRender);
 }

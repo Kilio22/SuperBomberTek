@@ -37,7 +37,6 @@ namespace Indie
     private:
         void skipScene(bool update, bool render, bool subUpdate, bool subRender);
         void initGameStruct(SceneManager &manager);
-        std::string getFileName(std::string const &filepath);
 
     private:
         /* ========== OTHER ========== */

@@ -28,6 +28,8 @@ static float getPercentage(Indie::MasterInfo &info)
 Indie::EndScene::EndScene(ContextManager &context)
     : context(context)
     , selector(1, 2, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
+    , menu(std::make_unique<Button>(context))
+    , restart(std::make_unique<Button>(context))
 {
 }
 
@@ -35,9 +37,10 @@ void Indie::EndScene::init()
 {
     ServiceLocator::getInstance().get<MusicManager>().setMusic(0);
     this->title = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/menu/title.png");
-    this->menu.reset(new Button(context));
-    this->restart.reset(new Button(context));
     this->font = context.getGuiEnv()->getFont("../ressources/font/Banschrift.xml");
+    if (this->font == nullptr) {
+        throw Indie::Exceptions::FileNotFoundException(ERROR_STR, "Cannot open file: \"../ressources/font/Banschrift.xml\"");
+    }
     this->menu->init(context, "../ressources/images/solo/Play.png", 0, 0, POS(0,0));
     this->restart->init(context, "../ressources/images/solo/Retour.png", 0, 1, POS(0,0));
     if (this->endGame.xp != 0) {

@@ -7,12 +7,12 @@
 
 #include "MultiKeybindsScene.hpp"
 #include "GameScene.hpp"
+#include "ImageLoader.hpp"
 #include "InitGame.hpp"
 #include "IntroScene.hpp"
 #include "MultiScene.hpp"
 #include "ServiceLocator.hpp"
 #include "SoloScene.hpp"
-#include "ImageLoader.hpp"
 #include "SoundManager.hpp"
 
 void Indie::MultiKeybindsScene::skipScene(bool update, bool render, bool subUpdate, bool subRender)
@@ -41,6 +41,9 @@ Indie::MultiKeybindsScene::MultiKeybindsScene(Indie::ContextManager &context)
     title = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/multi2/title.png");
     layout = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/multi2/Layout.png");
     font = context.getGuiEnv()->getFont("../ressources/font/Banschrift.xml");
+    if (font == nullptr) {
+        throw Indie::Exceptions::FileNotFoundException(ERROR_STR, "Cannot open file: \"../ressources/font/Banschrift.xml\"");
+    }
     /* ================================================================== */
     // Keybinds p1
     /* ================================================================== */
@@ -251,10 +254,10 @@ void Indie::MultiKeybindsScene::renderPost3D()
     /* ================================================================== */
     // DISPLAY TEXTS
     /* ================================================================== */
-    std::string p1Name
-        = getFileName(ServiceLocator::getInstance().get<SceneManager>().getScene<SoloScene>()->charaPaths[p1CharaSelector.getPos().first].first);
-    std::string p2Name
-        = getFileName(ServiceLocator::getInstance().get<SceneManager>().getScene<SoloScene>()->charaPaths[p2CharaSelector.getPos().first].first);
+    std::string p1Name = ServiceLocator::getInstance().get<SceneManager>().getScene<Indie::SoloScene>()->getFileName(
+        ServiceLocator::getInstance().get<SceneManager>().getScene<SoloScene>()->charaPaths[p1CharaSelector.getPos().first].first);
+    std::string p2Name = ServiceLocator::getInstance().get<SceneManager>().getScene<Indie::SoloScene>()->getFileName(
+        ServiceLocator::getInstance().get<SceneManager>().getScene<SoloScene>()->charaPaths[p2CharaSelector.getPos().first].first);
     font->draw(p1Name.c_str(), RECT(450 - (5 * int(p1Name.size())), 462, 0, 0), { 255, 255, 255, 255 });
     font->draw(p2Name.c_str(), RECT(450 - (5 * int(p2Name.size())), 540, 0, 0), { 255, 255, 255, 255 });
     /* ================================================================== */
@@ -266,17 +269,4 @@ void Indie::MultiKeybindsScene::renderPost3D()
         wasKeyUpdated = (it.second->getStatus()) ? true : wasKeyUpdated;
     if (wasKeyUpdated)
         context.displayImage((pKeybinds.begin())->second->tick);
-}
-
-std::string Indie::MultiKeybindsScene::getFileName(std::string const &filepath)
-{
-    std::string filename(filepath.c_str());
-    const size_t last_slash_id = filename.find_last_of("\\/");
-
-    if (std::string::npos != last_slash_id)
-        filename.erase(0, last_slash_id + 1);
-    const size_t period_id = filename.rfind('.');
-    if (std::string::npos != period_id)
-        filename.erase(period_id);
-    return (filename);
 }

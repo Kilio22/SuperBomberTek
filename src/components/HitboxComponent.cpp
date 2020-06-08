@@ -19,6 +19,9 @@ Indie::Components::HitboxComponent::HitboxComponent(irr::core::vector3df positio
     }
     contextManager.getSceneManager()->getMeshManipulator()->setVertexColors(newMesh, irr::video::SColor(0, 20, 20, 20));
     this->mesh = contextManager.getSceneManager()->addAnimatedMeshSceneNode(newMesh, 0);
+    if (this->mesh == nullptr) {
+        throw Indie::Exceptions::DeviceException(ERROR_STR, "Cannot add animatedMeshSceneNode");
+    }
     this->mesh->setMaterialFlag(irr::video::EMF_LIGHTING, false);
     this->mesh->setMaterialFlag(irr::video::EMF_BACK_FACE_CULLING, false);
     this->mesh->setMaterialType(irr::video::EMT_TRANSPARENT_VERTEX_ALPHA);

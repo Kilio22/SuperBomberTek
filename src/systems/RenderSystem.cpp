@@ -7,6 +7,7 @@
 
 #include "RenderSystem.hpp"
 #include "Components.h"
+#include "DeviceException.hpp"
 #include "FileNotFoundException.hpp"
 
 void Indie::Systems::RenderSystem::changeBox(Entity *wall, Components::MAP_STATE state) const
@@ -22,12 +23,18 @@ void Indie::Systems::RenderSystem::changeBox(Entity *wall, Components::MAP_STATE
     }
     if (state == Components::MAP_STATE::TRANSPARENT) {
         newAnimatedMesh = contextManager.getSceneManager()->addAnimatedMeshSceneNode(newMesh, 0);
+        if (newAnimatedMesh == nullptr) {
+            throw Indie::Exceptions::DeviceException(ERROR_STR, "Cannot add animatedMeshSceneNode");
+        }
         contextManager.getSceneManager()->getMeshManipulator()->setVertexColorAlpha(newAnimatedMesh->getMesh()->getMesh(0), 150);
         newAnimatedMesh->setMaterialFlag(irr::video::EMF_LIGHTING, false);
         newAnimatedMesh->setMaterialFlag(irr::video::EMF_BACK_FACE_CULLING, false);
         newAnimatedMesh->setMaterialType(irr::video::EMT_TRANSPARENT_VERTEX_ALPHA);
     } else {
         newAnimatedMesh = contextManager.getSceneManager()->addAnimatedMeshSceneNode(newMesh, 0);
+        if (newAnimatedMesh == nullptr) {
+            throw Indie::Exceptions::DeviceException(ERROR_STR, "Cannot add animatedMeshSceneNode");
+        }
         newAnimatedMesh->setMaterialFlag(irr::video::EMF_LIGHTING, true);
         newAnimatedMesh->setMaterialFlag(irr::video::EMF_FOG_ENABLE, true);
     }
@@ -65,7 +72,7 @@ void Indie::Systems::RenderSystem::checkMapState(EntityManager &entityManager) c
     if (newMapState != currentState) {
         this->changeBoxes(entityManager, newMapState);
         for (auto map : entityManager.each<Components::MapComponent>()) {
-           map->getComponent<Components::MapComponent>()->setMapState(newMapState);
+            map->getComponent<Components::MapComponent>()->setMapState(newMapState);
         }
     }
 }

@@ -64,7 +64,10 @@ void Indie::GameEngine::setupSceneManager(ContextManager &context)
 Indie::GameEngine::GameEngine()
     : context(ServiceLocator::getInstance().get<ContextManager>())
 {
-    loadImage = context.getDriver()->getTexture("../ressources/images/Loading.png");
+    this->loadImage = context.getDriver()->getTexture("../ressources/images/Loading.png");
+    if (this->loadImage == nullptr) {
+        throw Indie::Exceptions::FileNotFoundException(ERROR_STR, "Cannot found file: \"../ressources/images/Loading.png\"");
+    }
 }
 
 Indie::GameEngine::~GameEngine()

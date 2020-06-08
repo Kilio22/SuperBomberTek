@@ -15,11 +15,13 @@
 
 using namespace Indie::Components;
 
-void Indie::Systems::GameSystem::onUpdate(irr::f32, EntityManager &entityManager) const
+void Indie::Systems::GameSystem::onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const
 {
     auto &sceneManager = ServiceLocator::getInstance().get<SceneManager>();
     auto game = entityManager.getUniqueEntity<GameComponent>()->getComponent<GameComponent>();
 
+    if (game->getTimeToEnd() > 0.f)
+        game->setTimeToEnd(game->getTimeToEnd() - deltaTime);
     if (game->getGameStatus() == MATCH_PLAY::NOT_ENDED && this->isGameEnded(entityManager, game)) {
         ServiceLocator::getInstance().get<MusicManager>().pauseMusic();
         for (auto entity : entityManager.each<PlayerComponent>()) {
@@ -68,8 +70,11 @@ bool Indie::Systems::GameSystem::isGameEnded(EntityManager &entityManager, GameC
         game->setGameStatus(MATCH_PLAY::LOSE);
     else if (playerCount == 1)
         game->setGameStatus(MATCH_PLAY::WIN);
-    else
-        return false;
+    else {
+        if (game->getTimeToEnd() > 0.f)
+            return false;
+        game->setGameStatus(MATCH_PLAY::DRAW);
+    }
     return true;
 }
 
