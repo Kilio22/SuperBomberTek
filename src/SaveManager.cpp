@@ -42,7 +42,7 @@ void Indie::SaveManager::loadSave(const std::string &filepath)
     try {
         this->currentSave = Indie::ServiceLocator::getInstance().get<FileParser>().parse(filepath);
     } catch (const std::exception &e) {
-        std::cerr << e.what() << '\n';
+        std::cerr << e.what() << std::endl;
         this->resetMasterInfos();
         this->resetVolume();
         this->resetKeybinds();
@@ -87,7 +87,8 @@ void Indie::SaveManager::loadMusicParams(void)
         soundManager.setVolume(soundVolumeValue);
     } catch (const std::exception &e) {
         this->resetVolume();
-        std::cerr << e.what() << '\n';
+        std::cerr << e.what() << std::endl;
+        std::cerr << "Reseting options..." << std::endl;
     }
 }
 
@@ -131,7 +132,8 @@ void Indie::SaveManager::loadMasterInfos(void)
         ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->setMasterInfo(info);
     } catch (const std::exception &e) {
         this->resetMasterInfos();
-        std::cout << e.what() << std::endl;
+        std::cerr << e.what() << std::endl;
+        std::cerr << "Reseting game informations..." << std::endl;
     }
 }
 
@@ -171,7 +173,8 @@ void Indie::SaveManager::loadKeybinds(void)
         }
     } catch (const std::exception &e) {
         soloScene->resetKeybinds();
-        std::cout << e.what() << std::endl;
+        std::cerr << e.what() << std::endl;
+        std::cerr << "Reseting keybinds..." << std::endl;
     }
 }
 
@@ -180,7 +183,12 @@ void Indie::SaveManager::saveCurrentSave(void)
     this->saveMusicParams();
     this->saveMasterInfos();
     this->saveKeybinds();
-    Indie::ServiceLocator::getInstance().get<FileParser>().writeToFile(this->currentSavePath, this->currentSave);
+    try {
+        Indie::ServiceLocator::getInstance().get<FileParser>().writeToFile(this->currentSavePath, this->currentSave);
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << std::endl;
+        std::cerr << "Can't save game" << std::endl;
+    }
 }
 
 void Indie::SaveManager::saveMusicParams(void)

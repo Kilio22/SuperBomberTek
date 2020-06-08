@@ -17,8 +17,8 @@
 #include "PauseScene.hpp"
 #include "SceneManager.hpp"
 #include "ServiceLocator.hpp"
-#include "SoundManager.hpp"
 #include "SoloScene.hpp"
+#include "SoundManager.hpp"
 #include <filesystem>
 
 const std::unordered_map<Indie::MultiScene::UI_SELECTOR_TYPE, irr::core::vector2di> Indie::MultiScene::uiSelectorsSize
@@ -175,7 +175,13 @@ void Indie::MultiScene::update(irr::f32 ticks)
     }
     if (buttons.at(BUTTON_TYPE::TIME)->getStatus() == Button::Status::Selected) {
         this->uiSelectors[UI_SELECTOR_TYPE::TIME]->update();
-        this->initGame->timeLimit = (time_t)(this->uiSelectors[UI_SELECTOR_TYPE::TIME]->getPos().first * 5);
+        std::pair<int, int> currentPos = this->uiSelectors[UI_SELECTOR_TYPE::TIME]->getPos();
+
+        if (currentPos.first < 18) {
+            currentPos.first = 18;
+            this->uiSelectors[UI_SELECTOR_TYPE::TIME]->setPos(currentPos.first, currentPos.second);
+        }
+        this->initGame->timeLimit = (time_t)(currentPos.first * 5);
     }
     if (buttons.at(BUTTON_TYPE::AI)->getStatus() == Button::Status::Selected) {
         this->uiSelectors[UI_SELECTOR_TYPE::AI]->update();

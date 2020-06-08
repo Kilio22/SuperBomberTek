@@ -137,7 +137,7 @@ void Indie::GameScene::init()
     mapGenerator.generate(entityManager, entityBuilder);
 
     entityBuilder.createShake();
-    entityManager.createUniqueEntity<GameComponent>();
+    entityManager.createUniqueEntity<GameComponent>((irr::f32)this->initGame->timeLimit);
 
     device->getCursorControl()->setVisible(false);
 }
@@ -199,6 +199,14 @@ void Indie::GameScene::renderPost3D()
         font->draw(irr::core::stringw(ss.str().c_str()), irr::core::rect<irr::s32>(x, y, 0, 0), colors[n]);
         ss.str("");
     }
+    auto gameComponent = this->entityManager.getUniqueEntity<GameComponent>()->getComponent<GameComponent>();
+    int timer = (int)gameComponent->getTimeToEnd();
+    std::string timeAmmount = std::to_string(timer / 60) + ":";
+
+    if (timer % 60 < 10)
+        timeAmmount += "0";
+    timeAmmount += std::to_string(timer % 60);
+    this->font->draw(timeAmmount.c_str(), irr::core::rect<irr::s32>(1280 / 2, 1, 0, 0), irr::video::SColor(255, 255, 255, 255));
 }
 
 Indie::InitGame *Indie::GameScene::getInitGame(void) const
