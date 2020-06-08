@@ -174,6 +174,9 @@ void Indie::SaveManager::loadKeybinds(void)
 
 void Indie::SaveManager::saveCurrentSave(void)
 {
+    if (this->currentSavePath == "") {
+        return;
+    }
     this->saveMusicParams();
     this->saveMasterInfos();
     this->saveKeybinds();
