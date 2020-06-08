@@ -285,7 +285,7 @@ std::unordered_map<std::string, std::time_t> Indie::SaveManager::getSavedGame(vo
         if (entry.is_regular_file() == true && entry.path().extension() == ".txt") {
             auto timeEntry = entry.last_write_time();
             std::time_t cftime = to_time_t(timeEntry);
-            nameSaves.insert({this->getFileName(entry.path().u8string()), cftime});
+            nameSaves.insert({ServiceLocator::getInstance().get<SceneManager>().getScene<Indie::SoloScene>()->getFileName(entry.path().u8string()), cftime});
         }
     }
     return nameSaves;
