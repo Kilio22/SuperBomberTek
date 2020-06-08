@@ -32,6 +32,9 @@ std::unordered_map<std::string, std::string> Indie::FileParser::parse(const std:
         if (values.size() != nbValues)
             throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"" + filepath + "\" corrupted.");
         if (values.size() != 0) {
+            if (data.find(values.at(0)) != data.end()) {
+                throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"" + filepath + "\" corrupted.");
+            }
             if (values.size() == 1)
                 data.insert({ values.at(0), "" });
             else
