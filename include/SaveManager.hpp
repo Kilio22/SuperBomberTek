@@ -11,6 +11,7 @@
 #include <string>
 #include <unordered_map>
 #include <chrono>
+#include <vector>
 
 namespace Indie
 {
@@ -24,7 +25,9 @@ namespace Indie
         void saveCurrentSave(void);
         void setCurrentSave(const std::unordered_map<std::string, std::string> &newSave);
         void saveValue(const std::pair<std::string, std::string> &value);
-        std::unordered_map<std::string, time_t> getSavedGame(void);
+
+        std::unordered_map<std::string, std::string> getCurrentSave(void) const;
+        std::vector<std::pair<std::string, time_t>> getSavedGame(void);
     private:
         void loadMusicParams(void);
         void loadMasterInfos(void);

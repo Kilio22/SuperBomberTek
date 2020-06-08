@@ -31,7 +31,6 @@ namespace Indie
             void renderPre3D() final;
             void renderPost3D() final;
 
-
             const Indie::EndGame &getEndGame(void) const;
             void setEndGame(const Indie::EndGame &endGame);
 

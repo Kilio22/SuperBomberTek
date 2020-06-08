@@ -14,6 +14,7 @@
 #include "ServiceLocator.hpp"
 #include "SoloScene.hpp"
 #include "SoundManager.hpp"
+#include "MenuScene.hpp"
 
 void Indie::MultiKeybindsScene::skipScene(bool update, bool render, bool subUpdate, bool subRender)
 {
@@ -34,10 +35,6 @@ Indie::MultiKeybindsScene::MultiKeybindsScene(Indie::ContextManager &context)
     , p2CharaButton(std::make_unique<Button>(context))
     , initGame(std::make_unique<InitGame>())
 {
-    p1CharaSelector.setSize(int(ServiceLocator::getInstance().get<SceneManager>().getScene<SoloScene>()->charaPaths.size()),
-        1); // On set juste la size en plus petit pour pas qu'il ai accès à des perso mdr
-    p2CharaSelector.setSize(int(ServiceLocator::getInstance().get<SceneManager>().getScene<SoloScene>()->charaPaths.size()),
-        1); // On set juste la size en plus petit pour pas qu'il ai accès à des perso mdr
     title = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/multi2/title.png");
     layout = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/multi2/Layout.png");
     font = context.getGuiEnv()->getFont("../ressources/font/Banschrift.xml");
@@ -132,6 +129,14 @@ void Indie::MultiKeybindsScene::init()
     pKeybinds.reserve(p1Keybinds.size() + p2Keybinds.size());
     pKeybinds.insert(pKeybinds.end(), p1Keybinds.begin(), p1Keybinds.end());
     pKeybinds.insert(pKeybinds.end(), p2Keybinds.begin(), p2Keybinds.end());
+    this->lvl = ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->getMasterInfo().lvl;
+    this->availableSkins.clear();
+    for (auto playerSkin : PlayerSkins::skinPaths) {
+        if (this->lvl >= playerSkin.reqLvl)
+            availableSkins.push_back({ playerSkin.path, playerSkin.color });
+    }
+    p1CharaSelector.setSize((int)this->availableSkins.size(), 1);
+    p2CharaSelector.setSize((int)this->availableSkins.size(), 1);
 }
 
 void Indie::MultiKeybindsScene::reset()
@@ -216,16 +221,15 @@ void Indie::MultiKeybindsScene::initGameStruct(SceneManager &sceneManager)
     PlayerParams p1Params;
     PlayerParams p2Params;
 
-    p1Params.playerColor = sceneManager.getScene<SoloScene>()->charaPaths[p1CharaSelector.getPos().first].second;
-    p1Params.playerTexture = sceneManager.getScene<SoloScene>()->charaPaths[p1CharaSelector.getPos().first].first;
+    p1Params.playerColor = this->availableSkins.at(p1CharaSelector.getPos().first).second;
+    p1Params.playerTexture = this->availableSkins.at(p1CharaSelector.getPos().first).first;
     for (auto &i : p1Keybinds)
         p1Params.playerKeys.insert({ i.second->getKey(), i.first });
-    p2Params.playerColor = sceneManager.getScene<SoloScene>()->charaPaths[p2CharaSelector.getPos().first].second;
-    p2Params.playerTexture = sceneManager.getScene<SoloScene>()->charaPaths[p2CharaSelector.getPos().first].first;
+    p2Params.playerColor = this->availableSkins.at(p2CharaSelector.getPos().first).second;
+    p2Params.playerTexture = this->availableSkins.at(p2CharaSelector.getPos().first).first;
     for (auto &i : p2Keybinds)
         p2Params.playerKeys.insert({ i.second->getKey(), i.first });
     this->initGame->mode = GameScene::MODE::MULTI;
-    this->initGame->playersParams = {};
     this->initGame->playersParams.push_back({ p1Params });
     this->initGame->playersParams.push_back({ p2Params });
     sceneManager.getScene<GameScene>()->setInitGame(*this->initGame);
@@ -254,10 +258,10 @@ void Indie::MultiKeybindsScene::renderPost3D()
     /* ================================================================== */
     // DISPLAY TEXTS
     /* ================================================================== */
-    std::string p1Name = ServiceLocator::getInstance().get<SceneManager>().getScene<Indie::SoloScene>()->getFileName(
-        ServiceLocator::getInstance().get<SceneManager>().getScene<SoloScene>()->charaPaths[p1CharaSelector.getPos().first].first);
-    std::string p2Name = ServiceLocator::getInstance().get<SceneManager>().getScene<Indie::SoloScene>()->getFileName(
-        ServiceLocator::getInstance().get<SceneManager>().getScene<SoloScene>()->charaPaths[p2CharaSelector.getPos().first].first);
+    std::string p1Name = ServiceLocator::getInstance().get<SceneManager>().getScene<SoloScene>()->getFileName(
+        this->availableSkins.at(p1CharaSelector.getPos().first).first);
+    std::string p2Name = ServiceLocator::getInstance().get<SceneManager>().getScene<SoloScene>()->getFileName(
+        this->availableSkins.at(p2CharaSelector.getPos().first).first);
     font->draw(p1Name.c_str(), RECT(450 - (5 * int(p1Name.size())), 462, 0, 0), { 255, 255, 255, 255 });
     font->draw(p2Name.c_str(), RECT(450 - (5 * int(p2Name.size())), 540, 0, 0), { 255, 255, 255, 255 });
     /* ================================================================== */

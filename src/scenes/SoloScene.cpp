@@ -19,19 +19,14 @@
 #include <filesystem>
 #include <fstream>
 
-const std::vector<std::pair<std::string, Indie::Components::PlayerComponent::PLAYER_COLOR>> Indie::SoloScene::charaPaths {
-    { "../ressources/textures/character/Gris.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GENERIC },
-    { "../ressources/textures/character/Bleu.png", Indie::Components::PlayerComponent::PLAYER_COLOR::BLUE },
-    { "../ressources/textures/character/Rouge.png", Indie::Components::PlayerComponent::PLAYER_COLOR::RED },
-    { "../ressources/textures/character/Vert.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GREEN },
-    { "../ressources/textures/character/Violet.png", Indie::Components::PlayerComponent::PLAYER_COLOR::PURPLE },
-    { "../ressources/textures/character/Jaune.png", Indie::Components::PlayerComponent::PLAYER_COLOR::YELLOW },
-    { "../ressources/textures/character/Gris+.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GENERIC },
-    { "../ressources/textures/character/Bleu+.png", Indie::Components::PlayerComponent::PLAYER_COLOR::BLUE },
-    { "../ressources/textures/character/Rouge+.png", Indie::Components::PlayerComponent::PLAYER_COLOR::RED },
-    { "../ressources/textures/character/Vert+.png", Indie::Components::PlayerComponent::PLAYER_COLOR::GREEN },
-    { "../ressources/textures/character/Violet+.png", Indie::Components::PlayerComponent::PLAYER_COLOR::PURPLE },
-    { "../ressources/textures/character/Jaune+.png", Indie::Components::PlayerComponent::PLAYER_COLOR::YELLOW }
+const std::vector<std::pair<std::string, unsigned int>> Indie::SoloScene::mapPaths {
+    { "Defaut", 0U },
+    { "Procedurale", 0U },
+    { "../ressources/maps/Lagon.supermap", 2U },
+    { "../ressources/maps/Esport.supermap", 4U },
+    { "../ressources/maps/Maze.supermap", 6U },
+    { "../ressources/maps/Suico.supermap", 8U },
+    { "../ressources/maps/Empty.supermap", 10U },
 };
 
 const std::unordered_map<Indie::SoloScene::UI_SELECTOR_TYPE, irr::core::vector2di> Indie::SoloScene::uiSelectorsSize
@@ -58,16 +53,7 @@ Indie::SoloScene::SoloScene(Indie::ContextManager &context)
     uiSelectors.at(Indie::SoloScene::UI_SELECTOR_TYPE::MAP)->setBLockSound(true, false);
     this->initGame->powerUp = true;
     this->pUps->setStatus(this->initGame->powerUp);
-    this->uiSelectors[UI_SELECTOR_TYPE::SKIN]->setSize(int(charaPaths.size()), 1);
     this->modelRotation = 0;
-    this->mapPaths.push_back("Default");
-    this->mapPaths.push_back("Random");
-    for (const auto &entry : std::filesystem::directory_iterator("../ressources/maps/")) {
-        if (entry.is_regular_file() == true) {
-            this->mapPaths.push_back(entry.path().u8string());
-        }
-    }
-    this->uiSelectors[UI_SELECTOR_TYPE::MAP]->setSize(int(mapPaths.size()), 1);
     for (size_t buttonType = (size_t)BUTTON_TYPE::SKIN; buttonType < (size_t)BUTTON_TYPE::NONE; buttonType++) {
         this->buttons.insert({ (BUTTON_TYPE)buttonType, std::make_unique<Button>(context) });
     }
@@ -146,11 +132,26 @@ void Indie::SoloScene::init()
     std::find_if(keybinds.begin(), keybinds.end(), [](const auto &var) {
         return (var.first == Indie::Components::KEY_TYPE::DROP);
     })->second->init("../ressources/images/solo/KB_Bar.png", 3, 5, POS(456, 547));
-    // Some inits :
-    this->playerParams->playerTexture = charaPaths[this->uiSelectors[UI_SELECTOR_TYPE::SKIN]->getPos().first].first;
-    this->playerParams->playerColor = charaPaths[this->uiSelectors[UI_SELECTOR_TYPE::SKIN]->getPos().first].second;
+    /* ================================================================== */
+    // OTHER INIT
+    /* ================================================================== */
+    this->lvl = ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->getMasterInfo().lvl;
+    this->availableMaps.clear();
+    for (auto [mapPath, reqLvl] : this->mapPaths) {
+        if (this->lvl >= reqLvl)
+            this->availableMaps.push_back(mapPath);
+    }
+    this->uiSelectors[UI_SELECTOR_TYPE::MAP]->setSize((int)this->availableMaps.size(), 1);
+    this->availableSkins.clear();
+    for (auto playerSkin : PlayerSkins::skinPaths) {
+        if (this->lvl >= playerSkin.reqLvl)
+            availableSkins.push_back({ playerSkin.path, playerSkin.color });
+    }
+    this->uiSelectors[UI_SELECTOR_TYPE::SKIN]->setSize((int)availableSkins.size(), 1);
+    this->playerParams->playerTexture = availableSkins[this->uiSelectors[UI_SELECTOR_TYPE::SKIN]->getPos().first].first;
+    this->playerParams->playerColor = availableSkins[this->uiSelectors[UI_SELECTOR_TYPE::SKIN]->getPos().first].second;
     this->playerParams->playerKeys.clear();
-    this->initGame->mapPath = mapPaths[this->uiSelectors[UI_SELECTOR_TYPE::MAP]->getPos().first];
+    this->initGame->mapPath = availableMaps.at(this->uiSelectors[UI_SELECTOR_TYPE::MAP]->getPos().first);
     this->initGame->mapTheme = (this->uiSelectors[UI_SELECTOR_TYPE::THEME]->getPos().first == 0) ? Components::THEME::DIRT : Components::THEME::STONE;
     this->theme1 = this->createTheme("../ressources/static_mesh/map1model.mc.ply");
     this->theme2 = this->createTheme("../ressources/static_mesh/map2model.mc.ply");
@@ -236,12 +237,12 @@ void Indie::SoloScene::update(irr::f32 ticks)
     /* ================================================================== */
     if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().first == 1 && this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().second == 1) {
         this->uiSelectors[UI_SELECTOR_TYPE::SKIN]->update();
-        this->playerParams->playerTexture = charaPaths[this->uiSelectors[UI_SELECTOR_TYPE::SKIN]->getPos().first].first;
-        this->playerParams->playerColor = charaPaths[this->uiSelectors[UI_SELECTOR_TYPE::SKIN]->getPos().first].second;
+        this->playerParams->playerTexture = availableSkins.at(this->uiSelectors[UI_SELECTOR_TYPE::SKIN]->getPos().first).first;
+        this->playerParams->playerColor = availableSkins.at(this->uiSelectors[UI_SELECTOR_TYPE::SKIN]->getPos().first).second;
     }
     if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().first == 1 && this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().second == 0) {
         this->uiSelectors[UI_SELECTOR_TYPE::MAP]->update();
-        this->initGame->mapPath = mapPaths[this->uiSelectors[UI_SELECTOR_TYPE::MAP]->getPos().first];
+        this->initGame->mapPath = availableMaps.at(this->uiSelectors[UI_SELECTOR_TYPE::MAP]->getPos().first);
     }
     if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().first == 1 && this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().second == 2) {
         this->uiSelectors[UI_SELECTOR_TYPE::THEME]->update();
@@ -320,9 +321,9 @@ void Indie::SoloScene::renderPost3D()
     std::string mPath = this->getFileName(this->initGame->mapPath);
     std::string pName = this->getFileName(this->playerParams->playerTexture);
     std::string tName = (this->initGame->mapTheme == Components::THEME::DIRT) ? "Garden" : "Cobblestone";
-    std::unordered_map<std::string, int> scores_map
-        = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo().scores_map;
+    auto scores_map = ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->getMasterInfo().scores_map;
     int mapScore = 0;
+
     for (auto score : scores_map) {
         if (score.first == this->getFileName(this->initGame->mapPath)) {
             mapScore = score.second;

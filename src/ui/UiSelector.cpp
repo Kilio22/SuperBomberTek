@@ -26,7 +26,7 @@ Indie::UiSelector::UiSelector(int sizeX, int sizeY, irr::EKEY_CODE up, irr::EKEY
 
 std::pair<int, int> Indie::UiSelector::getPos() const
 {
-    return std::pair<int, int>(posX, posY);
+    return { posX, posY };
 }
 
 void Indie::UiSelector::setBLockSound(bool x, bool y)
