@@ -7,7 +7,7 @@
 
 #include "TitleScene.hpp"
 #include "Exceptions.h"
-#include "MainMenuScene.hpp"
+#include "SaveScene.hpp"
 #include "ServiceLocator.hpp"
 #include "ImageLoader.hpp"
 #include "SceneManager.hpp"
@@ -44,7 +44,7 @@ void Indie::TitleScene::skipScene(bool update, bool render, bool subUpdate, bool
 {
     auto &sceneManager = Indie::ServiceLocator::getInstance().get<SceneManager>();
 
-    sceneManager.setSubScene<MainMenuScene>();
+    sceneManager.setSubScene<SaveScene>();
     sceneManager.setSceneUpdateActive(update);
     sceneManager.setSceneRenderActive(render);
     sceneManager.setSubSceneUpdateActive(subUpdate);
@@ -58,7 +58,7 @@ void Indie::TitleScene::update(irr::f32 ticks)
         return;
     }
     if (EventHandler::getInstance().isAnyKeyPressedAtOnce()) {
-        ServiceLocator::getInstance().get<SceneManager>().setSubScene<MainMenuScene>();
+        ServiceLocator::getInstance().get<SceneManager>().setSubScene<SaveScene>();
         this->skipScene(true, true, true, true);
         ServiceLocator::getInstance().get<SoundManager>().playSound("title_select");
         EventHandler::getInstance().resetKeys();

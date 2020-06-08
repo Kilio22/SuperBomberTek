@@ -219,6 +219,11 @@ void Indie::SaveManager::setCurrentSave(const std::unordered_map<std::string, st
     this->currentSave = newSave;
 }
 
+std::unordered_map<std::string, std::string> Indie::SaveManager::getCurrentSave(void) const
+{
+    return this->currentSave;
+}
+
 void Indie::SaveManager::saveValue(const std::pair<std::string, std::string> &value)
 {
     if (std::find_if(this->currentSave.begin(), this->currentSave.end(), [value](const auto &ref) { return ref.first == value.first; })
@@ -271,15 +276,15 @@ time_t to_time_t(TP tp)
     return system_clock::to_time_t(sctp);
 }
 
-std::unordered_map<std::string, time_t> Indie::SaveManager::getSavedGame(void)
+std::vector<std::pair<std::string, time_t>> Indie::SaveManager::getSavedGame(void)
 {
-    std::unordered_map<std::string, time_t> nameSaves;
+    std::vector<std::pair<std::string, time_t>> nameSaves;
 
     for (const auto &entry : std::filesystem::directory_iterator("../ressources/.saves/")) {
         if (entry.is_regular_file() == true && entry.path().extension() == ".txt") {
             auto timeEntry = entry.last_write_time();
             time_t cftime = to_time_t(timeEntry);
-            nameSaves.insert({ServiceLocator::getInstance().get<SceneManager>().getScene<Indie::SoloScene>()->getFileName(entry.path().u8string()), cftime});
+            nameSaves.push_back({ServiceLocator::getInstance().get<SceneManager>().getScene<Indie::SoloScene>()->getFileName(entry.path().u8string()), cftime});
         }
     }
     return nameSaves;

@@ -66,7 +66,7 @@ void Indie::MainMenuScene::update(irr::f32)
         context.getDevice()->closeDevice();
     }
     if (Indie::EventHandler::getInstance().isKeyPressed(irr::KEY_ESCAPE) == true) {
-        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::TitleScene>();
+        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::SaveScene>();
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(true);
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(true);
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneUpdateActive(true);
