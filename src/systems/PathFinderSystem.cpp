@@ -145,7 +145,9 @@ void Indie::Systems::PathFinderSystem::findFirstPosition(std::vector<std::vector
 
 void Indie::Systems::PathFinderSystem::findPosition(std::vector<std::vector<OBJECT>> &map, PathFinderComponent *pathFinder, irr::core::vector2di aiPosition) const
 {
-    std::array<int, 4> position = {aiPosition.X, aiPosition.Y, -99, 99};
+    int aiPosX = aiPosition.X;
+    int aiPosY = aiPosition.Y;
+    int distance = 99;
     int nbBox = 0;
     int random = 0;
 
@@ -157,19 +159,25 @@ void Indie::Systems::PathFinderSystem::findPosition(std::vector<std::vector<OBJE
                 nbBox += (map.at(j).at(i + 1) == OBJECT::BOX) ? 1 : 0;
                 nbBox += (map.at(j + 1).at(i) == OBJECT::BOX) ? 1 : 0;
                 nbBox += (map.at(j).at(i - 1) == OBJECT::BOX) ? 1 : 0;
-                if (nbBox >= 1 && (getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(irr::s32(i), irr::s32(j))) <= position.at(3))) {
-                    if (position.at(0) != aiPosition.X || position.at(1) != aiPosition.Y) {
+                if (nbBox >= 1 && (getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(irr::s32(i), irr::s32(j))) <= distance)) {
+                    if (aiPosX != aiPosition.X || aiPosY != aiPosition.Y) {
                         random = std::rand()/((RAND_MAX + 1u) / 10);
-                        if (random >= 5)
-                            position = {(int)i, (int)j, nbBox, getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(irr::s32(i), irr::s32(j)))};
+                        if (random >= 5) {
+                            aiPosX = (int)i;
+                            aiPosY = (int)j;
+                            distance = getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(irr::s32(i), irr::s32(j)));
+                        }
                     }
-                    else
-                        position = {(int)i, (int)j, nbBox, getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(irr::s32(i), irr::s32(j)))};
+                    else {
+                        aiPosX = (int)i;
+                        aiPosY = (int)j;
+                        distance = getDistance2D(irr::core::vector2di(aiPosition.X, aiPosition.Y), irr::core::vector2di(irr::s32(i), irr::s32(j)));
+                    }
                 }
             }
         }
     }
-    pathFinder->setEndMapPos(irr::core::vector2di(position.at(0), position.at(1)));
+    pathFinder->setEndMapPos(irr::core::vector2di(aiPosX, aiPosY));
 }
 
 void Indie::Systems::PathFinderSystem::setMapBomb(std::vector<std::vector<OBJECT>> &map,  EntityManager &entityManager) const
