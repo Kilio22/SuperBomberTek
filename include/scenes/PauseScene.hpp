@@ -19,7 +19,16 @@ namespace Indie
     class PauseScene : public IScene
     {
     public:
-        enum class PAUSE_ASSETS { CONTINUE, MENU, QUIT, RESTART, BOMBER, TITLE, BG };
+        enum class PAUSE_ASSETS
+        {
+            CONTINUE,
+            MENU,
+            QUIT,
+            RESTART,
+            BOMBER,
+            TITLE,
+            BG
+        };
 
         PauseScene(ContextManager &context);
         ~PauseScene() = default;
@@ -31,7 +40,8 @@ namespace Indie
         void renderPost3D() final;
 
     private:
-        enum class BUTTON_TYPE {
+        enum class BUTTON_TYPE
+        {
             PLAY,
             MENU,
             RESTART,

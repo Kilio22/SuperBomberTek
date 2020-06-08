@@ -55,7 +55,7 @@ void Indie::FileParser::writeToFile(const std::string &filepath, const std::unor
         oss << values.first << "=" << values.second;
         std::string finalString = oss.str();
 
-        ofs << finalString << std::endl; // to delete useless ',' at the end of the string
+        ofs << finalString << std::endl;
     }
     ofs.close();
 }

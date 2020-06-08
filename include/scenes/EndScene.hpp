@@ -31,13 +31,13 @@ namespace Indie
             void renderPre3D() final;
             void renderPost3D() final;
 
-            void skipScene(bool update, bool render, bool subUpdate, bool subRender);
 
             const Indie::EndGame &getEndGame(void) const;
             void setEndGame(const Indie::EndGame &endGame);
 
         private:
             void increaseXp(Indie::MasterInfo &info);
+            void skipScene(bool update, bool render, bool subUpdate, bool subRender);
 
             ContextManager &context;
             UiSelector selector;

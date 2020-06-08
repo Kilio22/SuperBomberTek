@@ -8,13 +8,13 @@
 
 #include "SoloScene.hpp"
 #include "GameScene.hpp"
+#include "ImageLoader.hpp"
 #include "InitGame.hpp"
 #include "IntroScene.hpp"
 #include "MainMenuScene.hpp"
 #include "MenuScene.hpp"
 #include "PauseScene.hpp"
 #include "ServiceLocator.hpp"
-#include "ImageLoader.hpp"
 #include "SoundManager.hpp"
 #include <filesystem>
 #include <fstream>
@@ -56,14 +56,17 @@ Indie::SoloScene::SoloScene(Indie::ContextManager &context)
     uiSelectors.at(Indie::SoloScene::UI_SELECTOR_TYPE::SKIN)->setBLockSound(true, false);
     uiSelectors.at(Indie::SoloScene::UI_SELECTOR_TYPE::THEME)->setBLockSound(true, false);
     uiSelectors.at(Indie::SoloScene::UI_SELECTOR_TYPE::MAP)->setBLockSound(true, false);
-    this->pUpsEnabled = true;
-    this->pUps->setStatus(pUpsEnabled);
+    this->initGame->powerUp = true;
+    this->pUps->setStatus(this->initGame->powerUp);
     this->uiSelectors[UI_SELECTOR_TYPE::SKIN]->setSize(int(charaPaths.size()), 1);
     this->modelRotation = 0;
     this->mapPaths.push_back("Default");
     this->mapPaths.push_back("Random");
-    for (const auto &entry : std::filesystem::directory_iterator("../ressources/maps/"))
-        this->mapPaths.push_back(entry.path().u8string());
+    for (const auto &entry : std::filesystem::directory_iterator("../ressources/maps/")) {
+        if (entry.is_regular_file() == true) {
+            this->mapPaths.push_back(entry.path().u8string());
+        }
+    }
     this->uiSelectors[UI_SELECTOR_TYPE::MAP]->setSize(int(mapPaths.size()), 1);
     for (size_t buttonType = (size_t)BUTTON_TYPE::SKIN; buttonType < (size_t)BUTTON_TYPE::NONE; buttonType++) {
         this->buttons.insert({ (BUTTON_TYPE)buttonType, std::make_unique<Button>(context) });
@@ -118,7 +121,7 @@ void Indie::SoloScene::init()
     // CHECKBOXES INIT
     /* ================================================================== */
     pUps->init("../ressources/images/solo/Check.png", 1, 3, POS(0, 0));
-    pUps->setStatus(pUpsEnabled);
+    pUps->setStatus(this->initGame->powerUp);
     /* ================================================================== */
     // KEYBINDS INIT
     /* ================================================================== */
@@ -158,7 +161,7 @@ void Indie::SoloScene::setKeybinds(const std::vector<std::pair<Indie::Components
 {
     this->keybinds.clear();
     for (auto &keybind : keybinds) {
-        this->keybinds.push_back({keybind.first, std::make_unique<Indie::Keybind>(*keybind.second)});
+        this->keybinds.push_back({ keybind.first, std::make_unique<Indie::Keybind>(*keybind.second) });
     }
 }
 
@@ -221,7 +224,7 @@ void Indie::SoloScene::update(irr::f32 ticks)
     // UPDATE CHECKBOXES
     /* ================================================================== */
     this->pUps->update(this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos());
-    this->pUpsEnabled = this->pUps->getStatus();
+    this->initGame->powerUp = this->pUps->getStatus();
     /* ================================================================== */
     // UPDATE SELECTORS
     /* ================================================================== */
@@ -264,14 +267,11 @@ void Indie::SoloScene::update(irr::f32 ticks)
 void Indie::SoloScene::initGameStruct(SceneManager &sceneManager)
 {
     context.getSceneManager()->clear();
-    this->initGame->mapPath = this->initGame->mapPath;
     this->initGame->mode = GameScene::MODE::SOLO;
     this->initGame->nbAi = 3;
-    this->initGame->mapTheme = this->initGame->mapTheme;
     this->initGame->mapType = (this->uiSelectors[UI_SELECTOR_TYPE::MAP]->getPos().first == 0)
         ? Components::MAP_TYPE::DEFAULT
         : ((this->uiSelectors[UI_SELECTOR_TYPE::MAP]->getPos().first == 1) ? Components::MAP_TYPE::RANDOM : Components::MAP_TYPE::SAVED);
-    this->initGame->powerUp = pUpsEnabled;
     this->initGame->timeLimit = 180;
     for (auto &it : keybinds) {
         this->playerParams->playerKeys.insert({ it.second->getKey(), it.first });

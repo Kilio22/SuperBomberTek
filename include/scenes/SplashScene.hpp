@@ -16,9 +16,9 @@ namespace Indie
 {
     class SplashScene : public IScene
     {
-        public:
-
-        enum class SPLASH_ASSETS : int {
+    public:
+        enum class SPLASH_ASSETS : int
+        {
             BG,
             LOGO,
             PROJECT,
@@ -35,7 +35,7 @@ namespace Indie
         void renderPre3D() final;
         void renderPost3D() final;
 
-        private:
+    private:
         void skipScene(void);
 
         ContextManager &context;

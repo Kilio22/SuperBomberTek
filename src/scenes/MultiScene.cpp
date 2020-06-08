@@ -8,15 +8,15 @@
 
 #include "MultiScene.hpp"
 #include "GameScene.hpp"
+#include "ImageLoader.hpp"
 #include "InitGame.hpp"
 #include "IntroScene.hpp"
 #include "MainMenuScene.hpp"
 #include "MenuScene.hpp"
 #include "MultiKeybindsScene.hpp"
 #include "PauseScene.hpp"
-#include "ServiceLocator.hpp"
-#include "ImageLoader.hpp"
 #include "SceneManager.hpp"
+#include "ServiceLocator.hpp"
 #include "SoundManager.hpp"
 #include <filesystem>
 
@@ -60,8 +60,11 @@ Indie::MultiScene::MultiScene(Indie::ContextManager &context)
     this->uiSelectors.at(UI_SELECTOR_TYPE::TIME)->setPos(18, 0);
     mapPaths.push_back("Default");
     mapPaths.push_back("Random");
-    for (const auto &entry : std::filesystem::directory_iterator("../ressources/maps/"))
-        mapPaths.push_back(entry.path().u8string());
+    for (const auto &entry : std::filesystem::directory_iterator("../ressources/maps/")) {
+        if (entry.is_regular_file() == true) {
+            mapPaths.push_back(entry.path().u8string());
+        }
+    }
     this->uiSelectors.at(UI_SELECTOR_TYPE::MAP)->setSize(int(mapPaths.size()), 1);
     for (size_t buttonType = (size_t)BUTTON_TYPE::THEME; buttonType < (size_t)BUTTON_TYPE::NONE; buttonType++) {
         this->buttons.insert({ (BUTTON_TYPE)buttonType, std::make_unique<Button>(context) });
@@ -143,7 +146,7 @@ void Indie::MultiScene::update(irr::f32 ticks)
         }
     }
     if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().first != 1 && this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().second < 4) {
-        //ServiceLocator::getInstance().get<SoundManager>().playSound("menu_lock");
+        // ServiceLocator::getInstance().get<SoundManager>().playSound("menu_lock");
         this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->setPos(1, this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().second); // First selectors
     }
     if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().first == 0 && this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().second == 4) {

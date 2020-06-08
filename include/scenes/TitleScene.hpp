@@ -20,7 +20,7 @@ namespace Indie
 
     class TitleScene : public IScene
     {
-        public:
+    public:
         TitleScene(ContextManager &context);
         ~TitleScene() = default;
 
@@ -29,9 +29,10 @@ namespace Indie
         void update(irr::f32 deltaTime) final;
         void renderPre3D() final;
         void renderPost3D() final;
+
+    private:
         void skipScene(bool update, bool render, bool subUpdate, bool subRender);
 
-        private:
         ContextManager &context;
         Image *titleLogo = NULL;
         Image *pressText = NULL;

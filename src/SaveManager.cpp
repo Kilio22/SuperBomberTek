@@ -8,10 +8,10 @@
 #include "SaveManager.hpp"
 #include "FileParser.hpp"
 #include "MasterInfo.hpp"
+#include "MusicManager.hpp"
+#include "SceneManager.hpp"
 #include "Scenes.h"
 #include "ServiceLocator.hpp"
-#include "SceneManager.hpp"
-#include "MusicManager.hpp"
 #include "SoundManager.hpp"
 #include <filesystem>
 
@@ -99,10 +99,7 @@ void Indie::SaveManager::loadMusicParams(void)
         musicManager.setVolume(musicVolumeValue);
         soundManager.setVolume(soundVolumeValue);
     } catch (const std::exception &e) {
-        musicManager.setVolume(10);
-        musicManager.unMute();
-        soundManager.setVolume(10);
-        soundManager.setMute(false);
+        this->resetVolume();
         std::cerr << e.what() << '\n';
     }
 }
@@ -110,13 +107,14 @@ void Indie::SaveManager::loadMusicParams(void)
 void Indie::SaveManager::loadMasterInfos(void)
 {
     MasterInfo info = {};
-    std::vector<std::string> mapPaths = {};
+    std::vector<std::string> mapPaths = { "Default", "Random" };
     std::unordered_map<std::string, std::string> mapsData = {};
 
-    mapPaths.push_back("Default");
-    mapPaths.push_back("Random");
-    for (const auto &entry : std::filesystem::directory_iterator("../ressources/maps/"))
-        mapPaths.push_back(this->getFileName(entry.path().u8string()));
+    for (const auto &entry : std::filesystem::directory_iterator("../ressources/maps/")) {
+        if (entry.is_regular_file() == true) {
+            mapPaths.push_back(this->getFileName(entry.path().u8string()));
+        }
+    }
     for (const auto &mapPath : mapPaths) {
         const auto &it
             = std::find_if(this->currentSave.begin(), this->currentSave.end(), [mapPath](const auto &ref) { return ref.first == mapPath; });
@@ -126,26 +124,15 @@ void Indie::SaveManager::loadMasterInfos(void)
         }
     }
     try {
-        std::unordered_map<std::string, std::string> data = {{"LVL", this->currentSave.at("LVL")}, {"XP", this->currentSave.at("XP")}};
-        for (auto data : data) {
-            std::string nameType = data.first;
-            int nbXp = std::stoi(data.second);
+        const std::string &lvlData = this->currentSave.at("LVL");
+        const std::string &xpData = this->currentSave.at("XP");
+        int lvlValue = std::stoi(lvlData);
+        int xpValue = std::stoi(xpData);
 
-            if (nameType != "LVL" && nameType != "XP")
-                throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"" + this->currentSavePath + "\" corrupted2.");
-            if (nbXp < 0)
-                throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"" + this->currentSavePath + "\" corrupted2.");
-            if (nameType == "LVL")
-                info.lvl = nbXp;
-            if (nameType == "XP")
-                info.xp = nbXp;
-        }
-    } catch (const std::exception &e) {
-        info.lvl = 0;
-        info.xp = 0;
-        std::cout << e.what() << std::endl;
-    }
-    try {
+        if (xpValue < 0 || lvlValue < 0)
+            throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"" + this->currentSavePath + "\" corrupted2.");
+        info.lvl = lvlValue;
+        info.xp = xpValue;
         for (auto data : mapsData) {
             std::string mapName = data.first;
             int highScore = std::stoi(data.second);
@@ -154,11 +141,11 @@ void Indie::SaveManager::loadMasterInfos(void)
                 throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"" + this->currentSavePath + "\" corrupted.");
             info.scores_map.insert(std::pair<std::string, int>(mapName, highScore));
         }
+        ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->setMasterInfo(info);
     } catch (const std::exception &e) {
-        info.scores_map = {};
+        this->resetMasterInfos();
         std::cout << e.what() << std::endl;
     }
-    ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->setMasterInfo(info);
 }
 
 void Indie::SaveManager::loadKeybinds(void)

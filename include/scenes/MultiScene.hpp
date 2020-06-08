@@ -58,8 +58,9 @@ namespace Indie
             NONE
         };
 
-        ContextManager &context;
         static const std::unordered_map<UI_SELECTOR_TYPE, irr::core::vector2di> uiSelectorsSize;
+
+        ContextManager &context;
         std::unordered_map<UI_SELECTOR_TYPE, std::unique_ptr<UiSelector>> uiSelectors;
         std::unordered_map<BUTTON_TYPE, std::unique_ptr<Button>> buttons;
         std::unique_ptr<Checkbox> pUps;
@@ -72,7 +73,6 @@ namespace Indie
         irr::scene::IAnimatedMeshSceneNode *theme2;
         float modelRotation;
         std::vector<std::string> mapPaths;
-        // PARAMS (Faudra les filer à multi 2 avec une fonction publique de multi 2)
         std::unique_ptr<InitGame> initGame;
         // TODO : XP BAR
         // TODO : Recup le level et l'xp qqpart. Faudra just set les valeurs du coup.

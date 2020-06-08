@@ -14,7 +14,7 @@ namespace Indie
 {
     class IntroScene : public IScene
     {
-        public:
+    public:
         IntroScene(ContextManager &context);
         ~IntroScene() = default;
 
@@ -25,7 +25,7 @@ namespace Indie
         void renderPost3D() final;
         void skipScene(void);
 
-        private:
+    private:
         void worldTour(irr::f32 deltaTime);
         void resetTarget(void);
         void downTarget(irr::f32 deltaTime);
