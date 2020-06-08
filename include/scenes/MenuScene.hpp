@@ -14,6 +14,7 @@
 #include "Parallax.hpp"
 #include <memory>
 #include <vector>
+#include "Prompt.hpp"
 
 namespace Indie
 {

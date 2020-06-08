@@ -272,3 +272,27 @@ void Indie::SaveManager::resetKeybinds(void)
 {
     ServiceLocator::getInstance().get<SceneManager>().getScene<SoloScene>()->resetKeybinds();
 }
+
+template <typename TP>
+std::time_t to_time_t(TP tp)
+{
+    using namespace std::chrono;
+    auto sctp = time_point_cast<system_clock::duration>(tp - TP::clock::now()
+              + system_clock::now());
+    return system_clock::to_time_t(sctp);
+}
+
+std::unordered_map<std::string, std::time_t> Indie::SaveManager::getSavedGame(void)
+{
+    std::unordered_map<std::string, std::time_t> nameSaves;
+
+    for (const auto &entry : std::filesystem::directory_iterator("../ressources/.saves/")) {
+        if (entry.is_regular_file() == true && entry.path().extension() == ".txt") {
+            auto timeEntry = entry.last_write_time();
+            std::time_t cftime = to_time_t(timeEntry);
+            nameSaves.insert({this->getFileName(entry.path().u8string()), cftime});
+        }
+    }
+    return nameSaves;
+}
+

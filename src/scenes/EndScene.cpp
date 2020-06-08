@@ -113,14 +113,6 @@ void Indie::EndScene::renderPost3D()
     font->draw(std::to_string(info.lvl).c_str(), RECT(400, 500, 0, 0), {255, 255, 255, 255});
 }
 
-void Indie::EndScene::skipScene(bool update, bool render, bool subUpdate, bool subRender)
-{
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(update);
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(render);
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneUpdateActive(subUpdate);
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneRenderActive(subRender);
-}
-
 const Indie::EndGame &Indie::EndScene::getEndGame(void) const
 {
     return this->endGame;

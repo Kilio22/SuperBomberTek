@@ -20,5 +20,6 @@
 #include "SoloScene.hpp"
 #include "SplashScene.hpp"
 #include "TitleScene.hpp"
+#include "SaveScene.hpp"
 
 #endif /* !SCENES_HPP_ */

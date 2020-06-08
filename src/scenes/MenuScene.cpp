@@ -74,7 +74,6 @@ void Indie::MenuScene::renderPre3D()
 
 void Indie::MenuScene::renderPost3D() {}
 
-
 const Indie::MasterInfo &Indie::MenuScene::getMasterInfo(void) const
 {
     return this->masterInfo;
