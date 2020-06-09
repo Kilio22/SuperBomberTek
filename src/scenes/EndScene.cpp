@@ -105,7 +105,7 @@ void Indie::EndScene::update(irr::f32 ticks)
     if (info.xp >= MasterInfo::xp_level[info.lvl]) {
         ServiceLocator::getInstance().get<SoundManager>().playSound("level_up");
         popUpDuration = 200;
-        lvlUpType = (info.lvl % 2 == 0) ? UI_IMAGE_TYPE::LVL_UP_MAP : UI_IMAGE_TYPE::LVL_UP_PLAYER;
+        lvlUpType = (info.lvl % 2 == 0) ? UI_IMAGE_TYPE::LVL_UP_PLAYER : UI_IMAGE_TYPE::LVL_UP_MAP;
         info.xp -= MasterInfo::xp_level[info.lvl];
         info.lvl++;
     }
