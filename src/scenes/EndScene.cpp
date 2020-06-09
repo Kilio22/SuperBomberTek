@@ -148,24 +148,24 @@ void Indie::EndScene::setEndGame(const Indie::EndGame &endGame)
     mode = (this->endGame.scores.size() == 1) ? GAME_MODE::SOLO : GAME_MODE::MULTI;
     if (mode == GAME_MODE::SOLO) {
         if (this->endGame.matchPlay == Indie::MATCH_PLAY::WIN)
-            swprintf(endText, 100, L"Tu as gagn%c !", 233);
+            swprintf(endText, 100, L"Tu as gagn\u00E9 !");
         else
             swprintf(endText, 100, L"Tu as perdu...");
     } else {
         if (this->endGame.matchPlay == Indie::MATCH_PLAY::DRAW)
-            swprintf(endText, 100, L"Egalit%c !", 233);
+            swprintf(endText, 100, L"Egalit\u00E9 !");
         else if (this->endGame.matchPlay == Indie::MATCH_PLAY::LOSE)
             swprintf(endText, 100, L"Vous avez perdu...");
         else {
-            const size_t cSize = strlen(this->endGame.scores[0].first.c_str())+1;
-            wchar_t *wc = new wchar_t[cSize];
             #ifdef WIN32
+                const size_t cSize = strlen(this->endGame.scores[0].first.c_str())+1;
+                wchar_t *wc = new wchar_t[cSize];
                 mbstowcs_s(NULL, wc, cSize, this->endGame.scores[0].first.c_str(), cSize - 1);
+                swprintf(endText, 100,  L"%s a gagn\u00E9 !", wc);
+                delete[] wc;
             #else
-                mbstowcs(wc, this->endGame.scores[0].first.c_str(), cSize);
+                swprintf(endText, 100,  L"%s a gagn\u00E9 !", this->endGame.scores[0].first.c_str());
             #endif // WIN32
-            swprintf(endText, 100,  L"%s a gagn%c !", wc, 233);
-            delete[] wc;
         }
     }
 }
