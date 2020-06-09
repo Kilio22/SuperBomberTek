@@ -83,6 +83,7 @@ void Indie::Systems::GameSystem::endGame(EntityManager &entityManager, SceneMana
     EndGame stats;
 
     stats.matchPlay = endType;
+    stats.xp = 0;
     for (auto entity : entityManager.each<PlayerComponent>()) {
         auto player = entity->getComponent<PlayerComponent>();
 
@@ -92,7 +93,6 @@ void Indie::Systems::GameSystem::endGame(EntityManager &entityManager, SceneMana
             stats.xp = player->getXp();
             stats.scores.insert(stats.scores.begin(), { player->getName(), player->getScore() });
         } else {
-            stats.xp = 0;
             stats.scores.push_back({ player->getName(), player->getScore() });
         }
     }
