@@ -40,7 +40,13 @@ void Indie::MapGenerator::generate(Indie::EntityManager &entityManager, Indie::E
     if (mapComponent->getType() != Indie::Components::MAP_TYPE::SAVED) {
         setSpawn(map, mapComponent->getDimension());
     }
-    path += (mapComponent->getTheme() == Indie::Components::THEME::DIRT) ? "map_dirt/" : "map_stone/";
+    if (mapComponent->getTheme() == Indie::Components::THEME::DIRT) {
+        path += "map_dirt/";
+    } else if (mapComponent->getTheme() == Indie::Components::THEME::STONE) {
+        path += "map_stone/";
+    } else {
+        path += "map_snow/";
+    }
     for (int i = mapComponent->getDimension().Y - 1; i >= 0; i--) {
         for (int j = 0; j < mapComponent->getDimension().X; j++) {
             entityBuilder.createGround({ (irr::f32)(20 * j), 0, (irr::f32)(20 * i) }, path + "ground.obj", path + "ground.png");

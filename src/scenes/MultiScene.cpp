@@ -23,7 +23,7 @@
 #include <filesystem>
 
 const std::unordered_map<Indie::MultiScene::UI_SELECTOR_TYPE, irr::core::vector2di> Indie::MultiScene::uiSelectorsSize
-    = { { Indie::MultiScene::UI_SELECTOR_TYPE::DEFAULT, { 3, 6 } }, { Indie::MultiScene::UI_SELECTOR_TYPE::THEME, { 2, 1 } },
+    = { { Indie::MultiScene::UI_SELECTOR_TYPE::DEFAULT, { 3, 6 } }, { Indie::MultiScene::UI_SELECTOR_TYPE::THEME, { 3, 1 } },
           { Indie::MultiScene::UI_SELECTOR_TYPE::MAP, { 1, 1 } }, { Indie::MultiScene::UI_SELECTOR_TYPE::AI, { 3, 1 } },
           { Indie::MultiScene::UI_SELECTOR_TYPE::TIME, { 61, 1 } } };
 
@@ -75,6 +75,7 @@ void Indie::MultiScene::init() // Check all paths & init values
 
     this->theme1 = this->createTheme("../ressources/static_mesh/map1model.mc.ply");
     this->theme2 = this->createTheme("../ressources/static_mesh/map2model.mc.ply");
+    this->theme3 = this->createTheme("../ressources/static_mesh/map3model.mc.ply");
     // IMAGES GET
     this->title = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/multi1/title.png");
     this->layout = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/multi1/Layout.png");
@@ -105,8 +106,7 @@ void Indie::MultiScene::init() // Check all paths & init values
     }
     this->uiSelectors.at(UI_SELECTOR_TYPE::MAP)->setSize((int)availableMaps.size(), 1);
     this->initGame->mapPath = availableMaps.at(this->uiSelectors.at(UI_SELECTOR_TYPE::MAP)->getPos().first);
-    this->initGame->mapTheme
-        = (this->uiSelectors.at(UI_SELECTOR_TYPE::THEME)->getPos().first == 0) ? Components::THEME::DIRT : Components::THEME::STONE;
+    this->initGame->mapTheme = (Components::THEME)this->uiSelectors[UI_SELECTOR_TYPE::THEME]->getPos().first;
 }
 
 irr::scene::IAnimatedMeshSceneNode *Indie::MultiScene::createTheme(const std::string &filepath)
@@ -138,8 +138,10 @@ void Indie::MultiScene::update(irr::f32 ticks)
     /* ================================================================== */
     this->theme1->setVisible(this->initGame->mapTheme == Components::THEME::DIRT);
     this->theme2->setVisible(this->initGame->mapTheme == Components::THEME::STONE);
+    this->theme3->setVisible(this->initGame->mapTheme == Components::THEME::SNOW);
     this->theme1->setRotation(irr::core::vector3df(0, modelRotation, 0));
     this->theme2->setRotation(irr::core::vector3df(0, modelRotation, 0));
+    this->theme3->setRotation(irr::core::vector3df(0, modelRotation, 0));
     this->modelRotation += float(10 * ticks);
     /* ================================================================== */
     // LAYOUTS SKIP
@@ -178,8 +180,7 @@ void Indie::MultiScene::update(irr::f32 ticks)
     }
     if (buttons.at(BUTTON_TYPE::THEME)->getStatus() == Button::Status::Selected) {
         this->uiSelectors[UI_SELECTOR_TYPE::THEME]->update();
-        this->initGame->mapTheme
-            = (this->uiSelectors[UI_SELECTOR_TYPE::THEME]->getPos().first == 0) ? Components::THEME::DIRT : Components::THEME::STONE;
+        this->initGame->mapTheme = (Components::THEME)this->uiSelectors[UI_SELECTOR_TYPE::THEME]->getPos().first;
     }
     if (buttons.at(BUTTON_TYPE::TIME)->getStatus() == Button::Status::Selected) {
         this->uiSelectors[UI_SELECTOR_TYPE::TIME]->update();
@@ -241,7 +242,7 @@ void Indie::MultiScene::renderPost3D()
 
     // DISPLAY TEXTS
     std::string mPath = ServiceLocator::getInstance().get<SceneManager>().getScene<Indie::SoloScene>()->getFileName(this->initGame->mapPath);
-    std::string tName = (this->initGame->mapTheme == Components::THEME::DIRT) ? "Garden" : "Cobblestone";
+    std::string tName;
     std::string aiAmmount = std::to_string(this->initGame->nbAi);
     std::string timeAmmount = std::to_string((this->initGame->timeLimit) / 60) + ":";
     std::unordered_map<std::string, int> scores_map
@@ -251,6 +252,12 @@ void Indie::MultiScene::renderPost3D()
         timeAmmount += "0";
     timeAmmount += std::to_string((this->initGame->timeLimit) % 60);
 
+    if (this->initGame->mapTheme == Components::THEME::DIRT)
+        tName = "Jardin";
+    else if (this->initGame->mapTheme == Components::THEME::STONE)
+        tName = "Cobblestone";
+    else
+        tName = "Hiver";
     for (auto score : scores_map) {
         if (score.first == this->initGame->mapPath) {
             mapScore = score.second;
