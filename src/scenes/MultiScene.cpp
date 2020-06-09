@@ -31,8 +31,8 @@ const std::unordered_map<Indie::MultiScene::UI_SELECTOR_TYPE, irr::core::vector2
 Indie::MultiScene::MultiScene(Indie::ContextManager &context)
     : context(context)
     , pUps(std::make_unique<Checkbox>(context))
-    , initGame(std::make_unique<InitGame>())
     , xpBar(context)
+    , initGame(std::make_unique<InitGame>())
 {
     for (size_t uiSelectorType = (size_t)UI_SELECTOR_TYPE::DEFAULT; uiSelectorType < (size_t)UI_SELECTOR_TYPE::NONE; uiSelectorType++) {
         int x = this->uiSelectorsSize.at((UI_SELECTOR_TYPE)uiSelectorType).X;

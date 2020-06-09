@@ -126,7 +126,6 @@ void Indie::EndScene::renderPost3D()
     fontVeryBig->draw(this->endText, RECT(154, 107, 0, 0), {255, 255, 255, 255});
     this->menu->draw();
     this->restart->draw();
-    unsigned int actualLevel = 0;
     for (size_t i = 0; i < this->endGame.scores.size(); i++)
         fontBig->draw((this->endGame.scores.at(i).first + "  :  " + std::to_string(this->endGame.scores.at(i).second)).c_str(), RECT(150, 400 + ((int)i * 50), 0, 0), {255, 255, 255, 255});
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->saveHighScoreMap(gameInfo->mapPath, this->endGame.scores.at(0).second);

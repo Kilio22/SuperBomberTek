@@ -9,8 +9,8 @@
 #include "FileCorruptedException.hpp"
 #include "FileNotFoundException.hpp"
 #include <fstream>
-#include <sstream>
 #include <iterator>
+#include <sstream>
 
 using namespace Indie::Components;
 
@@ -170,8 +170,8 @@ void Indie::MapGenerator::createSavedMap(
     if ((int)map.size() != dimension.Y) {
         throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File " + mapPath + " corrupted.");
     }
-    if (map.at(dimension.Y - 2).at(dimension.X - 2) != OBJECT::VOID || map.at(1).at(1) != OBJECT::VOID ||
-map.at(1).at(dimension.X - 2) != OBJECT::VOID || map.at(dimension.Y - 2).at(1) != OBJECT::VOID) {
+    if (map.at(dimension.Y - 2).at(dimension.X - 2) != OBJECT::VOID || map.at(1).at(1) != OBJECT::VOID
+        || map.at(1).at(dimension.X - 2) != OBJECT::VOID || map.at(dimension.Y - 2).at(1) != OBJECT::VOID) {
         throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File " + mapPath + " corrupted.");
     }
 }

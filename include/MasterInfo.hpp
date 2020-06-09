@@ -9,6 +9,7 @@
 #define MASTERINFO_HPP_
 
 #include <unordered_map>
+#include <vector>
 
 namespace Indie
 {

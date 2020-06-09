@@ -10,13 +10,13 @@
 #include "SaveScene.hpp"
 #include "EntityManager.hpp"
 #include "ImageLoader.hpp"
-#include "ServiceLocator.hpp"
-#include "SceneManager.hpp"
 #include "SaveManager.hpp"
+#include "SceneManager.hpp"
 #include "Scenes.h"
+#include "ServiceLocator.hpp"
 #include <ctime>
-#include <time.h>
 #include <stdio.h>
+#include <time.h>
 
 Indie::SaveScene::SaveScene(ContextManager &context)
     : context(context)
@@ -25,7 +25,7 @@ Indie::SaveScene::SaveScene(ContextManager &context)
     , prompt(std::make_unique<Prompt>(context))
 {
     for (int count = 0; count < 3; count++) {
-        this->saveButtons.insert({count, std::make_unique<Button>(context)});
+        this->saveButtons.insert({ count, std::make_unique<Button>(context) });
     }
 }
 
@@ -33,9 +33,9 @@ void Indie::SaveScene::init()
 {
     this->font = context.getGuiEnv()->getFont("../ressources/font/Banschrift.xml");
     this->title = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/save/title.png");
-    this->saveButtons.at(0)->init(context, "../ressources/images/save/Save1.png", 0, 0, POS(0,0), false);
-    this->saveButtons.at(1)->init(context, "../ressources/images/save/Save2.png", 1, 0, POS(0,0), false);
-    this->saveButtons.at(2)->init(context, "../ressources/images/save/Save3.png", 2, 0, POS(0,0), false);
+    this->saveButtons.at(0)->init(context, "../ressources/images/save/Save1.png", 0, 0, POS(0, 0), false);
+    this->saveButtons.at(1)->init(context, "../ressources/images/save/Save2.png", 1, 0, POS(0, 0), false);
+    this->saveButtons.at(2)->init(context, "../ressources/images/save/Save3.png", 2, 0, POS(0, 0), false);
     this->prompt->init("../ressources/images/save/TextBar.png", 1, 1, POS(460, 455));
     this->play->init(context, "../ressources/images/save/Jouer.png", 1, 2, POS(0, 0));
     this->savedGame = ServiceLocator::getInstance().get<Indie::SaveManager>().getSavedGame();
@@ -127,21 +127,21 @@ void Indie::SaveScene::renderPost3D()
     this->prompt->draw();
 
     for (const auto game : this->savedGame) {
-        struct tm * timeinfo;
+        struct tm *timeinfo;
         char time[80];
 
         timeinfo = localtime(&game.second);
         (void)strftime(time, 80, "%d/%m/%Y %H:%M:%S", timeinfo);
         std::string timeString(time);
-        font->draw(game.first.c_str(), RECT(120 + (i * 380), 190, 0, 0), {255, 255, 255, 255});
-        font->draw(time, RECT(350 + ((irr::s32)i * 380) - (9 * (irr::s32)timeString.size()), 330, 0, 0), {255, 255, 255, 255});
+        font->draw(game.first.c_str(), RECT(120 + (i * 380), 190, 0, 0), { 255, 255, 255, 255 });
+        font->draw(time, RECT(350 + ((irr::s32)i * 380) - (9 * (irr::s32)timeString.size()), 330, 0, 0), { 255, 255, 255, 255 });
         i++;
     }
     for (; i < 3; i++) {
-        font->draw("Vide", RECT(120 + (i * 380), 190, 0, 0), {255, 255, 255, 255});
-        font->draw("N/A", RECT(350 + (i * 380) - 15, 330, 0, 0), {255, 255, 255, 255});
+        font->draw("Vide", RECT(120 + (i * 380), 190, 0, 0), { 255, 255, 255, 255 });
+        font->draw("N/A", RECT(350 + (i * 380) - 15, 330, 0, 0), { 255, 255, 255, 255 });
     }
-    font->draw("Supprimer: Appuyez sur <Suppr>", RECT(850, 100, 0, 0), {255, 255, 255, 255});
+    font->draw("Supprimer: Appuyez sur <Suppr>", RECT(850, 100, 0, 0), { 255, 255, 255, 255 });
 }
 
 void Indie::SaveScene::skipScene(bool update, bool render, bool subUpdate, bool subRender)

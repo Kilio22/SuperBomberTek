@@ -28,9 +28,9 @@ const std::unordered_map<Indie::SoloScene::UI_SELECTOR_TYPE, irr::core::vector2d
 Indie::SoloScene::SoloScene(Indie::ContextManager &context)
     : context(context)
     , pUps(std::make_unique<Checkbox>(context))
+    , xpBar(context)
     , initGame(std::make_unique<InitGame>())
     , playerParams(std::make_unique<PlayerParams>())
-    , xpBar(context)
 {
     for (size_t uiSelectorType = (size_t)UI_SELECTOR_TYPE::DEFAULT; uiSelectorType < (size_t)UI_SELECTOR_TYPE::NONE; uiSelectorType++) {
         int x = this->uiSelectorsSize.at((UI_SELECTOR_TYPE)uiSelectorType).X;
