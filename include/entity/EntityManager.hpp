@@ -174,9 +174,6 @@ namespace Indie
                     }
                     return false;
                 }), this->entities.end());
-
-                if (nbDeleted > 0)
-                    std::cout << "Cleaned " << nbDeleted << " entities." << std::endl;
             }
 
             void reset()
