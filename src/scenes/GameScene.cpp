@@ -140,8 +140,6 @@ void Indie::GameScene::init()
 
     entityBuilder.createShake();
     entityManager.createUniqueEntity<GameComponent>((irr::f32)this->initGame->timeLimit);
-
-    device->getCursorControl()->setVisible(false);
 }
 
 void Indie::GameScene::reset()
