@@ -15,6 +15,7 @@
 #include "PlayerSkins.hpp"
 #include "SceneManager.hpp"
 #include "UiSelector.hpp"
+#include "Bar.hpp"
 #include <memory>
 #include <vector>
 
@@ -70,6 +71,7 @@ namespace Indie
         std::unordered_map<SoloScene::BUTTON_TYPE, std::unique_ptr<Button>> buttons;
         std::vector<std::pair<Indie::Components::KEY_TYPE, std::unique_ptr<Keybind>>> keybinds;
         std::unique_ptr<Checkbox> pUps;
+        Bar xpBar;
         Image *title;
         Image *layout;
         Image *kbLayout;

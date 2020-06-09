@@ -30,6 +30,7 @@ Indie::SoloScene::SoloScene(Indie::ContextManager &context)
     , pUps(std::make_unique<Checkbox>(context))
     , initGame(std::make_unique<InitGame>())
     , playerParams(std::make_unique<PlayerParams>())
+    , xpBar(context)
 {
     for (size_t uiSelectorType = (size_t)UI_SELECTOR_TYPE::DEFAULT; uiSelectorType < (size_t)UI_SELECTOR_TYPE::NONE; uiSelectorType++) {
         int x = this->uiSelectorsSize.at((UI_SELECTOR_TYPE)uiSelectorType).X;
@@ -67,7 +68,15 @@ irr::scene::IAnimatedMeshSceneNode *Indie::SoloScene::createTheme(const std::str
 
 void Indie::SoloScene::init()
 {
-    // TODO : XP BAR
+    /* ================================================================== */
+    // XPBAR INIT
+    /* ================================================================== */
+    Indie::MasterInfo info = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo();
+    xpBar.init("../ressources/images/Bar.png", 0, 100, 0);
+    xpBar.setSize(0, MasterInfo::xp_level[info.lvl]);
+    xpBar.setValue(info.xp);
+    xpBar.setLevel(info.lvl);
+    xpBar.update();
     /* ================================================================== */
     // 3D INIT
     /* ================================================================== */
@@ -193,6 +202,10 @@ void Indie::SoloScene::update(irr::f32 ticks)
     // les boutons qui sont plus loin (psk la taille est pas pareille partout)
     /* ================================================================== */
     this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->update(); // We update the main selector
+    if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().first == 0 && this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().second == 3) {
+        ServiceLocator::getInstance().get<SoundManager>().playSound("menu_lock");
+        this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->setPos(1, 3); // Play <- == PowerUps
+    }
     if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().second == 3 && this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().first == 2) {
         this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->setPos(4, 4); // PowerUps -> = Play
     }
@@ -335,6 +348,10 @@ void Indie::SoloScene::renderPost3D()
     if (this->keybinds[0].second->getStatus() || this->keybinds[1].second->getStatus() || this->keybinds[2].second->getStatus()
         || this->keybinds[3].second->getStatus() || this->keybinds[4].second->getStatus())
         context.displayImage(this->keybinds[0].second->tick);
+    /* ================================================================== */
+    // DISPLAY XPBAR
+    /* ================================================================== */
+    xpBar.draw(POS(760, 0));
 }
 
 void Indie::SoloScene::resetKeybinds(void)

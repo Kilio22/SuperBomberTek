@@ -14,6 +14,8 @@
 #include "Parallax.hpp"
 #include "PauseScene.hpp"
 #include "ServiceLocator.hpp"
+#include "SoloScene.hpp"
+#include "EndScene.hpp"
 #include "Systems.h"
 #include <sstream>
 
@@ -116,7 +118,7 @@ void Indie::GameScene::init()
 
     for (auto player : this->initGame->playersParams) {
         entityBuilder.createPlayer(this->defaultPositions.at(idx).first, "../ressources/animated_mesh/character/character_idle.b3d",
-            player.playerTexture, player.playerKeys, "Player " + std::to_string(++n), player.playerColor, this->defaultPositions.at(idx).second);
+            player.playerTexture, player.playerKeys, "Joueur " + std::to_string(++n), player.playerColor, this->defaultPositions.at(idx).second);
         usedTextures.push_back(player.playerTexture);
         idx++;
     }
@@ -216,5 +218,10 @@ Indie::InitGame *Indie::GameScene::getInitGame(void) const
 
 void Indie::GameScene::setInitGame(const Indie::InitGame &initGame)
 {
+    std::vector<std::string> names;
+
     this->initGame = std::make_unique<Indie::InitGame>(initGame);
+    for (const auto &it : this->initGame->playersParams)
+        names.push_back(ServiceLocator::getInstance().get<SceneManager>().getScene<SoloScene>()->getFileName(it.playerTexture));
+    ServiceLocator::getInstance().get<SceneManager>().getScene<EndScene>()->setPlayerNames(names);
 }

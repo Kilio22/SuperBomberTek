@@ -12,6 +12,7 @@
 #include "ContextManager.hpp"
 #include "IScene.hpp"
 #include "UiSelector.hpp"
+#include "Bar.hpp"
 #include <memory>
 #include <unordered_map>
 #include <vector>
@@ -66,6 +67,7 @@ namespace Indie
         Image *title;
         Image *layout;
         Image *whiteBg;
+        Bar xpBar;
         irr::gui::IGUIFont *font;
         // Faut pas oublier de clear le scenemanager
         irr::scene::IAnimatedMeshSceneNode *theme1;
@@ -73,6 +75,8 @@ namespace Indie
         float modelRotation;
         std::vector<std::string> availableMaps;
         std::unique_ptr<InitGame> initGame;
+        unsigned short int xp;
+        unsigned short int lvl;
     };
 }
 

@@ -32,6 +32,7 @@ Indie::MultiScene::MultiScene(Indie::ContextManager &context)
     : context(context)
     , pUps(std::make_unique<Checkbox>(context))
     , initGame(std::make_unique<InitGame>())
+    , xpBar(context)
 {
     for (size_t uiSelectorType = (size_t)UI_SELECTOR_TYPE::DEFAULT; uiSelectorType < (size_t)UI_SELECTOR_TYPE::NONE; uiSelectorType++) {
         int x = this->uiSelectorsSize.at((UI_SELECTOR_TYPE)uiSelectorType).X;
@@ -56,7 +57,13 @@ Indie::MultiScene::MultiScene(Indie::ContextManager &context)
 
 void Indie::MultiScene::init() // Check all paths & init values
 {
-    // TODO : XP BAR
+    // XPBAR INIT
+    Indie::MasterInfo info = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo();
+    xpBar.init("../ressources/images/Bar.png", 0, 100, 0);
+    xpBar.setSize(0, MasterInfo::xp_level[info.lvl]);
+    xpBar.setValue(info.xp);
+    xpBar.setLevel(info.lvl);
+    xpBar.update();
     // 3D INIT
     irr::scene::ICameraSceneNode *camera = context.getSceneManager()->addCameraSceneNode(0, { 0, 0, -75 }, { 0, 0, 0 }, -1, true);
 
@@ -140,8 +147,7 @@ void Indie::MultiScene::update(irr::f32 ticks)
     this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->update(); // We update the main selector
     if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().second == 5) {
         if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().first != 2) {
-            ServiceLocator::getInstance().get<SoundManager>().playSound("menu_lock");
-            this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->setPos(2, 5); // Can't move left from the last button
+            this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->setPos(2, 4);
         }
     }
     if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().first != 1 && this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().second < 4) {
@@ -256,6 +262,8 @@ void Indie::MultiScene::renderPost3D()
     font->draw(tName.c_str(), RECT(410 - (5 * int(tName.size())), 218, 0, 0), { 255, 255, 255, 255 });
     font->draw(timeAmmount.c_str(), RECT(410 - (5 * int(timeAmmount.size())), 300, 0, 0), { 255, 255, 255, 255 });
     font->draw(aiAmmount.c_str(), RECT(410 - (5 * int(aiAmmount.size())), 384, 0, 0), { 255, 255, 255, 255 });
+    // DISPLAY XPBAR
+    xpBar.draw(POS(760, 0));
 }
 
 void Indie::MultiScene::skipScene(bool update, bool render, bool subUpdate, bool subRender)

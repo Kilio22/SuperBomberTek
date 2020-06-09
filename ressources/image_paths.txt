@@ -191,6 +191,7 @@
 ../ressources/images/end/Bar_empty.png
 ../ressources/images/end/Bar_full.png
 ../ressources/images/end/Bar_Layout.png
+../ressources/images/end/Layout.png
 ../ressources/images/end/Layout1.png
 ../ressources/images/end/Layout2.png
 ../ressources/images/end/Menu_idle.png
@@ -204,6 +205,8 @@
 ../ressources/images/end/Text3.png
 ../ressources/images/end/Text4.png
 ../ressources/images/end/Text5.png
+../ressources/images/end/lvlup.png
+../ressources/images/end/lvlup2.png
 ../ressources/images/save/Jouer_idle.png
 ../ressources/images/save/Jouer_pressed.png
 ../ressources/images/save/Jouer_selected.png

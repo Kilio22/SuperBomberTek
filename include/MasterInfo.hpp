@@ -16,6 +16,7 @@ namespace Indie
         unsigned int xp;
         unsigned int lvl;
         std::unordered_map<std::string, int> scores_map;
+        static const std::vector<unsigned int> xp_level;
     };
 }
 
