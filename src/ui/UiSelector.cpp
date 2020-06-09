@@ -37,6 +37,14 @@ void Indie::UiSelector::setBLockSound(bool x, bool y)
 
 void Indie::UiSelector::update()
 {
+    if (posX < 0)
+        posX = 0;
+    if (posX >= sizeX)
+        posX = sizeX - 1;
+    if (posY < 0)
+        posY = 0;
+    if (posY >= sizeY)
+        posY = sizeY - 1;
     if (EventHandler::getInstance().isKeyPressedAtOnce(up)) {
         if (posY >= 1) {
             posY = posY - 1;

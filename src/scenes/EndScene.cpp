@@ -160,7 +160,11 @@ void Indie::EndScene::setEndGame(const Indie::EndGame &endGame)
             const size_t cSize = strlen(this->endGame.scores[0].first.c_str())+1;
             wchar_t *wc = new wchar_t[cSize];
             size_t outSize;
-            mbstowcs_s(&outSize, wc, cSize, this->endGame.scores[0].first.c_str(), cSize - 1);
+            #ifdef WIN32
+                mbstowcs_s(&outSize, wc, cSize, this->endGame.scores[0].first.c_str(), cSize - 1);
+            #else
+                mbstowcs(wc, this->endGame.scores[0].first.c_str(), cSize);
+            #endif // WIN32
             swprintf(endText, 100,  L"%s a gagn%c !", wc, 233);
             delete[] wc;
         }

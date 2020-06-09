@@ -53,7 +53,7 @@ Indie::MultiKeybindsScene::MultiKeybindsScene(Indie::ContextManager &context)
     p1Keybinds.push_back(std::pair<Indie::Components::KEY_TYPE, std::shared_ptr<Keybind>>(
         Components::KEY_TYPE::RIGHT, new Keybind(context, irr::EKEY_CODE::KEY_RIGHT)));
     p1Keybinds.push_back(std::pair<Indie::Components::KEY_TYPE, std::shared_ptr<Keybind>>(
-        Components::KEY_TYPE::DROP, new Keybind(context, irr::EKEY_CODE::KEY_KEY_M)));
+        Components::KEY_TYPE::DROP, new Keybind(context, irr::EKEY_CODE::KEY_CONTROL)));
     /* ================================================================== */
     // Keybinds p2
     /* ================================================================== */
@@ -67,6 +67,8 @@ Indie::MultiKeybindsScene::MultiKeybindsScene(Indie::ContextManager &context)
         Components::KEY_TYPE::RIGHT, new Keybind(context, irr::EKEY_CODE::KEY_KEY_D)));
     p2Keybinds.push_back(std::pair<Indie::Components::KEY_TYPE, std::shared_ptr<Keybind>>(
         Components::KEY_TYPE::DROP, new Keybind(context, irr::EKEY_CODE::KEY_KEY_F)));
+    p1CharaSelector.setPos(0, 0);
+    p2CharaSelector.setPos(1, 0);
 }
 
 void Indie::MultiKeybindsScene::setData(InitGame *initGame)
@@ -195,10 +197,28 @@ void Indie::MultiKeybindsScene::update(irr::f32 ticks)
     /* ================================================================== */
     // CLICK BUTTONS
     /* ================================================================== */
-    if (p1CharaButton->getStatus() == Button::Status::Selected)
+    if (p1CharaButton->getStatus() == Button::Status::Selected) {
         p1CharaSelector.update();
-    if (p2CharaButton->getStatus() == Button::Status::Selected)
+        if (p2CharaSelector.getPos().first == p1CharaSelector.getPos().first) {
+            p1CharaSelector.setPos(p1CharaSelector.getPos().first + 1, p1CharaSelector.getPos().second);
+            p1CharaSelector.update();
+        }
+        if (p2CharaSelector.getPos().first == p1CharaSelector.getPos().first) {
+            p1CharaSelector.setPos(p1CharaSelector.getPos().first - 1, p1CharaSelector.getPos().second);
+            p1CharaSelector.update();
+        }
+    }
+    if (p2CharaButton->getStatus() == Button::Status::Selected) {
         p2CharaSelector.update();
+        if (p2CharaSelector.getPos().first == p1CharaSelector.getPos().first) {
+            p2CharaSelector.setPos(p2CharaSelector.getPos().first + 1, p2CharaSelector.getPos().second);
+            p2CharaSelector.update();
+        }
+        if (p2CharaSelector.getPos().first == p1CharaSelector.getPos().first) {
+            p2CharaSelector.setPos(p2CharaSelector.getPos().first - 1, p2CharaSelector.getPos().second);
+            p2CharaSelector.update();
+        }
+    }
     if (play->getStatus() == Button::Status::Pressed || EventHandler::getInstance().isKeyPressed(irr::EKEY_CODE::KEY_KEY_P) == true) {
         SceneManager &sceneManager = ServiceLocator::getInstance().get<SceneManager>();
 
