@@ -10,7 +10,7 @@
 
 using namespace Indie::Components;
 
-void Indie::Systems::TimerStopSystem::onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const
+void Indie::Systems::TimerStopSystem::onUpdate(irr::f32, EntityManager &entityManager) const
 {
     for (auto entity : entityManager.each<TimerComponent>()) {
         auto timer = entity->getComponent<TimerComponent>();

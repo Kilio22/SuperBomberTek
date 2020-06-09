@@ -147,7 +147,7 @@ void Indie::MultiKeybindsScene::reset()
     init();
 }
 
-void Indie::MultiKeybindsScene::update(irr::f32 ticks)
+void Indie::MultiKeybindsScene::update(irr::f32)
 {
     /* ================================================================== */
     // KEYBINDS UPDATE

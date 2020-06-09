@@ -49,7 +49,7 @@ namespace Indie::Systems
         bool checkCollisionWithWalls(
             EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox, Components::PlayerComponent *playerComponent) const;
         std::pair<bool, int> checkCollisionWithKillingEntities(
-            EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox, Components::PlayerComponent *playerComponent) const;
+            EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox) const;
     };
 } // namespace Indie::Systems
 

@@ -11,7 +11,7 @@
 
 using namespace Indie::Components;
 
-void Indie::Systems::PlayerSystem::onUpdate(irr::f32 deltaTime, EntityManager &entityManager) const
+void Indie::Systems::PlayerSystem::onUpdate(irr::f32, EntityManager &entityManager) const
 {
     for (auto entity : entityManager.each<PlayerComponent>()) {
         auto player = entity->getComponent<PlayerComponent>();

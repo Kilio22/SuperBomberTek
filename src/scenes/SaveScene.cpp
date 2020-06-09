@@ -48,7 +48,7 @@ void Indie::SaveScene::reset()
     this->init();
 }
 
-void Indie::SaveScene::update(irr::f32 ticks)
+void Indie::SaveScene::update(irr::f32)
 {
     std::string toDelete;
 

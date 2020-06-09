@@ -113,7 +113,7 @@ bool Indie::Systems::CollisionSystem::checkCollisionWithWalls(
 }
 
 std::pair<bool, int> Indie::Systems::CollisionSystem::checkCollisionWithKillingEntities(
-    EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox, Components::PlayerComponent *playerComponent) const
+    EntityManager &entityManager, const irr::core::aabbox3df &characterBoundingBox) const
 {
     for (Entity *entity : entityManager.each<Components::RenderComponent, Components::KillComponent>()) {
         auto renderComponent = entity->getComponent<Components::RenderComponent>();
@@ -167,7 +167,7 @@ void Indie::Systems::CollisionSystem::onUpdate(irr::f32, EntityManager &entityMa
 
             this->checkCollisionWithPowerUps(entityManager, updatedBoundingBox, entityPlayerComponent);
             this->checkCollisionWithPowerDowns(entityManager, updatedBoundingBox, entityPlayerComponent);
-            auto [collides, colliderOwnerId] = this->checkCollisionWithKillingEntities(entityManager, updatedBoundingBox, entityPlayerComponent);
+            auto [collides, colliderOwnerId] = this->checkCollisionWithKillingEntities(entityManager, updatedBoundingBox);
             if (collides == true) {
                 auto colliderPlayerEntity = entityManager.getById(colliderOwnerId);
                 auto colliderPlayerComponent
@@ -200,7 +200,7 @@ void Indie::Systems::CollisionSystem::onUpdate(irr::f32, EntityManager &entityMa
                 continue;
             }
         }
-        auto [collides, colliderOwnerId] = this->checkCollisionWithKillingEntities(entityManager, updatedBoundingBox, entityPlayerComponent);
+        auto [collides, colliderOwnerId] = this->checkCollisionWithKillingEntities(entityManager, updatedBoundingBox);
         if (collides == true) {
             auto colliderPlayerEntity = entityManager.getById(colliderOwnerId);
             auto colliderPlayerComponent

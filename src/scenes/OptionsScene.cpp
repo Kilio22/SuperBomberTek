@@ -57,7 +57,7 @@ void Indie::OptionsScene::reset()
     init();
 }
 
-void Indie::OptionsScene::update(irr::f32 ticks)
+void Indie::OptionsScene::update(irr::f32)
 {
     selector.update();
     if (selector.getPos().first != 1) {
