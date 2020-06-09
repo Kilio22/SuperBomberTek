@@ -159,9 +159,8 @@ void Indie::EndScene::setEndGame(const Indie::EndGame &endGame)
         else {
             const size_t cSize = strlen(this->endGame.scores[0].first.c_str())+1;
             wchar_t *wc = new wchar_t[cSize];
-            size_t outSize;
             #ifdef WIN32
-                mbstowcs_s(&outSize, wc, cSize, this->endGame.scores[0].first.c_str(), cSize - 1);
+                mbstowcs_s(NULL, wc, cSize, this->endGame.scores[0].first.c_str(), cSize - 1);
             #else
                 mbstowcs(wc, this->endGame.scores[0].first.c_str(), cSize);
             #endif // WIN32

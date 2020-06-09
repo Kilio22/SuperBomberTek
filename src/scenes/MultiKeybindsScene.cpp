@@ -53,7 +53,7 @@ Indie::MultiKeybindsScene::MultiKeybindsScene(Indie::ContextManager &context)
     p1Keybinds.push_back(std::pair<Indie::Components::KEY_TYPE, std::shared_ptr<Keybind>>(
         Components::KEY_TYPE::RIGHT, new Keybind(context, irr::EKEY_CODE::KEY_RIGHT)));
     p1Keybinds.push_back(std::pair<Indie::Components::KEY_TYPE, std::shared_ptr<Keybind>>(
-        Components::KEY_TYPE::DROP, new Keybind(context, irr::EKEY_CODE::KEY_CONTROL)));
+        Components::KEY_TYPE::DROP, new Keybind(context, irr::EKEY_CODE::KEY_RSHIFT)));
     /* ================================================================== */
     // Keybinds p2
     /* ================================================================== */
