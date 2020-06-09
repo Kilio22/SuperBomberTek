@@ -144,6 +144,7 @@ void Indie::SaveScene::renderPost3D()
         font->draw("Vide", RECT(120 + (i * 380), 190, 0, 0), {255, 255, 255, 255});
         font->draw("N/A", RECT(350 + (i * 380) - 15, 330, 0, 0), {255, 255, 255, 255});
     }
+    font->draw("Supprimer: Appuyez sur <Suppr>", RECT(850, 100, 0, 0), {255, 255, 255, 255});
 }
 
 void Indie::SaveScene::skipScene(bool update, bool render, bool subUpdate, bool subRender)
