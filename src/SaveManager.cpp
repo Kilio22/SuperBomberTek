@@ -173,6 +173,11 @@ void Indie::SaveManager::loadKeybinds(void)
     }
 }
 
+void Indie::SaveManager::resetCurentSave()
+{
+    this->currentSavePath = "";
+}
+
 void Indie::SaveManager::saveCurrentSave(void)
 {
     if (this->currentSavePath == "") {

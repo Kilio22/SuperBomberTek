@@ -34,17 +34,9 @@ namespace Indie
         private:
             void onUpdate();
 
-            enum class SAVE_BUTTON_TYPE
-            {
-                SAVE1,
-                SAVE2,
-                SAVE3,
-                NONE
-            };
-
             ContextManager &context;
             UiSelector selector;
-            std::unordered_map<SAVE_BUTTON_TYPE, std::unique_ptr<Button>> saveButtons;
+            std::unordered_map<int, std::unique_ptr<Button>> saveButtons;
             std::unique_ptr<Button> play;
             std::unique_ptr<Prompt> prompt;
             Image *title;
