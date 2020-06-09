@@ -284,7 +284,7 @@ std::vector<std::pair<std::string, time_t>> Indie::SaveManager::getSavedGame(voi
     std::vector<std::pair<std::string, time_t>> nameSaves;
 
     for (const auto &entry : std::filesystem::directory_iterator("../ressources/.saves/")) {
-        if (entry.is_regular_file() == true && entry.path().extension() == ".txt") {
+        if (entry.is_regular_file() == true && entry.path().extension() == ".supersave") {
             auto timeEntry = entry.last_write_time();
             time_t cftime = to_time_t(timeEntry);
             nameSaves.push_back({ServiceLocator::getInstance().get<SceneManager>().getScene<Indie::SoloScene>()->getFileName(entry.path().u8string()), cftime});

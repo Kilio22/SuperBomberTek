@@ -13,6 +13,7 @@
 #include "IScene.hpp"
 #include "UiSelector.hpp"
 #include <memory>
+#include <utility>
 #include <unordered_map>
 
 namespace Indie
