@@ -21,9 +21,6 @@ void Indie::GameEngine::setupMusicManager()
     ServiceLocator::getInstance().get<MusicManager>().addMusic("../ressources/musics/main_menu.wav"); // id 0
     ServiceLocator::getInstance().get<MusicManager>().addMusic("../ressources/musics/level_select.wav"); // id 1
     ServiceLocator::getInstance().get<MusicManager>().setMusic(0);
-    ServiceLocator::getInstance().get<MusicManager>().setVolume(10);
-    ServiceLocator::getInstance().get<MusicManager>().unMute();
-    ServiceLocator::getInstance().get<MusicManager>().playMusic();
 }
 
 void Indie::GameEngine::setupSoundManager()
@@ -41,8 +38,6 @@ void Indie::GameEngine::setupSoundManager()
     ServiceLocator::getInstance().get<SoundManager>().addSound("../ressources/sounds/power_up.wav");
     ServiceLocator::getInstance().get<SoundManager>().addSound("../ressources/sounds/title_select.wav");
     ServiceLocator::getInstance().get<SoundManager>().addSound("../ressources/sounds/xp_up.wav");
-    ServiceLocator::getInstance().get<SoundManager>().setVolume(10);
-    ServiceLocator::getInstance().get<SoundManager>().setMute(false);
 }
 
 void Indie::GameEngine::setupSceneManager(ContextManager &context)
@@ -117,6 +112,8 @@ void Indie::GameEngine::startGame()
     this->setupSoundManager();
     this->setupMusicManager();
     this->setupSceneManager(context);
+    ServiceLocator::getInstance().get<SaveManager>().loadMusicParams();
+    ServiceLocator::getInstance().get<MusicManager>().playMusic();
 
     this->context.getDevice()->setEventReceiver(&EventHandler::getInstance());
 

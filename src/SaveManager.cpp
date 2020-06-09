@@ -9,11 +9,11 @@
 #include "FileParser.hpp"
 #include "MasterInfo.hpp"
 #include "MusicManager.hpp"
+#include "PlayerMaps.hpp"
 #include "SceneManager.hpp"
 #include "Scenes.h"
 #include "ServiceLocator.hpp"
 #include "SoundManager.hpp"
-#include "PlayerMaps.hpp"
 #include <filesystem>
 
 Indie::SaveManager::SaveManager()
@@ -30,7 +30,6 @@ Indie::SaveManager::~SaveManager()
 void Indie::SaveManager::loadSave(const std::string &filepath)
 {
     if (filepath == this->currentSavePath) {
-        this->loadMusicParams();
         this->loadMasterInfos();
         this->loadKeybinds();
         return;
@@ -45,11 +44,9 @@ void Indie::SaveManager::loadSave(const std::string &filepath)
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
         this->resetMasterInfos();
-        this->resetVolume();
         this->resetKeybinds();
         return;
     }
-    this->loadMusicParams();
     this->loadMasterInfos();
     this->loadKeybinds();
 }
@@ -60,15 +57,17 @@ void Indie::SaveManager::loadMusicParams(void)
     SoundManager &soundManager = ServiceLocator::getInstance().get<SoundManager>();
 
     try {
-        const std::string &musicVolume = this->currentSave.at("MUSIC_VOLUME");
-        const std::string &muteMusic = this->currentSave.at("MUSIC_MUTE");
-        const std::string &soundVolume = this->currentSave.at("SOUND_VOLUME");
-        const std::string &muteSound = this->currentSave.at("SOUND_MUTE");
+        std::unordered_map<std::string, std::string> parsedData = Indie::ServiceLocator::getInstance().get<FileParser>().parse(
+            "../ressources/.saves/settings.supersettings");
+        const std::string &musicVolume = parsedData.at("MUSIC_VOLUME");
+        const std::string &muteMusic = parsedData.at("MUSIC_MUTE");
+        const std::string &soundVolume = parsedData.at("SOUND_VOLUME");
+        const std::string &muteSound = parsedData.at("SOUND_MUTE");
 
         if (musicVolume == "" || muteMusic == "" || soundVolume == "" || muteSound == "")
-            throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"" + this->currentSavePath + "\" corrupted1.");
+            throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"../ressources/.saves/settings.supersettings\" corrupted1.");
         if ((muteMusic != "true" && muteMusic != "false") || (muteSound != "true" && muteSound != "false"))
-            throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"" + this->currentSavePath + "\" corrupted1.");
+            throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"../ressources/.saves/settings.supersettings\" corrupted1.");
         if (muteMusic == "true") {
             musicManager.mute();
         } else {
@@ -83,7 +82,7 @@ void Indie::SaveManager::loadMusicParams(void)
         int soundVolumeValue = std::stoi(soundVolume);
 
         if (musicVolumeValue > 20 || musicVolumeValue < 0 || soundVolumeValue > 20 || soundVolumeValue < 0)
-            throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"" + this->currentSavePath + "\" corrupted1.");
+            throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"../ressources/.saves/settings.supersettings\" corrupted1.");
         musicManager.setVolume(musicVolumeValue);
         soundManager.setVolume(soundVolumeValue);
     } catch (const std::exception &e) {
@@ -198,18 +197,25 @@ void Indie::SaveManager::saveMusicParams(void)
 {
     auto &musicManager = ServiceLocator::getInstance().get<MusicManager>();
     auto &soundManager = ServiceLocator::getInstance().get<SoundManager>();
+    std::unordered_map<std::string, std::string> musicData;
 
-    this->saveValue({ "MUSIC_VOLUME", std::to_string(musicManager.getMusicVolume()) });
+    musicData.insert({ "MUSIC_VOLUME", std::to_string(musicManager.getMusicVolume()) });
     if (musicManager.isMusicMuted() == true) {
-        this->saveValue({ "MUSIC_MUTE", "true" });
+        musicData.insert({ "MUSIC_MUTE", "true" });
     } else {
-        this->saveValue({ "MUSIC_MUTE", "false" });
+        musicData.insert({ "MUSIC_MUTE", "false" });
     }
-    this->saveValue({ "SOUND_VOLUME", std::to_string(soundManager.getVolume()) });
+    musicData.insert({ "SOUND_VOLUME", std::to_string(soundManager.getVolume()) });
     if (soundManager.isMuted() == true) {
-        this->saveValue({ "SOUND_MUTE", "true" });
+        musicData.insert({ "SOUND_MUTE", "true" });
     } else {
-        this->saveValue({ "SOUND_MUTE", "false" });
+        musicData.insert({ "SOUND_MUTE", "false" });
+    }
+    try {
+        Indie::ServiceLocator::getInstance().get<FileParser>().writeToFile("../ressources/.saves/settings.supersettings", musicData);
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << std::endl;
+        std::cerr << "Can't save settings" << std::endl;
     }
 }
 
@@ -280,8 +286,7 @@ template <typename TP>
 time_t to_time_t(TP tp)
 {
     using namespace std::chrono;
-    auto sctp = time_point_cast<system_clock::duration>(tp - TP::clock::now()
-              + system_clock::now());
+    auto sctp = time_point_cast<system_clock::duration>(tp - TP::clock::now() + system_clock::now());
     return system_clock::to_time_t(sctp);
 }
 
@@ -293,9 +298,9 @@ std::vector<std::pair<std::string, time_t>> Indie::SaveManager::getSavedGame(voi
         if (entry.is_regular_file() == true && entry.path().extension() == ".supersave") {
             auto timeEntry = entry.last_write_time();
             time_t cftime = to_time_t(timeEntry);
-            nameSaves.push_back({ServiceLocator::getInstance().get<SceneManager>().getScene<Indie::SoloScene>()->getFileName(entry.path().u8string()), cftime});
+            nameSaves.push_back(
+                { ServiceLocator::getInstance().get<SceneManager>().getScene<Indie::SoloScene>()->getFileName(entry.path().u8string()), cftime });
         }
     }
     return nameSaves;
 }
-

@@ -23,6 +23,7 @@ namespace Indie
 
         void loadSave(const std::string &filepath);
         void saveCurrentSave(void);
+        void loadMusicParams(void);
         void setCurrentSave(const std::unordered_map<std::string, std::string> &newSave);
         void saveValue(const std::pair<std::string, std::string> &value);
 
@@ -31,7 +32,6 @@ namespace Indie
         void resetCurentSave();
 
     private:
-        void loadMusicParams(void);
         void loadMasterInfos(void);
         void loadKeybinds(void);
         void saveMusicParams(void);
