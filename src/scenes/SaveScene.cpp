@@ -115,7 +115,7 @@ void Indie::SaveScene::renderPost3D()
     int i = 0;
 
     for (size_t buttonType = (size_t)SAVE_BUTTON_TYPE::SAVE1; buttonType < (size_t)SAVE_BUTTON_TYPE::NONE; buttonType++) {
-        if (this->saveSelected == buttonType + 1)
+        if (this->saveSelected == (int)(buttonType) + 1)
             this->saveButtons.at((SAVE_BUTTON_TYPE)buttonType)->setStatus(Button::Status::Selected);
     }
     context.displayImage(title);

@@ -39,7 +39,6 @@ namespace Indie
                 SAVE1,
                 SAVE2,
                 SAVE3,
-                PLAY,
                 NONE
             };
 

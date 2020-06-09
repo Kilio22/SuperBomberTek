@@ -222,7 +222,7 @@ void Indie::SaveManager::setCurrentSave(const std::unordered_map<std::string, st
     this->currentSave = newSave;
 }
 
-std::unordered_map<std::string, std::string> Indie::SaveManager::getCurrentSave(void) const
+std::unordered_map<std::string, std::string> &Indie::SaveManager::getCurrentSave(void)
 {
     return this->currentSave;
 }
