@@ -5,9 +5,12 @@
 ** SaveScene
 */
 
+#define __STDC_WANT_LIB_EXT1__ 1
+#define _XOPEN_SOURCE
+
+#include "SaveScene.hpp"
 #include "EntityManager.hpp"
 #include "ImageLoader.hpp"
-#include "SaveScene.hpp"
 #include "ServiceLocator.hpp"
 #include "SceneManager.hpp"
 #include "SaveManager.hpp"
@@ -19,27 +22,24 @@
 Indie::SaveScene::SaveScene(ContextManager &context)
     : context(context)
     , selector(3, 3, irr::EKEY_CODE::KEY_UP, irr::EKEY_CODE::KEY_DOWN, irr::EKEY_CODE::KEY_LEFT, irr::EKEY_CODE::KEY_RIGHT)
+    , play(std::make_unique<Button>(context))
+    , prompt(std::make_unique<Prompt>(context))
 {
+    for (size_t buttonType = (size_t)SAVE_BUTTON_TYPE::SAVE1; buttonType < (size_t)SAVE_BUTTON_TYPE::NONE; buttonType++) {
+        this->saveButtons.insert({(SAVE_BUTTON_TYPE)buttonType, std::make_unique<Button>(context)});
+    }
 }
 
 void Indie::SaveScene::init()
 {
-    this->savedGame = ServiceLocator::getInstance().get<Indie::SaveManager>().getSavedGame();
-    this->title = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/save/title.png");
     this->font = context.getGuiEnv()->getFont("../ressources/font/Banschrift.xml");
-
-    this->play.reset(new Button(context));
-    this->save1.reset(new Button(context));
-    this->save2.reset(new Button(context));
-    this->save3.reset(new Button(context));
-    this->prompt.reset(new Prompt(context));
-
-    this->save1->init(context, "../ressources/images/save/Save1.png", 0, 0, POS(0,0), false);
-    this->save2->init(context, "../ressources/images/save/Save2.png", 1, 0, POS(0,0), false);
-    this->save3->init(context, "../ressources/images/save/Save3.png", 2, 0, POS(0,0), false);
-
+    this->title = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/save/title.png");
+    this->saveButtons.at(SAVE_BUTTON_TYPE::SAVE1)->init(context, "../ressources/images/save/Save1.png", 0, 0, POS(0,0), false);
+    this->saveButtons.at(SAVE_BUTTON_TYPE::SAVE2)->init(context, "../ressources/images/save/Save2.png", 1, 0, POS(0,0), false);
+    this->saveButtons.at(SAVE_BUTTON_TYPE::SAVE3)->init(context, "../ressources/images/save/Save3.png", 2, 0, POS(0,0), false);
     this->prompt->init("../ressources/images/save/TextBar.png", 1, 1, POS(460, 455));
     this->play->init(context, "../ressources/images/save/Jouer.png", 1, 2, POS(0, 0));
+    this->savedGame = ServiceLocator::getInstance().get<Indie::SaveManager>().getSavedGame();
 }
 
 void Indie::SaveScene::reset()
@@ -51,12 +51,13 @@ void Indie::SaveScene::reset()
 void Indie::SaveScene::update(irr::f32 ticks)
 {
     std::string toDelete;
+
     selector.update();
     if (selector.getPos().second >= 1)
         selector.setPos(1, selector.getPos().second);
-    this->save1->update(selector.getPos());
-    this->save2->update(selector.getPos());
-    this->save3->update(selector.getPos());
+    this->saveButtons.at(SAVE_BUTTON_TYPE::SAVE1)->update(selector.getPos());
+    this->saveButtons.at(SAVE_BUTTON_TYPE::SAVE2)->update(selector.getPos());
+    this->saveButtons.at(SAVE_BUTTON_TYPE::SAVE3)->update(selector.getPos());
     this->prompt->update(selector.getPos());
     this->play->update(selector.getPos());
 
@@ -71,48 +72,39 @@ void Indie::SaveScene::update(irr::f32 ticks)
         this->saveSelected = 0;
     }
     if (play->getStatus() == Button::Status::Pressed && this->prompt->getText().size() > 0 && this->saveSelected != 0) {
-        ServiceLocator::getInstance().get<SaveManager>().loadSave("../ressources/.saves/" + this->prompt->getText() + ".txt");
+        ServiceLocator::getInstance().get<SaveManager>().loadSave("../ressources/.saves/" + this->prompt->getText() + ".supersave");
         ServiceLocator::getInstance().get<SaveManager>().saveCurrentSave();
         if ((int)this->savedGame.size() >= this->saveSelected && this->savedGame.at(this->saveSelected - 1).first != this->prompt->getText()) {
-            toDelete = "../ressources/.saves/" + this->savedGame.at(this->saveSelected - 1).first + ".txt";
+            toDelete = "../ressources/.saves/" + this->savedGame.at(this->saveSelected - 1).first + ".supersave";
             ServiceLocator::getInstance().get<SaveManager>().loadSave(toDelete);
             std::unordered_map<std::string, std::string> currentSave = ServiceLocator::getInstance().get<SaveManager>().getCurrentSave();
-            ServiceLocator::getInstance().get<SaveManager>().loadSave("../ressources/.saves/" + this->prompt->getText() + ".txt");
+            ServiceLocator::getInstance().get<SaveManager>().loadSave("../ressources/.saves/" + this->prompt->getText() + ".supersave");
             ServiceLocator::getInstance().get<SaveManager>().setCurrentSave(currentSave);
             ServiceLocator::getInstance().get<SaveManager>().saveCurrentSave();
-            remove(toDelete.c_str());
+            std::remove(toDelete.c_str());
         }
+        this->prompt->setText("");
         this->onUpdate();
         ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::MainMenuScene>();
         skipScene(true, true, true, true);
         this->saveSelected = 0;
     }
     if (EventHandler::getInstance().isKeyPressedAtOnce(irr::KEY_DELETE) && this->saveSelected != 0 && this->savedGame.size() > 0) {
-        toDelete = "../ressources/.saves/" + this->savedGame.at(this->saveSelected - 1).first + ".txt";
+        toDelete = "../ressources/.saves/" + this->savedGame.at(this->saveSelected - 1).first + ".supersave";
         this->saveSelected = 0;
-        remove(toDelete.c_str());
+        std::remove(toDelete.c_str());
+        this->prompt->setText("");
         this->onUpdate();
     }
-    if (save1->getStatus() == Button::Status::Pressed) {
-        this->saveSelected = 1;
-        if (this->savedGame.size() >= 1)
-            this->prompt->setText(this->savedGame.at(0).first);
-        else
-            this->prompt->setText("");
-    }
-    if (save2->getStatus() == Button::Status::Pressed) {
-        this->saveSelected = 2;
-        if (this->savedGame.size() >= 2)
-            this->prompt->setText(this->savedGame.at(1).first);
-        else
-            this->prompt->setText("");
-    }
-    if (save3->getStatus() == Button::Status::Pressed) {
-        this->saveSelected = 3;
-        if (this->savedGame.size() >= 3)
-            this->prompt->setText(this->savedGame.at(2).first);
-        else
-            this->prompt->setText("");
+
+    for (size_t buttonType = (size_t)SAVE_BUTTON_TYPE::SAVE1; buttonType < (size_t)SAVE_BUTTON_TYPE::NONE; buttonType++) {
+        if (this->saveButtons.at((SAVE_BUTTON_TYPE)buttonType)->getStatus() == Button::Status::Pressed) {
+            this->saveSelected = buttonType + 1;
+            if (this->savedGame.size() >= buttonType + 1)
+                this->prompt->setText(this->savedGame.at(buttonType).first);
+            else
+                this->prompt->setText("");
+        }
     }
 }
 
@@ -122,25 +114,26 @@ void Indie::SaveScene::renderPost3D()
 {
     int i = 0;
 
-    if (this->saveSelected == 1)
-        this->save1->setStatus(Button::Status::Selected);
-    if (this->saveSelected == 2)
-        this->save2->setStatus(Button::Status::Selected);
-    if (this->saveSelected == 3)
-        this->save3->setStatus(Button::Status::Selected);
+    for (size_t buttonType = (size_t)SAVE_BUTTON_TYPE::SAVE1; buttonType < (size_t)SAVE_BUTTON_TYPE::NONE; buttonType++) {
+        if (this->saveSelected == (int)(buttonType) + 1)
+            this->saveButtons.at((SAVE_BUTTON_TYPE)buttonType)->setStatus(Button::Status::Selected);
+    }
     context.displayImage(title);
-    this->save1->draw();
-    this->save2->draw();
-    this->save3->draw();
+    for (size_t buttonType = (size_t)SAVE_BUTTON_TYPE::SAVE1; buttonType < (size_t)SAVE_BUTTON_TYPE::NONE; buttonType++)
+        this->saveButtons.at((SAVE_BUTTON_TYPE)buttonType)->draw();
     this->play->draw();
     this->prompt->draw();
 
     for (const auto game : this->savedGame) {
-        struct tm * timeinfo = localtime (&game.second);
+        struct tm * timeinfo = localtime(&game.second);
         char time[80];
-        strftime (time,80,"%d/%m/%Y %H:%M:%S",timeinfo);
+        #ifdef __STDC_LIB_EXT1__
+            localtime_s(&timeinfo, &game.second);
+        #else
+            timeinfo = localtime(&game.second);
+        #endif
+        (void)strftime(time, 80, "%d/%m/%Y %H:%M:%S", timeinfo);
         std::string timeString(time);
-
         font->draw(game.first.c_str(), RECT(120 + (i * 380), 190, 0, 0), {255, 255, 255, 255});
         font->draw(time, RECT(350 + (i * 380) - (9 * timeString.size()), 330, 0, 0), {255, 255, 255, 255});
         i++;

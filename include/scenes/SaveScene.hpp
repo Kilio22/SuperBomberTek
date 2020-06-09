@@ -14,6 +14,7 @@
 #include "Prompt.hpp"
 #include "UiSelector.hpp"
 #include <memory>
+#include <unordered_map>
 
 namespace Indie
 {
@@ -33,11 +34,17 @@ namespace Indie
         private:
             void onUpdate();
 
+            enum class SAVE_BUTTON_TYPE
+            {
+                SAVE1,
+                SAVE2,
+                SAVE3,
+                NONE
+            };
+
             ContextManager &context;
             UiSelector selector;
-            std::unique_ptr<Button> save1;
-            std::unique_ptr<Button> save2;
-            std::unique_ptr<Button> save3;
+            std::unordered_map<SAVE_BUTTON_TYPE, std::unique_ptr<Button>> saveButtons;
             std::unique_ptr<Button> play;
             std::unique_ptr<Prompt> prompt;
             Image *title;

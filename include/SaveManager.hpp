@@ -26,7 +26,7 @@ namespace Indie
         void setCurrentSave(const std::unordered_map<std::string, std::string> &newSave);
         void saveValue(const std::pair<std::string, std::string> &value);
 
-        std::unordered_map<std::string, std::string> getCurrentSave(void) const;
+        std::unordered_map<std::string, std::string> &getCurrentSave(void);
         std::vector<std::pair<std::string, time_t>> getSavedGame(void);
 
     private:
