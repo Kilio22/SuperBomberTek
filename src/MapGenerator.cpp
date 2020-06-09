@@ -170,6 +170,10 @@ void Indie::MapGenerator::createSavedMap(
     if ((int)map.size() != dimension.Y) {
         throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File " + mapPath + " corrupted.");
     }
+    if (map.at(dimension.Y - 2).at(dimension.X - 2) != OBJECT::VOID || map.at(1).at(1) != OBJECT::VOID ||
+map.at(1).at(dimension.X - 2) != OBJECT::VOID || map.at(dimension.Y - 2).at(1) != OBJECT::VOID) {
+        throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File " + mapPath + " corrupted.");
+    }
 }
 
 void Indie::MapGenerator::setSpawn(std::vector<std::vector<Indie::Components::OBJECT>> &map, irr::core::vector2di dimension)
