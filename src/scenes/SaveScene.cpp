@@ -24,6 +24,7 @@ Indie::SaveScene::SaveScene(ContextManager &context)
 
 void Indie::SaveScene::init()
 {
+    this->savedGame = ServiceLocator::getInstance().get<Indie::SaveManager>().getSavedGame();
     this->title = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/save/title.png");
     this->font = context.getGuiEnv()->getFont("../ressources/font/Banschrift.xml");
 
@@ -49,7 +50,6 @@ void Indie::SaveScene::reset()
 
 void Indie::SaveScene::update(irr::f32 ticks)
 {
-    std::vector<std::pair<std::string, time_t>> savedGame = ServiceLocator::getInstance().get<Indie::SaveManager>().getSavedGame();
     std::string toDelete;
     selector.update();
     if (selector.getPos().second >= 1)
@@ -73,8 +73,8 @@ void Indie::SaveScene::update(irr::f32 ticks)
     if (play->getStatus() == Button::Status::Pressed && this->prompt->getText().size() > 0 && this->saveSelected != 0) {
         ServiceLocator::getInstance().get<SaveManager>().loadSave("../ressources/.saves/" + this->prompt->getText() + ".txt");
         ServiceLocator::getInstance().get<SaveManager>().saveCurrentSave();
-        if ((int)savedGame.size() >= this->saveSelected && savedGame.at(this->saveSelected - 1).first != this->prompt->getText()) {
-            toDelete = "../ressources/.saves/" + savedGame.at(this->saveSelected - 1).first + ".txt";
+        if ((int)this->savedGame.size() >= this->saveSelected && this->savedGame.at(this->saveSelected - 1).first != this->prompt->getText()) {
+            toDelete = "../ressources/.saves/" + this->savedGame.at(this->saveSelected - 1).first + ".txt";
             ServiceLocator::getInstance().get<SaveManager>().loadSave(toDelete);
             std::unordered_map<std::string, std::string> currentSave = ServiceLocator::getInstance().get<SaveManager>().getCurrentSave();
             ServiceLocator::getInstance().get<SaveManager>().loadSave("../ressources/.saves/" + this->prompt->getText() + ".txt");
@@ -82,33 +82,35 @@ void Indie::SaveScene::update(irr::f32 ticks)
             ServiceLocator::getInstance().get<SaveManager>().saveCurrentSave();
             remove(toDelete.c_str());
         }
+        this->onUpdate();
         ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::MainMenuScene>();
         skipScene(true, true, true, true);
         this->saveSelected = 0;
     }
-    if (EventHandler::getInstance().isKeyPressedAtOnce(irr::KEY_DELETE) && this->saveSelected != 0 && savedGame.size() > 0) {
-        toDelete = "../ressources/.saves/" + savedGame.at(this->saveSelected - 1).first + ".txt";
+    if (EventHandler::getInstance().isKeyPressedAtOnce(irr::KEY_DELETE) && this->saveSelected != 0 && this->savedGame.size() > 0) {
+        toDelete = "../ressources/.saves/" + this->savedGame.at(this->saveSelected - 1).first + ".txt";
         this->saveSelected = 0;
         remove(toDelete.c_str());
+        this->onUpdate();
     }
     if (save1->getStatus() == Button::Status::Pressed) {
         this->saveSelected = 1;
-        if (savedGame.size() >= 1)
-            this->prompt->setText(savedGame.at(0).first);
+        if (this->savedGame.size() >= 1)
+            this->prompt->setText(this->savedGame.at(0).first);
         else
             this->prompt->setText("");
     }
     if (save2->getStatus() == Button::Status::Pressed) {
         this->saveSelected = 2;
-        if (savedGame.size() >= 2)
-            this->prompt->setText(savedGame.at(1).first);
+        if (this->savedGame.size() >= 2)
+            this->prompt->setText(this->savedGame.at(1).first);
         else
             this->prompt->setText("");
     }
     if (save3->getStatus() == Button::Status::Pressed) {
         this->saveSelected = 3;
-        if (savedGame.size() >= 3)
-            this->prompt->setText(savedGame.at(2).first);
+        if (this->savedGame.size() >= 3)
+            this->prompt->setText(this->savedGame.at(2).first);
         else
             this->prompt->setText("");
     }
@@ -118,7 +120,6 @@ void Indie::SaveScene::renderPre3D() {}
 
 void Indie::SaveScene::renderPost3D()
 {
-    std::vector<std::pair<std::string, time_t>> savedGame = ServiceLocator::getInstance().get<Indie::SaveManager>().getSavedGame();
     int i = 0;
 
     if (this->saveSelected == 1)
@@ -134,7 +135,7 @@ void Indie::SaveScene::renderPost3D()
     this->play->draw();
     this->prompt->draw();
 
-    for (const auto game : savedGame) {
+    for (const auto game : this->savedGame) {
         struct tm * timeinfo = localtime (&game.second);
         char time[80];
         strftime (time,80,"%d/%m/%Y %H:%M:%S",timeinfo);
@@ -156,4 +157,9 @@ void Indie::SaveScene::skipScene(bool update, bool render, bool subUpdate, bool 
     Indie::ServiceLocator::getInstance().get<SceneManager>().setSceneRenderActive(render);
     Indie::ServiceLocator::getInstance().get<SceneManager>().setSubSceneUpdateActive(subUpdate);
     Indie::ServiceLocator::getInstance().get<SceneManager>().setSubSceneRenderActive(subRender);
+}
+
+void Indie::SaveScene::onUpdate()
+{
+    this->savedGame = ServiceLocator::getInstance().get<Indie::SaveManager>().getSavedGame();
 }

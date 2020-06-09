@@ -31,6 +31,8 @@ namespace Indie
             void skipScene(bool update, bool render, bool subUpdate, bool subRender);
 
         private:
+            void onUpdate();
+
             ContextManager &context;
             UiSelector selector;
             std::unique_ptr<Button> save1;
@@ -41,6 +43,7 @@ namespace Indie
             Image *title;
             irr::gui::IGUIFont *font;
             int saveSelected;
+            std::vector<std::pair<std::string, time_t>> savedGame;
     };
 }
 
