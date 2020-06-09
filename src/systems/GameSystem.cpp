@@ -20,7 +20,7 @@ void Indie::Systems::GameSystem::onUpdate(irr::f32 deltaTime, EntityManager &ent
     auto &sceneManager = ServiceLocator::getInstance().get<SceneManager>();
     auto game = entityManager.getUniqueEntity<GameComponent>()->getComponent<GameComponent>();
 
-    if (game->getTimeToEnd() > 0.f)
+    if (game->getTimeToEnd() > 0.f && game->getGameStatus() == MATCH_PLAY::NOT_ENDED)
         game->setTimeToEnd(game->getTimeToEnd() - deltaTime);
     if (game->getGameStatus() == MATCH_PLAY::NOT_ENDED && this->isGameEnded(entityManager, game)) {
         ServiceLocator::getInstance().get<MusicManager>().pauseMusic();
@@ -44,7 +44,7 @@ void Indie::Systems::GameSystem::onUpdate(irr::f32 deltaTime, EntityManager &ent
         this->endGame(entityManager, sceneManager, game->getGameStatus());
         entityManager.cleanup();
         sceneManager.setSceneUpdateActive(false);
-        sceneManager.setSceneRenderActive(true);
+        sceneManager.setSceneRenderActive(false);
         ServiceLocator::getInstance().get<MusicManager>().playMusic();
         sceneManager.setSubScene<EndScene>();
     }
