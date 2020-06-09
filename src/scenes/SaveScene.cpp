@@ -12,6 +12,7 @@
 #include "ImageLoader.hpp"
 #include "SaveManager.hpp"
 #include "SceneManager.hpp"
+#include "SoundManager.hpp"
 #include "Scenes.h"
 #include "ServiceLocator.hpp"
 #include <ctime>
@@ -53,8 +54,10 @@ void Indie::SaveScene::update(irr::f32 ticks)
     std::string toDelete;
 
     selector.update();
-    if (selector.getPos().second >= 1)
+    if (selector.getPos().second >= 1 && selector.getPos().first != 1) {
+        ServiceLocator::getInstance().get<SoundManager>().playSound("menu_lock");
         selector.setPos(1, selector.getPos().second);
+    }
     this->saveButtons.at(0)->update(selector.getPos());
     this->saveButtons.at(1)->update(selector.getPos());
     this->saveButtons.at(2)->update(selector.getPos());
