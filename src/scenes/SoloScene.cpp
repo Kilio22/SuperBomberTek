@@ -16,18 +16,9 @@
 #include "PauseScene.hpp"
 #include "ServiceLocator.hpp"
 #include "SoundManager.hpp"
+#include "PlayerMaps.hpp"
 #include <filesystem>
 #include <fstream>
-
-const std::vector<std::pair<std::string, unsigned int>> Indie::SoloScene::mapPaths {
-    { "Defaut", 0U },
-    { "Procedurale", 0U },
-    { "../ressources/maps/Lagon.supermap", 2U },
-    { "../ressources/maps/Esport.supermap", 4U },
-    { "../ressources/maps/Maze.supermap", 6U },
-    { "../ressources/maps/Suico.supermap", 8U },
-    { "../ressources/maps/Empty.supermap", 10U },
-};
 
 const std::unordered_map<Indie::SoloScene::UI_SELECTOR_TYPE, irr::core::vector2di> Indie::SoloScene::uiSelectorsSize
     = { { Indie::SoloScene::UI_SELECTOR_TYPE::DEFAULT, { 5, 6 } }, { Indie::SoloScene::UI_SELECTOR_TYPE::SKIN, { 1, 1 } },
@@ -137,7 +128,7 @@ void Indie::SoloScene::init()
     /* ================================================================== */
     this->lvl = ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->getMasterInfo().lvl;
     this->availableMaps.clear();
-    for (auto [mapPath, reqLvl] : this->mapPaths) {
+    for (auto [mapPath, reqLvl] : PlayerMaps::mapPaths) {
         if (this->lvl >= reqLvl)
             this->availableMaps.push_back(mapPath);
     }
@@ -148,8 +139,8 @@ void Indie::SoloScene::init()
             availableSkins.push_back({ playerSkin.path, playerSkin.color });
     }
     this->uiSelectors[UI_SELECTOR_TYPE::SKIN]->setSize((int)availableSkins.size(), 1);
-    this->playerParams->playerTexture = availableSkins[this->uiSelectors[UI_SELECTOR_TYPE::SKIN]->getPos().first].first;
-    this->playerParams->playerColor = availableSkins[this->uiSelectors[UI_SELECTOR_TYPE::SKIN]->getPos().first].second;
+    this->playerParams->playerTexture = availableSkins.at(this->uiSelectors[UI_SELECTOR_TYPE::SKIN]->getPos().first).first;
+    this->playerParams->playerColor = availableSkins.at(this->uiSelectors[UI_SELECTOR_TYPE::SKIN]->getPos().first).second;
     this->playerParams->playerKeys.clear();
     this->initGame->mapPath = availableMaps.at(this->uiSelectors[UI_SELECTOR_TYPE::MAP]->getPos().first);
     this->initGame->mapTheme = (this->uiSelectors[UI_SELECTOR_TYPE::THEME]->getPos().first == 0) ? Components::THEME::DIRT : Components::THEME::STONE;

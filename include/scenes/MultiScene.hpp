@@ -71,12 +71,8 @@ namespace Indie
         irr::scene::IAnimatedMeshSceneNode *theme1;
         irr::scene::IAnimatedMeshSceneNode *theme2;
         float modelRotation;
-        std::vector<std::string> mapPaths;
+        std::vector<std::string> availableMaps;
         std::unique_ptr<InitGame> initGame;
-        // TODO : XP BAR
-        // TODO : Recup le level et l'xp qqpart. Faudra just set les valeurs du coup.
-        unsigned short int xp;
-        unsigned short int lvl;
     };
 }
 

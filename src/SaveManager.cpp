@@ -13,6 +13,7 @@
 #include "Scenes.h"
 #include "ServiceLocator.hpp"
 #include "SoundManager.hpp"
+#include "PlayerMaps.hpp"
 #include <filesystem>
 
 Indie::SaveManager::SaveManager()
@@ -97,9 +98,9 @@ void Indie::SaveManager::loadMasterInfos(void)
     std::unordered_map<std::string, std::string> mapsData;
     MasterInfo info;
 
-    for (const auto &mapPath : SoloScene::mapPaths) {
+    for (const auto &mapPath : PlayerMaps::mapPaths) {
         const auto &it
-            = std::find_if(this->currentSave.begin(), this->currentSave.end(), [mapPath](const auto &ref) { return ref.first == mapPath.first; });
+            = std::find_if(this->currentSave.begin(), this->currentSave.end(), [mapPath](const auto &ref) { return ref.first == mapPath.path; });
 
         if (it != this->currentSave.end()) {
             mapsData.insert({ it->first, it->second });

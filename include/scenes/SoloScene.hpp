@@ -39,8 +39,6 @@ namespace Indie
         void resetKeybinds(void);
         std::string getFileName(std::string const &filepath);
 
-        static const std::vector<std::pair<std::string, unsigned int>> mapPaths;
-
     private:
         enum class BUTTON_TYPE
         {

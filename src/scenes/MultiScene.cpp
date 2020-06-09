@@ -19,6 +19,7 @@
 #include "ServiceLocator.hpp"
 #include "SoloScene.hpp"
 #include "SoundManager.hpp"
+#include "PlayerMaps.hpp"
 #include <filesystem>
 
 const std::unordered_map<Indie::MultiScene::UI_SELECTOR_TYPE, irr::core::vector2di> Indie::MultiScene::uiSelectorsSize
@@ -48,14 +49,6 @@ Indie::MultiScene::MultiScene(Indie::ContextManager &context)
     this->pUps->setStatus(this->initGame->powerUp);
     this->uiSelectors.at(UI_SELECTOR_TYPE::DEFAULT)->setPos(1, 0);
     this->uiSelectors.at(UI_SELECTOR_TYPE::TIME)->setPos(18, 0);
-    mapPaths.push_back("Default");
-    mapPaths.push_back("Random");
-    for (const auto &entry : std::filesystem::directory_iterator("../ressources/maps/")) {
-        if (entry.is_regular_file() == true) {
-            mapPaths.push_back(entry.path().u8string());
-        }
-    }
-    this->uiSelectors.at(UI_SELECTOR_TYPE::MAP)->setSize(int(mapPaths.size()), 1);
     for (size_t buttonType = (size_t)BUTTON_TYPE::THEME; buttonType < (size_t)BUTTON_TYPE::NONE; buttonType++) {
         this->buttons.insert({ (BUTTON_TYPE)buttonType, std::make_unique<Button>(context) });
     }
@@ -65,8 +58,7 @@ void Indie::MultiScene::init() // Check all paths & init values
 {
     // TODO : XP BAR
     // 3D INIT
-    irr::scene::ICameraSceneNode *camera
-        = context.getSceneManager()->addCameraSceneNode(0, irr::core::vector3df(0, 0, -75), irr::core::vector3df(0, 0, 0), -1, true);
+    irr::scene::ICameraSceneNode *camera = context.getSceneManager()->addCameraSceneNode(0, { 0, 0, -75 }, { 0, 0, 0 }, -1, true);
 
     if (camera == nullptr) {
         throw Indie::Exceptions::SceneManagerException(ERROR_STR, "Cannot add camera scene node.");
@@ -95,7 +87,17 @@ void Indie::MultiScene::init() // Check all paths & init values
     // CHECKBOXES INIT
     this->pUps->init("../ressources/images/multi1/Check.png", 1, 4, POS(0, 0));
     this->pUps->setStatus(this->initGame->powerUp);
-    this->initGame->mapPath = mapPaths.at(this->uiSelectors.at(UI_SELECTOR_TYPE::MAP)->getPos().first);
+    this->availableMaps.clear();
+    for (const auto &map : PlayerMaps::mapPaths)
+        this->availableMaps.push_back(map.path);
+    for (const auto &entry : std::filesystem::directory_iterator("../ressources/maps/")) {
+        if (std::find(this->availableMaps.begin(), this->availableMaps.end(), entry.path().u8string()) != this->availableMaps.end())
+            continue;
+        if (entry.is_regular_file() == true && entry.path().extension() == ".supermap")
+            availableMaps.push_back(entry.path().u8string());
+    }
+    this->uiSelectors.at(UI_SELECTOR_TYPE::MAP)->setSize((int)availableMaps.size(), 1);
+    this->initGame->mapPath = availableMaps.at(this->uiSelectors.at(UI_SELECTOR_TYPE::MAP)->getPos().first);
     this->initGame->mapTheme
         = (this->uiSelectors.at(UI_SELECTOR_TYPE::THEME)->getPos().first == 0) ? Components::THEME::DIRT : Components::THEME::STONE;
 }
@@ -166,7 +168,7 @@ void Indie::MultiScene::update(irr::f32 ticks)
     /* ================================================================== */
     if (buttons.at(BUTTON_TYPE::MAP)->getStatus() == Button::Status::Selected) {
         this->uiSelectors[UI_SELECTOR_TYPE::MAP]->update();
-        this->initGame->mapPath = mapPaths.at(this->uiSelectors[UI_SELECTOR_TYPE::MAP]->getPos().first);
+        this->initGame->mapPath = availableMaps.at(this->uiSelectors[UI_SELECTOR_TYPE::MAP]->getPos().first);
     }
     if (buttons.at(BUTTON_TYPE::THEME)->getStatus() == Button::Status::Selected) {
         this->uiSelectors[UI_SELECTOR_TYPE::THEME]->update();
