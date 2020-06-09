@@ -199,7 +199,7 @@ void Indie::MultiKeybindsScene::update(irr::f32 ticks)
         p1CharaSelector.update();
     if (p2CharaButton->getStatus() == Button::Status::Selected)
         p2CharaSelector.update();
-    if (play->getStatus() == Button::Status::Pressed) {
+    if (play->getStatus() == Button::Status::Pressed || EventHandler::getInstance().isKeyPressed(irr::EKEY_CODE::KEY_KEY_P) == true) {
         SceneManager &sceneManager = ServiceLocator::getInstance().get<SceneManager>();
 
         this->initGameStruct(sceneManager);

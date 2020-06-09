@@ -71,7 +71,8 @@ void Indie::SaveScene::update(irr::f32 ticks)
         skipScene(true, true, true, true);
         this->saveSelected = 0;
     }
-    if (play->getStatus() == Button::Status::Pressed && this->prompt->getText().size() > 0 && this->saveSelected != 0) {
+    if ((play->getStatus() == Button::Status::Pressed || EventHandler::getInstance().isKeyPressed(irr::EKEY_CODE::KEY_KEY_P) == true)
+        && this->prompt->getText().size() > 0 && this->saveSelected != 0) {
         ServiceLocator::getInstance().get<SaveManager>().loadSave("../ressources/.saves/" + this->prompt->getText() + ".supersave");
         ServiceLocator::getInstance().get<SaveManager>().saveCurrentSave();
         if ((int)this->savedGame.size() >= this->saveSelected && this->savedGame.at(this->saveSelected - 1).first != this->prompt->getText()) {

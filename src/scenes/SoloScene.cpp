@@ -22,7 +22,7 @@
 
 const std::unordered_map<Indie::SoloScene::UI_SELECTOR_TYPE, irr::core::vector2di> Indie::SoloScene::uiSelectorsSize
     = { { Indie::SoloScene::UI_SELECTOR_TYPE::DEFAULT, { 5, 6 } }, { Indie::SoloScene::UI_SELECTOR_TYPE::SKIN, { 1, 1 } },
-          { Indie::SoloScene::UI_SELECTOR_TYPE::THEME, { 2, 1 } }, { Indie::SoloScene::UI_SELECTOR_TYPE::MAP, { 1, 1 } } };
+          { Indie::SoloScene::UI_SELECTOR_TYPE::THEME, { 3, 1 } }, { Indie::SoloScene::UI_SELECTOR_TYPE::MAP, { 1, 1 } } };
 
 // Il faut changer les valeurs ici dans les constructeurs des selecteurs quand on aura le nombre de map max etc
 Indie::SoloScene::SoloScene(Indie::ContextManager &context)
@@ -152,9 +152,10 @@ void Indie::SoloScene::init()
     this->playerParams->playerColor = availableSkins.at(this->uiSelectors[UI_SELECTOR_TYPE::SKIN]->getPos().first).second;
     this->playerParams->playerKeys.clear();
     this->initGame->mapPath = availableMaps.at(this->uiSelectors[UI_SELECTOR_TYPE::MAP]->getPos().first);
-    this->initGame->mapTheme = (this->uiSelectors[UI_SELECTOR_TYPE::THEME]->getPos().first == 0) ? Components::THEME::DIRT : Components::THEME::STONE;
+    this->initGame->mapTheme = (Components::THEME)this->uiSelectors[UI_SELECTOR_TYPE::THEME]->getPos().first;
     this->theme1 = this->createTheme("../ressources/static_mesh/map1model.mc.ply");
     this->theme2 = this->createTheme("../ressources/static_mesh/map2model.mc.ply");
+    this->theme3 = this->createTheme("../ressources/static_mesh/map3model.mc.ply");
 }
 
 void Indie::SoloScene::reset()
@@ -182,8 +183,10 @@ void Indie::SoloScene::update(irr::f32 ticks)
     // 3D UPDATE
     theme1->setVisible(this->initGame->mapTheme == Components::THEME::DIRT);
     theme2->setVisible(this->initGame->mapTheme == Components::THEME::STONE);
+    theme3->setVisible(this->initGame->mapTheme == Components::THEME::SNOW);
     theme1->setRotation(irr::core::vector3df(0, modelRotation, 0));
     theme2->setRotation(irr::core::vector3df(0, modelRotation, 0));
+    theme3->setRotation(irr::core::vector3df(0, modelRotation, 0));
     modelRotation += float(10 * ticks);
     // KEYBINDS SET USED
     for (auto &keybind : this->keybinds) {
@@ -250,8 +253,7 @@ void Indie::SoloScene::update(irr::f32 ticks)
     }
     if (this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().first == 1 && this->uiSelectors[UI_SELECTOR_TYPE::DEFAULT]->getPos().second == 2) {
         this->uiSelectors[UI_SELECTOR_TYPE::THEME]->update();
-        this->initGame->mapTheme
-            = (this->uiSelectors[UI_SELECTOR_TYPE::THEME]->getPos().first == 0) ? Components::THEME::DIRT : Components::THEME::STONE;
+        this->initGame->mapTheme = (Components::THEME)this->uiSelectors[UI_SELECTOR_TYPE::THEME]->getPos().first;
     }
     /* ================================================================== */
     // CLICK BUTTONS
@@ -324,10 +326,16 @@ void Indie::SoloScene::renderPost3D()
     // DISPLAY TEXTS
     std::string mPath = this->getFileName(this->initGame->mapPath);
     std::string pName = this->getFileName(this->playerParams->playerTexture);
-    std::string tName = (this->initGame->mapTheme == Components::THEME::DIRT) ? "Garden" : "Cobblestone";
+    std::string tName;
     auto scores_map = ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->getMasterInfo().scores_map;
     int mapScore = 0;
 
+    if (this->initGame->mapTheme == Components::THEME::DIRT)
+        tName = "Jardin";
+    else if (this->initGame->mapTheme == Components::THEME::STONE)
+        tName = "Cobblestone";
+    else
+        tName = "Hiver";
     for (auto score : scores_map) {
         if (score.first == this->getFileName(this->initGame->mapPath)) {
             mapScore = score.second;

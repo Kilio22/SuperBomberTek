@@ -78,6 +78,7 @@ namespace Indie
         irr::gui::IGUIFont *font;
         irr::scene::IAnimatedMeshSceneNode *theme1;
         irr::scene::IAnimatedMeshSceneNode *theme2;
+        irr::scene::IAnimatedMeshSceneNode *theme3;
         float modelRotation;
         std::vector<std::string> availableMaps;
         std::vector<std::pair<std::string, Components::PlayerComponent::PLAYER_COLOR>> availableSkins;

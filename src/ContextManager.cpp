@@ -16,6 +16,8 @@ Indie::ContextManager::ContextManager(irr::core::dimension2d<irr::u32> size)
     if (device == nullptr) {
         throw Indie::Exceptions::DeviceException(ERROR_STR, "Cannot create device.");
     }
+    device->setWindowCaption(L"SuperBomberTek");
+    device->getCursorControl()->setVisible(true);
     this->size = size;
     driver = device->getVideoDriver();
     if (driver == nullptr) {

@@ -72,6 +72,7 @@ namespace Indie
         // Faut pas oublier de clear le scenemanager
         irr::scene::IAnimatedMeshSceneNode *theme1;
         irr::scene::IAnimatedMeshSceneNode *theme2;
+        irr::scene::IAnimatedMeshSceneNode *theme3;
         float modelRotation;
         std::vector<std::string> availableMaps;
         std::unique_ptr<InitGame> initGame;

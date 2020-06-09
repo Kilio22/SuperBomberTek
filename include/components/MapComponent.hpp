@@ -25,7 +25,8 @@ namespace Indie::Components
     enum class THEME
     {
         STONE,
-        DIRT
+        DIRT,
+        SNOW
     };
 
     enum class OBJECT
