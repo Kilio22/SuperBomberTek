@@ -5,8 +5,7 @@
 ** SaveScene
 */
 
-#define __STDC_WANT_LIB_EXT1__ 1
-#define _XOPEN_SOURCE
+#define _CRT_SECURE_NO_WARNINGS
 
 #include "SaveScene.hpp"
 #include "EntityManager.hpp"
@@ -127,23 +126,21 @@ void Indie::SaveScene::renderPost3D()
     this->prompt->draw();
 
     for (const auto game : this->savedGame) {
-        struct tm * timeinfo = localtime(&game.second);
+        struct tm * timeinfo;
         char time[80];
-        #ifdef __STDC_LIB_EXT1__
-            localtime_s(&timeinfo, &game.second);
-        #else
-            timeinfo = localtime(&game.second);
-        #endif
+
+        timeinfo = localtime(&game.second);
         (void)strftime(time, 80, "%d/%m/%Y %H:%M:%S", timeinfo);
         std::string timeString(time);
         font->draw(game.first.c_str(), RECT(120 + (i * 380), 190, 0, 0), {255, 255, 255, 255});
-        font->draw(time, RECT(350 + (i * 380) - (9 * timeString.size()), 330, 0, 0), {255, 255, 255, 255});
+        font->draw(time, RECT(350 + ((irr::s32)i * 380) - (9 * (irr::s32)timeString.size()), 330, 0, 0), {255, 255, 255, 255});
         i++;
     }
     for (; i < 3; i++) {
         font->draw("Vide", RECT(120 + (i * 380), 190, 0, 0), {255, 255, 255, 255});
         font->draw("N/A", RECT(350 + (i * 380) - 15, 330, 0, 0), {255, 255, 255, 255});
     }
+    font->draw("Supprimer: Appuyez sur <Suppr>", RECT(850, 100, 0, 0), {255, 255, 255, 255});
 }
 
 void Indie::SaveScene::skipScene(bool update, bool render, bool subUpdate, bool subRender)
