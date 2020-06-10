@@ -14,10 +14,9 @@
 #define RECT(x, y, w, h) (irr::core::rect<irr::s32>((irr::s32)x, (irr::s32)y, (irr::s32)w, (irr::s32)h))
 #define DIM(x, y) (irr::core::dimension2d<irr::u32>((irr::s32)x, (irr::s32)y))
 
-using Image = irr::video::ITexture;
-
 namespace Indie
 {
+    using Image = irr::video::ITexture;
 
     /**
      * @brief ContextManager class

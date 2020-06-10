@@ -32,7 +32,7 @@ Indie::ImageLoader::~ImageLoader()
         context.getDriver()->removeTexture(it->second);
 }
 
-Image *Indie::ImageLoader::getImage(std::string const &filepath)
+Indie::Image *Indie::ImageLoader::getImage(std::string const &filepath)
 {
     return this->images.at(filepath);
 }

@@ -21,20 +21,20 @@ namespace Indie::Components
     public:
         enum class PLAYER_COLOR
         {
-            RED,
-            GREEN,
-            BLUE,
-            YELLOW,
-            PURPLE,
-            GENERIC,
+            RED = 0,
+            GREEN = 1,
+            BLUE = 2,
+            YELLOW = 3,
+            PURPLE = 4,
+            GREY = 5,
         };
 
         enum class PLAYER_START_POSITION
         {
-            TOP_LEFT,
-            TOP_RIGHT,
-            DOWN_LEFT,
-            DOWN_RIGHT,
+            TOP_LEFT = 0,
+            TOP_RIGHT = 1,
+            DOWN_LEFT = 2,
+            DOWN_RIGHT = 3,
         };
 
     public:

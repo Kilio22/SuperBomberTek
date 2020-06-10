@@ -48,6 +48,9 @@ namespace Indie
             BACK
         };
 
+        void drawPlayerInterfaces() const;
+        void drawTimer() const;
+
         static const std::vector<std::pair<irr::core::vector3df, Components::PlayerComponent::PLAYER_START_POSITION>> defaultPositions;
         static const std::vector<std::pair<std::string, Components::PlayerComponent::PLAYER_COLOR>> skins;
         static const std::unordered_map<SKYBOX_TYPE, std::string> skyboxTexturesPath;
@@ -55,12 +58,20 @@ namespace Indie
         irr::IrrlichtDevice *device;
         irr::video::IVideoDriver *driver;
         irr::scene::ISceneManager *sceneManager;
-        irr::gui::IGUIFont *font;
 
         ContextManager &context;
         EntityManager &entityManager;
         SystemManager &systemManager;
         std::unique_ptr<InitGame> initGame;
+
+        irr::gui::IGUIFont *font;
+        Image *chronoBg;
+        Image *leftUi;
+        Image *rightUi;
+        Image *bombUi;
+        Image *speedUi;
+        Image *fireUi;
+        Image *wallPassUi;
     };
 }
 

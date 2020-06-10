@@ -17,7 +17,7 @@
 #include "SoloScene.hpp"
 #include "EndScene.hpp"
 #include "Systems.h"
-#include <sstream>
+#include "ImageLoader.hpp"
 
 using namespace Indie::Systems;
 using namespace Indie::Components;
@@ -28,13 +28,13 @@ const std::vector<std::pair<irr::core::vector3df, PlayerComponent::PLAYER_START_
 };
 
 const std::vector<std::pair<std::string, PlayerComponent::PLAYER_COLOR>> Indie::GameScene::skins
-    = { { "../ressources/textures/character/Gris.png", PlayerComponent::PLAYER_COLOR::GENERIC },
+    = { { "../ressources/textures/character/Gris.png", PlayerComponent::PLAYER_COLOR::GREY },
           { "../ressources/textures/character/Bleu.png", PlayerComponent::PLAYER_COLOR::BLUE },
           { "../ressources/textures/character/Rouge.png", PlayerComponent::PLAYER_COLOR::RED },
           { "../ressources/textures/character/Vert.png", PlayerComponent::PLAYER_COLOR::GREEN },
           { "../ressources/textures/character/Violet.png", PlayerComponent::PLAYER_COLOR::PURPLE },
           { "../ressources/textures/character/Jaune.png", PlayerComponent::PLAYER_COLOR::YELLOW },
-          { "../ressources/textures/character/Gris+.png", PlayerComponent::PLAYER_COLOR::GENERIC },
+          { "../ressources/textures/character/Gris+.png", PlayerComponent::PLAYER_COLOR::GREY },
           { "../ressources/textures/character/Bleu+.png", PlayerComponent::PLAYER_COLOR::BLUE },
           { "../ressources/textures/character/Rouge+.png", PlayerComponent::PLAYER_COLOR::RED },
           { "../ressources/textures/character/Vert+.png", PlayerComponent::PLAYER_COLOR::GREEN },
@@ -140,6 +140,14 @@ void Indie::GameScene::init()
 
     entityBuilder.createShake();
     entityManager.createUniqueEntity<GameComponent>((irr::f32)this->initGame->timeLimit);
+
+    this->chronoBg = ServiceLocator::getInstance().get<ImageLoader>().getImage("../ressources/images/gui/chrono.png");
+    this->leftUi = ServiceLocator::getInstance().get<ImageLoader>().getImage("../ressources/images/gui/box.png");
+    this->rightUi = ServiceLocator::getInstance().get<ImageLoader>().getImage("../ressources/images/gui/box_flipped.png");
+    this->bombUi = ServiceLocator::getInstance().get<ImageLoader>().getImage("../ressources/images/gui/bomb.png");
+    this->speedUi = ServiceLocator::getInstance().get<ImageLoader>().getImage("../ressources/images/gui/speed.png");
+    this->fireUi = ServiceLocator::getInstance().get<ImageLoader>().getImage("../ressources/images/gui/fire.png");
+    this->wallPassUi = ServiceLocator::getInstance().get<ImageLoader>().getImage("../ressources/images/gui/wallpass.png");
 }
 
 void Indie::GameScene::reset()
@@ -147,8 +155,6 @@ void Indie::GameScene::reset()
     this->init();
 }
 
-// LOOP ORDER:
-// beginScene -> events -> update -> renderPre3D -> render3D -> renderPost3D -> endScene
 void Indie::GameScene::update(irr::f32 deltaTime)
 {
     this->entityManager.cleanup();
@@ -175,30 +181,58 @@ void Indie::GameScene::renderPre3D() {}
 
 void Indie::GameScene::renderPost3D()
 {
+    this->drawPlayerInterfaces();
+    this->drawTimer();
+}
+
+void Indie::GameScene::drawPlayerInterfaces() const
+{
     const std::vector<irr::video::SColor> colors
-        = { { 200, 255, 0, 0 }, { 200, 0, 255, 0 }, { 200, 0, 0, 255 }, { 200, 255, 255, 0 }, { 200, 255, 0, 255 }, { 200, 192, 192, 192 } };
-    const std::vector<irr::core::vector2di> positions = { { 20, 20 }, { 1050, 20 }, { 20, 550 }, { 1050, 550 } };
-    std::stringstream ss;
-    int n = 0;
+        = { { 255, 255, 144, 144 }, { 255, 144, 144, 255 }, { 255, 83, 83, 236 }, { 255, 255, 255, 144 }, { 255, 255, 144, 255 }, { 255, 255, 255, 255 } };
+    const std::vector<irr::core::vector2di> positions = { { 0, 150 }, { 1030, 150 }, { 0, 400 }, { 1030, 400 } };
 
     for (auto entity : entityManager.each<PlayerComponent>()) {
         auto player = entity->getComponent<PlayerComponent>();
-
-        ss << player->getName();
-        if (player->getWallPass() == true)
-            ss << "  (WP)";
-        ss << std::endl;
-        ss << "  Bombs: " << player->getCurrentBombNb() << " / " << player->getMaxBombNb() << std::endl;
-        ss << "  Bomb range: " << player->getBombsRange() << std::endl;
-        ss << "  Speed: " << std::string(player->getVelocityLevel(), '>') << std::endl;
-        ss << "  Score: " << player->getScore() << std::endl;
-        n = (int)player->getPlayerColor();
-        if (player->isDead() == true)
-            n = (int)PlayerComponent::PLAYER_COLOR::GENERIC;
         auto [x, y] = positions[(int)player->getStartPosition()];
-        font->draw(irr::core::stringw(ss.str().c_str()), irr::core::rect<irr::s32>(x, y, 0, 0), colors[n]);
-        ss.str("");
+        std::string nameAndScore = player->getName() + ":   " + std::to_string(player->getScore());
+        int nColor = (int)player->getPlayerColor();
+
+        if ((int)player->getStartPosition() % 2 == 0) { // left side
+            this->context.displayImage(this->leftUi, { x, y }, colors[nColor]);
+            font->draw(nameAndScore.c_str(), { x + 8, y + 15, 0, 0 }, { 255, 255, 255, 255 });
+            for (unsigned int i = 0; i < player->getMaxBombNb(); ++i) {
+                if (i < player->getCurrentBombNb())
+                    this->context.displayImage(this->bombUi, { x + 5 + int(i * 15), y + 43 });
+                else
+                    this->context.displayImage(this->bombUi, { x + 5 + int(i * 15), y + 43 }, { 128, 255, 255, 255 });
+            }
+            for (unsigned int i = 0; i < player->getVelocityLevel(); ++i)
+                this->context.displayImage(this->speedUi, { x + 5 + int(i * 12), y + 75 });
+            this->context.displayImage(this->fireUi, { x + 5, y + 110 });
+            font->draw(irr::core::stringw(player->getBombsRange()), { x + 45, y + 115, 0, 0 }, { 255, 255, 255, 255 });
+            if (player->getWallPass())
+                this->context.displayImage(this->wallPassUi, { x + 90, y + 105 });
+        } else { // right side
+            this->context.displayImage(this->rightUi, { x, y }, colors[nColor]);
+            font->draw(nameAndScore.c_str(), { x + 55, y + 15, 0, 0 }, { 255, 255, 255, 255 });
+            for (unsigned int i = 0; i < player->getMaxBombNb(); ++i) {
+                if (i < player->getCurrentBombNb())
+                    this->context.displayImage(this->bombUi, { x + 210 - int(i * 15), y + 43 });
+                else
+                    this->context.displayImage(this->bombUi, { x + 210 - int(i * 15), y + 43 }, { 128, 255, 255, 255 });
+            }
+            for (unsigned int i = 0; i < player->getVelocityLevel(); ++i)
+                this->context.displayImage(this->speedUi, { x + 220 - int(i * 12), y + 75 });
+            this->context.displayImage(this->fireUi, { x + 215, y + 110 });
+            font->draw(irr::core::stringw(player->getBombsRange()), { x + 180, y + 115, 0, 0 }, { 255, 255, 255, 255 });
+            if (player->getWallPass())
+                this->context.displayImage(this->wallPassUi, { x + 125, y + 105 });
+        }
     }
+}
+
+void Indie::GameScene::drawTimer() const
+{
     auto gameComponent = this->entityManager.getUniqueEntity<GameComponent>()->getComponent<GameComponent>();
     int timer = (int)gameComponent->getTimeToEnd();
     std::string timeAmmount = std::to_string(timer / 60) + ":";
@@ -206,7 +240,8 @@ void Indie::GameScene::renderPost3D()
     if (timer % 60 < 10)
         timeAmmount += "0";
     timeAmmount += std::to_string(timer % 60);
-    this->font->draw(timeAmmount.c_str(), irr::core::rect<irr::s32>(1280 / 2, 1, 0, 0), irr::video::SColor(255, 255, 255, 255));
+    this->context.displayImage(this->chronoBg);
+    this->font->draw(timeAmmount.c_str(), irr::core::rect<irr::s32>(1280 / 2, 5, 0, 0), irr::video::SColor(255, 255, 255, 255));
 }
 
 Indie::InitGame *Indie::GameScene::getInitGame(void) const
