@@ -73,11 +73,11 @@ void Indie::Bar::draw(irr::core::position2d<irr::s32> pos) const
         percentageText = std::to_string(this->value) + "/" + std::to_string(this->max);
 
     context.displayImage(this->empty, pos);
-    context.displayImage(this->full, RECT(0, 0, (349 * this->percentage / 100) + 168, 63) ,pos);
+    context.displayImage(this->full, RECT(0, 0, (325 * this->percentage / 100) + 175, 63) ,pos);
     context.displayImage(this->layout, pos);
     font->draw(lvlText.c_str(), RECT(115 - (5 * (int)lvlText.size()) + pos.X, 15 + pos.Y, 0, 0), {255, 255, 255, 255});
     font->draw(percentageText.c_str(), RECT(333 - (5 * (int)percentageText.size()) + pos.X, 15 + pos.Y, 0, 0), {255, 255, 255, 255});
 }
 // text pos 114 19
 // % pos 333 19
-// bar length : 349 + 168
+// Edit : je sais pas compter
