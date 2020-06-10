@@ -73,9 +73,16 @@ void Indie::SoloScene::init()
     /* ================================================================== */
     Indie::MasterInfo info = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo();
     xpBar.init("../ressources/images/Bar.png", 0, 100, 0);
-    xpBar.setSize(0, MasterInfo::xp_level[info.lvl]);
-    xpBar.setValue(info.xp);
-    xpBar.setLevel(info.lvl);
+    auto lvlCount = (unsigned int)MasterInfo::xp_level.size();
+    if (info.lvl >= lvlCount) {
+        xpBar.setSize(0, 1);
+        xpBar.setValue(1);
+        xpBar.setLevel(lvlCount);
+    } else {
+        xpBar.setSize(0, MasterInfo::xp_level[info.lvl]);
+        xpBar.setValue(info.xp);
+        xpBar.setLevel(info.lvl);
+    }
     xpBar.update();
     /* ================================================================== */
     // 3D INIT

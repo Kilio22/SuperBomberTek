@@ -112,9 +112,14 @@ void Indie::SaveManager::loadMasterInfos(void)
         int xpValue = std::stoi(xpData);
 
         if (xpValue < 0 || lvlValue < 0)
-            throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"" + this->currentSavePath + "\" corrupted2.");
-        info.lvl = lvlValue;
-        info.xp = xpValue;
+            throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"" + this->currentSavePath + "\" corrupted.");
+        if (lvlValue >= (unsigned int)MasterInfo::xp_level.size()) {
+            info.lvl = (unsigned int)MasterInfo::xp_level.size();
+            info.xp = 1;
+        } else {
+            info.lvl = lvlValue;
+            info.xp = xpValue;
+        }
         for (auto data : mapsData) {
             std::string mapName = data.first;
             int highScore = std::stoi(data.second);
@@ -221,12 +226,16 @@ void Indie::SaveManager::saveMusicParams(void)
 
 void Indie::SaveManager::saveMasterInfos(void)
 {
-    const MasterInfo &info = ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->getMasterInfo();
+    MasterInfo info = ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->getMasterInfo();
 
+    if (info.lvl >= (unsigned int)MasterInfo::xp_level.size()) {
+        info.lvl = (unsigned int)MasterInfo::xp_level.size();
+        info.xp = 1;
+    }
     this->saveValue({ "LVL", std::to_string((int)info.lvl) });
     this->saveValue({ "XP", std::to_string((int)info.xp) });
     for (auto highScoreMap : info.scores_map)
-        this->saveValue({ highScoreMap.first, std::to_string((int)highScoreMap.second) });
+        this->saveValue({ highScoreMap.first, std::to_string(highScoreMap.second) });
 }
 
 void Indie::SaveManager::setCurrentSave(const std::unordered_map<std::string, std::string> &newSave)
