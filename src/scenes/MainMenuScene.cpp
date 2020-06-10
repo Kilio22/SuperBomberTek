@@ -62,15 +62,16 @@ void Indie::MainMenuScene::update(irr::f32)
         ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::OptionsScene>();
         skipScene(true, true, true, true);
     }
+    if (this->buttons.at(BUTTON_TYPE::CREDITS)->getStatus() == Button::Status::Pressed) {
+        ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::CreditScene>();
+        skipScene(false, false, true, true);
+    }
     if (this->buttons.at(BUTTON_TYPE::QUITTER)->getStatus() == Button::Status::Pressed) {
         context.getDevice()->closeDevice();
     }
     if (Indie::EventHandler::getInstance().isKeyPressed(irr::KEY_ESCAPE) == true) {
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::SaveScene>();
-        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(true);
-        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(true);
-        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneUpdateActive(true);
-        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneRenderActive(true);
+        skipScene(true, true, true, true);
         EventHandler::getInstance().resetKeys();
     }
 }

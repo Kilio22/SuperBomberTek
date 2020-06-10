@@ -56,6 +56,7 @@ void Indie::GameEngine::setupSceneManager(ContextManager &context)
     ServiceLocator::getInstance().get<SceneManager>().addScene<MultiScene>(context);
     ServiceLocator::getInstance().get<SceneManager>().addScene<MultiKeybindsScene>(context);
     ServiceLocator::getInstance().get<SceneManager>().addScene<SaveScene>(context);
+    ServiceLocator::getInstance().get<SceneManager>().addScene<CreditScene>(context);
     ServiceLocator::getInstance().get<SceneManager>().setScene<SplashScene>(context);
     ServiceLocator::getInstance().get<SceneManager>().setSceneUpdateActive(true);
     ServiceLocator::getInstance().get<SceneManager>().setSceneRenderActive(true);

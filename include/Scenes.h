@@ -21,5 +21,6 @@
 #include "SplashScene.hpp"
 #include "TitleScene.hpp"
 #include "SaveScene.hpp"
+#include "CreditScene.hpp"
 
 #endif /* !SCENES_HPP_ */
