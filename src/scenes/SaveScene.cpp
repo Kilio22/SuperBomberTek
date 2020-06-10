@@ -93,7 +93,7 @@ void Indie::SaveScene::update(irr::f32)
         skipScene(true, true, true, true);
         this->saveSelected = 0;
     }
-    if (EventHandler::getInstance().isKeyPressedAtOnce(irr::KEY_DELETE) && this->saveSelected != 0 && this->savedGame.size() > 0) {
+    if (EventHandler::getInstance().isKeyPressedAtOnce(irr::KEY_DELETE) && this->saveSelected != 0 && ((int)this->savedGame.size() > this->saveSelected - 1)) {
         toDelete = "../ressources/.saves/" + this->savedGame.at(this->saveSelected - 1).first + ".supersave";
         ServiceLocator::getInstance().get<SaveManager>().resetCurentSave();
         std::remove(toDelete.c_str());

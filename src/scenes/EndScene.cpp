@@ -50,12 +50,13 @@ Indie::EndScene::EndScene(ContextManager &context)
 
 void Indie::EndScene::init()
 {
-    ServiceLocator::getInstance().get<MusicManager>().setMusic(0);
+    MasterInfo info = ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->getMasterInfo();
 
+    ServiceLocator::getInstance().get<MusicManager>().pauseMusic();
     xpBar.init("../ressources/images/Bar.png", 0, 100, 0);
     this->restart->init(context, "../ressources/images/end/Recommencer.png", 0, 0, POS(0,0));
     this->menu->init(context, "../ressources/images/end/Menu.png", 0, 1, POS(0,0));
-    if (this->endGame.xp != 0) {
+    if (info.lvl != (unsigned int)MasterInfo::xp_level.size() && this->endGame.xp != 0) {
         this->nbXpToSub = (float)this->endGame.xp / 102.f;
         ServiceLocator::getInstance().get<SoundManager>().playSound("xp_up");
     }
@@ -69,27 +70,27 @@ void Indie::EndScene::reset()
 
 void Indie::EndScene::update(irr::f32 ticks)
 {
-    Indie::MasterInfo info = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo();
+    MasterInfo info = ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->getMasterInfo();
+
     selector.update();
     if (popUpDuration == 0) {
         this->menu->update(selector.getPos());
         this->restart->update(selector.getPos());
     }
-
     if (this->menu->getStatus() == Button::Status::Pressed && popUpDuration == 0) {
         ServiceLocator::getInstance().get<EntityManager>().reset();
-        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setScene<Indie::MenuScene>(context);
-        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::MainMenuScene>();
+        ServiceLocator::getInstance().get<SceneManager>().setScene<MenuScene>(context);
+        ServiceLocator::getInstance().get<SceneManager>().setSubScene<MainMenuScene>();
     }
     if (this->restart->getStatus() == Button::Status::Pressed && popUpDuration == 0) {
         ServiceLocator::getInstance().get<EntityManager>().reset();
-        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::GameScene>()->reset();
-        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(false);
-        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(true);
-        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::IntroScene>();
-        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneUpdateActive(true);
-        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubSceneRenderActive(true);
-        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<IntroScene>()->skipScene();
+        ServiceLocator::getInstance().get<SceneManager>().getScene<GameScene>()->reset();
+        ServiceLocator::getInstance().get<SceneManager>().setSceneUpdateActive(false);
+        ServiceLocator::getInstance().get<SceneManager>().setSceneRenderActive(true);
+        ServiceLocator::getInstance().get<SceneManager>().setSubScene<IntroScene>();
+        ServiceLocator::getInstance().get<SceneManager>().setSubSceneUpdateActive(true);
+        ServiceLocator::getInstance().get<SceneManager>().setSubSceneRenderActive(true);
+        ServiceLocator::getInstance().get<SceneManager>().getScene<IntroScene>()->skipScene();
         EventHandler::getInstance().resetKeys();
     }
     popUpDuration = (popUpDuration > 0) ? (time_t)(popUpDuration - ticks) : (time_t)0;
@@ -98,23 +99,28 @@ void Indie::EndScene::update(irr::f32 ticks)
         EventHandler::getInstance().resetKeys();
     }
     this->increaseXp(info);
-    xpBar.setSize(0, MasterInfo::xp_level[info.lvl]);
-    xpBar.setValue(info.xp);
-    xpBar.setLevel(info.lvl);
+    auto lvlCount = (unsigned int)MasterInfo::xp_level.size();
+    if (info.lvl >= lvlCount) {
+        xpBar.setSize(0, 1);
+        xpBar.setValue(1);
+        xpBar.setLevel(lvlCount);
+    } else {
+        xpBar.setSize(0, MasterInfo::xp_level[info.lvl]);
+        xpBar.setValue(info.xp);
+        xpBar.setLevel(info.lvl);
+    }
     xpBar.update();
-    if (info.xp >= MasterInfo::xp_level[info.lvl]) {
+    if (info.lvl < lvlCount && info.xp >= MasterInfo::xp_level[info.lvl]) {
         ServiceLocator::getInstance().get<SoundManager>().playSound("level_up");
         popUpDuration = 200;
         lvlUpType = (info.lvl % 2 == 0) ? UI_IMAGE_TYPE::LVL_UP_PLAYER : UI_IMAGE_TYPE::LVL_UP_MAP;
         info.xp -= MasterInfo::xp_level[info.lvl];
         info.lvl++;
     }
-    Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->setMasterInfo(info);
-
+    ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->setMasterInfo(info);
 }
 
-void Indie::EndScene::renderPre3D()
-{}
+void Indie::EndScene::renderPre3D() {}
 
 void Indie::EndScene::renderPost3D()
 {
