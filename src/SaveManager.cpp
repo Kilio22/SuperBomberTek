@@ -113,7 +113,7 @@ void Indie::SaveManager::loadMasterInfos(void)
 
         if (xpValue < 0 || lvlValue < 0)
             throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"" + this->currentSavePath + "\" corrupted.");
-        if (lvlValue >= (unsigned int)MasterInfo::xp_level.size()) {
+        if (lvlValue >= (int)MasterInfo::xp_level.size()) {
             info.lvl = (unsigned int)MasterInfo::xp_level.size();
             info.xp = 1;
         } else {
