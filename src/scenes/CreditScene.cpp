@@ -101,11 +101,12 @@ const std::vector<std::pair<irr::core::stringw, Indie::CreditScene::TEXT_SIZE>> 
         //{L"", Indie::CreditScene::TEXT_SIZE::MEDIUM},
         {L"Special Thanks To", Indie::CreditScene::TEXT_SIZE::MEDIUM},
         //{L"", Indie::CreditScene::TEXT_SIZE::MEDIUM},
-        {L"Stackov ERFLOW", Indie::CreditScene::TEXT_SIZE::SMALL},
-        {L"Nicolas CAGE", Indie::CreditScene::TEXT_SIZE::SMALL},
-        {L"Shreksophone", Indie::CreditScene::TEXT_SIZE::SMALL},
         {L"Jean-Pierre PERNAUT", Indie::CreditScene::TEXT_SIZE::SMALL},
         {L"Le Pas-de-Calais", Indie::CreditScene::TEXT_SIZE::SMALL},
+        {L"L\u00E9o de la chaine Techmakers", Indie::CreditScene::TEXT_SIZE::SMALL},
+        {L"Nicolas CAGE", Indie::CreditScene::TEXT_SIZE::SMALL},
+        {L"Shreksophone", Indie::CreditScene::TEXT_SIZE::SMALL},
+        {L"Stackov ERFLOW", Indie::CreditScene::TEXT_SIZE::SMALL},
         //{L"", Indie::CreditScene::TEXT_SIZE::MEDIUM},
         //{L"", Indie::CreditScene::TEXT_SIZE::MEDIUM},
         {L"", Indie::CreditScene::TEXT_SIZE::MEDIUM},
@@ -161,7 +162,10 @@ void Indie::CreditScene::reset()
 
 void Indie::CreditScene::update(irr::f32 ticks)
 {
-    pos -= (float)(speed * ticks);
+    if (EventHandler::getInstance().isAnyKeyPressed())
+        pos -= (float)(speed * ticks * 10);
+    else
+        pos -= (float)(speed * ticks);
     if (EventHandler::getInstance().isKeyPressed(irr::EKEY_CODE::KEY_ESCAPE)) {
         ServiceLocator::getInstance().get<SceneManager>().setSceneUpdateActive(true);
         ServiceLocator::getInstance().get<SceneManager>().setSceneRenderActive(true);
@@ -170,6 +174,7 @@ void Indie::CreditScene::update(irr::f32 ticks)
         ServiceLocator::getInstance().get<SoundManager>().playSound("menu_back");
         ServiceLocator::getInstance().get<SceneManager>().setSubScene<MainMenuScene>();
         context.getGuiEnv()->clear();
+        return;
     }
     for (const auto &it : texts) {
         irr::s32 tmpX = it.first->getRelativePosition().UpperLeftCorner.X;
