@@ -45,7 +45,6 @@ void Indie::Systems::GameSystem::onUpdate(irr::f32 deltaTime, EntityManager &ent
         entityManager.cleanup();
         sceneManager.setSceneUpdateActive(false);
         sceneManager.setSceneRenderActive(false);
-        ServiceLocator::getInstance().get<MusicManager>().playMusic();
         sceneManager.setSubScene<EndScene>();
     }
 }
