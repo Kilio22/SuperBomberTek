@@ -18,9 +18,6 @@ namespace Indie
         WIN = 1,
         LOSE = 2,
         DRAW = 3,
-        // P1_WON,
-        // P2_WON,
-        // BOTH_LOSE
     };
 
     struct EndGame {

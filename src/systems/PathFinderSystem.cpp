@@ -9,6 +9,7 @@
 #include "PathFinderSystem.hpp"
 #include "AIComponent.hpp"
 #include "BombComponent.hpp"
+#include "MoveComponent.hpp"
 #include "PositionComponent.hpp"
 #include "PowerUpComponent.hpp"
 #include "PowerDownComponent.hpp"
@@ -34,10 +35,11 @@ void Indie::Systems::PathFinderSystem::onUpdate(irr::f32, Indie::EntityManager &
     this->cleanMap(map);
     mapEnemy = map;
 
-    for (auto entity : entityManager.each<PathFinderComponent, AIComponent, PositionComponent>()) {
+    for (auto entity : entityManager.each<PathFinderComponent, AIComponent, PositionComponent, MoveComponent>()) {
         auto pathFinder = entity->getComponent<PathFinderComponent>();
         auto ai = entity->getComponent<AIComponent>();
         auto position = entity->getComponent<PositionComponent>();
+        auto move = entity->getComponent<MoveComponent>();
         int aiX = (getCenter((int)position->getPosition().X)) / 20;
         int aiZ = (getCenter((int)position->getPosition().Z)) / 20;
         mapEnemy = map;
@@ -48,10 +50,13 @@ void Indie::Systems::PathFinderSystem::onUpdate(irr::f32, Indie::EntityManager &
         if ((int)mapEnemy.at(aiZ).at(aiX) == 6 && ai->getDodge() == false) {
             ai->setDodge(true);
             ai->setAction(ACTION::DODGE);
+            move->setDrop(true);
             pathFinder->setMap(map);
         }
-        if ((int)mapEnemy.at(aiZ).at(aiX) != 6 && ai->getDodge() == true)
+        if ((int)mapEnemy.at(aiZ).at(aiX) != 6 && ai->getDodge() == true) {
             ai->setDodge(false);
+            move->setDrop(false);
+        }
 
         if (pathFinder->getMap().empty() || ai->getAction() == ACTION::STANDBY)
             pathFinder->setMap(map);
