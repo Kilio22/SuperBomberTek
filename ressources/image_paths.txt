@@ -226,3 +226,10 @@
 ../ressources/images/Bar_layout.png
 ../ressources/images/Bar_empty.png
 ../ressources/images/Bar_full.png
+../ressources/images/gui/chrono.png
+../ressources/images/gui/box.png
+../ressources/images/gui/box_flipped.png
+../ressources/images/gui/fire.png
+../ressources/images/gui/wallpass.png
+../ressources/images/gui/speed.png
+../ressources/images/gui/bomb.png
