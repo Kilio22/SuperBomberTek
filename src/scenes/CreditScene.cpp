@@ -166,7 +166,7 @@ void Indie::CreditScene::update(irr::f32 ticks)
         pos -= (float)(speed * ticks * 10);
     else
         pos -= (float)(speed * ticks);
-    if (EventHandler::getInstance().isKeyPressed(irr::EKEY_CODE::KEY_ESCAPE)) {
+    if (EventHandler::getInstance().isKeyPressed(irr::EKEY_CODE::KEY_ESCAPE) || texts.back().first->getRelativePosition().UpperLeftCorner.Y < -100) {
         ServiceLocator::getInstance().get<SceneManager>().setSceneUpdateActive(true);
         ServiceLocator::getInstance().get<SceneManager>().setSceneRenderActive(true);
         ServiceLocator::getInstance().get<SceneManager>().setSubSceneUpdateActive(true);
