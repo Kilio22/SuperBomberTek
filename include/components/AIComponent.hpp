@@ -76,6 +76,18 @@ namespace Indie::Components
         void setBehavior(unsigned int value);
 
         /**
+         * @brief Sets the dodge value, if is on player range
+         * @param value The dodge value
+         */
+        void setDodge(bool value);
+
+        /**
+         * @brief Gets the dodge value of AI
+         * @return The dodge value
+         */
+        bool getDodge() const;
+
+        /**
          * @brief Gets the behavior value of AI
          * @return The behavior value
          */
@@ -102,6 +114,7 @@ namespace Indie::Components
     private:
         int nextPosX = 0;
         int nextPosY = 0;
+        bool dodge = 0;
         unsigned int behavior = 0;
         DIRECTION direction = DIRECTION::NONE;
         ACTION action = ACTION::STANDBY;

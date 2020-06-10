@@ -82,3 +82,13 @@ unsigned int Indie::Components::AIComponent::getBehavior() const
 {
     return this->behavior;
 }
+
+void Indie::Components::AIComponent::setDodge(bool value)
+{
+    this->dodge = value;
+}
+
+bool Indie::Components::AIComponent::getDodge() const
+{
+    return this->dodge;
+}
