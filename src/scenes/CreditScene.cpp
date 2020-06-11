@@ -139,7 +139,6 @@ void Indie::CreditScene::init()
     int offset = 0;
     for (const auto &it : CreditScene::lines) {
         irr::gui::IGUIStaticText *tmp = context.getGuiEnv()->addStaticText(it.first.c_str(), irr::core::rect<irr::s32>(0, 0, 1280, 720), false, false, 0, -1, false);
-        irr::s32 tmpX = tmp->getTextWidth();
         irr::s32 tmpY = tmp->getTextHeight();
         tmp->setRelativePosition(POS(0, (int)(tmpY + offset + pos)));
         tmp->setTextAlignment(irr::gui::EGUI_ALIGNMENT::EGUIA_CENTER, irr::gui::EGUI_ALIGNMENT::EGUIA_UPPERLEFT);
