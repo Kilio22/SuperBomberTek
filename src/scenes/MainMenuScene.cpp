@@ -29,6 +29,8 @@ Indie::MainMenuScene::MainMenuScene(ContextManager &context)
 void Indie::MainMenuScene::init()
 {
     Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setMusic(0);
+    if (Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().getStatus() != Music::Status::Loop)
+        Indie::ServiceLocator::getInstance().get<Indie::MusicManager>().setStatus(Music::Status::Loop);
 
     this->title = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/menu/title.png");
     this->bomb = Indie::ServiceLocator::getInstance().get<Indie::ImageLoader>().getImage("../ressources/images/menu/bomb.png");

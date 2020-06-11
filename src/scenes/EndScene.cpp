@@ -52,7 +52,8 @@ void Indie::EndScene::init()
 {
     MasterInfo info = ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->getMasterInfo();
 
-    ServiceLocator::getInstance().get<MusicManager>().pauseMusic();
+    ServiceLocator::getInstance().get<MusicManager>().setMusic(1);
+    ServiceLocator::getInstance().get<MusicManager>().playMusic();
     xpBar.init("../ressources/images/Bar.png", 0, 100, 0);
     this->restart->init(context, "../ressources/images/end/Recommencer.png", 0, 0, POS(0,0));
     this->menu->init(context, "../ressources/images/end/Menu.png", 0, 1, POS(0,0));

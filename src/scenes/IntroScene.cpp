@@ -48,7 +48,7 @@ void Indie::IntroScene::update(irr::f32 deltaTime)
     } else {
         this->downTarget(deltaTime);
     }
-    if (EventHandler::getInstance().isKeyPressed(irr::KEY_ESCAPE)) {
+    if (EventHandler::getInstance().isKeyPressed(irr::KEY_ESCAPE) || Indie::ServiceLocator::getInstance().get<MusicManager>().getStatus() == Music::Status::Loop) {
         this->skipScene();
     }
 }
@@ -66,14 +66,14 @@ void Indie::IntroScene::skipScene(void)
     Indie::ServiceLocator::getInstance().get<SceneManager>().setSceneRenderActive(true);
     Indie::ServiceLocator::getInstance().get<SceneManager>().setSubSceneRenderActive(false);
     Indie::ServiceLocator::getInstance().get<SceneManager>().setSubSceneUpdateActive(false);
-    Indie::ServiceLocator::getInstance().get<MusicManager>().setStatus(Music::Status::Loop);
+    //Indie::ServiceLocator::getInstance().get<MusicManager>().setStatus(Music::Status::Loop);
 }
 
 void Indie::IntroScene::worldTour(irr::f32 deltaTime)
 {
     irr::core::vector3df newRotatationAngle;
 
-    this->currentRotationAngle.Y += deltaTime * 20.f;
+    this->currentRotationAngle.Y += deltaTime * 30.f;
     newRotatationAngle = this->currentRotationAngle;
     if (this->currentRotationAngle.Y >= 360.f)
         newRotatationAngle.Y = 0.f;
@@ -91,7 +91,7 @@ void Indie::IntroScene::downTarget(irr::f32 deltaTime)
     irr::core::vector3df target = this->camera->getTarget();
 
     if (target.Y > -34.f) {
-        target.Y -= deltaTime * 30.f;
+        target.Y -= deltaTime * 120.f;
         this->camera->setTarget(target);
     } else {
         this->skipScene();

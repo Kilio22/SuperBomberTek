@@ -18,6 +18,7 @@
 #include "EndScene.hpp"
 #include "Systems.h"
 #include "ImageLoader.hpp"
+#include "MusicManager.hpp"
 
 using namespace Indie::Systems;
 using namespace Indie::Components;
@@ -83,6 +84,7 @@ Indie::GameScene::GameScene(ContextManager &context)
 
 void Indie::GameScene::init()
 {
+    ServiceLocator::getInstance().get<MusicManager>().setMusic(2);
     auto &entityBuilder = ServiceLocator::getInstance().get<EntityBuilder>();
     irr::scene::ICameraSceneNode *camera = sceneManager->addCameraSceneNode();
     MapGenerator mapGenerator(entityBuilder, { 15, 13 }, this->initGame->mapType, this->initGame->mapTheme, this->initGame->mapPath);
@@ -90,7 +92,6 @@ void Indie::GameScene::init()
     int idx = 0;
     int n = 0;
 
-    ServiceLocator::getInstance().get<MusicManager>().setMusic(1);
     if (camera == nullptr) {
         throw Indie::Exceptions::SceneManagerException(ERROR_STR, "Cannot add camera scene node.");
     }
