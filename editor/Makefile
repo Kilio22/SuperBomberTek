@@ -42,7 +42,8 @@ SRC_PATH	=	$(ROOT_PATH)$(SRC_NAME)
 
 SRC				=	Editor.cpp \
 						Hud.cpp \
-						Map.cpp
+						Map.cpp \
+						ThemeVizualizer.cpp
 SRC_LIB		=	
 LIB_PATHS	=	
 

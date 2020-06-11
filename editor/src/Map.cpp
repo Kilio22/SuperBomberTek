@@ -20,5 +20,10 @@ Map::~Map() {
 
 void Map::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     (void)states;
-    (void)target;
+    sf::RectangleShape placeholder;
+
+    placeholder.setPosition(10, 10);
+    placeholder.setSize(sf::Vector2f(416, 480));
+    placeholder.setFillColor(sf::Color::Red);
+    target.draw(placeholder);
 }

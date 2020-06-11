@@ -8,9 +8,12 @@
 #include "Editor.hpp"
 
 Editor::Editor() :
-    _window(sf::VideoMode(800, 600), "Indie Map Editor")
+    _window(sf::VideoMode(636, 500), "Indie Map Editor")
 {
-    
+    _window.setFramerateLimit(60);
+
+    _themeVizualizer.setPosition(100, 100);
+    _themeVizualizer.setScale(4, 4);
 }
 
 Editor::~Editor() {
@@ -35,10 +38,12 @@ void Editor::clear() {
 }
 
 void Editor::update() {
-    _window.draw(_map);
-    _window.draw(_hud);
+    _themeVizualizer.update();
 }
 
 void Editor::render() {
+    _window.draw(_map);
+    _window.draw(_hud);
+    _window.draw(_themeVizualizer);
     _window.display();
 }
