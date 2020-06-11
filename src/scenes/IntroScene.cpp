@@ -66,7 +66,8 @@ void Indie::IntroScene::skipScene(void)
     Indie::ServiceLocator::getInstance().get<SceneManager>().setSceneRenderActive(true);
     Indie::ServiceLocator::getInstance().get<SceneManager>().setSubSceneRenderActive(false);
     Indie::ServiceLocator::getInstance().get<SceneManager>().setSubSceneUpdateActive(false);
-    //Indie::ServiceLocator::getInstance().get<MusicManager>().setStatus(Music::Status::Loop);
+    if (Indie::ServiceLocator::getInstance().get<MusicManager>().getStatus() != Music::Status::Loop)
+        Indie::ServiceLocator::getInstance().get<MusicManager>().setStatus(Music::Status::Loop);
 }
 
 void Indie::IntroScene::worldTour(irr::f32 deltaTime)
