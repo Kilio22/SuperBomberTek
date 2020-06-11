@@ -2,18 +2,18 @@
 ** EPITECH PROJECT, 2020
 ** OOP_indie_studio_2019
 ** File description:
-** MasterInfo
+** GameInfos
 */
 
-#ifndef MASTERINFO_HPP_
-#define MASTERINFO_HPP_
+#ifndef GAMEINFOS_HPP_
+#define GAMEINFOS_HPP_
 
 #include <unordered_map>
 #include <vector>
 
 namespace Indie
 {
-    struct MasterInfo {
+    struct GameInfos {
         unsigned int xp;
         unsigned int lvl;
         std::unordered_map<std::string, int> scores_map;
@@ -21,4 +21,4 @@ namespace Indie
     };
 }
 
-#endif /* !MASTERINFO_HPP_ */
+#endif /* !GAMEINFOS_HPP_ */

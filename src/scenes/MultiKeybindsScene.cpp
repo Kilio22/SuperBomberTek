@@ -131,7 +131,7 @@ void Indie::MultiKeybindsScene::init()
     pKeybinds.reserve(p1Keybinds.size() + p2Keybinds.size());
     pKeybinds.insert(pKeybinds.end(), p1Keybinds.begin(), p1Keybinds.end());
     pKeybinds.insert(pKeybinds.end(), p2Keybinds.begin(), p2Keybinds.end());
-    this->lvl = ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->getMasterInfo().lvl;
+    this->lvl = ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->getGameInfos().lvl;
     this->availableSkins.clear();
     for (auto playerSkin : PlayerSkins::skinPaths) {
         if (this->lvl >= playerSkin.reqLvl)

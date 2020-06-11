@@ -2,12 +2,12 @@
 ** EPITECH PROJECT, 2020
 ** OOP_indie_studio_2019
 ** File description:
-** MasterInfo
+** GameInfos
 */
 
-#include "MasterInfo.hpp"
+#include "GameInfos.hpp"
 
-const std::vector<unsigned int> Indie::MasterInfo::xp_level = {
+const std::vector<unsigned int> Indie::GameInfos::xp_level = {
     250,
     350,
     475,

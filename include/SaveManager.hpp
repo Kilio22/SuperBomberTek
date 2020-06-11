@@ -32,14 +32,14 @@ namespace Indie
         void resetCurentSave();
 
     private:
-        void loadMasterInfos(void);
+        void loadGameInfos(void);
         void loadKeybinds(void);
         void saveMusicParams(void);
-        void saveMasterInfos(void);
+        void saveGameInfos(void);
         void saveKeybinds(void);
 
         void resetVolume(void);
-        void resetMasterInfos(void);
+        void resetGameInfos(void);
         void resetKeybinds(void);
 
         std::unordered_map<std::string, std::string> currentSave;

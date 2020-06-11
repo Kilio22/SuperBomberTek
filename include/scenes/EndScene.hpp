@@ -13,7 +13,7 @@
 #include "ContextManager.hpp"
 #include "IScene.hpp"
 #include "UiSelector.hpp"
-#include "MasterInfo.hpp"
+#include "GameInfos.hpp"
 #include "EndGameInfo.hpp"
 #include <string>
 #include <memory>
@@ -54,7 +54,7 @@ namespace Indie
                 MULTI
             };
 
-            void increaseXp(Indie::MasterInfo &info);
+            void increaseXp(Indie::GameInfos &info);
             void skipScene(bool update, bool render, bool subUpdate, bool subRender);
 
             ContextManager &context;

@@ -10,7 +10,7 @@
 
 #include "ContextManager.hpp"
 #include "IScene.hpp"
-#include "MasterInfo.hpp"
+#include "GameInfos.hpp"
 #include "Parallax.hpp"
 #include <memory>
 #include <vector>
@@ -33,8 +33,8 @@ namespace Indie
 
         void saveHighScoreMap(std::string mapPath, int score);
 
-        const MasterInfo &getMasterInfo(void) const;
-        void setMasterInfo(const MasterInfo &masterInfo);
+        const GameInfos &getGameInfos(void) const;
+        void setGameInfos(const GameInfos &gameInfos);
 
     private:
         static const irr::core::vector2df velocities[5];
@@ -42,7 +42,7 @@ namespace Indie
 
         ContextManager &context;
         std::vector<std::unique_ptr<Parallax>> parallax;
-        MasterInfo masterInfo;
+        GameInfos gameInfos;
     };
 }
 
