@@ -25,7 +25,11 @@ ThemeVizualizer::ThemeVizualizer(THEME theme)
         _darkSprites[i].setTextureRect((sf::IntRect){0, i * 29, 29, 30});
     }
 
-
+    _mountainTexture.loadFromFile("assets/bombertek.png", (sf::IntRect){113, 2, 30, 120});
+    for (int i = 0; i < 4; i++) {
+        _mountainSprite[i].setTexture(_mountainTexture);
+        _mountainSprite[i].setTextureRect((sf::IntRect){0, 30 * i, 30, 30});
+    }
 }
 
 ThemeVizualizer::~ThemeVizualizer() {
