@@ -19,7 +19,6 @@ const irr::core::vector2df Indie::MenuScene::velocities[5] = { { 10.f, 10.f}, { 
 
 Indie::MenuScene::MenuScene(ContextManager &context)
     : context(context)
-    , masterInfo(Indie::MasterInfo())
 {
 }
 
@@ -65,19 +64,19 @@ void Indie::MenuScene::renderPre3D()
 
 void Indie::MenuScene::renderPost3D() {}
 
-const Indie::MasterInfo &Indie::MenuScene::getMasterInfo(void) const
+const Indie::GameInfos &Indie::MenuScene::getGameInfos(void) const
 {
-    return this->masterInfo;
+    return this->gameInfos;
 }
 
-void Indie::MenuScene::setMasterInfo(const Indie::MasterInfo &masterInfo)
+void Indie::MenuScene::setGameInfos(const Indie::GameInfos &gameInfos)
 {
-    this->masterInfo = masterInfo;
+    this->gameInfos = gameInfos;
 }
 
 void Indie::MenuScene::saveHighScoreMap(std::string mapPath, int score)
 {
-    MasterInfo info = this->getMasterInfo();
+    GameInfos info = this->getGameInfos();
     bool isExist = false;
 
     for (auto &HighScoredMap : info.scores_map) {
@@ -92,5 +91,5 @@ void Indie::MenuScene::saveHighScoreMap(std::string mapPath, int score)
     if (isExist == false)
         info.scores_map.insert(
             std::pair<std::string, int>(ServiceLocator::getInstance().get<SceneManager>().getScene<Indie::SoloScene>()->getFileName(mapPath), score));
-    this->setMasterInfo(info);
+    this->setGameInfos(info);
 }

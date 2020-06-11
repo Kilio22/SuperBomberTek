@@ -7,7 +7,7 @@
 
 #include "SaveManager.hpp"
 #include "FileParser.hpp"
-#include "MasterInfo.hpp"
+#include "GameInfos.hpp"
 #include "MusicManager.hpp"
 #include "PlayerMaps.hpp"
 #include "SceneManager.hpp"
@@ -17,8 +17,6 @@
 #include <filesystem>
 
 Indie::SaveManager::SaveManager()
-    : currentSave({})
-    , currentSavePath("")
 {
 }
 
@@ -30,7 +28,7 @@ Indie::SaveManager::~SaveManager()
 void Indie::SaveManager::loadSave(const std::string &filepath)
 {
     if (filepath == this->currentSavePath) {
-        this->loadMasterInfos();
+        this->loadGameInfos();
         this->loadKeybinds();
         return;
     }
@@ -43,11 +41,11 @@ void Indie::SaveManager::loadSave(const std::string &filepath)
         this->currentSave = Indie::ServiceLocator::getInstance().get<FileParser>().parse(filepath);
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
-        this->resetMasterInfos();
+        this->resetGameInfos();
         this->resetKeybinds();
         return;
     }
-    this->loadMasterInfos();
+    this->loadGameInfos();
     this->loadKeybinds();
 }
 
@@ -92,10 +90,10 @@ void Indie::SaveManager::loadMusicParams(void)
     }
 }
 
-void Indie::SaveManager::loadMasterInfos(void)
+void Indie::SaveManager::loadGameInfos(void)
 {
     std::unordered_map<std::string, std::string> mapsData;
-    MasterInfo info;
+    GameInfos info;
 
     for (const auto &mapPath : PlayerMaps::mapPaths) {
         const auto &it
@@ -113,8 +111,8 @@ void Indie::SaveManager::loadMasterInfos(void)
 
         if (xpValue < 0 || lvlValue < 0)
             throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"" + this->currentSavePath + "\" corrupted.");
-        if (lvlValue >= (int)MasterInfo::xp_level.size()) {
-            info.lvl = (unsigned int)MasterInfo::xp_level.size();
+        if (lvlValue >= (int)GameInfos::xp_level.size()) {
+            info.lvl = (unsigned int)GameInfos::xp_level.size();
             info.xp = 1;
         } else {
             info.lvl = lvlValue;
@@ -128,9 +126,9 @@ void Indie::SaveManager::loadMasterInfos(void)
                 throw Indie::Exceptions::FileCorruptedException(ERROR_STR, "File \"" + this->currentSavePath + "\" corrupted.");
             info.scores_map.insert(std::pair<std::string, int>(mapName, highScore));
         }
-        ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->setMasterInfo(info);
+        ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->setGameInfos(info);
     } catch (const std::exception &e) {
-        this->resetMasterInfos();
+        this->resetGameInfos();
         std::cerr << e.what() << std::endl;
         std::cerr << "Reseting game informations..." << std::endl;
     }
@@ -188,7 +186,7 @@ void Indie::SaveManager::saveCurrentSave(void)
         return;
     }
     this->saveMusicParams();
-    this->saveMasterInfos();
+    this->saveGameInfos();
     this->saveKeybinds();
     try {
         Indie::ServiceLocator::getInstance().get<FileParser>().writeToFile(this->currentSavePath, this->currentSave);
@@ -224,12 +222,12 @@ void Indie::SaveManager::saveMusicParams(void)
     }
 }
 
-void Indie::SaveManager::saveMasterInfos(void)
+void Indie::SaveManager::saveGameInfos(void)
 {
-    MasterInfo info = ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->getMasterInfo();
+    GameInfos info = ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->getGameInfos();
 
-    if (info.lvl >= (unsigned int)MasterInfo::xp_level.size()) {
-        info.lvl = (unsigned int)MasterInfo::xp_level.size();
+    if (info.lvl >= (unsigned int)GameInfos::xp_level.size()) {
+        info.lvl = (unsigned int)GameInfos::xp_level.size();
         info.xp = 1;
     }
     this->saveValue({ "LVL", std::to_string((int)info.lvl) });
@@ -279,11 +277,11 @@ void Indie::SaveManager::resetVolume(void)
     soundManager.setMute(false);
 }
 
-void Indie::SaveManager::resetMasterInfos(void)
+void Indie::SaveManager::resetGameInfos(void)
 {
-    MasterInfo info = { 0, 0, {} };
+    GameInfos info = { 0, 0, {} };
 
-    ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->setMasterInfo(info);
+    ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->setGameInfos(info);
 }
 
 void Indie::SaveManager::resetKeybinds(void)

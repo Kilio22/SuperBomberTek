@@ -25,9 +25,6 @@ namespace Indie {
             void setLevel(int level);
             void draw(irr::core::position2d<irr::s32> pos) const;
 
-        protected:
-        //private:
-        //    float getPercentage(Indie::MasterInfo &info);
         private:
             ContextManager &context;
             int min;

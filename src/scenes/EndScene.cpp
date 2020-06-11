@@ -50,14 +50,14 @@ Indie::EndScene::EndScene(ContextManager &context)
 
 void Indie::EndScene::init()
 {
-    MasterInfo info = ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->getMasterInfo();
+    GameInfos info = ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->getGameInfos();
 
     ServiceLocator::getInstance().get<MusicManager>().setMusic(1);
     ServiceLocator::getInstance().get<MusicManager>().playMusic();
     xpBar.init("../ressources/images/Bar.png", 0, 100, 0);
     this->restart->init(context, "../ressources/images/end/Recommencer.png", 0, 0, POS(0,0));
     this->menu->init(context, "../ressources/images/end/Menu.png", 0, 1, POS(0,0));
-    if (info.lvl != (unsigned int)MasterInfo::xp_level.size() && this->endGame.xp != 0) {
+    if (info.lvl != (unsigned int)GameInfos::xp_level.size() && this->endGame.xp != 0) {
         this->nbXpToSub = (float)this->endGame.xp / 102.f;
         ServiceLocator::getInstance().get<SoundManager>().playSound("xp_up");
     }
@@ -71,7 +71,7 @@ void Indie::EndScene::reset()
 
 void Indie::EndScene::update(irr::f32 ticks)
 {
-    MasterInfo info = ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->getMasterInfo();
+    GameInfos info = ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->getGameInfos();
 
     selector.update();
     if (popUpDuration == 0) {
@@ -100,32 +100,32 @@ void Indie::EndScene::update(irr::f32 ticks)
         EventHandler::getInstance().resetKeys();
     }
     this->increaseXp(info);
-    auto lvlCount = (unsigned int)MasterInfo::xp_level.size();
+    auto lvlCount = (unsigned int)GameInfos::xp_level.size();
     if (info.lvl >= lvlCount) {
         xpBar.setSize(0, 1);
         xpBar.setValue(1);
         xpBar.setLevel(lvlCount);
     } else {
-        xpBar.setSize(0, MasterInfo::xp_level[info.lvl]);
+        xpBar.setSize(0, GameInfos::xp_level[info.lvl]);
         xpBar.setValue(info.xp);
         xpBar.setLevel(info.lvl);
     }
     xpBar.update();
-    if (info.lvl < lvlCount && info.xp >= MasterInfo::xp_level[info.lvl]) {
+    if (info.lvl < lvlCount && info.xp >= GameInfos::xp_level[info.lvl]) {
         ServiceLocator::getInstance().get<SoundManager>().playSound("level_up");
         popUpDuration = 200;
         lvlUpType = (info.lvl % 2 == 0) ? UI_IMAGE_TYPE::LVL_UP_PLAYER : UI_IMAGE_TYPE::LVL_UP_MAP;
-        info.xp -= MasterInfo::xp_level[info.lvl];
+        info.xp -= GameInfos::xp_level[info.lvl];
         info.lvl++;
     }
-    ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->setMasterInfo(info);
+    ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->setGameInfos(info);
 }
 
 void Indie::EndScene::renderPre3D() {}
 
 void Indie::EndScene::renderPost3D()
 {
-    MasterInfo info;
+    GameInfos info;
     InitGame *gameInfo = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::GameScene>()->getInitGame();
 
     context.displayImage(images.at(UI_IMAGE_TYPE::BG));
@@ -136,7 +136,7 @@ void Indie::EndScene::renderPost3D()
     for (size_t i = 0; i < this->endGame.scores.size(); i++)
         fontBig->draw((this->endGame.scores.at(i).first + "  :  " + std::to_string(this->endGame.scores.at(i).second)).c_str(), RECT(150, 400 + ((int)i * 50), 0, 0), {255, 255, 255, 255});
     Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->saveHighScoreMap(gameInfo->mapPath, this->endGame.scores.at(0).second);
-    info = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo();
+    info = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getGameInfos();
     xpBar.draw(POS(50, 600));
     if (popUpDuration > 0)
         context.displayImage(images.at(lvlUpType));
@@ -183,7 +183,7 @@ void Indie::EndScene::setPlayerNames(const std::vector<std::string> &names)
         playerNames.push_back(it);
 }
 
-void Indie::EndScene::increaseXp(Indie::MasterInfo &info)
+void Indie::EndScene::increaseXp(Indie::GameInfos &info)
 {
     // c'est de la magie noir ce truc je sais pas comment le changer
     if (this->endGame.xp != 0) {

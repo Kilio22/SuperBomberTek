@@ -58,15 +58,15 @@ Indie::MultiScene::MultiScene(Indie::ContextManager &context)
 void Indie::MultiScene::init() // Check all paths & init values
 {
     // XPBAR INIT
-    Indie::MasterInfo info = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo();
+    Indie::GameInfos info = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getGameInfos();
     xpBar.init("../ressources/images/Bar.png", 0, 100, 0);
-    auto lvlCount = (unsigned int)MasterInfo::xp_level.size();
+    auto lvlCount = (unsigned int)GameInfos::xp_level.size();
     if (info.lvl >= lvlCount) {
         xpBar.setSize(0, 1);
         xpBar.setValue(1);
         xpBar.setLevel(lvlCount);
     } else {
-        xpBar.setSize(0, MasterInfo::xp_level[info.lvl]);
+        xpBar.setSize(0, GameInfos::xp_level[info.lvl]);
         xpBar.setValue(info.xp);
         xpBar.setLevel(info.lvl);
     }
@@ -254,7 +254,7 @@ void Indie::MultiScene::renderPost3D()
     std::string aiAmmount = std::to_string(this->initGame->nbAi);
     std::string timeAmmount = std::to_string((this->initGame->timeLimit) / 60) + ":";
     std::unordered_map<std::string, int> scores_map
-        = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo().scores_map;
+        = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getGameInfos().scores_map;
     int mapScore = 0;
     if (this->initGame->timeLimit % 60 < 10)
         timeAmmount += "0";

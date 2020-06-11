@@ -66,7 +66,7 @@ void Indie::Bar::draw(irr::core::position2d<irr::s32> pos) const
 {
     std::string lvlText = std::to_string(this->level);
     std::string percentageText;
-    
+
     if ((time(NULL) / 4) % 2 == 0)
         percentageText = std::to_string(this->percentage) + "%";
     else
@@ -78,6 +78,3 @@ void Indie::Bar::draw(irr::core::position2d<irr::s32> pos) const
     font->draw(lvlText.c_str(), RECT(115 - (5 * (int)lvlText.size()) + pos.X, 15 + pos.Y, 0, 0), {255, 255, 255, 255});
     font->draw(percentageText.c_str(), RECT(333 - (5 * (int)percentageText.size()) + pos.X, 15 + pos.Y, 0, 0), {255, 255, 255, 255});
 }
-// text pos 114 19
-// % pos 333 19
-// Edit : je sais pas compter

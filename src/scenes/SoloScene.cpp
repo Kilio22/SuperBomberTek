@@ -71,15 +71,15 @@ void Indie::SoloScene::init()
     /* ================================================================== */
     // XPBAR INIT
     /* ================================================================== */
-    Indie::MasterInfo info = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getMasterInfo();
+    Indie::GameInfos info = Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().getScene<Indie::MenuScene>()->getGameInfos();
     xpBar.init("../ressources/images/Bar.png", 0, 100, 0);
-    auto lvlCount = (unsigned int)MasterInfo::xp_level.size();
+    auto lvlCount = (unsigned int)GameInfos::xp_level.size();
     if (info.lvl >= lvlCount) {
         xpBar.setSize(0, 1);
         xpBar.setValue(1);
         xpBar.setLevel(lvlCount);
     } else {
-        xpBar.setSize(0, MasterInfo::xp_level[info.lvl]);
+        xpBar.setSize(0, GameInfos::xp_level[info.lvl]);
         xpBar.setValue(info.xp);
         xpBar.setLevel(info.lvl);
     }
@@ -142,7 +142,7 @@ void Indie::SoloScene::init()
     /* ================================================================== */
     // OTHER INIT
     /* ================================================================== */
-    this->lvl = ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->getMasterInfo().lvl;
+    this->lvl = ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->getGameInfos().lvl;
     this->availableMaps.clear();
     for (auto [mapPath, reqLvl] : PlayerMaps::mapPaths) {
         if (this->lvl >= reqLvl)
@@ -335,7 +335,7 @@ void Indie::SoloScene::renderPost3D()
     std::string mPath = this->getFileName(this->initGame->mapPath);
     std::string pName = this->getFileName(this->playerParams->playerTexture);
     std::string tName;
-    auto scores_map = ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->getMasterInfo().scores_map;
+    auto scores_map = ServiceLocator::getInstance().get<SceneManager>().getScene<MenuScene>()->getGameInfos().scores_map;
     int mapScore = 0;
 
     if (this->initGame->mapTheme == Components::THEME::DIRT)
