@@ -47,7 +47,7 @@ Indie::SoloScene::SoloScene(Indie::ContextManager &context)
     this->pUps->setStatus(this->initGame->powerUp);
     this->modelRotation = 0;
     for (size_t buttonType = (size_t)BUTTON_TYPE::SKIN; buttonType < (size_t)BUTTON_TYPE::NONE; buttonType++) {
-        this->buttons.insert({ (BUTTON_TYPE)buttonType, std::make_unique<Button>(context) });
+        this->buttons.insert({ (BUTTON_TYPE)buttonType, std::make_unique<Button>(context, false) });
     }
 }
 
@@ -111,8 +111,8 @@ void Indie::SoloScene::init()
     /* ================================================================== */
     // BUTTONS INIT
     /* ================================================================== */
-    this->buttons.at(BUTTON_TYPE::PLAY)->init(context, "../ressources/images/solo/Play.png", 4, 4, POS(0, 0));
-    this->buttons.at(BUTTON_TYPE::BACK)->init(context, "../ressources/images/solo/Retour.png", 4, 5, POS(0, 0));
+    this->buttons.at(BUTTON_TYPE::PLAY)->init(context, "../ressources/images/solo/Play.png", 4, 4, POS(0, 0), true);
+    this->buttons.at(BUTTON_TYPE::BACK)->init(context, "../ressources/images/solo/Retour.png", 4, 5, POS(0, 0), true);
     this->buttons.at(BUTTON_TYPE::SKIN)->init(context, "../ressources/images/solo/Perso.png", 1, 1, POS(0, 0), false);
     this->buttons.at(BUTTON_TYPE::THEME)->init(context, "../ressources/images/solo/Theme.png", 1, 2, POS(0, 0), false);
     this->buttons.at(BUTTON_TYPE::MAP)->init(context, "../ressources/images/solo/Niveau.png", 1, 0, POS(0, 0), false);
@@ -277,6 +277,7 @@ void Indie::SoloScene::update(irr::f32 ticks)
     }
     if (this->buttons.at(BUTTON_TYPE::BACK)->getStatus() == Button::Status::Pressed
         || EventHandler::getInstance().isKeyPressed(irr::EKEY_CODE::KEY_ESCAPE) == true) {
+        ServiceLocator::getInstance().get<SoundManager>().playSound("menu_back");
         context.getSceneManager()->clear();
         skipScene(true, true, true, true);
         ServiceLocator::getInstance().get<SceneManager>().setSubScene<MainMenuScene>();

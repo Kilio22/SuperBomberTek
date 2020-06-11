@@ -16,6 +16,7 @@
 #include "ImageLoader.hpp"
 #include "SceneManager.hpp"
 #include "MusicManager.hpp"
+#include "SoundManager.hpp"
 
 Indie::MainMenuScene::MainMenuScene(ContextManager &context)
     : context(context)
@@ -72,7 +73,8 @@ void Indie::MainMenuScene::update(irr::f32)
         context.getDevice()->closeDevice();
     }
     if (Indie::EventHandler::getInstance().isKeyPressed(irr::KEY_ESCAPE) == true) {
-        Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::SaveScene>();
+        ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::SaveScene>();
+        ServiceLocator::getInstance().get<SoundManager>().playSound("menu_back");
         skipScene(true, true, true, true);
         EventHandler::getInstance().resetKeys();
     }

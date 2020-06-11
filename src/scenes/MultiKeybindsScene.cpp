@@ -231,6 +231,7 @@ void Indie::MultiKeybindsScene::update(irr::f32)
     if (back->getStatus() == Button::Status::Pressed || EventHandler::getInstance().isKeyPressed(irr::EKEY_CODE::KEY_ESCAPE) == true) {
         context.getSceneManager()->clear();
         skipScene(true, true, true, true);
+        ServiceLocator::getInstance().get<SoundManager>().playSound("menu_back");
         ServiceLocator::getInstance().get<SceneManager>().setSubScene<MultiScene>();
         EventHandler::getInstance().resetKeys();
     }

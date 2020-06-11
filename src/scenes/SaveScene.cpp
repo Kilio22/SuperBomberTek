@@ -65,6 +65,7 @@ void Indie::SaveScene::update(irr::f32)
     this->play->update(selector.getPos());
 
     if (Indie::EventHandler::getInstance().isKeyPressed(irr::KEY_ESCAPE) == true) {
+        ServiceLocator::getInstance().get<SoundManager>().playSound("menu_back");
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSubScene<Indie::TitleScene>();
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneUpdateActive(true);
         Indie::ServiceLocator::getInstance().get<Indie::SceneManager>().setSceneRenderActive(true);
