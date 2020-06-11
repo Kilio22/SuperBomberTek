@@ -12,6 +12,7 @@
 #include "Components.h"
 #include "SceneManager.hpp"
 #include "MusicManager.hpp"
+#include <algorithm>
 
 using namespace Indie::Components;
 
@@ -79,10 +80,11 @@ bool Indie::Systems::GameSystem::isGameEnded(EntityManager &entityManager, GameC
 
 void Indie::Systems::GameSystem::endGame(EntityManager &entityManager, SceneManager &sceneManager, MATCH_PLAY endType) const
 {
+    std::vector<unsigned int> xps;
     EndGame stats;
 
-    stats.matchPlay = endType;
     stats.xp = 0;
+    stats.matchPlay = endType;
     for (auto entity : entityManager.each<PlayerComponent>()) {
         auto player = entity->getComponent<PlayerComponent>();
 
@@ -92,10 +94,12 @@ void Indie::Systems::GameSystem::endGame(EntityManager &entityManager, SceneMana
             stats.xp = player->getXp();
             stats.scores.insert(stats.scores.begin(), { player->getName(), player->getScore() });
         } else {
-            stats.xp = player->getXp() / 2;
+            xps.push_back(player->getXp());
             stats.scores.push_back({ player->getName(), player->getScore() });
         }
     }
+    if (endType != MATCH_PLAY::WIN)
+        stats.xp = *std::max_element(xps.begin(), xps.end()) / 2;
     sceneManager.getScene<EndScene>()->setEndGame(stats);
 }
 
