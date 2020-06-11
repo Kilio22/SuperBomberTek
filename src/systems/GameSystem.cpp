@@ -92,6 +92,7 @@ void Indie::Systems::GameSystem::endGame(EntityManager &entityManager, SceneMana
             stats.xp = player->getXp();
             stats.scores.insert(stats.scores.begin(), { player->getName(), player->getScore() });
         } else {
+            stats.xp = player->getXp() / 2;
             stats.scores.push_back({ player->getName(), player->getScore() });
         }
     }

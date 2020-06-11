@@ -177,7 +177,7 @@ void Indie::CreditScene::update(irr::f32 ticks)
         return;
     }
     for (const auto &it : texts) {
-        irr::s32 tmpX = it.first->getRelativePosition().UpperLeftCorner.X;
+        //irr::s32 tmpX = it.first->getRelativePosition().UpperLeftCorner.X;
         irr::s32 tmpXNew = irr::s32(100 * (cos(int((it.second + pos) / 80))));
         // pour pas que ça bouge faut juste filer tmpX en premier arg au lieu de tmpXNew.
         it.first->setRelativePosition(POS(tmpXNew, irr::s32(it.second + pos)));
