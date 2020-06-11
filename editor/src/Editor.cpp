@@ -14,6 +14,7 @@ Editor::Editor() :
 
     _themeVizualizer.setPosition(100, 100);
     _themeVizualizer.setScale(4, 4);
+    _themeVizualizer.setTheme(ThemeVizualizer::THEME::DARK);
 }
 
 Editor::~Editor() {
