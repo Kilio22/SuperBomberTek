@@ -189,7 +189,7 @@ void Indie::GameScene::renderPost3D()
 void Indie::GameScene::drawPlayerInterfaces() const
 {
     const std::vector<irr::video::SColor> colors
-        = { { 255, 255, 144, 144 }, { 255, 144, 144, 255 }, { 255, 83, 83, 236 }, { 255, 255, 255, 144 }, { 255, 255, 144, 255 }, { 255, 255, 255, 255 } };
+        = { { 255, 255, 144, 144 }, { 255, 144, 255, 144 }, { 255, 144, 144, 255 }, { 255, 255, 255, 144 }, { 255, 255, 144, 255 }, { 255, 255, 255, 255 } };
     const std::vector<irr::core::vector2di> positions = { { 0, 150 }, { 1030, 150 }, { 0, 400 }, { 1030, 400 } };
 
     for (auto entity : entityManager.each<PlayerComponent>()) {
