@@ -18,9 +18,9 @@
 
 void Indie::GameEngine::setupMusicManager()
 {
-    ServiceLocator::getInstance().get<MusicManager>().addMusic("../ressources/musics/main_menu.wav"); // id 0
-    ServiceLocator::getInstance().get<MusicManager>().addMusic("../ressources/musics/level_select.wav"); // id 1 // bah enfaite elle est utilisée dans EndScene mdr
-    ServiceLocator::getInstance().get<MusicManager>().addMusic("../ressources/musics/game.wav"); // id 2
+    ServiceLocator::getInstance().get<MusicManager>().addMusic("../ressources/musics/main_menu.ogg"); // id 0
+    ServiceLocator::getInstance().get<MusicManager>().addMusic("../ressources/musics/level_select.ogg"); // id 1 // bah enfaite elle est utilisée dans EndScene mdr
+    ServiceLocator::getInstance().get<MusicManager>().addMusic("../ressources/musics/game.ogg"); // id 2
     ServiceLocator::getInstance().get<MusicManager>().setMusic(0);
 }
 
