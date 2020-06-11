@@ -8,12 +8,15 @@
 #ifndef CB9DE120_D7FF_4148_B222_EB099879ABE3
 #define CB9DE120_D7FF_4148_B222_EB099879ABE3
 
-class Hud {
+#include <SFML/Graphics.hpp>
+
+class Hud : public sf::Drawable {
     public:
         Hud();
         ~Hud();
 
     public:
+        virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 
     private:
 };

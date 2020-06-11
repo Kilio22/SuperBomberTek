@@ -36,6 +36,7 @@ void Editor::clear() {
 
 void Editor::update() {
     _window.draw(_map);
+    _window.draw(_hud);
 }
 
 void Editor::render() {

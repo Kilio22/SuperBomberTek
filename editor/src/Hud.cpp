@@ -12,5 +12,10 @@ Hud::Hud() {
 }
 
 Hud::~Hud() {
-    
+
+}
+
+void Hud::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+    (void)target;
+    (void)states;
 }
