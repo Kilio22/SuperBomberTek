@@ -45,28 +45,28 @@ Indie::MultiKeybindsScene::MultiKeybindsScene(Indie::ContextManager &context)
     // Keybinds p1
     /* ================================================================== */
     p1Keybinds.push_back(
-        std::pair<Indie::Components::KEY_TYPE, std::shared_ptr<Keybind>>(Components::KEY_TYPE::UP, new Keybind(context, irr::EKEY_CODE::KEY_UP)));
+        std::pair<Indie::Components::KEY_TYPE, std::shared_ptr<Keybind>>(Components::KEY_TYPE::UP, std::make_shared<Keybind>(context, irr::EKEY_CODE::KEY_UP)));
     p1Keybinds.push_back(
-        std::pair<Indie::Components::KEY_TYPE, std::shared_ptr<Keybind>>(Components::KEY_TYPE::DOWN, new Keybind(context, irr::EKEY_CODE::KEY_DOWN)));
+        std::pair<Indie::Components::KEY_TYPE, std::shared_ptr<Keybind>>(Components::KEY_TYPE::DOWN, std::make_shared<Keybind>(context, irr::EKEY_CODE::KEY_DOWN)));
     p1Keybinds.push_back(
-        std::pair<Indie::Components::KEY_TYPE, std::shared_ptr<Keybind>>(Components::KEY_TYPE::LEFT, new Keybind(context, irr::EKEY_CODE::KEY_LEFT)));
+        std::pair<Indie::Components::KEY_TYPE, std::shared_ptr<Keybind>>(Components::KEY_TYPE::LEFT, std::make_shared<Keybind>(context, irr::EKEY_CODE::KEY_LEFT)));
     p1Keybinds.push_back(std::pair<Indie::Components::KEY_TYPE, std::shared_ptr<Keybind>>(
-        Components::KEY_TYPE::RIGHT, new Keybind(context, irr::EKEY_CODE::KEY_RIGHT)));
+        Components::KEY_TYPE::RIGHT, std::make_shared<Keybind>(context, irr::EKEY_CODE::KEY_RIGHT)));
     p1Keybinds.push_back(std::pair<Indie::Components::KEY_TYPE, std::shared_ptr<Keybind>>(
-        Components::KEY_TYPE::DROP, new Keybind(context, irr::EKEY_CODE::KEY_RSHIFT)));
+        Components::KEY_TYPE::DROP, std::make_shared<Keybind>(context, irr::EKEY_CODE::KEY_RSHIFT)));
     /* ================================================================== */
     // Keybinds p2
     /* ================================================================== */
     p2Keybinds.push_back(
-        std::pair<Indie::Components::KEY_TYPE, std::shared_ptr<Keybind>>(Components::KEY_TYPE::UP, new Keybind(context, irr::EKEY_CODE::KEY_KEY_Z)));
+        std::pair<Indie::Components::KEY_TYPE, std::shared_ptr<Keybind>>(Components::KEY_TYPE::UP, std::make_shared<Keybind>(context, irr::EKEY_CODE::KEY_KEY_Z)));
     p2Keybinds.push_back(std::pair<Indie::Components::KEY_TYPE, std::shared_ptr<Keybind>>(
-        Components::KEY_TYPE::DOWN, new Keybind(context, irr::EKEY_CODE::KEY_KEY_S)));
+        Components::KEY_TYPE::DOWN, std::make_shared<Keybind>(context, irr::EKEY_CODE::KEY_KEY_S)));
     p2Keybinds.push_back(std::pair<Indie::Components::KEY_TYPE, std::shared_ptr<Keybind>>(
-        Components::KEY_TYPE::LEFT, new Keybind(context, irr::EKEY_CODE::KEY_KEY_Q)));
+        Components::KEY_TYPE::LEFT, std::make_shared<Keybind>(context, irr::EKEY_CODE::KEY_KEY_Q)));
     p2Keybinds.push_back(std::pair<Indie::Components::KEY_TYPE, std::shared_ptr<Keybind>>(
-        Components::KEY_TYPE::RIGHT, new Keybind(context, irr::EKEY_CODE::KEY_KEY_D)));
+        Components::KEY_TYPE::RIGHT, std::make_shared<Keybind>(context, irr::EKEY_CODE::KEY_KEY_D)));
     p2Keybinds.push_back(std::pair<Indie::Components::KEY_TYPE, std::shared_ptr<Keybind>>(
-        Components::KEY_TYPE::DROP, new Keybind(context, irr::EKEY_CODE::KEY_KEY_F)));
+        Components::KEY_TYPE::DROP, std::make_shared<Keybind>(context, irr::EKEY_CODE::KEY_KEY_F)));
     p1CharaSelector.setPos(0, 0);
     p2CharaSelector.setPos(1, 0);
 }
