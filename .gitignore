@@ -134,3 +134,6 @@ build/
 /.vs
 CMakeFiles/*
 .*/
+/doc/html
+/doc/latex
+/doc/man
