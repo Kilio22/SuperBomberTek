@@ -220,6 +220,7 @@ void Indie::MultiScene::update(irr::f32 ticks)
     }
     if (this->buttons.at(BUTTON_TYPE::BACK)->getStatus() == Button::Status::Pressed
         || EventHandler::getInstance().isKeyPressed(irr::EKEY_CODE::KEY_ESCAPE) == true) {
+        ServiceLocator::getInstance().get<SoundManager>().playSound("menu_back");
         context.getSceneManager()->clear();
         skipScene(true, true, true, true);
         ServiceLocator::getInstance().get<SceneManager>().setSubScene<MainMenuScene>();

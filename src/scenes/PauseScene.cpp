@@ -12,6 +12,7 @@
 #include "ServiceLocator.hpp"
 #include "ImageLoader.hpp"
 #include "SceneManager.hpp"
+#include "SoundManager.hpp"
 
 const std::unordered_map<Indie::PauseScene::PAUSE_ASSETS, std::string> Indie::PauseScene::assets_paths
     = { { Indie::PauseScene::PAUSE_ASSETS::CONTINUE, "../ressources/images/pause/Continue.png" },
@@ -58,6 +59,7 @@ void Indie::PauseScene::update(irr::f32)
         button.second->update(this->selector.getPos());
     }
     if (this->buttons[BUTTON_TYPE::PLAY]->getStatus() == Button::Status::Pressed || Indie::EventHandler::getInstance().isKeyPressed(irr::KEY_ESCAPE) == true) {
+        ServiceLocator::getInstance().get<SoundManager>().playSound("menu_back");
         Indie::ServiceLocator::getInstance().get<SceneManager>().setSubSceneUpdateActive(false);
         Indie::ServiceLocator::getInstance().get<SceneManager>().setSubSceneRenderActive(false);
         Indie::ServiceLocator::getInstance().get<SceneManager>().setSceneUpdateActive(true);

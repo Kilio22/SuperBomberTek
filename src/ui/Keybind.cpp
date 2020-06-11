@@ -135,6 +135,13 @@ void Indie::Keybind::update(std::pair<int, int> pos)
         status = true;
     }
     if (status) {
+        if (EventHandler::getInstance().isKeyPressed(irr::EKEY_CODE::KEY_ESCAPE)) {
+            ServiceLocator::getInstance().get<SoundManager>().playSound("menu_back");
+            status = false;
+            EventHandler::getInstance().resetKeysStatus();
+            EventHandler::getInstance().resetKeysStatusOnce();
+            return;
+        }
         for (auto it : keyCodes) {
             if (EventHandler::getInstance().isKeyPressedAtOnce(it.first)) {
                 if (it.first == key) {
