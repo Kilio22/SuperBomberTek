@@ -12,6 +12,7 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <memory>
+#include "Map.hpp"
 
 class Editor {
     public:
@@ -28,6 +29,8 @@ class Editor {
 
     private:
         sf::RenderWindow _window;
+
+        Map _map;
 };
 
 #endif /* C603948F_E38D_48C5_B016_BC3B0C1DF8F4 */

@@ -10,10 +10,15 @@
 Map::Map() {
     for (int x = 0; x < 13; x++) {
         for (int y = 0; y < 15; y++)
-            _tiles[x][y] = 0;
+            _tiles[x][y] = EMPTY;
     }
 }
 
 Map::~Map() {
 
+}
+
+void Map::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+    (void)states;
+    (void)target;
 }

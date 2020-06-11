@@ -8,7 +8,10 @@
 #ifndef CE4340D6_254B_4E4E_9FFF_05CFDE2E3E74
 #define CE4340D6_254B_4E4E_9FFF_05CFDE2E3E74
 
-class Map {
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+
+class Map : public sf::Drawable{
     public:
         enum TileType {EMPTY, UNDESTRUCTIBLE, DESTRUCTIBLE};
 
@@ -17,6 +20,7 @@ class Map {
         ~Map();
     
     public:
+        virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 
     private:
 
