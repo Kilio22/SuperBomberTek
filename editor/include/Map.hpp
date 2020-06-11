@@ -10,7 +10,8 @@
 
 class Map {
     public:
-        enum TileType = {}
+        enum TileType {EMPTY, UNDESTRUCTIBLE, DESTRUCTIBLE};
+
     public:
         Map();
         ~Map();
@@ -20,7 +21,7 @@ class Map {
     private:
 
     private:
-        int _tiles[13][15];
+        TileType _tiles[13][15];
 };
 
 #endif /* CE4340D6_254B_4E4E_9FFF_05CFDE2E3E74 */
