@@ -45,6 +45,8 @@ void Editor::update() {
     _themeVizualizer.update();
     _map.update(_window);
     _hud.update(_window);
+
+    _map.setTheme(_hud.getThemeState());
 }
 
 void Editor::render() {

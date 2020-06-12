@@ -35,7 +35,30 @@ void Hud::draw(sf::RenderWindow &window) {
 }
 
 void Hud::update(const sf::RenderWindow &window) {
+    int mx = sf::Mouse::getPosition(window).x;
+    int my = sf::Mouse::getPosition(window).y;
+
     _lightSelector.update(window);
     _darkSelector.update(window);
     _mountainSelector.update(window);
+
+    if (_lightSelector.isButtonClicked(mx, my)) {
+        _lightSelector.setSelected(false);
+        _darkSelector.setSelected(false);
+        _mountainSelector.setSelected(false);
+        _lightSelector.setSelected(true);
+        _themeState = EDITOR::THEME::LIGHT;
+    } else if (_darkSelector.isButtonClicked(mx, my)) {
+        _lightSelector.setSelected(false);
+        _darkSelector.setSelected(false);
+        _mountainSelector.setSelected(false);
+        _darkSelector.setSelected(true);
+        _themeState = EDITOR::THEME::DARK;
+    } else if (_mountainSelector.isButtonClicked(mx, my)) {
+        _lightSelector.setSelected(false);
+        _darkSelector.setSelected(false);
+        _mountainSelector.setSelected(false);
+        _mountainSelector.setSelected(true);
+        _themeState = EDITOR::THEME::MOUNTAIN;
+    }
 }
