@@ -17,11 +17,26 @@ class BrushButton : public sf::Drawable, public sf::Transformable {
         ~BrushButton() {};
     
     public:
+        virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
+        void update(sf::RenderWindow &window);
+        bool isButtonHover(int mx, int my) const;
+        bool isButtonClicked(int mx, int my) const;
+        void setSelected(bool selected) {_selectedState = selected;};
+        bool getSelected() const {return _selectedState;};
 
     private:
 
     private:
-    
+        sf::Texture _idleTexture;
+        sf::Texture _pressedTexture;
+        sf::Texture _selectedTexture;
+
+        sf::Sprite _idle;
+        sf::Sprite _pressed;
+        sf::Sprite _selected;
+
+        bool _selectedState;
+        bool _pressedState;
 };
 
 #endif /* B6900878_B230_49B4_AD4B_06E057DB482C */
