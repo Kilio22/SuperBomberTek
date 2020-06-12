@@ -43,7 +43,8 @@ SRC_PATH	=	$(ROOT_PATH)$(SRC_NAME)
 SRC				=	Editor.cpp \
 						Hud.cpp \
 						Map.cpp \
-						ThemeVizualizer.cpp
+						ThemeVizualizer.cpp \
+						ThemeButton.cpp
 SRC_LIB		=	
 LIB_PATHS	=	
 
@@ -54,7 +55,6 @@ LIB_PATHS_FLAG	=	$(LIB_PATHS:%=-L$(ROOT_PATH)%)
 
 CFLAGS	=	-Wall \
 					-Wextra \
-					-Werror \
 					-I $(INCL_PATH) \
 					$(LIB_PATHS_FLAG) \
 					$(LIBRARIES) \

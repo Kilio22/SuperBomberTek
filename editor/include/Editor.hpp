@@ -17,6 +17,7 @@
 #include "Map.hpp"
 #include "Hud.hpp"
 #include "ThemeVisualizer.hpp"
+#include "ThemeButton.hpp"
 
 class Editor {
     public:

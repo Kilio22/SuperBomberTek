@@ -12,7 +12,7 @@ Editor::Editor() :
 {
     _music.openFromFile("assets/main_menu_loop.wav");
     _music.setLoop(true);
-    _music.play();
+    //_music.play();
 
     _window.setFramerateLimit(60);
     _map.setTheme(EDITOR::THEME::MOUNTAIN);
@@ -44,10 +44,11 @@ void Editor::clear() {
 void Editor::update() {
     _themeVizualizer.update();
     _map.update(_window);
+    _hud.update(_window);
 }
 
 void Editor::render() {
-    _window.draw(_hud);
+    _hud.draw(_window);
     _map.draw(_window);
     _window.display();
 }
