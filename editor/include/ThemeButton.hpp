@@ -11,7 +11,7 @@
 #include <SFML/Graphics.hpp>
 #include "enums.hpp"
 
-class ThemeButton {
+class ThemeButton : public sf::Drawable, public sf::Transformable {
     public:
         ThemeButton(EDITOR::THEME theme = EDITOR::THEME::LIGHT);
         ~ThemeButton() {};
