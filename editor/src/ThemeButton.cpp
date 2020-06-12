@@ -31,6 +31,9 @@ ThemeButton::ThemeButton(EDITOR::THEME theme) {
             _idle.setTexture(_idleTexture);
             _selected.setTexture(_selectedTexture);
             _pressed.setTexture(_pressedTexture);
+            _idle.setTextureRect((sf::IntRect){131, 400, 64, 32});
+            _selected.setTextureRect((sf::IntRect){131, 400, 64, 32});
+            _pressed.setTextureRect((sf::IntRect){131, 400, 64, 32});
             break;
         case EDITOR::THEME::MOUNTAIN:
             _idleTexture.loadFromFile("assets/Snow idle.png");
@@ -39,6 +42,9 @@ ThemeButton::ThemeButton(EDITOR::THEME theme) {
             _idle.setTexture(_idleTexture);
             _selected.setTexture(_selectedTexture);
             _pressed.setTexture(_pressedTexture);
+            _idle.setTextureRect((sf::IntRect){12, 400, 64, 32});
+            _selected.setTextureRect((sf::IntRect){12, 400, 64, 32});
+            _pressed.setTextureRect((sf::IntRect){12, 400, 64, 32});
             break;
         default: break;
     }
