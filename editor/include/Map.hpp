@@ -13,6 +13,7 @@
 
 class Map : public sf::Drawable{
     public:
+        enum THEME {LIGHT, DARK, MOUNTAIN};
         enum TileType {EMPTY, UNDESTRUCTIBLE, DESTRUCTIBLE};
 
     public:
@@ -25,7 +26,12 @@ class Map : public sf::Drawable{
     private:
 
     private:
-        TileType _tiles[13][15];
+        TileType _tiles[13][11];
+
+        sf::Texture _texture;
+        sf::Sprite _lightThemeSprite[4];
+        sf::Sprite _darkThemeSprite[4];
+        sf::Sprite _mountainSprite[4];
 };
 
 #endif /* CE4340D6_254B_4E4E_9FFF_05CFDE2E3E74 */

@@ -13,22 +13,22 @@ ThemeVizualizer::ThemeVizualizer(THEME theme)
     _theme = theme;
     _clock.restart();
 
-    _lightTexture.loadFromFile("assets/bombertek.png", (sf::IntRect){50, 6, 27, 115});
+    _lightTexture.loadFromFile("assets/bombertek.png", (sf::IntRect){50, 0, 32, 128});
     for (int i = 0; i < 4; i++) {
         _lightSprites[i].setTexture(_lightTexture);
-        _lightSprites[i].setTextureRect((sf::IntRect){0, 29 * i, 27, 29});
+        _lightSprites[i].setTextureRect((sf::IntRect){0, 32 * i, 32, 32});
     }
 
-    _darkTexture.loadFromFile("assets/bombertek.png", (sf::IntRect){82, 4, 29, 118});
+    _darkTexture.loadFromFile("assets/bombertek.png", (sf::IntRect){82, 0, 32, 128});
     for (int i = 0; i < 4; i++) {
         _darkSprites[i].setTexture(_darkTexture);
-        _darkSprites[i].setTextureRect((sf::IntRect){0, i * 29, 29, 30});
+        _darkSprites[i].setTextureRect((sf::IntRect){0, i * 32, 32, 32});
     }
 
-    _mountainTexture.loadFromFile("assets/bombertek.png", (sf::IntRect){113, 2, 30, 120});
+    _mountainTexture.loadFromFile("assets/bombertek.png", (sf::IntRect){113, 0, 32, 128});
     for (int i = 0; i < 4; i++) {
         _mountainSprite[i].setTexture(_mountainTexture);
-        _mountainSprite[i].setTextureRect((sf::IntRect){0, 30 * i, 30, 30});
+        _mountainSprite[i].setTextureRect((sf::IntRect){0, 32 * i, 32, 32});
     }
 }
 
