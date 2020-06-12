@@ -11,6 +11,7 @@
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <memory>
 #include "enums.hpp"
 #include "Map.hpp"
@@ -32,6 +33,7 @@ class Editor {
 
     private:
         sf::RenderWindow _window;
+        sf::Music _music;
 
         Map _map;
         Hud _hud;

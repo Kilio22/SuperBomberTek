@@ -60,7 +60,8 @@ CFLAGS	=	-Wall \
 					$(LIBRARIES) \
 					-lsfml-graphics \
 					-lsfml-window \
-					-lsfml-system
+					-lsfml-system \
+					-lsfml-audio
 
 DEBUG_FLAGS	=	-g3 -gdwarf-4
 MAKE_RULE	=	all

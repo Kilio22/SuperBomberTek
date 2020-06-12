@@ -10,6 +10,10 @@
 Editor::Editor() :
     _window(sf::VideoMode(700, 436), "Indie Map Editor")
 {
+    _music.openFromFile("assets/main_menu_loop.wav");
+    _music.setLoop(true);
+    _music.play();
+
     _window.setFramerateLimit(60);
     _map.setTheme(EDITOR::THEME::MOUNTAIN);
     _themeVizualizer.setScale(5, 5);
