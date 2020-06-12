@@ -39,6 +39,7 @@ void Editor::clear() {
 
 void Editor::update() {
     _themeVizualizer.update();
+    _map.update(_window);
 }
 
 void Editor::render() {

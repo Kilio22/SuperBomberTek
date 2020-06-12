@@ -20,6 +20,7 @@ class Map{
     
     public:
         void draw(sf::RenderWindow &target);
+        void update(sf::RenderWindow &target);
         void setTheme(EDITOR::THEME theme) {_currentTheme = theme;};
     private:
 
