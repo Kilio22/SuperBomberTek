@@ -11,6 +11,7 @@ Editor::Editor() :
     _window(sf::VideoMode(700, 436), "Indie Map Editor")
 {
     _window.setFramerateLimit(60);
+    _map.setTheme(EDITOR::THEME::MOUNTAIN);
     _themeVizualizer.setScale(5, 5);
     _themeVizualizer.setPosition(sf::Vector2f(00, 00));
 }
@@ -42,7 +43,6 @@ void Editor::update() {
 
 void Editor::render() {
     _window.draw(_hud);
-    _window.draw(_map);
-    //_window.draw(_themeVizualizer);
+    _map.draw(_window);
     _window.display();
 }

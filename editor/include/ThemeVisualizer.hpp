@@ -10,25 +10,23 @@
 
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
+#include "enums.hpp"
 
 class ThemeVizualizer : public sf::Drawable, public sf::Transformable {
     public:
-        enum THEME {LIGHT, DARK, MOUNTAIN};
-
-    public:
-        ThemeVizualizer(THEME theme = THEME::LIGHT);
+        ThemeVizualizer(EDITOR::THEME theme = EDITOR::THEME::LIGHT);
         ~ThemeVizualizer();
     
     public:
-        void setTheme(THEME theme) {_theme = theme;};
-        THEME getTheme() const {return _theme;};
+        void setTheme(EDITOR::THEME theme) {_theme = theme;};
+        EDITOR::THEME getTheme() const {return _theme;};
 
         virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
         void update();
     private:
 
     private:
-        THEME _theme;
+        EDITOR::THEME _theme;
         sf::Texture _lightTexture;
         sf::Texture _darkTexture;
         sf::Texture _mountainTexture;

@@ -8,7 +8,7 @@
 #include "Hud.hpp"
 
 Hud::Hud() {
-    _brushState = EMPTY;
+    _brushState = EDITOR::TILETYPE::EMPTY;
 }
 
 Hud::~Hud() {

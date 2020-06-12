@@ -9,11 +9,9 @@
 #define CB9DE120_D7FF_4148_B222_EB099879ABE3
 
 #include <SFML/Graphics.hpp>
+#include "enums.hpp"
 
 class Hud : public sf::Drawable {
-    public:
-        enum Brush {EMPTY = -1, RUBBER, UNDESTRUCTIBLE, DESTRUCTIBLE};
-
     public:
         Hud();
         ~Hud();
@@ -21,11 +19,11 @@ class Hud : public sf::Drawable {
     public:
         virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
         void update(const sf::RenderWindow &window);
-        
-        Brush getBrushState() const {return _brushState;};
+
+        EDITOR::TILETYPE getBrushState() const {return _brushState;};
 
     private:
-        Brush _brushState;
+        EDITOR::TILETYPE _brushState;
 };
 
 #endif /* CB9DE120_D7FF_4148_B222_EB099879ABE3 */

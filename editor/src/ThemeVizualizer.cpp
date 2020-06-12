@@ -7,7 +7,7 @@
 
 #include "ThemeVisualizer.hpp"
 
-ThemeVizualizer::ThemeVizualizer(THEME theme)
+ThemeVizualizer::ThemeVizualizer(EDITOR::THEME theme)
 {
     _animId = 0;
     _theme = theme;
@@ -39,11 +39,11 @@ ThemeVizualizer::~ThemeVizualizer() {
 void ThemeVizualizer::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     states.transform *= getTransform();
     
-    if (_theme == LIGHT)
+    if (_theme == EDITOR::THEME::LIGHT)
         target.draw(_lightSprites[_animId], states);
-    else if (_theme == DARK)
+    else if (_theme == EDITOR::THEME::DARK)
         target.draw(_darkSprites[_animId], states);
-    else if (_theme == MOUNTAIN)
+    else if (_theme == EDITOR::THEME::MOUNTAIN)
         target.draw(_mountainSprite[_animId], states);
 }
 

@@ -12,6 +12,7 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <memory>
+#include "enums.hpp"
 #include "Map.hpp"
 #include "Hud.hpp"
 #include "ThemeVisualizer.hpp"
