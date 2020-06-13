@@ -44,14 +44,10 @@ void Map::draw(sf::RenderWindow &target) {
     int my = sf::Mouse::getPosition(target).y;
     for (int x = 0; x < 13; x++) {
         for (int y = 0; y < 11; y++) {
-            switch (_tiles[x][y]) {
-                case EDITOR::TILETYPE::EMPTY:
-                    ground.setScale(2, 2);
-                    ground.setPosition(10 + 32 + x * 32, 10 + 32 + y * 32);
-                    target.draw(ground);
-                    break;
-                default:break;
-            }
+            ground.setScale(2, 2);
+            ground.setPosition(10 + 32 + x * 32, 10 + 32 + y * 32);
+            target.draw(ground);
+
         }
     }
     for (int x = 0; x < 13; x++) {
