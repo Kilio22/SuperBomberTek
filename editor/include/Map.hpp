@@ -22,10 +22,13 @@ class Map{
         void draw(sf::RenderWindow &target);
         void update(sf::RenderWindow &target);
         void setTheme(EDITOR::THEME theme) {_currentTheme = theme;};
+        void setBrush(EDITOR::TILETYPE type) {_currentBrush = type;};
     private:
 
     private:
         EDITOR::THEME _currentTheme;
+        EDITOR::TILETYPE _currentBrush;
+        
         EDITOR::TILETYPE _tiles[13][11];
 
         sf::Texture _texture;

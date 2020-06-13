@@ -9,6 +9,8 @@
 
 Map::Map(EDITOR::THEME theme) {
     _currentTheme = theme;
+    _currentBrush = EDITOR::TILETYPE::EMPTY;
+
     for (int x = 0; x < 13; x++) {
         for (int y = 0; y < 11; y++)
             _tiles[x][y] = EDITOR::TILETYPE::EMPTY;
@@ -111,7 +113,7 @@ void Map::update(sf::RenderWindow &target) {
         for (int y = 0; y < 11; y++) {
             sf::IntRect tile = (sf::IntRect){10 + 32 + x * 32, 10 + 32 + y * 32, 32, 32};
             if (mx >= tile.left && mx < tile.left + tile.width && my >= tile.top && my < tile.top + tile.height) {
-                _tiles[x][y] = EDITOR::TILETYPE::DESTRUCTIBLE;
+                _tiles[x][y] = _currentBrush;
             }
         }
     }

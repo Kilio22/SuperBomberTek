@@ -47,6 +47,7 @@ void Editor::update() {
     _hud.update(_window);
 
     _map.setTheme(_hud.getThemeState());
+    _map.setBrush(_hud.getBrushState());
 }
 
 void Editor::render() {
