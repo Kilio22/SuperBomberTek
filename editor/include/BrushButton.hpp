@@ -13,12 +13,12 @@
 
 class BrushButton : public sf::Drawable, public sf::Transformable {
     public:
-        BrushButton(EDITOR::TILETYPE type = EDITOR::TILETYPE::EMPTY);
+        BrushButton();
         ~BrushButton() {};
     
     public:
         virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
-        void update(sf::RenderWindow &window);
+        void update(const sf::RenderWindow &window);
         bool isButtonHover(int mx, int my) const;
         bool isButtonClicked(int mx, int my) const;
         void setSelected(bool selected) {_selectedState = selected;};

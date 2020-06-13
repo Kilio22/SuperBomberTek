@@ -11,6 +11,7 @@
 #include <SFML/Graphics.hpp>
 #include "enums.hpp"
 #include "ThemeButton.hpp"
+#include "BrushButton.hpp"
 
 class Hud {
     public:
@@ -31,7 +32,11 @@ class Hud {
         ThemeButton _lightSelector;
         ThemeButton _darkSelector;
         ThemeButton _mountainSelector;
-        
+
+        BrushButton _emptySelector;
+        BrushButton _destructibleSelector;
+        BrushButton _undestructibleSelector;
+
         sf::Texture _placeholerTexture;
         sf::Sprite _placeholder;
 };

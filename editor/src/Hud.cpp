@@ -32,6 +32,9 @@ void Hud::draw(sf::RenderWindow &window) {
     window.draw(_lightSelector);
     window.draw(_darkSelector);
     window.draw(_mountainSelector);
+    window.draw(_emptySelector);
+    window.draw(_destructibleSelector);
+    window.draw(_undestructibleSelector);
 }
 
 void Hud::update(const sf::RenderWindow &window) {
@@ -40,6 +43,9 @@ void Hud::update(const sf::RenderWindow &window) {
 
     _lightSelector.update(window);
     _darkSelector.update(window);
+    _mountainSelector.update(window);
+    _emptySelector.update(window);
+    _destructibleSelector.update(window);
     _mountainSelector.update(window);
 
     if (_lightSelector.isButtonClicked(mx, my)) {
