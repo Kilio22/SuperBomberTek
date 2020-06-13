@@ -21,6 +21,10 @@ Hud::Hud() :
     _lightSelector.setPosition(510, 400);
     _darkSelector.setPosition(575, 400);
     _mountainSelector.setPosition(633, 400);
+
+    _emptySelector.setPosition(517, 213);
+    _destructibleSelector.setPosition(517, 180);
+    _undestructibleSelector.setPosition(517, 147);
 }
 
 Hud::~Hud() {
@@ -46,6 +50,7 @@ void Hud::update(const sf::RenderWindow &window) {
     _mountainSelector.update(window);
     _emptySelector.update(window);
     _destructibleSelector.update(window);
+    _undestructibleSelector.update(window);
     _mountainSelector.update(window);
 
     if (_lightSelector.isButtonClicked(mx, my)) {
@@ -66,5 +71,25 @@ void Hud::update(const sf::RenderWindow &window) {
         _mountainSelector.setSelected(false);
         _mountainSelector.setSelected(true);
         _themeState = EDITOR::THEME::MOUNTAIN;
+    }
+
+    if (_emptySelector.isButtonClicked(mx, my)) {
+        _emptySelector.setSelected(false);
+        _destructibleSelector.setSelected(false);
+        _undestructibleSelector.setSelected(false);
+        _emptySelector.setSelected(true);
+        _brushState = EDITOR::TILETYPE::EMPTY;
+    } else if (_destructibleSelector.isButtonClicked(mx, my)) {
+        _emptySelector.setSelected(false);
+        _destructibleSelector.setSelected(false);
+        _undestructibleSelector.setSelected(false);
+        _destructibleSelector.setSelected(true);
+        _brushState = EDITOR::TILETYPE::DESTRUCTIBLE;
+    } else if (_undestructibleSelector.isButtonClicked(mx, my)) {
+        _emptySelector.setSelected(false);
+        _destructibleSelector.setSelected(false);
+        _undestructibleSelector.setSelected(false);
+        _undestructibleSelector.setSelected(true);
+        _brushState = EDITOR::TILETYPE::UNDESTRUCTIBLE;
     }
 }
