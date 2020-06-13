@@ -12,6 +12,7 @@
 #include "enums.hpp"
 #include "ThemeButton.hpp"
 #include "BrushButton.hpp"
+#include "SaveButton.hpp"
 
 class Hud {
     public:
@@ -36,6 +37,8 @@ class Hud {
         BrushButton _emptySelector;
         BrushButton _destructibleSelector;
         BrushButton _undestructibleSelector;
+
+        SaveButton _saveButton;
 
         sf::Texture _placeholerTexture;
         sf::Sprite _placeholder;

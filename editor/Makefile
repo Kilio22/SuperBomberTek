@@ -45,7 +45,8 @@ SRC				=	Editor.cpp \
 						Map.cpp \
 						ThemeVizualizer.cpp \
 						ThemeButton.cpp \
-						BrushButton.cpp
+						BrushButton.cpp \
+						SaveButton.cpp
 SRC_LIB		=	
 LIB_PATHS	=	
 

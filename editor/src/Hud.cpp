@@ -26,15 +26,15 @@ Hud::Hud() :
     _destructibleSelector.setPosition(517, 180);
     _undestructibleSelector.setPosition(517, 147);
 
+    _saveButton.setPosition(505, 7);
+
     _brushState = EDITOR::TILETYPE::DESTRUCTIBLE;
     _themeState = EDITOR::THEME::LIGHT;
     _lightSelector.setSelected(true);
     _destructibleSelector.setSelected(true);
 }
 
-Hud::~Hud() {
-
-}
+Hud::~Hud() {}
 
 void Hud::draw(sf::RenderWindow &window) {
     window.draw(_placeholder);
@@ -44,6 +44,7 @@ void Hud::draw(sf::RenderWindow &window) {
     window.draw(_emptySelector);
     window.draw(_destructibleSelector);
     window.draw(_undestructibleSelector);
+    window.draw(_saveButton);
 }
 
 void Hud::update(const sf::RenderWindow &window) {
@@ -57,6 +58,7 @@ void Hud::update(const sf::RenderWindow &window) {
     _destructibleSelector.update(window);
     _undestructibleSelector.update(window);
     _mountainSelector.update(window);
+    _saveButton.update(window);
 
     if (_lightSelector.isButtonClicked(mx, my)) {
         _lightSelector.setSelected(false);
