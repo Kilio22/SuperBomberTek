@@ -26,10 +26,10 @@ Hud::Hud() :
     _destructibleSelector.setPosition(517, 180);
     _undestructibleSelector.setPosition(517, 147);
 
-    _brushState = EDITOR::TILETYPE::EMPTY;
+    _brushState = EDITOR::TILETYPE::DESTRUCTIBLE;
     _themeState = EDITOR::THEME::LIGHT;
     _lightSelector.setSelected(true);
-    _emptySelector.setSelected(true);
+    _destructibleSelector.setSelected(true);
 }
 
 Hud::~Hud() {
