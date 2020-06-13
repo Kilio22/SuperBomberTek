@@ -17,6 +17,7 @@ class ModalSave {
 
     public:
         void draw(sf::RenderWindow &window) const;
+        void update(sf::RenderWindow &window);
         
         bool isCloseHovered(const sf::RenderWindow &window);
         bool isClosePressed(const sf::RenderWindow &window);

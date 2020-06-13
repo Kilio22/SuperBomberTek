@@ -18,6 +18,7 @@
 #include "Hud.hpp"
 #include "ThemeVisualizer.hpp"
 #include "ThemeButton.hpp"
+#include "ModalSave.hpp"
 
 class Editor {
     public:
@@ -39,6 +40,9 @@ class Editor {
         Map _map;
         Hud _hud;
         ThemeVizualizer _themeVizualizer;
+        ModalSave _modalSave;
+
+        bool _modalState;
 };
 
 #endif /* C603948F_E38D_48C5_B016_BC3B0C1DF8F4 */

@@ -13,6 +13,7 @@
 #include "ThemeButton.hpp"
 #include "BrushButton.hpp"
 #include "SaveButton.hpp"
+#include "ThemeVisualizer.hpp"
 
 class Hud {
     public:
@@ -39,6 +40,7 @@ class Hud {
         BrushButton _undestructibleSelector;
 
         SaveButton _saveButton;
+        ThemeVizualizer _vizualizer;
 
         sf::Texture _placeholerTexture;
         sf::Sprite _placeholder;

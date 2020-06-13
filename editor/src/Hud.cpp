@@ -14,6 +14,7 @@ Hud::Hud() :
 {
     _brushState = EDITOR::TILETYPE::EMPTY;
     _themeState = EDITOR::THEME::LIGHT;
+    _vizualizer.setTheme(EDITOR::THEME::LIGHT);
     _placeholerTexture.loadFromFile("assets/Layout.png");
     _placeholder.setTexture(_placeholerTexture);
 
@@ -32,6 +33,9 @@ Hud::Hud() :
     _themeState = EDITOR::THEME::LIGHT;
     _lightSelector.setSelected(true);
     _destructibleSelector.setSelected(true);
+
+    _vizualizer.setScale(3.5, 3.5);
+    _vizualizer.setPosition(550, 280);
 }
 
 Hud::~Hud() {}
@@ -45,6 +49,7 @@ void Hud::draw(sf::RenderWindow &window) {
     window.draw(_destructibleSelector);
     window.draw(_undestructibleSelector);
     window.draw(_saveButton);
+    window.draw(_vizualizer);
 }
 
 void Hud::update(const sf::RenderWindow &window) {
@@ -66,18 +71,21 @@ void Hud::update(const sf::RenderWindow &window) {
         _mountainSelector.setSelected(false);
         _lightSelector.setSelected(true);
         _themeState = EDITOR::THEME::LIGHT;
+        _vizualizer.setTheme(EDITOR::THEME::LIGHT);
     } else if (_darkSelector.isButtonClicked(mx, my)) {
         _lightSelector.setSelected(false);
         _darkSelector.setSelected(false);
         _mountainSelector.setSelected(false);
         _darkSelector.setSelected(true);
         _themeState = EDITOR::THEME::DARK;
+        _vizualizer.setTheme(EDITOR::THEME::DARK);
     } else if (_mountainSelector.isButtonClicked(mx, my)) {
         _lightSelector.setSelected(false);
         _darkSelector.setSelected(false);
         _mountainSelector.setSelected(false);
         _mountainSelector.setSelected(true);
         _themeState = EDITOR::THEME::MOUNTAIN;
+        _vizualizer.setTheme(EDITOR::THEME::MOUNTAIN);
     }
 
     if (_emptySelector.isButtonClicked(mx, my)) {
@@ -99,4 +107,5 @@ void Hud::update(const sf::RenderWindow &window) {
         _undestructibleSelector.setSelected(true);
         _brushState = EDITOR::TILETYPE::UNDESTRUCTIBLE;
     }
+    _vizualizer.update();
 }

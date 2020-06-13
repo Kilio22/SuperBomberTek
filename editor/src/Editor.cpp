@@ -18,6 +18,7 @@ Editor::Editor() :
     _map.setTheme(EDITOR::THEME::MOUNTAIN);
     _themeVizualizer.setScale(5, 5);
     _themeVizualizer.setPosition(sf::Vector2f(00, 00));
+    _modalState = false;
 }
 
 Editor::~Editor() {
@@ -53,5 +54,6 @@ void Editor::update() {
 void Editor::render() {
     _hud.draw(_window);
     _map.draw(_window);
+    //_modalSave.draw(_window);
     _window.display();
 }
