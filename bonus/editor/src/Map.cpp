@@ -134,7 +134,7 @@ void Map::save(const std::string &filename) {
     std::string toWrite = "-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1\n";
     std::fstream file;
 
-    for (int i = 0; i < 11; i++) {
+    for (int i = 10; i >= 0; i--) {
         toWrite += "-1";
         for (int j = 0; j < 13; j++) {
             if (_tiles[j][i] == EDITOR::TILETYPE::EMPTY)
