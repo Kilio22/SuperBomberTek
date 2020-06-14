@@ -124,5 +124,25 @@ void Map::update(sf::RenderWindow &target) {
 }
 
 void Map::save(const std::string &filename) {
-    
+    std::string definitiveFilename = filename + ".supermap";
+    std::string toWrite = "-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1\n";
+    std::fstream file;
+
+    for (int i = 0; i < 11; i++) {
+        toWrite += "-1";
+        for (int j = 0; j < 13; j++) {
+            if (_tiles[j][i] == EDITOR::TILETYPE::EMPTY)
+                toWrite += " 0";
+            else if (_tiles[j][i] == EDITOR::TILETYPE::UNDESTRUCTIBLE)
+                toWrite += " 1";
+            else
+                toWrite += " 2";
+        }
+        toWrite += " -1\n";
+    }
+    toWrite += "-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1";
+    file.open(definitiveFilename, std::ios::trunc | std::ios::out);
+    std::cout << toWrite << std::endl;
+    file << toWrite;
+    file.close();
 }

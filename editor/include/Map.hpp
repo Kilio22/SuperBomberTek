@@ -12,6 +12,7 @@
 #include <SFML/Window.hpp>
 #include "enums.hpp"
 #include <iostream>
+#include <fstream>
 
 class Map{
     public:
