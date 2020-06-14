@@ -53,7 +53,7 @@ void ModalSave::draw(sf::RenderWindow &window) const {
     sf::Text input;
     input.setFont(_font);
     input.setString(_fileState);
-    input.setFillColor(sf::Color::White);
+    input.setFillColor(sf::Color(101, 115, 146));
     input.setPosition((sf::Vector2f){200, 150});
     window.draw(input);
 }
