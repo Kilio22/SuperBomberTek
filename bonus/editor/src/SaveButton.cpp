@@ -16,9 +16,9 @@ SaveButton::SaveButton() {
     _hovered.setTexture(_hoveredTexture);
     _pressed.setTexture(_pressedTexture);
 
-    _idle.setTextureRect((sf::IntRect){5, 5, 190, 32});
-    _hovered.setTextureRect((sf::IntRect){5, 5, 190, 32});
-    _pressed.setTextureRect((sf::IntRect){5, 5, 190, 32});
+    _idle.setTextureRect({5, 5, 190, 32});
+    _hovered.setTextureRect({5, 5, 190, 32});
+    _pressed.setTextureRect({5, 5, 190, 32});
 }
 
 void SaveButton::draw(sf::RenderTarget &target, sf::RenderStates states) const {
@@ -33,8 +33,8 @@ void SaveButton::draw(sf::RenderTarget &target, sf::RenderStates states) const {
 }
 
 void SaveButton::update(const sf::RenderWindow &window) {
-    int mx = sf::Mouse::getPosition(window).x;
-    int my = sf::Mouse::getPosition(window).y;
+    int mx = window.mapPixelToCoords(sf::Mouse::getPosition(window)).x;
+    int my = window.mapPixelToCoords(sf::Mouse::getPosition(window)).y;
 
     if (isButtonClicked(mx, my)) {
         _clickedState = true;

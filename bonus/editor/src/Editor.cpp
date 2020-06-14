@@ -12,7 +12,8 @@ Editor::Editor() :
 {
     _music.openFromFile("assets/main_menu_loop.wav");
     _music.setLoop(true);
-    //_music.play();
+    _music.setVolume(20);
+    _music.play();
 
     _window.setFramerateLimit(60);
     _map.setTheme(EDITOR::THEME::MOUNTAIN);
@@ -26,7 +27,12 @@ Editor::~Editor() {
 }
 
 void Editor::loop() {
+    sf::View view;
+
+    view.setCenter({350, 218});
+    view.setSize({700, 436});
     while (_window.isOpen()) {
+        _window.setView(view);
         sf::Event ev;
         while (_window.pollEvent(ev)) {
             if (ev.type == sf::Event::Closed)

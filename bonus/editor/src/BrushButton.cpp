@@ -19,16 +19,16 @@ BrushButton::BrushButton() {
     _pressed.setTexture(_pressedTexture);
     _selected.setTexture(_selectedTexture);
 
-    _idle.setTextureRect((sf::IntRect){18, 147, 32, 32});
-    _pressed.setTextureRect((sf::IntRect){18, 147, 32, 32});
-    _selected.setTextureRect((sf::IntRect){18, 147, 32, 32});
+    _idle.setTextureRect({18, 147, 32, 32});
+    _pressed.setTextureRect({18, 147, 32, 32});
+    _selected.setTextureRect({18, 147, 32, 32});
 }
 
 void BrushButton::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     states.transform *= getTransform();
     if (_pressedState) {
         target.draw(_pressed, states);
-     } else if (_selectedState) {
+    } else if (_selectedState) {
         target.draw(_selected, states);
     } else {
         target.draw(_idle, states);
@@ -36,8 +36,8 @@ void BrushButton::draw(sf::RenderTarget &target, sf::RenderStates states) const 
 }
 
 void BrushButton::update(const sf::RenderWindow &window) {
-    int mx = sf::Mouse::getPosition(window).x;
-    int my = sf::Mouse::getPosition(window).y;
+    int mx = window.mapPixelToCoords(sf::Mouse::getPosition(window)).x;
+    int my = window.mapPixelToCoords(sf::Mouse::getPosition(window)).y;
 
     if (isButtonClicked(mx, my))
         _pressedState = true;

@@ -21,12 +21,12 @@ Map::Map(EDITOR::THEME theme) {
         _lightThemeSprite[i].setTexture(_texture);
         _darkThemeSprite[i].setTexture(_texture);
         _mountainSprite[i].setTexture(_texture);
-        _darkThemeSprite[i].setTextureRect((sf::IntRect){0, 32 * i, 16, 32});
-        _lightThemeSprite[i].setTextureRect((sf::IntRect){16, 32 * i, 16, 32});
-        _mountainSprite[i].setTextureRect((sf::IntRect){32, 32 * i, 16, 32});
+        _darkThemeSprite[i].setTextureRect({0, 32 * i, 16, 32});
+        _lightThemeSprite[i].setTextureRect({16, 32 * i, 16, 32});
+        _mountainSprite[i].setTextureRect({32, 32 * i, 16, 32});
     }
     _cursor.setTexture(_texture);
-    _cursor.setTextureRect((sf::IntRect){0, 8 * 16, 16, 32});
+    _cursor.setTextureRect({0, 8 * 16, 16, 32});
     _cursor.setScale(2, 2);
 }
 
@@ -40,8 +40,8 @@ void Map::draw(sf::RenderWindow &target) {
     sf::Sprite undestructibleWall = _currentTheme == EDITOR::LIGHT ? _lightThemeSprite[2] : _currentTheme == EDITOR::DARK ? _darkThemeSprite[2] : _mountainSprite[2];
     sf::Sprite ground = _currentTheme == EDITOR::LIGHT ? _lightThemeSprite[3] : _currentTheme == EDITOR::DARK ? _darkThemeSprite[3] : _mountainSprite[3];
 
-    int mx = sf::Mouse::getPosition(target).x;
-    int my = sf::Mouse::getPosition(target).y;
+    int mx = target.mapPixelToCoords(sf::Mouse::getPosition(target)).x;
+    int my = target.mapPixelToCoords(sf::Mouse::getPosition(target)).y;
     for (int x = 0; x < 13; x++) {
         for (int y = 0; y < 11; y++) {
             ground.setScale(2, 2);
@@ -69,9 +69,9 @@ void Map::draw(sf::RenderWindow &target) {
     }
     for (int x = 0; x < 13; x++) {
         for (int y = 0; y < 11; y++) {
-            sf::IntRect tile = (sf::IntRect){10 + 32 + x * 32, 10 + 32 + y * 32, 32, 32};
+            sf::IntRect tile = {10 + 32 + x * 32, 10 + 32 + y * 32, 32, 32};
             if (mx >= tile.left && mx < tile.left + tile.width && my >= tile.top && my < tile.top + tile.height) {
-                _cursor.setPosition(10 + 32 + x * 32, 10 + 32 + y * 32);
+                _cursor.setPosition(10 + 32 + x * 32, 10 + y * 32);
                 target.draw(_cursor);
             }
         }
@@ -102,12 +102,18 @@ void Map::update(sf::RenderWindow &target) {
     if (!sf::Mouse::isButtonPressed(sf::Mouse::Left))
         return;
 
-    int mx = sf::Mouse::getPosition(target).x;
-    int my = sf::Mouse::getPosition(target).y;
+    int mx = target.mapPixelToCoords(sf::Mouse::getPosition(target)).x;
+    int my = target.mapPixelToCoords(sf::Mouse::getPosition(target)).y;
+    if (_currentBrush == EDITOR::TILETYPE::EMPTY)
+        _cursor.setTextureRect({32, 8 * 16, 16, 32});
+    else if (_currentBrush == EDITOR::TILETYPE::DESTRUCTIBLE)
+        _cursor.setTextureRect({16, 8 * 16, 16, 32});
+    else
+        _cursor.setTextureRect({0, 8 * 16, 16, 32});
 
     for (int x = 0; x < 13; x++) {
         for (int y = 0; y < 11; y++) {
-            sf::IntRect tile = (sf::IntRect){10 + 32 + x * 32, 10 + 32 + y * 32, 32, 32};
+            sf::IntRect tile = {10 + 32 + x * 32, 10 + 64 + y * 32, 32, 32};
             if (mx >= tile.left && mx < tile.left + tile.width && my >= tile.top && my < tile.top + tile.height) {
                 if (x == 0 && y == 0)
                     break;

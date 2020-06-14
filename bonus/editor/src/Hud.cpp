@@ -53,8 +53,8 @@ void Hud::draw(sf::RenderWindow &window) {
 }
 
 void Hud::update(const sf::RenderWindow &window) {
-    int mx = sf::Mouse::getPosition(window).x;
-    int my = sf::Mouse::getPosition(window).y;
+    int mx = window.mapPixelToCoords(sf::Mouse::getPosition(window)).x;
+    int my = window.mapPixelToCoords(sf::Mouse::getPosition(window)).y;
 
     _lightSelector.update(window);
     _darkSelector.update(window);
@@ -111,8 +111,8 @@ void Hud::update(const sf::RenderWindow &window) {
 }
 
 bool Hud::savePressed(const sf::RenderWindow &window) const {
-    int mx = sf::Mouse::getPosition(window).x;
-    int my = sf::Mouse::getPosition(window).y;
+    int mx = window.mapPixelToCoords(sf::Mouse::getPosition(window)).x;
+    int my = window.mapPixelToCoords(sf::Mouse::getPosition(window)).y;
 
     return (_saveButton.isButtonClicked(mx, my));
 }

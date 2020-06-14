@@ -54,13 +54,13 @@ void ModalSave::draw(sf::RenderWindow &window) const {
     input.setFont(_font);
     input.setString(_fileState);
     input.setFillColor(sf::Color(101, 115, 146));
-    input.setPosition((sf::Vector2f){200, 150});
+    input.setPosition({200, 150});
     window.draw(input);
 }
 
 bool ModalSave::isCloseHovered(const sf::RenderWindow &window) const {
-    int mx = sf::Mouse::getPosition(window).x;
-    int my = sf::Mouse::getPosition(window).y;
+    int mx = window.mapPixelToCoords(sf::Mouse::getPosition(window)).x;
+    int my = window.mapPixelToCoords(sf::Mouse::getPosition(window)).y;
     sf::IntRect rect(554, 77, 42, 37);
     
     return (mx >= rect.left && mx < rect.left + rect.width && my >= rect.top && my < rect.top + rect.height);
@@ -71,8 +71,8 @@ bool ModalSave::isClosePressed(const sf::RenderWindow &window) const {
 }
 
 bool ModalSave::isSaveHovered(const sf::RenderWindow &window) const {
-    int mx = sf::Mouse::getPosition(window).x;
-    int my = sf::Mouse::getPosition(window).y;
+    int mx = window.mapPixelToCoords(sf::Mouse::getPosition(window)).x;
+    int my = window.mapPixelToCoords(sf::Mouse::getPosition(window)).y;
     sf::IntRect rect(207, 207, 286, 42);
     
     return (mx >= rect.left && mx < rect.left + rect.width && my >= rect.top && my < rect.top + rect.height);

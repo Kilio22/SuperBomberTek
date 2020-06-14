@@ -20,9 +20,9 @@ ThemeButton::ThemeButton(EDITOR::THEME theme) {
             _idle.setTexture(_idleTexture);
             _selected.setTexture(_selectedTexture);
             _pressed.setTexture(_pressedTexture);
-            _idle.setTextureRect((sf::IntRect){68, 400, 64, 32});
-            _selected.setTextureRect((sf::IntRect){68, 400, 64, 32});
-            _pressed.setTextureRect((sf::IntRect){68, 400, 64, 32});
+            _idle.setTextureRect({68, 400, 64, 32});
+            _selected.setTextureRect({68, 400, 64, 32});
+            _pressed.setTextureRect({68, 400, 64, 32});
             break;
         case EDITOR::THEME::DARK:
             _idleTexture.loadFromFile("assets/Stone_idle.png");
@@ -31,9 +31,9 @@ ThemeButton::ThemeButton(EDITOR::THEME theme) {
             _idle.setTexture(_idleTexture);
             _selected.setTexture(_selectedTexture);
             _pressed.setTexture(_pressedTexture);
-            _idle.setTextureRect((sf::IntRect){131, 400, 64, 32});
-            _selected.setTextureRect((sf::IntRect){131, 400, 64, 32});
-            _pressed.setTextureRect((sf::IntRect){131, 400, 64, 32});
+            _idle.setTextureRect({131, 400, 64, 32});
+            _selected.setTextureRect({131, 400, 64, 32});
+            _pressed.setTextureRect({131, 400, 64, 32});
             break;
         case EDITOR::THEME::MOUNTAIN:
             _idleTexture.loadFromFile("assets/Snow idle.png");
@@ -42,9 +42,9 @@ ThemeButton::ThemeButton(EDITOR::THEME theme) {
             _idle.setTexture(_idleTexture);
             _selected.setTexture(_selectedTexture);
             _pressed.setTexture(_pressedTexture);
-            _idle.setTextureRect((sf::IntRect){12, 400, 64, 32});
-            _selected.setTextureRect((sf::IntRect){12, 400, 64, 32});
-            _pressed.setTextureRect((sf::IntRect){12, 400, 64, 32});
+            _idle.setTextureRect({12, 400, 64, 32});
+            _selected.setTextureRect({12, 400, 64, 32});
+            _pressed.setTextureRect({12, 400, 64, 32});
             break;
         default: break;
     }
@@ -62,8 +62,8 @@ void ThemeButton::draw(sf::RenderTarget &target, sf::RenderStates states) const 
 }
 
 void ThemeButton::update(const sf::RenderWindow &window) {
-    int mx = sf::Mouse::getPosition(window).x;
-    int my = sf::Mouse::getPosition(window).y;
+    int mx = window.mapPixelToCoords(sf::Mouse::getPosition(window)).x;
+    int my = window.mapPixelToCoords(sf::Mouse::getPosition(window)).y;
 
     if (isButtonClicked(mx, my))
         _pressedState = true;
