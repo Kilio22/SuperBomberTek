@@ -22,6 +22,7 @@ void Indie::Systems::PlayerSystem::onUpdate(irr::f32, EntityManager &entityManag
             if (timer->getTimePassed() >= timer->getTimeToEnd()) {
                 auto newPlayer = *player;
 
+                newPlayer.setWallPass(false);
                 entity->removeAllComponents();
                 entity->addComponent<PlayerComponent>(newPlayer);
             }
