@@ -142,7 +142,6 @@ void Map::save(const std::string &filename) {
     }
     toWrite += "-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1";
     file.open(definitiveFilename, std::ios::trunc | std::ios::out);
-    std::cout << toWrite << std::endl;
     file << toWrite;
     file.close();
 }
