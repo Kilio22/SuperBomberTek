@@ -22,7 +22,7 @@ Editor::Editor() :
 }
 
 Editor::~Editor() {
-
+    _music.stop();
 }
 
 void Editor::loop() {
@@ -66,6 +66,10 @@ void Editor::update() {
     } else {
         if (_modalSave.isClosePressed(_window))
             _modalState = false;
+        else if (_modalSave.isSavePressed(_window) && !_fileState.empty()) {
+            _window.close();
+            _map.save(_fileState);
+        }
     }
 }
 

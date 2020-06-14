@@ -23,6 +23,9 @@ class Map{
         void update(sf::RenderWindow &target);
         void setTheme(EDITOR::THEME theme) {_currentTheme = theme;};
         void setBrush(EDITOR::TILETYPE type) {_currentBrush = type;};
+
+        void save(const std::string &filename);
+
     private:
 
     private:

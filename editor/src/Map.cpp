@@ -122,3 +122,7 @@ void Map::update(sf::RenderWindow &target) {
         }
     }
 }
+
+void Map::save(const std::string &filename) {
+    
+}
