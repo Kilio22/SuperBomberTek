@@ -40,7 +40,9 @@ class Editor {
         Map _map;
         Hud _hud;
         ThemeVizualizer _themeVizualizer;
+
         ModalSave _modalSave;
+        std::string _fileState = "";
 
         bool _modalState;
 };

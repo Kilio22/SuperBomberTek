@@ -31,6 +31,18 @@ void Editor::loop() {
         while (_window.pollEvent(ev)) {
             if (ev.type == sf::Event::Closed)
                 _window.close();
+            if (ev.type == sf::Event::TextEntered && _modalState) {
+                if (ev.text.unicode < 128) {
+                    char c = static_cast<char>(ev.text.unicode);
+                    if ((int)c == 8) {
+                        if (!_fileState.empty())
+                            _fileState.pop_back();
+                    } else {
+                        _fileState.push_back(c);
+                    }
+                        std::cout << _fileState << std::endl;
+                }
+            }
         }
         clear();
         update();
