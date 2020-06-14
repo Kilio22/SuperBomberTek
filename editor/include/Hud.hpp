@@ -27,6 +27,8 @@ class Hud {
         EDITOR::TILETYPE getBrushState() const {return _brushState;};
         EDITOR::THEME getThemeState() const {return _themeState;};
 
+        bool savePressed(const sf::RenderWindow &window) const;
+
     private:
         EDITOR::TILETYPE _brushState;
         EDITOR::THEME _themeState;

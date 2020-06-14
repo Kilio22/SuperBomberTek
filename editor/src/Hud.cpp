@@ -109,3 +109,10 @@ void Hud::update(const sf::RenderWindow &window) {
     }
     _vizualizer.update();
 }
+
+bool Hud::savePressed(const sf::RenderWindow &window) const {
+    int mx = sf::Mouse::getPosition(window).x;
+    int my = sf::Mouse::getPosition(window).y;
+
+    return (_saveButton.isButtonClicked(mx, my));
+}

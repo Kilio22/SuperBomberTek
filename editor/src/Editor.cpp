@@ -44,16 +44,24 @@ void Editor::clear() {
 
 void Editor::update() {
     _themeVizualizer.update();
-    _map.update(_window);
-    _hud.update(_window);
-
-    _map.setTheme(_hud.getThemeState());
-    _map.setBrush(_hud.getBrushState());
+    if (!_modalState) {
+        _map.update(_window);
+        _hud.update(_window);
+        _map.setTheme(_hud.getThemeState());
+        _map.setBrush(_hud.getBrushState());
+        if (_hud.savePressed(_window))
+            _modalState = true;
+    } else {
+        if (_modalSave.isClosePressed(_window))
+            _modalState = false;
+    }
 }
 
 void Editor::render() {
     _hud.draw(_window);
     _map.draw(_window);
-    //_modalSave.draw(_window);
+    if (_modalState) {
+        _modalSave.draw(_window);
+    }
     _window.display();
 }

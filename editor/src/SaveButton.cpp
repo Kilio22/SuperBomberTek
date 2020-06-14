@@ -49,7 +49,7 @@ void SaveButton::update(const sf::RenderWindow &window) {
 }
 
 bool SaveButton::isButtonHover(int mx, int my) const {
-sf::IntRect rect(
+    sf::IntRect rect(
         getPosition().x,
         getPosition().y,
         _idle.getScale().x * 190,
