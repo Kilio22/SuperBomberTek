@@ -10,6 +10,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <string>
 
 class ModalSave {
     public:
@@ -18,13 +19,12 @@ class ModalSave {
 
     public:
         void draw(sf::RenderWindow &window) const;
-        void update(sf::RenderWindow &window);
 
         bool isCloseHovered(const sf::RenderWindow &window) const;
         bool isClosePressed(const sf::RenderWindow &window) const;
         bool isSaveHovered(const sf::RenderWindow &window) const;
         bool isSavePressed(const sf::RenderWindow &window) const;
-
+        void setFileState(const std::string &s) {_fileState = s;};
 
     private:
         sf::Texture _layoutTexture;
@@ -46,6 +46,9 @@ class ModalSave {
         sf::Sprite _saveIdle;
         sf::Sprite _saveSelected;
         sf::Sprite _savePressed;
+
+        std::string _fileState = "";
+        sf::Font _font;
 };
 
 #endif /* CBBD4B62_6610_4B28_BE19_D3B09C261518 */

@@ -23,6 +23,8 @@ ModalSave::ModalSave() {
     _saveIdle.setTexture(_saveIdleTexture);
     _saveSelected.setTexture(_saveSelectedTexture);
     _savePressed.setTexture(_savePressedTexture);
+
+    _font.loadFromFile("assets/upheavtt.ttf");
 }
 
 void ModalSave::draw(sf::RenderWindow &window) const {
@@ -47,10 +49,13 @@ void ModalSave::draw(sf::RenderWindow &window) const {
     } else {
         window.draw(_saveIdle);
     }
-}
 
-void ModalSave::update(sf::RenderWindow &window) {
-
+    sf::Text input;
+    input.setFont(_font);
+    input.setString(_fileState);
+    input.setFillColor(sf::Color::White);
+    input.setPosition((sf::Vector2f){200, 150});
+    window.draw(input);
 }
 
 bool ModalSave::isCloseHovered(const sf::RenderWindow &window) const {

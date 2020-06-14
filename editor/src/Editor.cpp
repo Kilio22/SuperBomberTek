@@ -37,10 +37,10 @@ void Editor::loop() {
                     if ((int)c == 8) {
                         if (!_fileState.empty())
                             _fileState.pop_back();
-                    } else {
+                    } else if (_fileState.length() < 16) {
                         _fileState.push_back(c);
                     }
-                        std::cout << _fileState << std::endl;
+                    _modalSave.setFileState(_fileState);
                 }
             }
         }
