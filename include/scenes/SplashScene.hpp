@@ -11,6 +11,7 @@
 #include "ContextManager.hpp"
 #include "IScene.hpp"
 #include <unordered_map>
+#include <string>
 
 namespace Indie
 {
