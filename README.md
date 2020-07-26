@@ -1,7 +1,7 @@
 # SuperBomberTek
 
-This project is a 2nd year project done at Epitech in C++ language.  
-It consists in creating a Bomberman in a group of 4 to 6 people.  
+This project is a 2nd end year project done at Epitech in C++ language.  
+It consists in creating a Bomberman-like in a group of 4 to 6 people.  
 
 **Group members:**  
   - [@Exylar](https://github.com/Exylar)
@@ -10,11 +10,11 @@ It consists in creating a Bomberman in a group of 4 to 6 people.
   - [@SuperZikoure](https://github.com/SuperZikoure)
   - [@zoraneus](https://github.com/zoraneus)
 
-For this project, we needed to use **Irrlicht 3D library** for the display side and the **SFML** for sounds & musics side.  
-**All assets are unique**, except musics which has been remixed by us.
+For this project, we needed to use **Irrlicht 3D library** for the display side and the **SFML library** for sounds & musics side.  
+**All assets are unique**, except musics which have been remixed by us.
 
 For this project, we've implemented an **ECS architecture**.  
-I really loved coding this project because first we were in group and everybody were motivated by the project and secondly, implementing the architecture cited above was really interesting, I've learned a lot about templates, game programming design patterns, games architecure etc...
+I really loved coding this project because first I was in a group in which everybody were motivated by the project and secondly, implementing the architecture cited above was really interesting, I've learned a lot about templates, game programming design patterns, games architecture etc...
 
 ### Here's an extract of the subject :
 
@@ -47,13 +47,13 @@ Do your best to avoid clunky animations or graphical glitches, manage your camer
 ## How to compile & run it ?
 
 - **Linux:**  
-Make sure that **cmake**, **irrlicht library** and **SFML library** has been installed on your pc, if not, please install them using your package manager, then run the following command at the root of the repository:  
+Make sure that **cmake**, **irrlicht library** and **SFML library** are installed on your pc, if not, please install them using your package manager, then run the following command at the root of the repository:  
   ```sh
   mkdir build && cd build && cmake ../ && make && ./bomberman
   ```
 
 - **Windows**:  
-Make sure that **cmake** has been installed on your PC and the ``cmake`` command can be run in powershell. If not please install cmake, then run the following commands at the   root of the repository using powershell:  
+Make sure that **cmake** are installed on your PC and the ``cmake`` command can be run in powershell. If not please install cmake, then run the following commands at the root of the repository using powershell:  
   ```sh
   $> mkdir build
   $> cd build
